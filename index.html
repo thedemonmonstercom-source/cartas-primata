@@ -766,19 +766,19 @@ const cvb=(c,n)=>{
 // ===== TROCAS (por código copiado entre amigos, sem servidor) =====
 // Regras v0.4: só repetidas, sem fusão, do mesmo rank e 1 por 1. TROCA = diferença máxima de rank entre as duas cartas (0 = só o mesmo rank).
 // Fluxo: A cria a oferta (a carta sai do inventário dele) e manda o código · B cola, escolhe a carta dele e manda o código de resposta · A cola a resposta e recebe.
-const TROCA=0,byId=i=>ALL.find(c=>c.id==i),okT=(a,b)=>Math.abs(a.r-b.r)<=TROCA,mine=f=>ALL.filter(c=>extra(c)>0&&!lvl(c)&&(!f||okT(c,f))).sort((a,b)=>b.r-a.r),cod=(t,n,i)=>`${t}-${n}-${i}`;
+const TROCA=0,byId=i=>ALL.find(c=>c.id==i),okT=(a,b)=>Math.abs(a.r-b.r)<=TROCA,mine=f=>ALL.filter(c=>extra(c)>0&&(!f||okT(c,f))).sort((a,b)=>b.r-a.r),cod=(t,n,i)=>`${t}-${n}-${i}`;
 S.tr=S.tr||{};S.td=S.td||{};let TV=null;
 const trow=(c,a)=>`<button data-${a}="${c.id}" style="--rc:${R[c.r][1]}"><b class="sq">${R[c.r][0]}</b><span>${c.n}</span><em class="pc">×${S.inv[c.id]}</em></button>`;
 const trk=()=>{
  const h=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Trocas</span></div>`,nt=t=>`<p class="mut ctr" style="margin:0 0 14px;letter-spacing:.04em;text-transform:none">${t}</p>`;
  if(TV&&TV.code)return h+nt("Mande este código para o seu amigo")+`<input class="cdi" readonly value="${TV.code}" onfocus="this.select()"><button class="bt cy" data-cp="1" style="margin-top:12px">Copiar código</button><button class="bt gh" data-z="0" style="margin-top:10px">Pronto</button>`;
- if(TV&&TV.o){const x=TV.o.c,l=mine(x);return h+nt("Seu amigo oferece esta carta")+`<div style="width:min(46vw,190px);margin:0 auto 16px">${card(x)}</div>`+nt(l.length?"Escolha uma repetida sua do mesmo rank:":"Você não tem repetidas do mesmo rank e sem fusão.")+`<div class="rl">${l.map(c=>trow(c,"y")).join("")}</div><button class="bt gh" data-z="0" style="margin-top:14px">Cancelar</button>`}
+ if(TV&&TV.o){const x=TV.o.c,l=mine(x);return h+nt("Seu amigo oferece esta carta")+`<div style="width:min(46vw,190px);margin:0 auto 16px">${card(x,"",0,0,"",0)}</div>`+nt(l.length?"Escolha uma repetida sua do mesmo rank:":"Você não tem repetidas do mesmo rank e sem fusão.")+`<div class="rl">${l.map(c=>trow(c,"y")).join("")}</div><button class="bt gh" data-z="0" style="margin-top:14px">Cancelar</button>`}
  const pe=Object.entries(S.tr).filter(([,i])=>byId(i)),m=mine();
  return h+nt("Troque repetidas com um amigo, 1 por 1. Só vale entre cartas do mesmo rank e sem fusão.")+`<div class="cvb"><p>Recebeu um código?</p><input class="cdi" id="ci" placeholder="Cole o código aqui" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="bt cy" data-z="1" style="margin-top:10px">Usar código</button></div>`+(pe.length?`<p class="mut" style="margin:20px 0 4px">Ofertas esperando resposta</p>`+pe.map(([n,i])=>`<div class="cvb"><p><b>${byId(i).n}</b></p><div class="two"><button class="bt gh" data-w="${n}">Ver código</button><button class="bt gh" data-u="${n}">Cancelar</button></div></div>`).join(""):"")+`<p class="mut" style="margin:20px 0 4px">Oferecer uma repetida</p><div class="rl">${m.map(c=>trow(c,"q")).join("")||nt("Você ainda não tem repetidas.")}</div>`};
 const copy=t=>{const i=document.querySelector(".cdi");i&&i.select();try{navigator.clipboard.writeText(t).then(()=>toast("Código copiado ✓"),()=>toast("Segure no código para copiar"))}catch(e){toast("Segure no código para copiar")}};
-function offerMk(id){const c=byId(id);if(!c||extra(c)<1||lvl(c))return;const n=Math.random().toString(36).slice(2,8);S.inv[id]--;S.tr[n]=id;save();TV={code:cod("OFERTA",n,id)};sync();toast(`<b>${c.n}</b> está na oferta · mande o código`)}
+function offerMk(id){const c=byId(id);if(!c||extra(c)<1)return;const n=Math.random().toString(36).slice(2,8);S.inv[id]--;S.tr[n]=id;save();TV={code:cod("OFERTA",n,id)};sync();toast(`<b>${c.n}</b> está na oferta · mande o código`)}
 function cancelT(n){const i=S.tr[n];if(!i)return;S.inv[i]=(S.inv[i]||0)+1;delete S.tr[n];save();sync();toast("Oferta cancelada · a carta voltou para você")}
-function takeT(id){const c=byId(id),o=TV&&TV.o,x=o&&o.c;if(!c||!x||extra(c)<1||lvl(c)||!okT(c,x)||S.td[o.n])return;S.inv[id]--;S.inv[x.id]=(S.inv[x.id]||0)+1;S.td[o.n]=1;S.nt=(S.nt||0)+1;save();TV={code:cod("RESPOSTA",o.n,id)};sync();toast(`🔁 Você recebeu <b>${x.n}</b> · mande o código de resposta`)}
+function takeT(id){const c=byId(id),o=TV&&TV.o,x=o&&o.c;if(!c||!x||extra(c)<1||!okT(c,x)||S.td[o.n])return;S.inv[id]--;S.inv[x.id]=(S.inv[x.id]||0)+1;S.td[o.n]=1;S.nt=(S.nt||0)+1;save();TV={code:cod("RESPOSTA",o.n,id)};sync();toast(`🔁 Você recebeu <b>${x.n}</b> · mande o código de resposta`)}
 function useCode(v){
  const[t,n,...r]=String(v).trim().split("-"),i=r.join("-"),c=byId(i);
  if(!n||!c||t!="OFERTA"&&t!="RESPOSTA")return toast("Código inválido. Cole o código inteiro.");
@@ -921,7 +921,7 @@ function play(p,d,pi,np=1,g=0){LN=np;
  const summary=()=>{
   ph=4;sk=1;skb.hidden=true;document.body.classList.remove("nofr");
   ov.querySelectorAll(".bst,.cf,.bn,.xf").forEach(e=>e.remove());ov.classList.remove("shk");
-  stage.innerHTML=`<div class="sum${N>20?" big":""}">${d.map(x=>`<div data-c="${x.c.id}"${x.n?' class="nw"':""}>${card(x.c)}</div>`).join("")}</div>`;
+  stage.innerHTML=`<div class="sum${N>20?" big":""}">${d.map(x=>`<div data-c="${x.c.id}"${x.n?' class="nw"':""}>${card(x.c,"",0,0,"",x.n?null:0)}</div>`).join("")}</div>`;
   hint.textContent=pi==null?"Toque na carta para ver a ficha":`${d.filter(x=>x.n).length} carta(s) nova(s) · toque numa carta para ver a ficha`;
   SUMR=()=>{const c=costOf(p)*np;acts.innerHTML=(pi==null?"":cvBtn(ALL,"a","cy")+`<button class="${S.fr<c?"off":""}" data-a="${np>1?3:1}">${np>1?`Abrir ×${np} de novo`:"Abrir outro"}<span class="pr">${gem}${fmt(c)}</span></button>`)+`<button class="gh" data-a="0">Voltar</button>`};SUMR();
   if(!pd){pd=1;if(pi!=null&&!g)pop("−"+fmt(costOf(p)*np),"neg")}
@@ -929,7 +929,7 @@ function play(p,d,pi,np=1,g=0){LN=np;
  // pilha: a carta da frente + até 2 atrás (todas de frente, uma sobre a outra)
  const place=()=>{
   const s=stk();if(!s)return;
-  s.classList.toggle("tdy",!spr);for(let j=0;j<3&&k+j<N;j++)if(!s.querySelector(`[data-sn="${k+j}"]`))s.insertAdjacentHTML("afterbegin",`<div class="sc hid" data-sn="${k+j}">${card(d[k+j].c)}<div class="cb back">✦</div></div>`);
+  s.classList.toggle("tdy",!spr);for(let j=0;j<3&&k+j<N;j++)if(!s.querySelector(`[data-sn="${k+j}"]`))s.insertAdjacentHTML("afterbegin",`<div class="sc hid" data-sn="${k+j}">${card(d[k+j].c,"",0,0,"",d[k+j].n?null:0)}<div class="cb back">✦</div></div>`);
   s.querySelectorAll(".sc").forEach(e=>{const j=e.dataset.sn-k;if(j<0||e.classList.contains("out"))return;const hd=j>0?!spr:e.classList.contains("hid");e.className="sc d"+j+(hd?" hid":"");e.style.zIndex=9-j})
  };
  // carta que acabou de ficar na frente: ranks altos "carregam" (silhueta tremendo) e depois explodem em efeitos
@@ -1018,7 +1018,7 @@ function view(c,keep){
  const n=S.inv[c.id],s=c.sk||[],f=$("fc"),mx=ST[8].map(v=>v*3),bar=(l,v,k)=>`<div class="sb"><span>${l}</span><i><u style="width:${Math.min(100,Math.max(5,v/mx[k]*100))}%"></u></i><b>${v}</b></div>`;
  const body=ft=="s"?stp(c,n):ft=="r"?fzb(c,n)+cvb(c,n):ft=="h"?`<p>${c.d||"Ainda sem história."}</p>`:(Array.isArray(s[0])?s:[s]).map(a=>`<h3>${a[0]||"Sem habilidade ainda"}</h3><em>${a[1]||""}</em><p>${a[2]||""}${a[3]&&a[3].rc?` <b>Recarga: ${a[3].rc} turnos.</b>`:""}</p>`).join("");
  f.style.setProperty("--rc",R[c.r][1]);
- f.innerHTML=`<div class="fch"><div class="hd"><button class="bk" data-a="2">‹ Voltar</button>${wlt()}</div>${card(c)}<h2>${c.n}</h2><p class="rar"><span class="rtg" style="--pc:${R[c.r][1]}">Rank ${R[c.r][0]}</span>${n?`<span class="rtg">${NIVEIS[lvl(c)]}</span>`:""}${n>1?`<span class="rtg">×${n} cópias</span>`:""}</p><div class="sg">${[["s","Status"],["h","História"],["k","Habilidade"],...(n?[["r","Repetidas"]]:[])].map(x=>`<button data-f="${x[0]}" class="${ft==x[0]?"on":""}">${x[1]}${x[0]=="r"&&n>1?`<b>${n-1}</b>`:""}</button>`).join("")}</div><div class="pnl">${body}</div></div>`;
+ f.innerHTML=`<div class="fch"><div class="hd"><button class="bk" data-a="2">‹ Voltar</button>${wlt()}</div>${card(c)}<h2>${c.n}</h2><p class="rar"><span class="rtg" style="--pc:${R[c.r][1]}">Rank ${R[c.r][0]}</span>${n?`<span class="rtg">${NIVEIS[lvl(c)]}</span>`:""}${n>1?`<span class="rtg">${lvl(c)?`1 melhorada + ${n-1} repetida${n>2?"s":""}`:`×${n} cópias`}</span>`:""}</p><div class="sg">${[["s","Status"],["h","História"],["k","Habilidade"],...(n?[["r","Repetidas"]]:[])].map(x=>`<button data-f="${x[0]}" class="${ft==x[0]?"on":""}">${x[1]}${x[0]=="r"&&n>1?`<b>${n-1}</b>`:""}</button>`).join("")}</div><div class="pnl">${body}</div></div>`;
  f.hidden=false;if(!keep)f.scrollTop=0;
 }
 function preview(i){const b=ALL.find(c=>!c.img)||ALL[0];PV={...b,img:0,r:i,id:"pv",hp:ST[i][0],atk:ST[i][1]};play(b.p,[{c:PV,n:false}],null)}
@@ -1175,8 +1175,8 @@ function aiActs(B){const s=cur_(B),E=tn(foe_(B).f.filter(Boolean)),A=s.f.filter(
 function aiMove(B){const L=aiActs(B),ep=[.6,.3,.02][B.o.ai||0];if(!L.length)return endT(B);L.forEach(x=>x.sc+=Math.random()*6);const a=Math.random()<ep?L[Math.random()*L.length|0]:L.sort((x,y)=>y.sc-x.sc)[0];if(a.k=="a")aAtk(B,a.u,a.t);else if(a.k=="s")aSk(B,a.u,a.i,a.g);else if(a.k=="p")aPlace(B,a.u);else aDraw(B)}
 function aiRun(){const B=BT;if(!B||B.over||!B.ai||B.t!=1)return;setTimeout(()=>{if(BT!==B||B.over)return;const a0=B.ac,t0=B.t;aiMove(B);if(!B.over&&B.t==t0&&(B.ac<1||B.ac==a0))endT(B);zr();if(B.over)return zend();aiRun()},1200)}
 // ----- DECK DE BATALHA (12 cartas, qualquer mistura) e código para lutar com amigo -----
-const dkv=()=>{const u={};return(S.dk||[]).map(byId).filter(c=>c&&(u[c.id]=(u[c.id]||0)+1)<=(S.inv[c.id]||0))};
-const dkf=()=>{const d=dkv(),u={},p=[];d.forEach(c=>u[c.id]=(u[c.id]||0)+1);ALL.forEach(c=>{for(let i=u[c.id]||0;i<(S.inv[c.id]||0);i++)p.push(c)});p.sort((a,b)=>b.r-a.r||lvl(b)-lvl(a));while(d.length<12&&p.length)d.push(p.shift());S.dk=d.map(c=>c.id);save();return d};
+const dkv=()=>{const u={};return(S.dk||[]).map(byId).filter(c=>c&&(S.inv[c.id]||0)>0&&!u[c.id]&&(u[c.id]=1))};
+const dkf=()=>{const d=dkv(),u={},p=[];d.forEach(c=>u[c.id]=1);ALL.forEach(c=>{if(!u[c.id]&&(S.inv[c.id]||0)>0)p.push(c)});p.sort((a,b)=>b.r-a.r||lvl(b)-lvl(a));while(d.length<12&&p.length)d.push(p.shift());S.dk=d.map(c=>c.id);save();return d};
 const dkcode=()=>"DECK~"+dkv().map(c=>c.id+":"+lvl(c)).join(",");
 // ----- DECK NA ABA DECK (estilo Clash Royale): deck no topo, a pessoa escolhe cartas do álbum para colocar -----
 let DSEL=null;
@@ -1188,12 +1188,12 @@ function dkPaint(){
  const p=$("dkp");if(!p)return;if(DSEL&&!(S.inv[DSEL]>0))DSEL=null;
  p.innerHTML=dkPanel();p.classList.toggle("pick",!!DSEL);
  const u=dkUsed(dkIds());
- document.querySelectorAll("#m [data-dc]").forEach(e=>{const id=e.dataset.dc,n=u[id]||0;e.classList.toggle("sel",id==DSEL);e.classList.toggle("fu",n>=(S.inv[id]||0));let b=e.querySelector(".dku");if(n){if(!b){b=document.createElement("i");b.className="dku";e.append(b)}b.textContent="✓ no deck"+(n>1?" ×"+n:"")}else if(b)b.remove()});
+ document.querySelectorAll("#m [data-dc]").forEach(e=>{const id=e.dataset.dc,n=u[id]||0;e.classList.toggle("sel",id==DSEL);e.classList.toggle("fu",n>=1);let b=e.querySelector(".dku");if(n){if(!b){b=document.createElement("i");b.className="dku";e.append(b)}b.textContent="✓ no deck"+(n>1?" ×"+n:"")}else if(b)b.remove()});
  dkBar()
 }
 const dkSave=()=>{save();dkPaint()};
-function dkUse(id){const ids=dkIds();if(!byId(id))return;if((S.inv[id]||0)-(dkUsed(ids)[id]||0)<1)return toast("Todas as cópias dessa carta já estão no deck.");if(ids.length>=12)return toast("Deck cheio · toque num espaço do deck para trocar.");ids.push(id);S.dk=ids;DSEL=null;dkSave()}
-function dkPlace(i,id){const ids=dkIds();if(ids[i]==id){DSEL=null;return dkPaint()}if(i<ids.length)ids.splice(i,1);else i=ids.length;if((S.inv[id]||0)-(dkUsed(ids)[id]||0)<1)return toast("Todas as cópias dessa carta já estão no deck.");ids.splice(i,0,id);S.dk=ids;DSEL=null;dkSave()}
+function dkUse(id){const ids=dkIds();if(!byId(id))return;if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");if(ids.length>=12)return toast("Deck cheio · toque num espaço do deck para trocar.");ids.push(id);S.dk=ids;DSEL=null;dkSave()}
+function dkPlace(i,id){const ids=dkIds();if(ids[i]==id){DSEL=null;return dkPaint()}if(i<ids.length)ids.splice(i,1);else i=ids.length;if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");ids.splice(i,0,id);S.dk=ids;DSEL=null;dkSave()}
 function dkRm(i){const ids=dkIds();if(i>=ids.length)return;ids.splice(i,1);S.dk=ids;dkSave()}
 document.addEventListener("click",e=>{
  const t=e.target.closest("[data-dc],[data-ds],[data-dx],[data-dk]");if(!t)return;const D=t.dataset;
@@ -1366,7 +1366,7 @@ function zend2(){const B=BT,w=B.w,k=B.o.k,t0=S.tp,a0=S.ar,g0=gifts(),rw=[];let t
  save();upd();
  zb.innerHTML=`<div class="zres"><h2>${w==0?(B.ai?"Vitória!":B.p[0].n+" venceu"):w==1?(B.ai?"Derrota":B.p[1].n+" venceu"):"Empate"}</h2>${tr?`<p class="ztr${dt<0?" ls":""}">${tr}</p>`:""}${rw.length?`<p class="zrw">${rw.join(" · ")}</p>`:""}<div class="two"><button class="bt gh" data-z="close">Voltar</button>${B.o.m=="a"?'<button class="bt" data-z="again">Lutar de novo</button>':""}</div></div>`}
 function zgo(a,b,o){BT=nb(a,b,o);BT.p.forEach((s,i)=>s.f[0]&&BT.ev.push({k:"place",s:i,id:s.f[0].id,r:s.f[0].c.r,el:s.f[0].c.el}));BT.ev.push({k:"turn",s:BT.t,first:1});BT.ai=o.m=="a";BT.v=window.LV?window.LV.me:BT.ai?0:BT.t;BT.lv=window.LV?1:0;SEL=null;PASS=0;zb.hidden=false;zr();aiRun()}
-function mineDeck(){let d=dkv();if(d.length<12)d=dkf();if(d.length<12){toast("Você precisa de <b>12 cartas</b> para montar o deck. Abra mais pacotes!");return null}return d.map(c=>({c,lv:lvl(c)}))}
+function mineDeck(){let d=dkv();if(d.length<12)d=dkf();if(d.length<12){toast("Você precisa de <b>12 cartas diferentes</b> para montar o deck. Abra mais pacotes!");return null}return d.map(c=>({c,lv:lvl(c)}))}
 function startArena(bs){const u=mineDeck();if(!u)return;const k=S.ar,e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*CONFIG.chefe}:x);zgo({n:"Você",u},{n:(bs?"Chefe · ":"Rival · ")+AR[k][0],u:e},{m:"a",k,ai:IA[k],b:bs?1:0})}
 function startFriend(v){const t=String(v||"").trim();if(t.slice(0,5)!="DECK~")return toast("Código inválido · cole o código do deck do seu amigo.");const f=t.slice(5).split(",").map(x=>{const[i,l]=x.split(":"),c=byId(i);return c?{c,lv:Math.max(0,Math.min(5,+l||0))}:null});if(f.length!=12||f.some(x=>!x))return toast("Código inválido · o deck do amigo precisa ter 12 cartas do jogo.");const u=mineDeck();if(!u)return;zgo({n:"Você",u},{n:window.ONLN||"Amigo",u:f},{m:"f"})}
 zb.onclick=e=>{const b=e.target.closest("[data-z]");if(!b)return;const a=b.dataset.z;if(a=="close"){BT=null;zb.hidden=true;PASS=0;upd();render(1)}else if(a=="again"){const bb=BT&&BT.o.b;BT=null;zb.hidden=true;startArena(bb)}else zc(a)};
@@ -1380,28 +1380,30 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-bz]");if(!
  else if(a=="mycode"){if(dkv().length<12&&dkf().length<12)return toast("Monte um deck de 12 cartas primeiro.");const t=dkcode();try{navigator.clipboard.writeText(t).then(()=>toast("Código do deck copiado ✓"),()=>ask("Código do deck",`<input class="cdi" readonly value="${t}" onfocus="this.select()">`,"Fechar",()=>{}))}catch(x){ask("Código do deck",`<input class="cdi" readonly value="${t}" onfocus="this.select()">`,"Fechar",()=>{})}}
  else if(a=="friend"){const i=$("fcd");i&&i.value.trim()?startFriend(i.value):toast("Cole o código do deck do seu amigo primeiro.")}
  else if(a.slice(0,3)=="rm:"){const i=S.dk.indexOf(a.slice(3));if(i>=0)S.dk.splice(i,1);save();render(1)}
- else if(a.slice(0,3)=="ad:"){if(dkv().length<12){S.dk=dkv().map(c=>c.id);S.dk.push(a.slice(3));save()}else toast("O deck já tem 12 cartas · remova uma antes.");render(1)}});
+ else if(a.slice(0,3)=="ad:"){if(dkv().some(c=>c.id==a.slice(3)))toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");else if(dkv().length<12){S.dk=dkv().map(c=>c.id);S.dk.push(a.slice(3));save()}else toast("O deck já tem 12 cartas · remova uma antes.");render(1)}});
 
 // ===== AJUSTES · SAVE · MODO ADM (v0.5) =====
 const b64=s=>btoa(unescape(encodeURIComponent(s))),unb=s=>decodeURIComponent(escape(atob(s))),rid=()=>Math.random().toString(36).slice(2,8),cpDl=(n,t)=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"application/json"}));a.download=n;a.click()},cpSrc=(t,f,cb)=>{const x=$(f).files[0];if(x){const r=new FileReader();r.onload=()=>cb(r.result);r.readAsText(x)}else cb($(t).value)},cpFl=(l,h)=>`<label>${l}</label>${h}`,cpTa=id=>`<textarea id="${id}" rows="3" onfocus="this.select()"></textarea>`;
 const saveCode=()=>"CP1:"+b64(JSON.stringify(S)),loadCode=t=>{t=String(t).trim();if(t.slice(0,4)=="CP1:")t=unb(t.slice(4));const j=JSON.parse(t);if(!j||!j.inv)throw 0;return j};
-const ADM=Object.assign({c:[],p:[],d:"",o:{},po:{},ab:[],ca:{}},ADM0);
+const ADM=Object.assign({c:[],p:[],d:"",o:{},po:{},ab:[],ca:{},xp:[]},ADM0);
 const sADM=()=>{try{localStorage.setItem("colprimata_adm",JSON.stringify(ADM));localStorage.setItem("colprimata_img",JSON.stringify(IMG))}catch(e){toast("Sem espaço no aparelho · exporte o conteúdo")}};
 function addCard(x){let p=P.find(q=>q.id==x.pk);if(!p){const d=ADM.p.find(q=>q.id==x.pk);if(!d)return;p={id:d.id,n:d.n,e:d.e,h:d.h,cost:d.cost,cards:[]};P.push(p)}const c={...x};prep(p,c,0);p.cards.push(c);ALL.push(c)}
 ADM.c.forEach(addCard);P.forEach(p=>p.dest=p.id==ADM.d);
 const adxRm=(a,x)=>{const k=a.indexOf(x);k>=0&&a.splice(k,1)};
 Object.keys(ADM.po).forEach(i=>{const p=P.find(q=>q.id==i);p&&Object.assign(p,ADM.po[i])});P.forEach(p=>{if(IMG["pk_"+p.id])p.img=IMG["pk_"+p.id]}); // foto do pacote fica em IMG["pk_"+id]
 Object.keys(ADM.o).forEach(i=>{const c=byId(i),o=ADM.o[i];if(!c)return;const p=c.p;
-if(o.del){if(p.cards.length>1){adxRm(p.cards,c);adxRm(ALL,c)}return}
+if(o.del){adxRm(p.cards,c);adxRm(ALL,c);return}
 const q=P.find(z=>z.id==o.pk);if(q&&q!=p){adxRm(p.cards,c);q.cards.push(c);c.p=q}
 Object.assign(c,o);if(!(o.ch>0))delete c.ch;if(!o.tipo)delete c.tipo});
+(ADM.xp||[]).forEach(id=>{const i=P.findIndex(q=>q.id==id);if(i>=0&&P.length>1){P[i].cards.forEach(c=>adxRm(ALL,c));P.splice(i,1)}});
+for(let i=P.length-1;i>=0;i--)if(!P[i].cards.length&&P.length>1)P.splice(i,1);
 // v1.5: habilidades da biblioteca (ADM.ab) dadas às cartas (ADM.ca) viram itens de c.sk
 Object.keys(ADM.ca).forEach(i=>{const c=byId(i);if(!c)return;const k=c.sk||[],l=Array.isArray(k[0])?k.slice():k.length?[k]:[];ADM.ca[i].forEach(id=>{const a=ADM.ab.find(x=>x.id==id);if(a)l.push([a.n,a.q?"“"+a.q+"”":"",dsc(a),{rc:a.rc,ef:a.ef,tr:a.tr}])});c.sk=l});
 function starterGo(){if(S.ini)return;S.ini=1;if(!Object.keys(S.inv).length){const l=shf(ALL.filter(c=>c.p&&!c.p.ex&&c.r<4)).slice(0,20);l.forEach(c=>S.inv[c.id]=1);S.opened=(S.opened||0)+2;setTimeout(()=>toast(`🎴 Você ganhou <b>2 pacotes iniciais</b>: ${l.length} cartas diferentes!`),700)}save()}
 const imgOK=(file,cb)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const lim=CONFIG.imgKB*1024,cv=document.createElement("canvas"),x=cv.getContext("2d");let mm="image/webp";if(cv.toDataURL(mm).slice(5,15)!="image/webp")mm="image/jpeg";for(const w of[600,520,440,360,300]){cv.width=w;cv.height=w*4/3;const k=Math.max(w/im.width,cv.height/im.height);x.fillStyle="#111";x.fillRect(0,0,w,cv.height);x.drawImage(im,(w-im.width*k)/2,(cv.height-im.height*k)/2,im.width*k,im.height*k);for(let q=.9;q>.3;q-=.1){const u=cv.toDataURL(mm,q);if(u.length*.75<=lim)return cb(u)}}cb(cv.toDataURL("image/jpeg",.3))};im.onerror=()=>cb(null);im.src=r.result};r.readAsDataURL(file)};
 const cfg=document.createElement("div");cfg.id="cfg";cfg.hidden=true;document.body.append(cfg);
 const gear=document.createElement("button");gear.id="gear";gear.textContent="⚙";gear.setAttribute("aria-label","Ajustes");document.body.append(gear);
-let AD=0,PEND=null;
+let AD=0,PEND=null,PW="";
 function cfgView(v){cfg.hidden=false;PEND=null;
  const T=`<div class="in2"><h2>${v=="a"?"Modo ADM":"Ajustes"}</h2>`,E=`<button class="bt gh" data-k="x">Fechar</button></div>`;
  if(v=="a"){
@@ -1418,9 +1420,9 @@ function cfgView(v){cfg.hidden=false;PEND=null;
 function nCard(){const n=$("an").value.trim(),pv=$("ap").value;if(!n)return toast("Dê um nome à carta.");let pk=pv;
  if(pv=="__"){const pn=$("pn").value.trim();if(!pn)return toast("Dê um nome ao pacote.");pk="p"+rid();ADM.p.push({id:pk,n:pn,e:$("pe").value||"🎴",h:+$("ph").value||200,cost:+$("pc").value||0})}
  const x={id:"a"+rid(),pk,r:$("ar2").value,n,d:$("ah").value.trim()||undefined},ch=parseFloat($("ac").value);if(ch>0)x.ch=ch;
- if(PEND)IMG[x.id]=PEND;ADM.c.push(x);sADM();addCard(x);toast(`✅ <b>${n}</b> criada!`);cfgView("a")}
+ if(PEND&&PW=="fi")IMG[x.id]=PEND;ADM.c.push(x);sADM();addCard(x);toast(`✅ <b>${n}</b> criada!`);try{sessionStorage.cpad2="ds_c"}catch(e){}cfgView("a");const dn=$("ds_n");if(dn)dn.open=true}
 gear.onclick=()=>cfgView("m");
-cfg.onchange=e=>{const t=e.target;if((t.id=="fi"||t.id=="fj")&&t.files[0])imgOK(t.files[0],u=>{PEND=u;toast(u?`Imagem pronta · ${Math.round(u.length*.75/1024)} KB`:"Não consegui ler a imagem")})};
+cfg.onchange=e=>{const t=e.target;if((t.id=="fi"||t.id=="fj")&&t.files[0])imgOK(t.files[0],u=>{PEND=u;PW=t.id;toast(u?`Imagem pronta · ${Math.round(u.length*.75/1024)} KB`:"Não consegui ler a imagem")})};
 cfg.onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;const k=b.dataset.k;
  if(k=="x"){cfg.hidden=true;sync()}
  else if(k=="m")cfgView("m")
@@ -1445,7 +1447,7 @@ adxL={admPin:"PIN do modo ADM",limiteDia:"Lutas por dia que dão prêmio",pacVit
 adxPo=()=>adxO(P,p=>`<option value="${p.id}">${p.e} ${p.n}</option>`),
 adxCo=()=>adxO(ALL,c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`),
 adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("ek2","Pacote",adxPo())+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+adxB("sc","Salvar carta")+adxB("dc","Excluir carta","gh")),
-adxPk=()=>adxD("k","📦 Editar pacotes",adxS("ek","Pacote",adxPo())+adxI("kn","Nome")+adxI("ke","Emoji")+adxI("kh","Cor (0 a 360)","","number")+adxI("kc","Preço em fragmentos (vazio = padrão)","","number")+adxI("ko","Chances % por raridade F,E,D,C,B,A,S,SS,SSS (vazio = padrão)")+adxB("sk","Salvar pacote")+adxB("dk","Excluir pacote criado aqui","gh")),
+adxPk=()=>adxD("k","📦 Editar pacotes",adxS("ek","Pacote",adxPo())+adxI("kn","Nome")+adxI("ke","Emoji")+adxI("kh","Cor (0 a 360)","","number")+adxI("kc","Preço em fragmentos (vazio = padrão)","","number")+adxI("ko","Chances % por raridade F,E,D,C,B,A,S,SS,SSS (vazio = padrão)")+adxB("sk","Salvar pacote")+adxB("dk","Excluir pacote","gh")),
 adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("cf_"+k,adxL[k]||k,CONFIG[k],typeof CONFIG[k]=="number"?"number":"text")).join("")
 +adxI("rfr","Fragmentos por repetida · F,E,D,C,B,A,S,SS,SSS",FRAG.join(","))+adxI("rcu","Preço padrão do pacote",CUSTO,"number")+adxI("rini","Fragmentos de quem começa",INICIO,"number")
 +adxI("rrc","Chance % de cada raridade (padrão dos pacotes)",R.map(r=>r[2]).join(","))
@@ -1459,18 +1461,19 @@ adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("
 adxGv=()=>adxD("g","🧪 Dar itens e testes",adxI("gn","Quantidade",10,"number")+adxS("gp","Pacote de presente",adxPo())+adxS("gc","Carta",adxCo())+adxB("gf","Dar fragmentos","cy")+adxB("gg","Dar pacotes de presente","cy")+adxB("gk","Dar a carta","cy")+adxB("ga","Liberar todas as cartas","gh"));
 function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("ek2").value=c.p.id;$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||""}
 function adxFk(){const p=P.find(q=>q.id==$("ek").value);if(!p)return;$("kn").value=p.n;$("ke").value=p.e;$("kh").value=p.h;$("kc").value=p.cost||"";$("ko").value=p.odds?p.odds.join(","):""}
-function adxGo(){sADM();sessionStorage.cpad=[...cfg.querySelectorAll("details[open]")].map(d=>d.id).join();location.reload()}
+function adxGo(){sADM();sessionStorage.cpad=[...cfg.querySelectorAll("details[open]")].map(d=>d.id).join();try{sessionStorage.cptab=tab}catch(e){}location.reload()}
 function adxSc(){const c=byId($("ec").value);if(!c)return;const g=i=>$(i).value,r=+g("er"),pk=g("ek2");let f=[+g("ehp"),+g("eatk")];
 if(pk!=c.p.id&&c.p.cards.length<2)return toast("O pacote precisa ficar com ao menos 1 carta.");
 if(f.some(x=>!(x>0)))return toast("Vida e dano precisam ser maiores que 0.");
 if(r!=c.r&&f[0]==c.hp&&f[1]==c.atk)f=[ST[r][0],ST[r][1]];
-ADM.o[c.id]={n:g("en").trim()||c.n,r,pk,hp:f[0],atk:f[1],ch:parseFloat(g("ech"))||0,d:g("eh").trim()};if(PEND)IMG[c.id]=PEND;adxGo()}
-function adxDc(){const c=byId($("ec").value);if(!c)return;if(c.p.cards.length<2)return toast("O pacote precisa ficar com ao menos 1 carta.");
-ask("Excluir carta?",`<b>${c.n}</b> some do jogo e dos pacotes.`,"Excluir",()=>{ADM.c=ADM.c.filter(x=>x.id!=c.id);delete IMG[c.id];ADM.o[c.id]={del:1};delete S.inv[c.id];save();adxGo()})}
+ADM.o[c.id]={n:g("en").trim()||c.n,r,pk,hp:f[0],atk:f[1],ch:parseFloat(g("ech"))||0,d:g("eh").trim()};if(PEND&&PW=="fj")IMG[c.id]=PEND;adxGo()}
+function adxXp(p){const id=p.id;ADM.p=ADM.p.filter(q=>q.id!=id);ADM.xp=[...new Set([...(ADM.xp||[]),id])];ADM.c.filter(x=>x.pk==id).forEach(x=>delete IMG[x.id]);ADM.c=ADM.c.filter(x=>x.pk!=id);if(ADM.d==id)ADM.d="";delete ADM.po[id];delete IMG["pk_"+id];p.cards.forEach(x=>{delete IMG[x.id];delete S.inv[x.id]})}
+function adxDc(){const c=byId($("ec").value);if(!c)return;const p=c.p,ult=p.cards.length<2;if(ult&&P.length<2)return toast("O jogo precisa ter ao menos 1 pacote com 1 carta.");
+ask("Excluir carta?",ult?`<b>${c.n}</b> é a última carta do pacote <b>${p.n}</b> · o pacote também será excluído.`:`<b>${c.n}</b> some do jogo e dos pacotes.`,"Excluir",()=>{ADM.c=ADM.c.filter(x=>x.id!=c.id);delete IMG[c.id];ADM.o[c.id]={del:1};delete S.inv[c.id];if(ult)adxXp(p);save();adxGo()})}
 function adxSk(){const id=$("ek").value,v=$("ko").value.trim(),od=v?v.split(",").map(Number):null;if(od&&(od.length!=9||od.some(x=>!(x>=0))))return toast("Chances: 9 números separados por vírgula.");
 ADM.po[id]=Object.assign(ADM.po[id]||{},{n:$("kn").value.trim()||"Pacote",e:$("ke").value||"🎴",h:+$("kh").value||0,cost:+$("kc").value||0,odds:od});adxGo()}
-function adxDk(){const id=$("ek").value,p=P.find(q=>q.id==id);if(!ADM.p.some(q=>q.id==id))return toast("Pacotes originais não podem ser excluídos · edite nome, preço e chances.");
-ask("Excluir pacote?",`<b>${p.n}</b> e as ${p.cards.length} cartas dele somem do jogo.`,"Excluir",()=>{ADM.c.filter(x=>x.pk==id).forEach(x=>delete IMG[x.id]);ADM.c=ADM.c.filter(x=>x.pk!=id);ADM.p=ADM.p.filter(q=>q.id!=id);if(ADM.d==id)ADM.d="";delete ADM.po[id];adxGo()})}
+function adxDk(){const id=$("ek").value,p=P.find(q=>q.id==id);if(!p)return;if(P.length<2)return toast("O jogo precisa ter ao menos 1 pacote.");
+ask("Excluir pacote?",`<b>${p.n}</b> e as ${p.cards.length} cartas dele somem do jogo.`,"Excluir",()=>{adxXp(p);save();adxGo()})}
 function adxSr(){const g=i=>$(i).value,n=i=>g(i).split(",").map(x=>+x.trim()),ln=i=>g(i).split("\n").map(x=>x.trim()).filter(Boolean),ok=a=>a.length==9&&a.every(x=>x>=0),
 ms=i=>ln(i).map(l=>{const p=l.split("|");return[p[0].trim(),(p[1]||"").trim(),+p[2]]}),cf={},mc={};
 Object.keys(CONFIG).forEach(k=>{const v=g("cf_"+k);cf[k]=typeof CONFIG[k]=="number"?+v:v});
@@ -1637,6 +1640,7 @@ starterGo();
 arenaInit();tickFp();
 $("ow").innerHTML=wal();save();
 render();
+{const tb=sessionStorage.cptab;if(tb!=null){sessionStorage.removeItem("cptab");if(/^[tahbm]$/.test(tb)&&tb!=tab){tab=tb;render()}}}
 {const q=sessionStorage.cpad;if(q!=null){sessionStorage.removeItem("cpad");AD=1;cfgView("a");q.split(",").forEach(i=>{const d=$(i);if(d)d.open=true})}}
 </script>
 <script>
@@ -1718,7 +1722,7 @@ let dirty=0,idx=[];
 // cabeçalho e barra de salvar acompanham a página aberta
 function ui(){const a=act();try{window.adxOpen&&adxOpen(a?a.id:"")}catch(e){console.warn("adm13",e)}const t=a&&T[a.id],f=a&&FT[a.id],ft=cfg.querySelector(".af"),b=ft&&ft.querySelector(".bt");if(!b)return;
 cfg.querySelector(".ah b").textContent=a?t[0]+" "+t[1]:"Modo ADM";cfg.querySelector(".ah small").textContent=a?t[2]:"Escolha uma categoria · tudo fica salvo neste aparelho";
-ft.hidden=!f;if(f){b.dataset.k=f[0];b.textContent=f[1];b.classList.toggle("dirty",!!dirty)}}
+ft.hidden=!f;if(f){b.dataset.k=f[0];b.textContent=f[1];b.classList.toggle("dirty",!!dirty)}if(a&&a.id=="ds_c"){const n=$("ds_n");if(n&&n.open){b.dataset.k="nc";b.textContent="Criar carta"}}}
 function show(id){PG().forEach(d=>d.open=d.id==id);ui();cfg.scrollTo(0,0)}
 function go(id){const c=$(id);if(!c)return;const d=c.closest(".adp"),n=c.closest("#ds_n");show(d.id);if(n)n.open=true;$("asq").value="";cfg.querySelector(".asl").innerHTML="";
 setTimeout(()=>{c.scrollIntoView({block:"center",behavior:"smooth"});c.classList.add("ahl");setTimeout(()=>c.classList.remove("ahl"),1700)},90)}
@@ -1747,6 +1751,7 @@ cfg.addEventListener("input",e=>{const t=e.target;if(!cfg.classList.contains("ad
 if(t.id=="asq"){const q=N(t.value.trim());cfg.querySelector(".asl").innerHTML=q.length<2?"":idx.filter(x=>x.n.includes(q)).slice(0,10).map(x=>`<button data-adm="f${x.id}"><b>${x.t}</b><small>${x.p}</small></button>`).join("")||'<p class="mut">Nada encontrado.</p>';return}
 if(t.closest(".adp")&&!t.closest("#ds_n")&&!/^(ec|ek|z_\w*)$/.test(t.id)&&!dirty){dirty=1;ui()}});
 cfg.addEventListener("toggle",e=>{const d=e.target;if(cfg.classList.contains("adm")&&d.matches&&d.matches("details.adp")&&d.open&&act()!==d)show(d.id)},true);
+cfg.addEventListener("toggle",e=>{if(e.target.id=="ds_n")ui()},true);
 const g0=adxGo;adxGo=function(){try{const a=act();a&&(sessionStorage.cpad2=a.id)}catch(e){}return g0.apply(this,arguments)};
 const c0=cfgView;cfgView=function(v){c0.apply(this,arguments);cfg.classList.remove("adm");if(v=="a")try{tidy()}catch(e){console.warn("adm",e)}};
 if(!cfg.hidden&&$("ds_c"))try{tidy()}catch(e){console.warn("adm",e)}
@@ -1848,7 +1853,7 @@ const G="https://www.gstatic.com/firebasejs/10.14.1/",[{initializeApp},A,F]=awai
 const app=initializeApp(FIREBASE_CONFIG),au=A.getAuth(app),db=F.getFirestore(app),{doc,getDoc,setDoc,deleteDoc,onSnapshot,updateDoc,collection,query,where,getDocs,arrayUnion}=F;
 const L=localStorage,SI=Storage.prototype.setItem,ls=(k,v)=>SI.call(L,k,v),g=i=>document.getElementById(i),bt=()=>typeof BT!=="undefined"&&BT;
 const H=s=>{let x=0;for(let i=0;i<s.length;i+=7)x=(x*31+s.charCodeAt(i))|0;return s.length+":"+x};
-const reload=()=>{const t=Date.now();if(t-(+sessionStorage.cp_rl||0)<1e4)return;sessionStorage.cp_rl=t;location.reload()};
+const reload=()=>{const t=Date.now();if(t-(+sessionStorage.cp_rl||0)<1e4)return;sessionStorage.cp_rl=t;try{if(!cfg.hidden&&AD){sessionStorage.cpad=[...cfg.querySelectorAll("details[open]")].map(d=>d.id).join();const a=cfg.querySelector("details.adp[open]");if(a)sessionStorage.cpad2=a.id}sessionStorage.cptab=tab}catch(e){}location.reload()};
 // cache das fotos no aparelho (IndexedDB): cada foto é baixada uma vez só
 const idb=new Promise((ok,no)=>{const r=indexedDB.open("cpimg",1);r.onupgradeneeded=()=>r.result.createObjectStore("i");r.onsuccess=()=>ok(r.result);r.onerror=()=>no()});
 const ig=k=>idb.then(d=>new Promise(ok=>{const q=d.transaction("i").objectStore("i").get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ok()})).catch(()=>{});
@@ -1884,7 +1889,7 @@ async function fotos(f){await PEND;CF=f;const ids=Object.keys(f).filter(i=>!(met
  const w=async()=>{while(n<ids.length){const id=ids[n++];try{let c=await ig(id);if(!c||c.t!==f[id]){const s=await getDoc(doc(db,"fotos",id));if(!s.exists())continue;c={t:f[id],d:s.data().d};is(id,c)}put(id,c.d,c.t)}catch(e){warn("fotos",e)}}};
  await Promise.all([w(),w(),w(),w()]);ready=1;if(ids.length&&!bt())render(1)}
 // ===== PERFIL · JOGADORES · TROCAS E DUELOS ONLINE =====
-document.head.insertAdjacentHTML("beforeend","<style>body:has(#cfg:not([hidden])) #cpchip{display:none}#cpchip{position:fixed;right:8px;bottom:calc(env(safe-area-inset-bottom,0px) + 120px);z-index:9000;display:flex;align-items:center;gap:6px;background:#000c;color:#fff;border:1px solid #fff4;border-radius:16px;padding:4px 10px;font-size:.78rem;font-weight:800}#cpchip img{width:22px;height:22px;border-radius:50%;object-fit:cover}#cpm{position:fixed;inset:0;z-index:9500;background:#000b;display:flex;align-items:flex-end;justify-content:center}#cpm .pbx{width:min(100%,460px);max-height:88vh;overflow:auto;background:var(--sf,#1e1d27);color:var(--fg,#fff);border-radius:20px 20px 0 0;padding:16px 16px 24px;display:grid;gap:10px;text-align:left}#cpm h4{margin:6px 0 0}#cpm small{display:block;opacity:.65;font-size:.72rem}.pr{display:flex;gap:12px;align-items:center}.pav,.pr img,.pl img,.pl i,.pr i{width:56px;height:56px;border-radius:50%;object-fit:cover;background:#ffffff1c;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:1.4rem;border:0;color:inherit;padding:0;overflow:hidden}.pav img,.pav i{width:100%;height:100%}.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pg div{background:#ffffff10;border-radius:12px;padding:10px 4px;text-align:center;font-size:.7rem}.pg b{display:block;font-size:1.05rem}.pl{display:flex;gap:10px;align-items:center;padding:8px;border-radius:14px;background:#ffffff0d;border:0;color:inherit;text-align:left}.pl img,.pl i{width:42px;height:42px;font-size:1.1rem}.pt{display:grid;gap:6px;padding:10px;border-radius:12px;background:#ffffff0d;font-size:.82rem}.pt div{display:flex;gap:6px}.pt .bt{flex:1}#cpm select{width:100%;padding:11px;border-radius:12px;background:#ffffff14;color:inherit;border:1px solid #ffffff26}</style>");
+document.head.insertAdjacentHTML("beforeend","<style>body:has(#cfg:not([hidden])) #cpchip{display:none}#cpchip{position:fixed;right:8px;bottom:calc(env(safe-area-inset-bottom,0px) + 120px);z-index:9000;display:flex;align-items:center;gap:6px;background:#000c;color:#fff;border:1px solid #fff4;border-radius:16px;padding:4px 10px;font-size:.78rem;font-weight:800}#cpchip img{width:22px;height:22px;border-radius:50%;object-fit:cover}#cpm{position:fixed;inset:0;z-index:9500;background:#000b;display:flex;align-items:flex-end;justify-content:center}#cpm .pbx{width:min(100%,460px);max-height:88vh;overflow:auto;background:var(--sf,#1e1d27);color:var(--fg,#fff);border-radius:20px 20px 0 0;padding:16px 16px 24px;display:grid;gap:10px;text-align:left}#cpm h4{margin:6px 0 0}#cpm small{display:block;opacity:.65;font-size:.72rem}.cxpr{display:flex;gap:12px;align-items:center}.cxpav,.cxpr img,.cxpl img,.cxpl i,.cxpr i{width:56px;height:56px;border-radius:50%;object-fit:cover;background:#ffffff1c;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:1.4rem;border:0;color:inherit;padding:0;overflow:hidden}.cxpav img,.cxpav i{width:100%;height:100%}.cxpg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.cxpg div{background:#ffffff10;border-radius:12px;padding:10px 4px;text-align:center;font-size:.7rem}.cxpg b{display:block;font-size:1.05rem}.cxpl{display:flex;gap:10px;align-items:center;padding:8px;border-radius:14px;background:#ffffff0d;border:0;color:inherit;text-align:left}.cxpl img,.cxpl i{width:42px;height:42px;font-size:1.1rem}.cxpt{display:grid;gap:6px;padding:10px;border-radius:12px;background:#ffffff0d;font-size:.82rem}.cxpt div{display:flex;gap:6px}.cxpt .bt{flex:1}#cpm select{width:100%;padding:11px;border-radius:12px;background:#ffffff14;color:inherit;border:1px solid #ffffff26}#cpm .pbx{grid-auto-rows:max-content;align-content:start}#cpm .pbx>*{min-height:min-content}#cpm .pbx .bt{margin:0;flex:none}</style>");
 const ME={n:"",f:""},esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let TIN=[],TOUT=[],ONL=null,pt=0,PL=[],CP=0,TH=[],nw=0;
 const warn=(w,e)=>{console.warn(w,e);if(nw++)return;toast("⚠️ "+w+": "+esc(e.code==="permission-denied"?"sem permissão no Firebase · atualize as regras":e.code||e.message))},
@@ -1893,31 +1898,31 @@ const warn=(w,e)=>{console.warn(w,e);if(nw++)return;toast("⚠️ "+w+": "+esc(e
 // fotos que ainda não subiram para a nuvem ficam guardadas no aparelho e voltam depois de atualizar
 const PEND=idb.then(d=>new Promise(ok=>{const q=d.transaction("i").objectStore("i").openCursor(),r=[];q.onsuccess=()=>{const x=q.result;if(x){x.value&&x.value.t<0&&r.push([x.key,x.value]);x.continue()}else{r.forEach(([i,v])=>{if(!IMG[i])put(i,v.d,-1)});if(r.length){bt()||render(1);pa()}ok()}};q.onerror=()=>ok()})).catch(()=>{});
 function stats(){const t=(S.cn&&S.cn.T)||{},w=t.win||0,o=S.on||{},h=ALL.filter(c=>S.inv[c.id]);let d=dkv();if(d.length<12)d=[...h].sort((a,b)=>b.r-a.r).slice(0,12);
- return{n:ME.n,f:ME.f||"",tp:S.tp||0,w,l:Math.max(0,(t.play||0)-w),ow:o.w||0,ol:o.l||0,nc:h.length,tot:ALL.length,dk:d.length==12?"DECK~"+d.map(c=>c.id+":"+lvl(c)).join(","):"",ex:Object.fromEntries(ALL.filter(c=>extra(c)>0&&!lvl(c)).map(c=>[c.id,extra(c)])),t:Date.now()}}
+ return{n:ME.n,f:ME.f||"",tp:S.tp||0,w,l:Math.max(0,(t.play||0)-w),ow:o.w||0,ol:o.l||0,nc:h.length,tot:ALL.length,dk:d.length==12?"DECK~"+d.map(c=>c.id+":"+lvl(c)).join(","):"",ex:Object.fromEntries(ALL.filter(c=>extra(c)>0).map(c=>[c.id,extra(c)])),t:Date.now()}}
 async function pubPerfil(){if(!U)return;try{await setDoc(doc(db,"perfis",U.uid),stats(),{merge:true})}catch(e){warn("perfil",e)}}
 function pf(){clearTimeout(pt);pt=setTimeout(pubPerfil,6000)}
 function modal(h){let o=g("cpm");if(!o){o=document.createElement("div");o.id="cpm";o.onclick=e=>{if(e.target===o)return o.remove();const b=e.target.closest("[data-a]");b&&act(b.dataset.a,b.dataset.v)};o.onchange=e=>{e.target.id=="tm"&&fillQ()};document.body.append(o)}o.innerHTML=`<div class="pbx">${h}</div>`;return o}
 function act(a,v){if(a=="me")perfil();else if(a=="pj")jogadores();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca")}
 function perfil(){const s=stats(),k=TIN.filter(t=>t.s=="p").length;
- modal(`<div class="pr"><button class="pav" data-a="pf">${av(ME.f,ME.n)}</button><div><b data-a="pn">${esc(ME.n)} ✎</b><small>toque na foto ou no nome para mudar</small></div></div><div class="pg"><div><b>🏆 ${s.tp}</b>troféus</div><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}</b>duelos ganhos</div><div><b>${s.ol}</b>duelos perdidos</div></div><button class="bt cy" data-a="pj">👥 Jogadores e trocas${k?" · 🔔 "+k:""}</button><button class="bt gh" data-a="out">Sair da conta</button>`)}
+ modal(`<div class="cxpr"><button class="cxpav" data-a="pf">${av(ME.f,ME.n)}</button><div><b data-a="pn">${esc(ME.n)} ✎</b><small>toque na foto ou no nome para mudar</small></div></div><div class="cxpg"><div><b>🏆 ${s.tp}</b>troféus</div><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}</b>duelos ganhos</div><div><b>${s.ol}</b>duelos perdidos</div></div><button class="bt cy" data-a="pj">👥 Jogadores e trocas${k?" · 🔔 "+k:""}</button><button class="bt gh" data-a="out">Sair da conta</button>`)}
 function pickFoto(){const i=document.createElement("input");i.type="file";i.accept="image/*";i.onchange=()=>{const x=i.files[0];if(!x)return;const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=96;const q=Math.min(im.width,im.height);c.getContext("2d").drawImage(im,(im.width-q)/2,(im.height-q)/2,q,q,0,0,96,96);ME.f=c.toDataURL("image/jpeg",.72);pubPerfil().then(()=>{chip();perfil()})};im.src=URL.createObjectURL(x)};i.click()}
 function rename(){const n=prompt("Seu apelido:",ME.n);if(n&&n.trim()){ME.n=n.trim().slice(0,20);pubPerfil().then(()=>{chip();perfil()})}}
 function sair(){confirm("Sair da conta de "+ME.n+"?")&&pushSave().then(()=>A.signOut(au)).then(()=>location.reload())}
 async function jogadores(){modal(`<p>Carregando…</p>`);let l=[];
  try{l=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
  l.sort((a,b)=>(b.tp||0)-(a.tp||0));PL=l;const ni=TIN.filter(t=>t.s=="p"),no=TOUT.filter(t=>t.s=="p");
- modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button>`+(ni.length?`<h4>Trocas recebidas</h4>`+ni.map(t=>`<div class="pt"><span><b>${esc(t.dn)}</b> oferece <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b> (sua)</span><div><button class="bt cy" data-a="ac" data-v="${t.id}">Aceitar</button><button class="bt gh" data-a="no" data-v="${t.id}">Recusar</button></div></div>`).join(""):"")+(no.length?`<h4>Suas ofertas</h4>`+no.map(t=>`<div class="pt"><span>Para <b>${esc(t.pn)}</b>: <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b></span><div><button class="bt gh" data-a="ca" data-v="${t.id}">Cancelar</button></div></div>`).join(""):"")+`<h4>Jogadores (${l.length})</h4>`+(l.length?l.map((p,i)=>`<button class="pl" data-a="ver" data-v="${i}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>🏆 ${p.tp||0} · ${p.w||0}V ${p.l||0}D</small></span></button>`).join(""):`<p>Nenhum amigo entrou ainda.</p>`))}
-function ver(i){CP=i;const p=PL[i];if(!p)return;modal(`<button class="bt gh" data-a="pj">‹ Jogadores</button><div class="pr"><span class="pav">${av(p.f,p.n)}</span><div><b>${esc(p.n)}</b><small>${p.nc||0}/${p.tot||0} cartas</small></div></div><div class="pg"><div><b>🏆 ${p.tp||0}</b>troféus</div><div><b>${p.w||0}</b>vitórias</div><div><b>${p.l||0}</b>derrotas</div><div><b>${p.ow||0}</b>duelos ganhos</div><div><b>${p.ol||0}</b>duelos perdidos</div></div><button class="bt cy" data-a="duel" data-v="${i}">⚔️ Duelo ao vivo</button><button class="bt gh" data-a="tr" data-v="${i}">🔁 Propor troca</button>`)}
+ modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button>`+(ni.length?`<h4>Trocas recebidas</h4>`+ni.map(t=>`<div class="cxpt"><span><b>${esc(t.dn)}</b> oferece <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b> (sua)</span><div><button class="bt cy" data-a="ac" data-v="${t.id}">Aceitar</button><button class="bt gh" data-a="no" data-v="${t.id}">Recusar</button></div></div>`).join(""):"")+(no.length?`<h4>Suas ofertas</h4>`+no.map(t=>`<div class="cxpt"><span>Para <b>${esc(t.pn)}</b>: <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b></span><div><button class="bt gh" data-a="ca" data-v="${t.id}">Cancelar</button></div></div>`).join(""):"")+`<h4>Jogadores (${l.length})</h4>`+(l.length?l.map((p,i)=>`<button class="cxpl" data-a="ver" data-v="${i}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>🏆 ${p.tp||0} · ${p.w||0}V ${p.l||0}D</small></span></button>`).join(""):`<p>Nenhum amigo entrou ainda.</p>`))}
+function ver(i){CP=i;const p=PL[i];if(!p)return;modal(`<button class="bt gh" data-a="pj">‹ Jogadores</button><div class="cxpr"><span class="cxpav">${av(p.f,p.n)}</span><div><b>${esc(p.n)}</b><small>${p.nc||0}/${p.tot||0} cartas</small></div></div><div class="cxpg"><div><b>🏆 ${p.tp||0}</b>troféus</div><div><b>${p.w||0}</b>vitórias</div><div><b>${p.l||0}</b>derrotas</div><div><b>${p.ow||0}</b>duelos ganhos</div><div><b>${p.ol||0}</b>duelos perdidos</div></div><button class="bt cy" data-a="duel" data-v="${i}">⚔️ Duelo ao vivo</button><button class="bt gh" data-a="tr" data-v="${i}">🔁 Propor troca</button>`)}
 function fillQ(){const a=byId(g("tm").value),q=g("tq");q.innerHTML=TH.filter(c=>!a||okT(a,c)).map(c=>`<option value="${c.id}">${R[c.r][0]} · ${esc(c.n)} (×${PL[CP].ex[c.id]})</option>`).join("")||`<option value="">Nenhuma compatível</option>`}
 function trocarUI(i){CP=i;const p=PL[i],M=mine();TH=Object.keys(p.ex||{}).map(byId).filter(Boolean).sort((a,b)=>b.r-a.r);const bk=`<button class="bt gh" data-a="ver" data-v="${i}">‹ Voltar</button>`;
  if(!M.length||!TH.length)return modal(bk+`<p>${!M.length?"Você não tem cartas repetidas para trocar.":esc(p.n)+" não tem repetidas agora."} A troca é 1 por 1, só repetidas do mesmo rank.</p>`);
  modal(bk+`<h4>Trocar com ${esc(p.n)}</h4><small>Sua carta sai agora e volta se ele recusar.</small><label>Você dá</label><select id="tm">${M.map(c=>`<option value="${c.id}">${R[c.r][0]} · ${esc(c.n)} (×${S.inv[c.id]})</option>`).join("")}</select><label>Você recebe</label><select id="tq"></select><button class="bt cy" data-a="send">Propor troca</button>`);fillQ()}
-async function enviar(){const p=PL[CP],a=byId(g("tm")&&g("tm").value),b=byId(g("tq")&&g("tq").value);if(!a||!b||!okT(a,b))return toast("Escolha duas cartas do mesmo rank.");if(extra(a)<1||lvl(a))return toast("Você não tem mais essa repetida.");
+async function enviar(){const p=PL[CP],a=byId(g("tm")&&g("tm").value),b=byId(g("tq")&&g("tq").value);if(!a||!b||!okT(a,b))return toast("Escolha duas cartas do mesmo rank.");if(extra(a)<1)return toast("Você não tem mais essa repetida.");
  S.inv[a.id]--;save();const id=U.uid.slice(0,6)+Date.now().toString(36);
  try{await setDoc(doc(db,"trocas",id),{de:U.uid,dn:ME.n,para:p.id,pn:p.n,o:a.id,q:b.id,s:"p",t:Date.now()})}catch(e){S.inv[a.id]++;save();return warn("troca",e)}
  toast(`📨 Oferta enviada para <b>${esc(p.n)}</b>`);TOUT.push({id,de:U.uid,dn:ME.n,para:p.id,pn:p.n,o:a.id,q:b.id,s:"p"});bt()||render(1);jogadores()}
 async function aceitar(id){const t=TIN.find(x=>x.id==id),a=byId(t&&t.o),b=byId(t&&t.q);if(!t||!a||!b)return toast("Troca inválida.");
- if(extra(b)<1||lvl(b))return toast(`Você não tem mais <b>${esc(b.n)}</b> repetida · recuse a troca.`);
+ if(extra(b)<1)return toast(`Você não tem mais <b>${esc(b.n)}</b> repetida · recuse a troca.`);
  try{await updateDoc(doc(db,"trocas",id),{s:"ok"})}catch(e){return warn("troca",e)}
  S.ot=S.ot||{};S.inv[b.id]--;S.inv[a.id]=(S.inv[a.id]||0)+1;S.ot[id]=1;t.s="ok";save();toast(`🔁 Você recebeu <b>${esc(a.n)}</b>!`);bt()||render(1);jogadores()}
 async function fim(id,s){const t=TIN.find(x=>x.id==id)||TOUT.find(x=>x.id==id);try{await updateDoc(doc(db,"trocas",id),{s})}catch(e){return warn("troca",e)}if(t)t.s=s;jogadores()}
