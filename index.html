@@ -1325,7 +1325,7 @@ const zu=(u,en,act)=>{if(!u)return'<div class="zu ze"></div>';const B=BT,q=SEL&&
 const zs=(s,en)=>{const f=`<div class="zrow">${s.f.map(u=>zu(u,en,1)).join("")}</div>`,r=`<div class="zrow zrs">${[0,1,2].map(i=>zu(s.r[i],en,0)).join("")}</div>`;return `<div class="zs">${en?r+f:f+r}</div>`};
 function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],s=cur_(B);let pn="";
  if(PASS)pn=`<div class="zres"><h2>Vez de ${B.p[B.t].n}</h2><p>Passe o celular.</p><button class="bt" data-z="go">Começar</button></div>`;
- else if(B.ai&&B.t==1)pn=`<p class="zst">Vez do rival…</p>`;
+ else if(B.lv&&B.t!=B.v)pn=`<p class="zst">Vez de ${B.p[B.t].n}…</p><button class="bk" data-z="quit">Desistir</button>`;else if(B.ai&&B.t==1)pn=`<p class="zst">Vez do rival…</p>`;
  else{const u=SEL&&SEL.u,fo=foe_(B).f.some(Boolean),emp=s.f.includes(null);
   pn=`<p class="zst">${s.n} · ações ${"●".repeat(B.ac)}${"○".repeat(Math.max(0,2-B.ac))}${B.n==1&&B.t==B.st?" · quem começa faz 1 ação":""}</p>`;
   if(SEL&&SEL.m=="a")pn+=`<p class="zst">Toque no inimigo que vai apanhar</p><button class="bt gh" data-z="cancel">Cancelar</button>`;
@@ -1335,12 +1335,12 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
   else pn+=`<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta sua para agir</p>`;
   pn+=`<div class="two"><button class="bt gh${!B.ac||s.drew||cn_(s)>=6||!s.dk.length?" off":""}" data-z="draw">Comprar · ${s.dk.length}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
  fxSnap();ME=me;zb.innerHTML=`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div><div class="zc">${pn}</div>`;fxFlush()}
-function zpost(){const B=BT;SEL=null;if(!B.over&&B.ac<1)endT(B);if(B.over)return zend();if(!B.ai&&B.t!=B.v)PASS=1;zr();aiRun()}
+function zpost(){const B=BT;SEL=null;if(!B.over&&B.ac<1)endT(B);if(B.over)return zend();if(!B.ai&&!B.lv&&B.t!=B.v)PASS=1;zr();aiRun()}
 function usk(){const B=BT,u=SEL.u,i=SEL.i,g=SEL.g;if(aSk(B,u,i,g)&&B.t==0)bump("abil");zpost()}
 function zc(a){const B=BT;if(!B)return;
  if(a=="go"){PASS=0;B.v=B.t;return zr()}
- if(a=="quit")return ask("Desistir da luta?","Conta como derrota.","Desistir",()=>{B.over=1;B.w=B.ai?1:1-B.v;B.why="desistiu";zend()},1);
- if(B.over||PASS||(B.ai&&B.t!=0))return;
+ if(a=="quit")return ask("Desistir da luta?","Conta como derrota.","Desistir",()=>{B.over=1;B.w=B.ai?1:1-B.v;B.why="desistiu";window.lvq&&window.lvq();zend()},1);
+ if(B.over||PASS||(B.ai&&B.t!=0)||(B.lv&&B.t!=B.v))return;
  const s=cur_(B),f=foe_(B);
  if(a=="cancel"){SEL=null;return zr()}
  if(a=="draw"){if(!aDraw(B))toast("Não dá para comprar agora · só 1 por turno, e o campo não pode estar cheio.");return zpost()}
@@ -1365,7 +1365,7 @@ function zend2(){const B=BT,w=B.w,k=B.o.k,t0=S.tp,a0=S.ar,g0=gifts(),rw=[];let t
  const dt=S.tp-t0,n=gifts()-g0;if(dt)tr=`${dt>0?"+":"−"}${Math.abs(dt)} 🏆`;if(n>0)rw.unshift(`🎁 +${n} pacote${n>1?"s":""}`);
  save();upd();
  zb.innerHTML=`<div class="zres"><h2>${w==0?(B.ai?"Vitória!":B.p[0].n+" venceu"):w==1?(B.ai?"Derrota":B.p[1].n+" venceu"):"Empate"}</h2>${tr?`<p class="ztr${dt<0?" ls":""}">${tr}</p>`:""}${rw.length?`<p class="zrw">${rw.join(" · ")}</p>`:""}<div class="two"><button class="bt gh" data-z="close">Voltar</button>${B.o.m=="a"?'<button class="bt" data-z="again">Lutar de novo</button>':""}</div></div>`}
-function zgo(a,b,o){BT=nb(a,b,o);BT.p.forEach((s,i)=>s.f[0]&&BT.ev.push({k:"place",s:i,id:s.f[0].id,r:s.f[0].c.r,el:s.f[0].c.el}));BT.ev.push({k:"turn",s:BT.t,first:1});BT.ai=o.m=="a";BT.v=BT.ai?0:BT.t;SEL=null;PASS=0;zb.hidden=false;zr();aiRun()}
+function zgo(a,b,o){BT=nb(a,b,o);BT.p.forEach((s,i)=>s.f[0]&&BT.ev.push({k:"place",s:i,id:s.f[0].id,r:s.f[0].c.r,el:s.f[0].c.el}));BT.ev.push({k:"turn",s:BT.t,first:1});BT.ai=o.m=="a";BT.v=window.LV?window.LV.me:BT.ai?0:BT.t;BT.lv=window.LV?1:0;SEL=null;PASS=0;zb.hidden=false;zr();aiRun()}
 function mineDeck(){let d=dkv();if(d.length<12)d=dkf();if(d.length<12){toast("Você precisa de <b>12 cartas</b> para montar o deck. Abra mais pacotes!");return null}return d.map(c=>({c,lv:lvl(c)}))}
 function startArena(bs){const u=mineDeck();if(!u)return;const k=S.ar,e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*CONFIG.chefe}:x);zgo({n:"Você",u},{n:(bs?"Chefe · ":"Rival · ")+AR[k][0],u:e},{m:"a",k,ai:IA[k],b:bs?1:0})}
 function startFriend(v){const t=String(v||"").trim();if(t.slice(0,5)!="DECK~")return toast("Código inválido · cole o código do deck do seu amigo.");const f=t.slice(5).split(",").map(x=>{const[i,l]=x.split(":"),c=byId(i);return c?{c,lv:Math.max(0,Math.min(5,+l||0))}:null});if(f.length!=12||f.some(x=>!x))return toast("Código inválido · o deck do amigo precisa ter 12 cartas do jogo.");const u=mineDeck();if(!u)return;zgo({n:"Você",u},{n:window.ONLN||"Amigo",u:f},{m:"f"})}
@@ -1427,7 +1427,7 @@ cfg.onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;const k=b.data
   else if(k[0]=="@")adx(k.slice(1))
  else if(k=="xs"){$("sc").value=saveCode();cpDl("colprimata_save.json",JSON.stringify(S));toast("Código gerado · copie ou guarde o arquivo")}
  else if(k=="is")cpSrc("sc","fs",t=>{let j;try{j=loadCode(t)}catch(x){return toast("Código ou arquivo inválido.")}ask("Importar save?","Isso <b>substitui</b> todo o progresso deste aparelho.","Importar",()=>{try{localStorage.setItem("colprimata_save",JSON.stringify(j))}catch(x){}location.reload()},1)})
- else if(k=="ad"){if(AD||$("pw").value==CONFIG.admPin){AD=1;cfgView("a")}else toast("PIN incorreto.")}
+ else if(k=="ad"){const pwv=$("pw").value;(async()=>{let r=null;if(!AD&&window.cpAdm)try{r=await window.cpAdm(pwv)}catch(e){}if(AD||r===true||pwv==CONFIG.admPin){AD=1;cfgView("a")}else toast("PIN incorreto.")})()}
  else if(k=="nc")nCard()
  else if(k=="ni"){if(!PEND)return toast("Escolha uma imagem primeiro.");const id=$("ei").value;IMG[id]=PEND;byId(id).img=PEND;sADM();PEND=null;toast("Imagem salva ✓")}
  else if(k=="nd"){ADM.d=$("ad").value;P.forEach(p=>p.dest=p.id==ADM.d);sADM();toast("Destaque salvo ✓")}
@@ -1845,7 +1845,7 @@ cfg.addEventListener("input",e=>{const i=e.target.id;if(e.target.closest("#ds_v"
 const FIREBASE_CONFIG={apiKey:"AIzaSyCbtfeIj5R-v7PTLZwTJzZYdym2jwViVNw",authDomain:"cartas-primata.firebaseapp.com",projectId:"cartas-primata",storageBucket:"cartas-primata.firebasestorage.app",messagingSenderId:"1030221190567",appId:"1:1030221190567:web:f5249f60a9799f1aaad282"};
 if(!FIREBASE_CONFIG.apiKey.startsWith("COLE"))(async()=>{
 const G="https://www.gstatic.com/firebasejs/10.14.1/",[{initializeApp},A,F]=await Promise.all([import(G+"firebase-app.js"),import(G+"firebase-auth.js"),import(G+"firebase-firestore.js")]);
-const app=initializeApp(FIREBASE_CONFIG),au=A.getAuth(app),db=F.getFirestore(app),{doc,getDoc,setDoc,deleteDoc,onSnapshot,updateDoc,collection,query,where,getDocs}=F;
+const app=initializeApp(FIREBASE_CONFIG),au=A.getAuth(app),db=F.getFirestore(app),{doc,getDoc,setDoc,deleteDoc,onSnapshot,updateDoc,collection,query,where,getDocs,arrayUnion}=F;
 const L=localStorage,SI=Storage.prototype.setItem,ls=(k,v)=>SI.call(L,k,v),g=i=>document.getElementById(i),bt=()=>typeof BT!=="undefined"&&BT;
 const H=s=>{let x=0;for(let i=0;i<s.length;i+=7)x=(x*31+s.charCodeAt(i))|0;return s.length+":"+x};
 const reload=()=>{const t=Date.now();if(t-(+sessionStorage.cp_rl||0)<1e4)return;sessionStorage.cp_rl=t;location.reload()};
@@ -1876,14 +1876,15 @@ async function pushAdm(){ // só o administrador consegue (as regras do Firebase
   const a=admStr||L.getItem("colprimata_adm")||"{}";if(!ch&&a===lastA){L.removeItem("cp_pa");return}
   const v=Date.now();ls("cp_v",v);CF=f;lastA=a;
   await setDoc(doc(db,"conteudo","adm"),{v,adm:a,f});L.removeItem("cp_pa");toast("☁️ Mudanças enviadas para todos");
- }catch(e){if(e.code==="permission-denied"){canAdm=false;L.removeItem("cp_pa");ls("cp_v","0");toast("⚠️ Seu login não é admin no Firebase · mudanças só neste aparelho")}else{console.warn(e);toast("⚠️ Falha ao enviar: "+esc(e.code||e.message));pa()}}}
+ }catch(e){if(e.code==="permission-denied"){canAdm=false;L.removeItem("cp_pa");ls("cp_v","0");toast("⚠️ Mudanças só neste aparelho · entre no modo ADM com o PIN certo para enviar a todos")}else{console.warn(e);toast("⚠️ Falha ao enviar: "+esc(e.code||e.message));pa()}}}
+window.cpAdm=async pin=>{if(!U)return null;try{await setDoc(doc(db,"admins",U.uid),{c:pin});canAdm=true;pa();return true}catch(e){return e.code==="permission-denied"?false:null}};
 function upd(){if(bt())return setTimeout(upd,3000);toast("🔄 Atualizando o jogo…");setTimeout(reload,900)}
 function put(id,d,t){IMG[id]=d;meta[id]={k:H(d),t};if(id.slice(0,3)==="pk_"){const p=P.find(x=>"pk_"+x.id===id);if(p)p.img=d}else{const c=byId(id);if(c)c.img=d}}
 async function fotos(f){await PEND;CF=f;const ids=Object.keys(f).filter(i=>!(meta[i]&&(meta[i].t===f[i]||meta[i].t<0)));let n=0;
  const w=async()=>{while(n<ids.length){const id=ids[n++];try{let c=await ig(id);if(!c||c.t!==f[id]){const s=await getDoc(doc(db,"fotos",id));if(!s.exists())continue;c={t:f[id],d:s.data().d};is(id,c)}put(id,c.d,c.t)}catch(e){warn("fotos",e)}}};
  await Promise.all([w(),w(),w(),w()]);ready=1;if(ids.length&&!bt())render(1)}
 // ===== PERFIL · JOGADORES · TROCAS E DUELOS ONLINE =====
-document.head.insertAdjacentHTML("beforeend","<style>#cpchip{position:fixed;right:8px;bottom:78px;z-index:9000;display:flex;align-items:center;gap:6px;background:#000c;color:#fff;border:1px solid #fff4;border-radius:16px;padding:4px 10px;font-size:.78rem;font-weight:800}#cpchip img{width:22px;height:22px;border-radius:50%;object-fit:cover}#cpm{position:fixed;inset:0;z-index:9500;background:#000b;display:flex;align-items:flex-end;justify-content:center}#cpm .pbx{width:min(100%,460px);max-height:88vh;overflow:auto;background:var(--sf,#1e1d27);color:var(--fg,#fff);border-radius:20px 20px 0 0;padding:16px 16px 24px;display:grid;gap:10px;text-align:left}#cpm h4{margin:6px 0 0}#cpm small{display:block;opacity:.65;font-size:.72rem}.pr{display:flex;gap:12px;align-items:center}.pav,.pr img,.pl img,.pl i,.pr i{width:56px;height:56px;border-radius:50%;object-fit:cover;background:#ffffff1c;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:1.4rem;border:0;color:inherit;padding:0;overflow:hidden}.pav img,.pav i{width:100%;height:100%}.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pg div{background:#ffffff10;border-radius:12px;padding:10px 4px;text-align:center;font-size:.7rem}.pg b{display:block;font-size:1.05rem}.pl{display:flex;gap:10px;align-items:center;padding:8px;border-radius:14px;background:#ffffff0d;border:0;color:inherit;text-align:left}.pl img,.pl i{width:42px;height:42px;font-size:1.1rem}.pt{display:grid;gap:6px;padding:10px;border-radius:12px;background:#ffffff0d;font-size:.82rem}.pt div{display:flex;gap:6px}.pt .bt{flex:1}#cpm select{width:100%;padding:11px;border-radius:12px;background:#ffffff14;color:inherit;border:1px solid #ffffff26}</style>");
+document.head.insertAdjacentHTML("beforeend","<style>body:has(#cfg:not([hidden])) #cpchip{display:none}#cpchip{position:fixed;right:8px;bottom:calc(env(safe-area-inset-bottom,0px) + 120px);z-index:9000;display:flex;align-items:center;gap:6px;background:#000c;color:#fff;border:1px solid #fff4;border-radius:16px;padding:4px 10px;font-size:.78rem;font-weight:800}#cpchip img{width:22px;height:22px;border-radius:50%;object-fit:cover}#cpm{position:fixed;inset:0;z-index:9500;background:#000b;display:flex;align-items:flex-end;justify-content:center}#cpm .pbx{width:min(100%,460px);max-height:88vh;overflow:auto;background:var(--sf,#1e1d27);color:var(--fg,#fff);border-radius:20px 20px 0 0;padding:16px 16px 24px;display:grid;gap:10px;text-align:left}#cpm h4{margin:6px 0 0}#cpm small{display:block;opacity:.65;font-size:.72rem}.pr{display:flex;gap:12px;align-items:center}.pav,.pr img,.pl img,.pl i,.pr i{width:56px;height:56px;border-radius:50%;object-fit:cover;background:#ffffff1c;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:1.4rem;border:0;color:inherit;padding:0;overflow:hidden}.pav img,.pav i{width:100%;height:100%}.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pg div{background:#ffffff10;border-radius:12px;padding:10px 4px;text-align:center;font-size:.7rem}.pg b{display:block;font-size:1.05rem}.pl{display:flex;gap:10px;align-items:center;padding:8px;border-radius:14px;background:#ffffff0d;border:0;color:inherit;text-align:left}.pl img,.pl i{width:42px;height:42px;font-size:1.1rem}.pt{display:grid;gap:6px;padding:10px;border-radius:12px;background:#ffffff0d;font-size:.82rem}.pt div{display:flex;gap:6px}.pt .bt{flex:1}#cpm select{width:100%;padding:11px;border-radius:12px;background:#ffffff14;color:inherit;border:1px solid #ffffff26}</style>");
 const ME={n:"",f:""},esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let TIN=[],TOUT=[],ONL=null,pt=0,PL=[],CP=0,TH=[],nw=0;
 const warn=(w,e)=>{console.warn(w,e);if(nw++)return;toast("⚠️ "+w+": "+esc(e.code==="permission-denied"?"sem permissão no Firebase · atualize as regras":e.code||e.message))},
@@ -1896,7 +1897,7 @@ function stats(){const t=(S.cn&&S.cn.T)||{},w=t.win||0,o=S.on||{},h=ALL.filter(c
 async function pubPerfil(){if(!U)return;try{await setDoc(doc(db,"perfis",U.uid),stats(),{merge:true})}catch(e){warn("perfil",e)}}
 function pf(){clearTimeout(pt);pt=setTimeout(pubPerfil,6000)}
 function modal(h){let o=g("cpm");if(!o){o=document.createElement("div");o.id="cpm";o.onclick=e=>{if(e.target===o)return o.remove();const b=e.target.closest("[data-a]");b&&act(b.dataset.a,b.dataset.v)};o.onchange=e=>{e.target.id=="tm"&&fillQ()};document.body.append(o)}o.innerHTML=`<div class="pbx">${h}</div>`;return o}
-function act(a,v){if(a=="me")perfil();else if(a=="pj")jogadores();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")duelo(+v);else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca")}
+function act(a,v){if(a=="me")perfil();else if(a=="pj")jogadores();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca")}
 function perfil(){const s=stats(),k=TIN.filter(t=>t.s=="p").length;
  modal(`<div class="pr"><button class="pav" data-a="pf">${av(ME.f,ME.n)}</button><div><b data-a="pn">${esc(ME.n)} ✎</b><small>toque na foto ou no nome para mudar</small></div></div><div class="pg"><div><b>🏆 ${s.tp}</b>troféus</div><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}</b>duelos ganhos</div><div><b>${s.ol}</b>duelos perdidos</div></div><button class="bt cy" data-a="pj">👥 Jogadores e trocas${k?" · 🔔 "+k:""}</button><button class="bt gh" data-a="out">Sair da conta</button>`)}
 function pickFoto(){const i=document.createElement("input");i.type="file";i.accept="image/*";i.onchange=()=>{const x=i.files[0];if(!x)return;const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=96;const q=Math.min(im.width,im.height);c.getContext("2d").drawImage(im,(im.width-q)/2,(im.height-q)/2,q,q,0,0,96,96);ME.f=c.toDataURL("image/jpeg",.72);pubPerfil().then(()=>{chip();perfil()})};im.src=URL.createObjectURL(x)};i.click()}
@@ -1906,10 +1907,7 @@ async function jogadores(){modal(`<p>Carregando…</p>`);let l=[];
  try{l=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
  l.sort((a,b)=>(b.tp||0)-(a.tp||0));PL=l;const ni=TIN.filter(t=>t.s=="p"),no=TOUT.filter(t=>t.s=="p");
  modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button>`+(ni.length?`<h4>Trocas recebidas</h4>`+ni.map(t=>`<div class="pt"><span><b>${esc(t.dn)}</b> oferece <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b> (sua)</span><div><button class="bt cy" data-a="ac" data-v="${t.id}">Aceitar</button><button class="bt gh" data-a="no" data-v="${t.id}">Recusar</button></div></div>`).join(""):"")+(no.length?`<h4>Suas ofertas</h4>`+no.map(t=>`<div class="pt"><span>Para <b>${esc(t.pn)}</b>: <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b></span><div><button class="bt gh" data-a="ca" data-v="${t.id}">Cancelar</button></div></div>`).join(""):"")+`<h4>Jogadores (${l.length})</h4>`+(l.length?l.map((p,i)=>`<button class="pl" data-a="ver" data-v="${i}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>🏆 ${p.tp||0} · ${p.w||0}V ${p.l||0}D</small></span></button>`).join(""):`<p>Nenhum amigo entrou ainda.</p>`))}
-function ver(i){CP=i;const p=PL[i];if(!p)return;modal(`<button class="bt gh" data-a="pj">‹ Jogadores</button><div class="pr"><span class="pav">${av(p.f,p.n)}</span><div><b>${esc(p.n)}</b><small>${p.nc||0}/${p.tot||0} cartas</small></div></div><div class="pg"><div><b>🏆 ${p.tp||0}</b>troféus</div><div><b>${p.w||0}</b>vitórias</div><div><b>${p.l||0}</b>derrotas</div><div><b>${p.ow||0}</b>duelos ganhos</div><div><b>${p.ol||0}</b>duelos perdidos</div></div><button class="bt cy" data-a="duel" data-v="${i}"${p.dk?"":" disabled"}>⚔️ Desafiar para duelo</button><button class="bt gh" data-a="tr" data-v="${i}">🔁 Propor troca</button>`)}
-// duelo: você enfrenta o deck atual do outro jogador (ele não precisa estar online)
-function duelo(i){const p=PL[i];if(!p||!p.dk)return toast("Esse jogador ainda não montou o deck.");ONL={u:p.id};window.ONLN=p.n;g("cpm").remove();startFriend(p.dk);window.ONLN=null;if(!bt())ONL=null}
-const z0=window.zend2;if(typeof z0=="function")window.zend2=function(){const B=typeof BT!=="undefined"&&BT,w=B&&B.w,on=ONL&&B&&B.o&&B.o.m=="f"&&!B.on2,r=z0.apply(this,arguments);if(on){B.on2=1;S.on=S.on||{};if(w==0)S.on.w=(S.on.w||0)+1;else S.on.l=(S.on.l||0)+1;ONL=null;save();pf()}return r};
+function ver(i){CP=i;const p=PL[i];if(!p)return;modal(`<button class="bt gh" data-a="pj">‹ Jogadores</button><div class="pr"><span class="pav">${av(p.f,p.n)}</span><div><b>${esc(p.n)}</b><small>${p.nc||0}/${p.tot||0} cartas</small></div></div><div class="pg"><div><b>🏆 ${p.tp||0}</b>troféus</div><div><b>${p.w||0}</b>vitórias</div><div><b>${p.l||0}</b>derrotas</div><div><b>${p.ow||0}</b>duelos ganhos</div><div><b>${p.ol||0}</b>duelos perdidos</div></div><button class="bt cy" data-a="duel" data-v="${i}">⚔️ Duelo ao vivo</button><button class="bt gh" data-a="tr" data-v="${i}">🔁 Propor troca</button>`)}
 function fillQ(){const a=byId(g("tm").value),q=g("tq");q.innerHTML=TH.filter(c=>!a||okT(a,c)).map(c=>`<option value="${c.id}">${R[c.r][0]} · ${esc(c.n)} (×${PL[CP].ex[c.id]})</option>`).join("")||`<option value="">Nenhuma compatível</option>`}
 function trocarUI(i){CP=i;const p=PL[i],M=mine();TH=Object.keys(p.ex||{}).map(byId).filter(Boolean).sort((a,b)=>b.r-a.r);const bk=`<button class="bt gh" data-a="ver" data-v="${i}">‹ Voltar</button>`;
  if(!M.length||!TH.length)return modal(bk+`<p>${!M.length?"Você não tem cartas repetidas para trocar.":esc(p.n)+" não tem repetidas agora."} A troca é 1 por 1, só repetidas do mesmo rank.</p>`);
@@ -1927,6 +1925,37 @@ function procOut(){S.ot=S.ot||{};let ch=0;for(const t of TOUT){if(S.ot[t.id])con
 function watchTr(){const c=collection(db,"trocas"),m=s=>s.docs.filter(d=>!d.metadata.hasPendingWrites).map(d=>({id:d.id,...d.data()}));
  onSnapshot(query(c,where("para","==",U.uid)),s=>{TIN=m(s);chip()},e=>warn("trocas",e));
  onSnapshot(query(c,where("de","==",U.uid)),s=>{TOUT=m(s);procOut();chip()},e=>warn("trocas",e))}
+
+/*LV0*/
+window.LV=null;let DW=null,DID=null;const INV={};
+const prng=a=>()=>{let t=a+=1831565813;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296},
+ prs=t=>{const f=String(t||"").slice(5).split(",").map(x=>{const[i,l]=x.split(":"),c=byId(i);return c?{c,lv:Math.max(0,Math.min(5,+l||0))}:null});return f.length==12&&f.every(Boolean)?f:null},
+ eng=(n,rec)=>{const f=window[n];window[n]=function(){const L=window.LV,B=arguments[0];if(!L||!L.rr)return f.apply(this,arguments);const top=!L.d,R0=Math.random,mine=top&&!L.rm&&B&&B.t!=null&&B.t==B.v,ex=n=="endT"&&B&&B.ac>0;if(top)Math.random=L.rr;L.d++;let r;try{r=f.apply(this,arguments)}finally{L.d--;if(top)Math.random=R0}if(mine&&rec&&(n=="endT"?ex:r))lvSend(rec.apply(null,arguments));return r}};
+// o sorteio do motor usa uma semente comum: os dois celulares jogam as mesmas ações e chegam ao mesmo resultado
+eng("nb");eng("aDraw",()=>({k:"dr"}));eng("aPlace",(B,u)=>({k:"pl",u:u.id}));eng("aAtk",(B,u,t)=>({k:"at",u:u.id,t:t.id}));eng("aSk",(B,u,i,g)=>({k:"sk",u:u.id,i,e:g&&g.e&&g.e.id,a:g&&g.a&&g.a.id}));eng("endT",()=>({k:"en"}));
+function lvSend(c){const L=window.LV;if(!L)return;c.n=L.qn++;updateDoc(doc(db,"duelos",L.id),{cm:arrayUnion(JSON.stringify(c))}).catch(e=>warn("duelo",e))}
+window.lvq=()=>window.LV&&lvSend({k:"qt"});
+function rply(c){const B=BT,L=window.LV;if(!B||!L||B.over)return;L.rm=1;try{const s=cur_(B),f=foe_(B),o=i=>[...s.f,...s.r].find(u=>u&&u.id==i),e=i=>f.f.find(u=>u&&u.id==i),k=c.k;
+ if(k=="qt"){B.over=1;B.w=B.v;B.why="desistiu";return zend()}
+ if(k=="dr")aDraw(B);else if(k=="pl")aPlace(B,o(c.u));else if(k=="at")aAtk(B,o(c.u),e(c.t));else if(k=="sk")aSk(B,o(c.u),c.i,{e:e(c.e),a:o(c.a)});else if(k=="en")endT(B);
+ zpost()}catch(x){console.warn("duelo",x)}finally{L.rm=0}}
+function lvCm(d){const L=window.LV;if(!L||!d.cm)return;d.cm.map(x=>{try{return JSON.parse(x)}catch(e){}}).filter(Boolean).sort((a,b)=>a.n-b.n).forEach(c=>{if(c.n==L.qn){L.q.push(c);L.qn++}});pump()}
+function pump(){const L=window.LV;if(!L||L.pb)return;L.pb=1;const nx=()=>{const c=L.q.shift();if(!c||window.LV!==L){L.pb=0;return}rply(c);setTimeout(nx,c.k=="en"?400:700)};nx()}
+function lvStart(id,d,me){const A=prs(d.da),C=prs(d.db);if(!A||!C)return toast("Deck inválido · duelo cancelado");window.LV={id,me,qn:0,q:[],d:0,rr:prng(+d.sd||1)};g("cpm")&&g("cpm").remove();zgo({n:d.an,u:A},{n:d.bn,u:C},{m:"f"})}
+/*LV1*/
+function lvWatch(id){DW&&DW();DW=onSnapshot(doc(db,"duelos",id),sn=>{const d=sn.data();if(!d)return;if(!window.LV){if(d.s=="p"&&d.a==U.uid&&d.db){DID=null;lvStart(id,d,0)}else if(d.s=="x"){DW&&DW();DW=null;DID=null;g("cpm")&&g("cpm").remove();toast(`⚔️ <b>${esc(d.bn)}</b> recusou o duelo`)}}else lvCm(d)},e=>warn("duelo",e))}
+async function desafiar(i){const p=PL[i],da=stats().dk;if(!p)return;if(!da)return toast("Você precisa de 12 cartas para duelar.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
+ const id=U.uid.slice(0,6)+Date.now().toString(36);
+ try{await setDoc(doc(db,"duelos",id),{a:U.uid,an:ME.n,b:p.id,bn:p.n,da,s:"w",sd:Math.random()*2147483647|0,t:Date.now(),cm:[]})}catch(e){return warn("duelo",e)}
+ DID=id;modal(`<h4>⚔️ Duelo ao vivo</h4><p>Esperando <b>${esc(p.n)}</b> aceitar… ele precisa estar com o jogo aberto.</p><button class="bt gh" data-a="dx">Cancelar</button>`);lvWatch(id);setTimeout(()=>{DID==id&&!window.LV&&cancelarD()},12e4)}
+function cancelarD(){const id=DID;DID=null;DW&&DW();DW=null;g("cpm")&&g("cpm").remove();id&&updateDoc(doc(db,"duelos",id),{s:"x"}).catch(()=>{})}
+async function aceitarD(id){const d=INV[id],dk=stats().dk;if(!d)return;if(!dk)return toast("Você precisa de 12 cartas para duelar.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
+ try{await updateDoc(doc(db,"duelos",id),{s:"p",db:dk})}catch(e){return warn("duelo",e)}
+ lvStart(id,{...d,db:dk,s:"p"},1);lvWatch(id)}
+function recusarD(id){g("cpm")&&g("cpm").remove();updateDoc(doc(db,"duelos",id),{s:"x"}).catch(()=>{})}
+function watchDu(){onSnapshot(query(collection(db,"duelos"),where("b","==",U.uid),where("s","==","w")),s=>{s.docChanges().forEach(ch=>{if(ch.type!="added")return;const d=ch.doc.data();if(d.t<Date.now()-15e4||window.LV||bt())return;INV[ch.doc.id]=d;modal(`<h4>⚔️ Duelo ao vivo!</h4><p><b>${esc(d.an)}</b> te desafiou. Aceitar agora?</p><button class="bt cy" data-a="dac" data-v="${ch.doc.id}">Aceitar</button><button class="bt gh" data-a="dno" data-v="${ch.doc.id}">Recusar</button>`)})},e=>warn("duelo",e))}
+// fim da luta ao vivo: o convidado vê o resultado do lado dele (lado 0) e o placar online é atualizado
+const z0=window.zend2;if(typeof z0=="function")window.zend2=function(){const B=typeof BT!=="undefined"&&BT,L=window.LV;if(B&&B.lv&&L&&!B.fl){B.fl=1;if(B.v==1){B.p.reverse();B.kl.reverse();if(B.w>=0)B.w=1-B.w;B.v=0}S.on=S.on||{};if(B.w==0)S.on.w=(S.on.w||0)+1;else if(B.w>0)S.on.l=(S.on.l||0)+1;if(L.me==0)updateDoc(doc(db,"duelos",L.id),{s:"e"}).catch(()=>{});DW&&DW();DW=null;window.LV=null;save();pf()}return z0.apply(this,arguments)};
 
 function login(msg){
  let o=g("cpl");if(!o){o=document.createElement("div");o.id="cpl";o.style.cssText="position:fixed;inset:0;z-index:99999;background:#0b0a12f2;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff;text-align:center";document.body.append(o)}
@@ -1959,7 +1988,7 @@ async function start(u){
  let n=p.exists()?p.data().n:"";
  if(!n){n=(NK||prompt("Escolha seu apelido (seus amigos vão ver):",(u.displayName||"").split(" ")[0])||"Jogador").trim().slice(0,20);setDoc(doc(db,"perfis",id),{n})}
  U=u;ME.n=n;ME.f=p.exists()?p.data().f||"":"";if(L.getItem("colprimata_save")&&(!c||L.cp_d))pushSave();
- g("cpl")&&g("cpl").remove();chip();watchTr();pf();
+ g("cpl")&&g("cpl").remove();chip();watchTr();watchDu();pf();
  onSnapshot(doc(db,"conteudo","adm"),s=>{const d=s.data();if(!d){ready=1;L.cp_pa&&pa();return}lastA=d.adm;
   if(L.cp_pa)pa();else if(d.v!==+L.cp_v){ls("cp_v",d.v);if(d.adm!==L.getItem("colprimata_adm")){ls("colprimata_adm",d.adm);upd()}}
   fotos(d.f||{})},e=>{console.warn(e);if(e.code==="permission-denied")convite(u)});
