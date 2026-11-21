@@ -3,9 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Coleção Primata</title>
+<title>Coleção Primata</title><script>(function(){var N={'1':'Primata 1.0','2':'Primata 2.0','r':'Primata Royale'},V={'1':'v1','2':'v2','r':'royale'},C={'1':'#161618','2':'#0a0a0a','r':'#2a68ad'};
+function get(){try{var t=localStorage.getItem('primata_tema');if(N[t])return t}catch(e){}return'1'}
+function apply(t){document.documentElement.setAttribute('data-tema',V[t]);var m=document.querySelector('meta[name=theme-color]');if(!m){m=document.createElement('meta');m.name='theme-color';document.head.appendChild(m)}m.content=C[t]}
+window.setTema=function(t){if(!N[t])return;try{localStorage.setItem('primata_tema',t)}catch(e){}apply(t)};
+window.tmHtml=function(){var c=get();return Object.keys(N).map(function(k){return'<button data-y="t'+k+'" aria-pressed="'+(k==c)+'">'+N[k]+'</button>'}).join('')};
+apply(get())})();</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;800;900&family=Lilita+One&family=Anton&family=Archivo+Narrow:wght@600;700&display=swap" rel="stylesheet">
 <style>
 
 /* ÍNDICE DO CSS (use Ctrl+F no título):
@@ -787,7 +792,7 @@ return api})();
 </div>
 <script>
 (function(){
-var ABERTURA=true,CHANCE=.62; // ABERTURA=false desliga · CHANCE menor = cartas raras saem menos (1 = todas iguais)
+var ABERTURA=!(function(){try{return sessionStorage.cpad!=null||sessionStorage.cptab!=null}catch(e){return 0}})(),CHANCE=.62; // ABERTURA=false desliga · CHANCE menor = cartas raras saem menos (1 = todas iguais)
 var el=document.getElementById('intro');
 if(!el)return;
 function rm(){el.remove();var s=document.getElementById('ix-css');if(s)s.remove()}
@@ -850,6 +855,9 @@ setTimeout(iniciar,3200);
 // • v1.3 (18/11/2026): MODO ADM COMPLETO · exemplos por rank, painel com verificação e simulador, visual do pacote (fot
 // • COLEÇÃO PRIMATA · ONLINE (Firebase) · etapa 1: contas, save na nuvem, ADM e fotos para todos
 // • PERFIL · JOGADORES · TROCAS E DUELOS ONLINE
+// • v1.8: ADM · IMPORTAR FICHA DE CARTA (texto feito por IA vira carta com história e habilidades)
+// • v1.9: ADM · LANÇAMENTOS (cartas novas ficam guardadas e são lançadas de uma vez) + atalhos e menu reorganizado
+// • v1.9: TEMAS · escolha no Menu: Primata 1.0, 2.0 (mangá) e Royale
 const ADM0=(()=>{try{return JSON.parse(localStorage.getItem("colprimata_adm")||"{}")||{}}catch(e){return{}}})();
 // REGRAS DO DECK E DAS REPETIDAS (18/11/2026): o deck tem 12 cartas DIFERENTES (a mesma carta nunca entra 2×, mesmo com várias cópias; vale também para o rival da arena e para decks de amigos). Só a carta ORIGINAL tem nível: as cópias repetidas ficam sempre sem melhoria e servem para trocar, converter ou fundir.
 // CARTAS: cada carta é um objeto dentro de "cards" (r = raridade: F E D C B A S SS SSS).
@@ -869,7 +877,7 @@ const ST=[[133,50],[165,62],[208,78],[261,98],[325,122],[405,152],[507,190],[640
 const FRAG=ADM0.fr&&ADM0.fr.length==9?ADM0.fr:[10,15,25,40,70,130,300,800,3000],CUSTO=ADM0.cu||500,INICIO=ADM0.ini??2500;
 // CONFIG (v0.5): números do jogo num só lugar. admPin = PIN do modo ADM (mude aqui).
 // RECOMPENSAS (rebalanceadas): limiteDia = lutas por dia que dão prêmio · pacVit = vitórias para ganhar 1 pacote · mk = troféus por marco (e fragmentos do marco) · mkPacote = troféus por pacote de marco (100 = 1 pacote a cada marco) · diaria = fragmentos do login · mDia / mSem = fragmentos por missão diária / semanal · mDiaBonus = missões diárias para ganhar 1 pacote de bônus · mSemPac = pacotes por missão semanal · derrota = fragmentos por derrota · arenaPac = pacotes do chefe da arena 1 (+arenaPacMais a cada arena seguinte) · arenaFrag = fragmentos do chefe × número da arena · campPac / campFrag = prêmio do Campeão · gratisLivre = pacotes do dia sem jogar · gratisJogar = batalhas para liberar +1 pacote do dia (0.5 = 2 pacotes por batalha) · amigoFrag / amigoDia = prêmio e limite diário das lutas com amigo.
-const CONFIG={admPin:"0000",limiteDia:10,pacVit:2,tw:30,tl:20,mk:100,mkPacote:100,mkMax:6000,chefeFinal:6000,chefe:1.2,diaria:300,amigoFrag:60,amigoDia:3,derrota:20,nDia:6,mDia:100,mSem:500,mSemPac:3,mDiaBonus:2,arenaPac:15,arenaPacMais:3,arenaFrag:500,campPac:60,campFrag:10000,gratisLivre:1,gratisJogar:.5,imgKB:90,arf0:60,arfK:10,fusArena:3,sArena:5,fusMult:1,faixa:15,som:1,musica:1,botErro:40,botForca:5,botNivel:1};
+const CONFIG={admPin:"0000",limiteDia:10,pacVit:2,tw:30,tl:20,mk:100,mkPacote:100,mkMax:6000,chefeFinal:6000,chefe:1.2,diaria:300,amigoFrag:60,amigoDia:3,derrota:20,nDia:6,mDia:100,mSem:500,mSemPac:3,mDiaBonus:2,arenaPac:15,arenaPacMais:3,arenaFrag:500,campPac:60,campFrag:10000,gratisLivre:1,gratisJogar:.5,imgKB:90,arf0:60,arfK:10,fusArena:3,sArena:5,fusMult:1,faixa:15,som:1,musica:1,botErro:40,botForca:5,botNivel:1,vidas:5,acoes:2,acaoIni:1,turnos:20,iaMs:1200,danoMult:1,vidaMult:1};
 Object.assign(CONFIG,ADM0.cfg||{});if("bauVit" in CONFIG){if(!(ADM0.cfg&&ADM0.cfg.pacVit!=null))CONFIG.pacVit=CONFIG.bauVit;delete CONFIG.bauVit} // saves antigos usavam outro nome para esta regra
 // relógio: fuso fixo de Brasília (UTC−3); hora que volta para o passado é ignorada
 const nowT=()=>{const t=Date.now(),r=S.rl||0;return t>r?(S.rl=t):r},lnow=()=>nowT()-108e5;
@@ -892,7 +900,7 @@ const save=()=>{try{avisos()}catch(e){}try{localStorage.setItem("colprimata_save
 function avisos(){if(!$("tc"))return;const a=S.ar+1,n=!S.av,v=S.av=S.av||{},L=[];
  if(a>=(CONFIG.fusArena||1)&&!v.fus){v.fus=1;L.push("🔓 <b>Fusões liberadas!</b> Suas cartas já podem subir de nível.")}
  if(a>=(CONFIG.sArena||1)&&!v.rs){v.rs=1;L.push("🔓 <b>Rank S liberado!</b> S, SS e SSS já podem sair nos pacotes.")}
- const g=v.g=v.g||{},G=[],e=cpxEvOn();if(e&&v.ev!==e.ate){v.ev=e.ate;G.push("🎉 <b>Evento "+e.n+"</b>: fragmentos ×"+e.mf+" nas vitórias até "+new Date(e.ate).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}))}ALL.forEach(c=>{if(c.ga>0&&a>=c.ga&&!g[c.id]){g[c.id]=1;if(!(S.inv[c.id]>0)){S.inv[c.id]=1;G.push("🎁 <b>Carta especial!</b> "+c.n+" entrou na sua coleção.")}}});
+ const g=v.g=v.g||{},G=[],e=cpxEvOn();if(e&&v.ev!==e.ate){v.ev=e.ate;if(e.gf>0){S.fr+=e.gf;G.push("🎁 <b>+"+e.gf+" fragmentos</b> de presente do evento")}for(let q=0;q<(e.gq||0);q++){const o=P.filter(x=>!pkExp(x)),pk=(e.gk&&P.find(x=>x.id==e.gk))||o[Math.floor(Math.random()*o.length)];if(pk){gift(pk.id,1);G.push("🎁 Pacote de presente: <b>"+pk.n+"</b>")}}if(e.gf>0||e.gq>0){try{save();upd()}catch(x){}}G.push("🎉 <b>Evento "+e.n+"</b>: fragmentos ×"+e.mf+" nas vitórias até "+new Date(e.ate).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}))}ALL.forEach(c=>{if(c.ga>0&&a>=c.ga&&!g[c.id]){g[c.id]=1;if(!(S.inv[c.id]>0)){S.inv[c.id]=1;G.push("🎁 <b>Carta especial!</b> "+c.n+" entrou na sua coleção.")}}});
  if((L.length&&!n)||G.length)setTimeout(()=>toast((n?[]:L).concat(G).join("<br>")),700)}
 const own=p=>p.cards.filter(c=>S.inv[c.id]).length;
 const roll=m=>{let x=Math.random()*100,i=0;for(;i<8;i++){x-=R[i][2];if(x<0)break}return Math.max(i,m)};
@@ -1040,7 +1048,7 @@ function useCode(v){
  delete S.tr[n];S.inv[i]=(S.inv[i]||0)+1;S.nt=(S.nt||0)+1;save();TV=null;sync();toast(`🔁 Troca feita: você recebeu <b>${c.n}</b>`)
 }
 // ===== PRESENTES (pacotes de recompensa) + CHANCES POR CARTA =====
-const pkExp=p=>p.esp>0||(p.ate>0&&Date.now()>p.ate),pkRest=t=>{const m=Math.max(0,Math.round((t-Date.now())/6e4)),d=m/1440|0,h=(m%1440)/60|0;return d?`${d}d ${h}h`:h?`${h}h ${m%60}min`:`${m}min`},bkH=(c,p)=>{const u=c.bk||(p&&p.bk);return`<div class="cb back${u?" bki":""}"${u?` style="background-image:url('${u}')"`:""}>${u?"":"✦"}</div>`};
+const pkExp=p=>p.esp>0||(p.ate>0&&Date.now()>p.ate),pkRest=t=>{const m=Math.max(0,Math.round((t-Date.now())/6e4)),d=m/1440|0,h=(m%1440)/60|0;return d?`${d}d ${h}h`:h?`${h}h ${m%60}min`:`${m}min`},bkH=(c,p)=>{const u=c.bk||(p&&p.bk)||IMG["bk_"+c.id]||(p&&IMG["pkb_"+p.id]);return`<div class="cb back${u?" bki":""}"${u?` style="background-image:url('${u}')"`:""}>${u?"":"✦"}</div>`};
 const pkt=id=>P.find(p=>p.id==id)||P[0],gift=(id,n=1)=>{const k=pkt(id).id;S.gp[k]=(S.gp[k]||0)+n};
 function openGift(pi){const p=P[pi],d=[],n=Math.min(S.gp[p.id]||0,10);if(!(n>0))return;S.gp[p.id]-=n;for(let i=0;i<n;i++)rollPack(p,d);S.opened+=n;save();play(p,d,pi,n,1)}
 const odds=q=>`${P.length>1?`<div class="chips">${P.map((x,i)=>`<button data-s="${i}" class="${i==as?"on":""}">${x.n}</button>`).join("")}</div>`:""}<div class="rl">${[...q.cards].sort((a,b)=>b.r-a.r).map(c=>`<button${S.inv[c.id]?` data-c="${c.id}"`:""} style="--rc:${R[c.r][1]}"><b class="sq">${R[c.r][0]}</b><span>${S.inv[c.id]?c.n:"???"}</span><em class="pc" style="min-width:64px">${c.sl=="secreta"&&!S.inv[c.id]?"???":cch(c)}</em></button>`).join("")}</div>`;
@@ -1096,7 +1104,7 @@ const ill=r=>{
  // cada parte animada vira uma camada própria (só transform/opacity => roda na GPU, sem repintar)
  return `<div class="art"><i class="bg"></i>${r>7?'<i class="nb lyr"></i>':""}${r>3?'<i class="ry lyr"></i>':""}${r>5?'<i class="au lyr"></i>':""}${V("",o,0,140,0,"slice")}${r>3?V("wgs lyr",w,28,108):""}${r>6?V("fk lyr",Z("M28 58C24 44 36 38 34 22 44 28 46 36 50 12 54 36 56 28 66 22 64 38 76 44 72 58Z",L(58,.95)),20,76):""}${r>7?V("rg lyr",`<ellipse cx="50" cy="54" rx="43" ry="13" fill="none" stroke="${L(82)}" stroke-width="1.2" stroke-dasharray="4 3"/>`,52,84)+V("rg r2 lyr",`<ellipse cx="50" cy="54" rx="38" ry="11" fill="none" stroke="${L(70,.7)}" stroke-width=".8"/>`,52,84):""}${V("gm lyr",`<g transform="translate(50 54) scale(${(.78+r*.07).toFixed(2)}) translate(-50 -54)">${g}</g>`,34,104)}${st[0]?V("t1 lyr",st[0],10,84):""}${st[1]?V("t2 lyr",st[1],10,84):""}${pt}</div>`};
 const LK=`<div class="art"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1.5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zm2 0h6V7a3 3 0 0 0-6 0z" fill="currentColor"/></svg></div>`;
-const card=(c,cl="",n=0,lk=0,xt="",lv)=>{const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),im=!lk&&c.img,fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;return `<div class="cd k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r};--f:${F[r]};--sd:${(4.2-r*.3).toFixed(1)}s">${lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r)}${lk?"":`${r>5?'<ins class="aur"></ins><ins class="emb"></ins>':""}<b class="rk">${R[r][0]}</b>${n>1?`<i class="x">×${n}</i>`:""}<u class="in"></u>${L?`<s class="fz">${"<i></i>".repeat(L)}</s>`:""}${r==8?'<u class="rbw"><i class="lyr"></i></u>':""}<div class="nm">${c.n}</div>${c.sl?`<em class="slo">${SLS[c.sl]||""}</em>`:""}`}${xt}</div>`};
+const card=(c,cl="",n=0,lk=0,xt="",lv)=>{const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),im=!lk&&(c.img||IMG[c.id]),fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;return `<div class="cd k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r};--f:${F[r]};--sd:${(4.2-r*.3).toFixed(1)}s">${lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r)}${lk?"":`${r>5?'<ins class="aur"></ins><ins class="emb"></ins>':""}<b class="rk">${R[r][0]}</b>${n>1?`<i class="x">×${n}</i>`:""}<u class="in"></u>${L?`<s class="fz">${"<i></i>".repeat(L)}</s>`:""}${r==8?'<u class="rbw"><i class="lyr"></i></u>':""}<div class="nm">${c.n}</div>${c.sl?`<em class="slo">${SLS[c.sl]||""}</em>`:""}`}${xt}</div>`};
 // se a foto de uma carta não carregar, mostra a ilustração gerada
 document.addEventListener("error",e=>{const t=e.target,d=t.tagName=="IMG"&&t.closest(".cd");if(d){d.classList.remove("img");t.parentNode.outerHTML=ill(+d.dataset.r)}},true);
 function updCs(){const c=$("cs");if(!c)return;const mid=c.scrollLeft+c.clientWidth/2;let b=9;[...c.children].forEach((s,i)=>{const d=Math.min(1,Math.abs(s.offsetLeft+s.offsetWidth/2-mid)/s.offsetWidth);s.style.transform=`scale(${(1-d*.22).toFixed(3)})`;s.style.opacity=(1-d*.6).toFixed(2);if(d<b){b=d;cur=i}});$("cap").textContent=P[cur].n;updOpen();document.querySelectorAll(".dots i").forEach((e,i)=>e.classList.toggle("on",i==cur));document.querySelectorAll(".ar button").forEach((e,i)=>e.style.opacity=(i?cur<P.length-1:cur>0)?1:.25)}
@@ -1272,14 +1280,14 @@ let PV=null,FC=null,ft="s";
 function view(c,keep){
  FC=c;if(!keep)ft="s";
  const n=S.inv[c.id],s=c.sk||[],f=$("fc"),mx=ST[8].map(v=>v*3),bar=(l,v,k)=>`<div class="sb"><span>${l}</span><i><u style="width:${Math.min(100,Math.max(5,v/mx[k]*100))}%"></u></i><b>${v}</b></div>`;
- const body=ft=="s"?stp(c,n):ft=="r"?fzb(c,n)+cvb(c,n):ft=="h"?`<p>${c.d||"Ainda sem história."}</p>`:(Array.isArray(s[0])?s:[s]).map(a=>{const rc=a[3]&&a[3].rc&&(!a[3].tr||a[3].tr=="u")?a[3].rc:0, // recarga só existe em habilidade ativa
+ const body=ft=="s"?stp(c,n):ft=="r"?fzb(c,n)+cvb(c,n):ft=="h"?`<p>${c.d||"Ainda sem história."}</p>`:(Array.isArray(s[0])?s:[s]).map((a,ix,ar)=>{const rc=a[3]&&a[3].rc&&(!a[3].tr||a[3].tr=="u")?a[3].rc:0, // recarga só existe em habilidade ativa
   tx=rc?String(a[2]||"").replace(/\s*Recarga:\s*\d+\s*turnos?\.?\s*$/i,""):a[2]||""; // tira a recarga que já veio escrita no texto, para não repetir
-  return `<h3>${a[0]||"Sem habilidade ainda"}</h3><em>${a[1]||""}</em><p>${tx}${rc?` <b>Recarga: ${rc} turno${rc>1?"s":""}.</b>`:""}</p>`}).join("");
+  return `<h3>${ar.length>1?"Habilidade "+(ix+1)+" · ":""}${a[0]||"Sem habilidade ainda"}</h3><em>${a[1]||""}</em><p>${tx}${rc?` <b>Recarga: ${rc} turno${rc>1?"s":""}.</b>`:""}</p>`}).join("");
  f.style.setProperty("--rc",R[c.r][1]);
  f.innerHTML=`<div class="fch"><div class="hd"><button class="bk" data-a="2">‹ Voltar</button>${wlt()}</div>${card(c)}<h2>${c.n}</h2><p class="rar"><span class="rtg" style="--pc:${R[c.r][1]}">Rank ${R[c.r][0]}</span>${n?`<span class="rtg">${NIVEIS[lvl(c)]}</span>`:""}${n>1?`<span class="rtg">${lvl(c)?`1 melhorada + ${n-1} repetida${n>2?"s":""}`:`×${n} cópias`}</span>`:""}</p><div class="sg">${[["s","Status"],["h","História"],["k","Habilidade"],...(n?[["r","Repetidas"]]:[])].map(x=>`<button data-f="${x[0]}" class="${ft==x[0]?"on":""}">${x[1]}${x[0]=="r"&&n>1?`<b>${n-1}</b>`:""}</button>`).join("")}</div><div class="pnl">${body}</div></div>`;
  f.hidden=false;if(!keep)f.scrollTop=0;
 }
-function preview(i){const b=ALL.find(c=>!c.img)||ALL[0];PV={...b,img:0,r:i,id:"pv",hp:ST[i][0],atk:ST[i][1]};play(b.p,[{c:PV,n:false}],null)}
+function preview(i){const p=P[as]||P[0],r=(p&&p.cards.find(c=>c.r==i))||ALL.find(c=>c.r==i),x=r||ALL.find(c=>!c.img)||ALL[0];PV=r?{...r,id:"pv"}:{...x,img:0,r:i,id:"pv",hp:ST[i][0],atk:ST[i][1]};play(x.p,[{c:PV,n:false}],null)}
 document.addEventListener("click",e=>{
  const t=e.target.closest("[data-t],[data-i],[data-s],[data-c],[data-a],[data-v],[data-p],[data-f],[data-m],[data-k],[data-o],[data-x],[data-d],[data-g],[data-q],[data-w],[data-u],[data-y],[data-z],[data-cp],[data-gf],[data-fp],[data-ri]");if(!t)return;
  const D=t.dataset;
@@ -1376,7 +1384,7 @@ const dsc=sp=>(sp.tr&&sp.tr!="u"?TRG[sp.tr]+": ":"")+sp.ef.map(e=>(FX[e.t]?FX[e.
 // ----- ARENAS (9) · troféus · recompensas -----
 // Troféus: vitória +TW, derrota −TL (nunca cai de arena: o piso é o mínimo da arena atual). TR = troféus para entrar em cada arena. IA = dificuldade (0 fácil, 1 normal, 2 difícil).
 // Vitória na arena: fragmentos arf(k) = 60 na 1ª, +10 por arena. 1 pacote a cada CHX vitórias (CONFIG.pacVit). Marco: a cada MK troféus dá MK fragmentos (e 1 pacote a cada mkPacote troféus). Derrotar o chefe dá a carta exclusiva da arena nova (rank = posição da arena) + pacotes e fragmentos (bossPrize: CONFIG.arenaPac, arenaPacMais, arenaFrag).
-const MAXT=20,TR=[0,300,700,1200,1800,2500,3300,4200,5200],TW=CONFIG.tw,TL=CONFIG.tl,CHX=CONFIG.pacVit,MK=CONFIG.mk,IA=[0,0,0,1,1,1,2,2,2];
+const MAXT=CONFIG.turnos||20,TR=[0,300,700,1200,1800,2500,3300,4200,5200],TW=CONFIG.tw,TL=CONFIG.tl,CHX=CONFIG.pacVit,MK=CONFIG.mk,IA=[0,0,0,1,1,1,2,2,2];
 const AR=[["Germano Sperb","🏫"],["Rua","🛣️"],["Casa do Henrique","🏠"],["Arquibancada","🏟️"],["Pracinha","🛝"],["Shopping Bourbon","🛍️"],["Pedrinho","🎓"],["Lurdes","🛒"],["Casa do Mauro","🏡"]],arf=k=>Math.round((CONFIG.arf0+CONFIG.arfK*k)*cpxEvM());
 (ADM0.tr||[]).forEach((v,i)=>{if(v>=0)TR[i]=v});(ADM0.an||[]).forEach((a,i)=>{if(a&&a[0])AR[i]=[a[0],a[1]||AR[i][1]]});
 const XS=[[{rc:3,ef:[{t:"d",a:"e",m:1.5}]},"Apito do Recreio"],[{rc:3,ef:[{t:"h",a:"s",p:30}]},"Fôlego de Rua"],[{rc:4,ef:[{t:"at",a:"A",p:20,n:2}]},"Grito da Turma"],[{rc:3,ef:[{t:"d",a:"e",m:1},{t:"at",a:"e",p:-20,n:2}]},"Golpe da Arquibancada"],[{rc:3,ef:[{t:"d",a:"E",m:1.4}]},"Corrida da Pracinha"],[{rc:4,ef:[{t:"d",a:"e",m:2},{t:"h",a:"s",p:20}]},"Promoção Relâmpago"],[{rc:4,ef:[{t:"h",a:"A",p:25}]},"Sinal do Intervalo"],[{rc:4,ef:[{t:"d",a:"E",m:1.6},{t:"at",a:"s",p:25,n:2}]},"Fila do Caixa"],[{rc:4,ef:[{t:"d",a:"E",m:2.5},{t:"h",a:"A",p:20}]},"Rei da Casa"]];
@@ -1402,9 +1410,9 @@ setInterval(()=>{const b=$("fpb");if(b&&tab=="h"&&ov.hidden)b.outerHTML=fpb()},3
 // 12 cartas por deck embaralhadas e viradas · 5 vidas · campo: 3 ativas + 3 reservas · 2 ações por turno (comprar 1×, atacar 1×/carta, habilidade, colocar) · quem começa faz 1 ação · sem crítico · sem trocar ativa por reserva · máx. MAXT turnos por jogador.
 // DANO = dano × múltiplo × elemento (sem defesa). Com o status por raridade, 3 golpes derrubam uma carta do mesmo rank e nível. Buff/debuff de "n turnos" dura n turnos do dono da carta.
 const abs=c=>{const s=c.sk||[],l=Array.isArray(s[0])?s:s.length?[s]:[];return l.filter(a=>a[3]&&a[3].ef&&!a[3].tr).map(a=>({n:a[0],rc:a[3].rc||3,ef:a[3].ef}))},pas=c=>{const s=c.sk||[];return(Array.isArray(s[0])?s:s.length?[s]:[]).filter(a=>a[3]&&a[3].ef&&a[3].tr).map(a=>({n:a[0],tr:a[3].tr,ef:a[3].ef}))};
-const mk=(c,lv,k=1)=>{const m=(1+.4*lv)*k,ab=abs(c);return{c,lv,hp:Math.round(c.hp*m),mx:Math.round(c.hp*m),atk:Math.round(c.atk*m),ab,ps:pas(c),cd:ab.map(()=>0),bf:[],u:0,id:Math.random().toString(36).slice(2,8)}};
+const mk=(c,lv,k=1)=>{const m=(1+.4*lv)*k,ab=abs(c);return{c,lv,hp:Math.round(c.hp*m*(CONFIG.vidaMult||1)),mx:Math.round(c.hp*m*(CONFIG.vidaMult||1)),atk:Math.round(c.atk*m),ab,ps:pas(c),cd:ab.map(()=>0),bf:[],u:0,id:Math.random().toString(36).slice(2,8)}};
 const bs=(u,k)=>u.bf.filter(b=>b.k==k).reduce((a,b)=>a+b.p,0),AT=u=>Math.max(1,u.atk*(1+bs(u,"at")/100));
-const dm=(a,t,m=1)=>Math.max(1,Math.round(AT(a)*m*elm(a.el||a.c.el,t.el||t.c.el)*Math.max(.1,1-bs(t,"df")/100)));
+const dm=(a,t,m=1)=>Math.max(1,Math.round(AT(a)*m*(CONFIG.danoMult||1)*elm(a.el||a.c.el,t.el||t.c.el)*Math.max(.1,1-bs(t,"df")/100)));
 const shf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const cur_=B=>B.p[B.t],foe_=B=>B.p.length>2?rv_(B):B.p[1-B.t],cn_=s=>s.f.filter(Boolean).length+s.r.length,lg=(B,t)=>{B.log.push(t);B.log.length>30&&B.log.shift()};
 // ===== BATALHA EM GRUPO no motor real: 2x2 (times) e todos contra todos (3 ou 4) · B.tm[i] = time do lado i · lado com vida 0 está fora =====
@@ -1412,8 +1420,8 @@ const ens_=(B,i=B.t)=>B.p.filter((s,j)=>B.tm[j]!=B.tm[i]&&s.life>0),en_=(B,i=B.t
 function finG(B,why){const sc=t=>{const L=B.p.filter((s,j)=>B.tm[j]==t);return[L.reduce((x,s)=>x+Math.max(0,s.life),0),L.reduce((x,s)=>x+(s.life>0?[...s.f,...s.r].filter(Boolean).reduce((y,u)=>y+u.hp,0):0),0)]};let w=-1,b=null,tie=0;[...new Set(B.tm)].forEach(t=>{const c=sc(t);if(!b||c[0]>b[0]||c[0]==b[0]&&c[1]>b[1]){w=t;b=c;tie=0}else if(c[0]==b[0]&&c[1]==b[1])tie=1});B.w=tie?-1:w;B.why=why;return 1}
 function qtS(B,s){const x=B.p[s];if(!x||x.life<1)return;x.life=0;lg(B,`🚪 ${x.n} saiu da mesa`);B.ev.push({k:"life",s,n:0});chk(B);if(!B.over&&B.t==s)endT(B)}
 function qtL(B,s){const L=window.LV;L&&(L.rm=1);try{qtS(B,s)}finally{L&&(L.rm=0)}}
-function nb(a,b,o){const sd=x=>({n:x.n,life:5,dk:shf(x.u).map(y=>mk(y.c,y.lv,y.s||1)),f:[null,null,null],r:[],drew:0}),LS=Array.isArray(a)?a:[a,b],B={p:LS.map(sd),t:Math.random()*LS.length|0,n:1,ac:1,log:[],over:0,o,kl:LS.map(()=>0),hit:[],ev:[],tm:o&&o.tm||LS.map((_,i)=>i)};B.st=B.t;B.p.forEach(s=>{const u=s.dk.shift();if(u)s.f[0]=u});stT(B,1);B.p.forEach((s,i)=>s.f[0]&&trg(B,s.f[0],i,"in"));return B}
-function stT(B,first){const s=cur_(B);B.ac=first?1:2;s.drew=0;B.hit=[];s.f.forEach(u=>{if(!u)return;const p=bs(u,"po"),b=u.bf.filter(x=>x.k=="bl").reduce((a,x)=>a+x.v,0),r=bs(u,"rg");if(p>0)hurt(B,u,Math.max(1,Math.round(u.mx*p/100)),null);if(b>0)hurt(B,u,b,null);if(r>0&&u.hp>0)u.hp=Math.min(u.mx,u.hp+Math.round(u.mx*r/100));if(u.hp>0)trg(B,u,B.t,"ti")});chk(B);[...s.f,...s.r].forEach(u=>{if(!u)return;const z=bs(u,"st")>0,m=z||bs(u,"cu")>0;u.u=z||bs(u,"dz")>0?1:0;u.cd=u.cd.map(x=>Math.max(m?1:0,x-(z?0:1)));u.bf=u.bf.map(b=>({...b,n:b.n-1})).filter(b=>b.n>0)})}
+function nb(a,b,o){const sd=x=>({n:x.n,life:CONFIG.vidas||5,dk:shf(x.u).map(y=>mk(y.c,y.lv,y.s||1)),f:[null,null,null],r:[],drew:0}),LS=Array.isArray(a)?a:[a,b],B={p:LS.map(sd),t:Math.random()*LS.length|0,n:1,ac:1,log:[],over:0,o,kl:LS.map(()=>0),hit:[],ev:[],tm:o&&o.tm||LS.map((_,i)=>i)};B.st=B.t;B.p.forEach(s=>{const u=s.dk.shift();if(u)s.f[0]=u});stT(B,1);B.p.forEach((s,i)=>s.f[0]&&trg(B,s.f[0],i,"in"));return B}
+function stT(B,first){const s=cur_(B);B.ac=first?(CONFIG.acaoIni||1):(CONFIG.acoes||2);s.drew=0;B.hit=[];s.f.forEach(u=>{if(!u)return;const p=bs(u,"po"),b=u.bf.filter(x=>x.k=="bl").reduce((a,x)=>a+x.v,0),r=bs(u,"rg");if(p>0)hurt(B,u,Math.max(1,Math.round(u.mx*p/100)),null);if(b>0)hurt(B,u,b,null);if(r>0&&u.hp>0)u.hp=Math.min(u.mx,u.hp+Math.round(u.mx*r/100));if(u.hp>0)trg(B,u,B.t,"ti")});chk(B);[...s.f,...s.r].forEach(u=>{if(!u)return;const z=bs(u,"st")>0,m=z||bs(u,"cu")>0;u.u=z||bs(u,"dz")>0?1:0;u.cd=u.cd.map(x=>Math.max(m?1:0,x-(z?0:1)));u.bf=u.bf.map(b=>({...b,n:b.n-1})).filter(b=>b.n>0)})}
 function fin(B,why){B.over=1;if(B.p.length>2)return finG(B,why);const[a,b]=B.p;let w=a.life>b.life?0:a.life<b.life?1:-1;if(w<0){const h=s=>[...s.f,...s.r].filter(Boolean).reduce((x,u)=>x+u.hp,0);w=h(a)>h(b)?0:h(a)<h(b)?1:-1}B.w=w;B.why=why;return 1}
 const chk=B=>B.p.length>2?(new Set(B.p.map((s,i)=>s.life>0?B.tm[i]:-1).filter(t=>t>=0)).size<2?fin(B,"vidas"):0):B.p[0].life<1||B.p[1].life<1?fin(B,"vidas"):0;
 function hurt(B,t,d,src){if(d>0){SND.hit();try{cpxShake(d,t)}catch(e){}}const i=B.p.findIndex(x=>x.f.includes(t));if(i<0||t.hp<1)return;if(bs(t,"im")>0)d=0;if(src&&d>0){if(bs(t,"ev")>0&&Math.random()*100<bs(t,"ev"))d=0;else if(bs(src,"cr")>0&&Math.random()*100<bs(src,"cr"))d*=2}const sh=t.bf.find(b=>b.k=="sh"&&b.p>0);if(sh&&d>0){const a=Math.min(sh.p,d);sh.p-=a;d-=a}d=Math.min(d,t.hp);t.hp-=d;const dead=!t.hp;B.ev.push({k:"dmg",id:t.id,s:i,d,mx:t.mx,dead,r:src?src.c.r:t.c.r,el:src&&src.c.el,tr:t.c.r});if(d>0&&src){const l=bs(src,"ls"),rf=bs(t,"rf");if(l>0&&src.hp>0)src.hp=Math.min(src.mx,src.hp+Math.round(d*l/100));if(rf>0&&src!=t&&src.hp>0&&sdx(B,src)>=0)hurt(B,src,Math.max(1,Math.round(d*rf/100)),null)}if(!dead){d>0&&trg(B,t,i,"da");return}const s=B.p[i];s.f[s.f.indexOf(t)]=null;gy(s,t);s.life--;B.ev.push({k:"life",s:i,n:s.life});{const kk=B.p.length>2?(src?sdx(B,src):-1):1-i;if(kk>=0)B.kl[kk]++}lg(B,`💥 ${t.c.n} caiu · ${s.n} perde 1 vida`);trg(B,t,i,"mo");if(src){const j=sdx(B,src);j>=0&&trg(B,src,j,"ki")}}
@@ -1436,7 +1444,7 @@ function aiActs(B){const s=cur_(B),E=tn(foe_(B).f.filter(Boolean)),A=s.f.filter(
  if(!s.drew&&cn_(s)<6&&s.dk.length)L.push({k:"d",sc:(cn_(s)<4?36:20)+(!A.length&&!s.r.length?200:0)});
  return L}
 function aiMove(B){const L=aiActs(B),ep=B.o.m=="a"?Math.max(.02,(CONFIG.botErro??40)/100*(1-Math.min(B.o.k||0,7)/7)+.02*Math.min(B.o.k||0,7)/7)*(B.o.b?.5:1):[.6,.3,.02][B.o.ai||0];if(!L.length)return endT(B);L.forEach(x=>x.sc+=Math.random()*(B.o.m=="a"?Math.max(1.5,6-(B.o.k||0)*.6):6));const a=Math.random()<ep?L[Math.random()*L.length|0]:L.sort((x,y)=>y.sc-x.sc)[0];if(a.k=="a")aAtk(B,a.u,a.t);else if(a.k=="s")aSk(B,a.u,a.i,a.g);else if(a.k=="p")aPlace(B,a.u);else aDraw(B)}
-function aiRun(){const B=BT;if(!B||B.over||!B.ai||B.t!=1)return;setTimeout(()=>{if(BT!==B||B.over)return;const a0=B.ac,t0=B.t;aiMove(B);if(!B.over&&B.t==t0&&(B.ac<1||B.ac==a0))endT(B);zr();if(B.over)return zend();aiRun()},1200)}
+function aiRun(){const B=BT;if(!B||B.over||!B.ai||B.t!=1)return;setTimeout(()=>{if(BT!==B||B.over)return;const a0=B.ac,t0=B.t;aiMove(B);if(!B.over&&B.t==t0&&(B.ac<1||B.ac==a0))endT(B);zr();if(B.over)return zend();aiRun()},CONFIG.iaMs||1200)}
 // ----- DECK DE BATALHA (12 cartas DIFERENTES: a mesma carta nunca entra 2×, mesmo com várias cópias) e código para lutar com amigo -----
 const dkv=()=>{const u={};return(S.dk||[]).map(byId).filter(c=>c&&(S.inv[c.id]||0)>0&&!u[c.id]&&(u[c.id]=1))};
 const dkf=()=>{const d=dkv(),u={},p=[];d.forEach(c=>u[c.id]=1);ALL.forEach(c=>{if(!u[c.id]&&(S.inv[c.id]||0)>0)p.push(c)});p.sort((a,b)=>b.r-a.r||lvl(b)-lvl(a));while(d.length<12&&p.length)d.push(p.shift());S.dk=d.map(c=>c.id);save();return d};
@@ -1603,10 +1611,10 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
  if(PASS)pn=`<div class="zres"><h2>Vez de ${B.p[B.t].n}</h2><p>Passe o celular.</p><button class="bt" data-z="go">Começar</button></div>`;
  else if(B.p.length>2&&A.life<1)pn=`<p class="zst">Você saiu da luta · acompanhando</p><button class="bk" data-z="leave">Sair da mesa</button>`;else if(B.lv&&B.t!=B.v)pn=`<p class="zst">Vez de ${B.p[B.t].n}…</p>${B.p.length>2?`<button class="bk" data-z="kick">Remover ${B.p[B.t].n} (ausente)</button>`:""}<button class="bk" data-z="quit">Desistir</button>`;else if(B.ai&&B.t==1)pn=`<p class="zst">Vez do rival…</p>`;
  else{const u=SEL&&SEL.u,fo=tg_(B).length>0,emp=s.f.includes(null);
-  pn=`<p class="zst">${s.n} · ações ${"●".repeat(B.ac)}${"○".repeat(Math.max(0,2-B.ac))}${B.n==1&&B.t==B.st?" · quem começa faz 1 ação":""}</p>`;
+  pn=`<p class="zst">${s.n} · ações ${"●".repeat(B.ac)}${"○".repeat(Math.max(0,(CONFIG.acoes||2)-B.ac))}${B.n==1&&B.t==B.st?" · quem começa faz 1 ação":""}</p>`;
   if(SEL&&SEL.m=="a")pn+=`<p class="zst">Toque no inimigo que vai apanhar</p><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else if(SEL&&SEL.m=="s")pn+=`<p class="zst">Escolha o alvo (${SEL.q[0]=="e"?"inimigo":"aliado"})</p><button class="bt gh" data-z="cancel">Cancelar</button>`;
-  else if(u&&!SEL.r)pn+=`<div class="two"><button class="bt${!u.u&&fo&&B.ac?"":" off"}" data-z="atk">Atacar</button>${u.ab.map((a,i)=>`<button class="bt cy${u.cd[i]||!B.ac?" off":""}" data-z="k${i}">✦ ${a.n}${u.cd[i]?` (${u.cd[i]})`:""}</button>`).join("")}</div><button class="bt gh" data-z="cancel">Cancelar</button>`;
+  else if(u&&!SEL.r)pn+=`${u.ab.length>1?`<p class="zst" style="text-transform:none;letter-spacing:.03em">Escolha: atacar ou uma das ${u.ab.length} habilidades (cada uma tem sua recarga)</p>`:""}<div class="two"${u.ab.length>1?` style="grid-template-columns:1fr"`:""}><button class="bt${!u.u&&fo&&B.ac?"":" off"}" data-z="atk">Atacar</button>${u.ab.map((a,i)=>`<button class="bt cy${u.cd[i]||!B.ac?" off":""}" data-z="k${i}">✦ ${a.n}${u.cd[i]?` (${u.cd[i]})`:""}</button>`).join("")}</div><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else if(u)pn+=`<button class="bt${emp&&B.ac?"":" off"}" data-z="place">Colocar em campo</button><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else pn+=`<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta para agir · toque de novo (ou no inimigo) para ver status e habilidades</p>`;
   pn+=`<div class="two"><button class="bt gh${!B.ac||s.drew||cn_(s)>=6||!s.dk.length?" off":""}" data-z="draw">Comprar · ${s.dk.length}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
@@ -1633,7 +1641,7 @@ function zc(a){const B=BT;if(!B)return;
 function zend(){const B=BT;if(B.zq)return;B.zq=1;const d=B.ev.length?1300:0;if(d)zr();setTimeout(()=>{if(BT===B)zend2()},d)}
 const gifts=()=>Object.values(S.gp||{}).reduce((a,b)=>a+(+b||0),0);
 // RESULTADO DA BATALHA: só o essencial · troféus ganhos ou perdidos (tr) e, quando houver, pacotes e avisos curtos (rw). Fragmentos e demais prêmios continuam sendo dados, só não aparecem aqui.
-function zend2(){if(BT&&BT.o&&BT.o.m=="g")return zendG(BT);const B=BT,w=B.w,k=B.o.k,t0=S.tp,_sn=(B.o.m=="a"||B.o.m=="f")&&w>=0&&SND[w===0?"win":"lose"](),_cf=(B.o.m=="a"||B.o.m=="f")&&w===0&&cpxConfetti(),a0=S.ar,g0=gifts(),rw=[];let tr="";fxEnd(B);bump("play");if(B.why!="desistiu"){const d0=day();if(!S.pj||S.pj.d!==d0)S.pj={d:d0,n:0};S.pj.n++}bump("kill",B.kl[0]);
+function zend2(){if(BT&&BT.o&&BT.o.m=="g")return zendG(BT);if(BT&&BT.o&&BT.o.inf)return zendI(BT);const B=BT,w=B.w,k=B.o.k,t0=S.tp,_sn=(B.o.m=="a"||B.o.m=="f")&&w>=0&&SND[w===0?"win":"lose"](),_cf=(B.o.m=="a"||B.o.m=="f")&&w===0&&cpxConfetti(),a0=S.ar,g0=gifts(),rw=[];let tr="";fxEnd(B);bump("play");if(B.why!="desistiu"){const d0=day();if(!S.pj||S.pj.d!==d0)S.pj={d:d0,n:0};S.pj.n++}bump("kill",B.kl[0]);
  if(B.o.m=="a"){const d=day();if(!S.ba||S.ba.d!==d)S.ba={d,n:0};const ok=S.ba.n++<CONFIG.limiteDia,bs=B.o.b;
   if(w==0){S.fr+=ok?arf(k):0;bump("win");if(ok){S.wn++;if(S.wn%CHX==0)gift(dpk().id)}else rw.push("Limite diário de prêmios atingido");
    if(bs){arenaUp();tr="👑 Chefe derrotado!";rw.push(S.ar>a0?`🏟 Arena nova: ${AR[S.ar][0]} · 🃏 carta exclusiva`:"🏆 Campeão!")}
@@ -1657,11 +1665,11 @@ function zgo(a,b,o){BT=nb(a,b,o);BT.p.forEach((s,i)=>s.f[0]&&BT.ev.push({k:"plac
 function mineDeck(){let d=dkv();if(d.length<12)d=dkf();if(d.length<12){toast("Você precisa de <b>12 cartas diferentes</b> para montar o deck. Abra mais pacotes!");return null}return d.map(c=>({c,lv:lvl(c)}))}
 function startArena(bs){const u=mineDeck();if(!u)return;const k=S.ar,e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*CONFIG.chefe}:x);zgo({n:"Você",u},{n:(bs?"Chefe · ":"Rival · ")+AR[k][0],u:e},{m:"a",k,ai:IA[k],b:bs?1:0})}
 function startFriend(v){const t=String(v||"").trim();if(t.slice(0,5)!="DECK~")return toast("Código inválido · cole o código do deck do seu amigo.");const f=t.slice(5).split(",").map(x=>{const[i,l]=x.split(":"),c=byId(i);return c?{c,lv:Math.max(0,Math.min(5,+l||0))}:null});if(f.length!=12||f.some(x=>!x))return toast("Código inválido · o deck do amigo precisa ter 12 cartas do jogo.");if(new Set(f.map(x=>x.c.id)).size!=12)return toast("Código inválido · o deck do amigo precisa ter 12 cartas diferentes, sem repetir.");const u=mineDeck();if(!u)return;zgo({n:"Você",u},{n:window.ONLN||"Amigo",u:f},{m:"f"})}
-zb.onclick=e=>{const b=e.target.closest("[data-z]");if(!b)return;const a=b.dataset.z;if(a=="close"){BT=null;zb.hidden=true;PASS=0;upd();render(1)}else if(a=="again"){const bb=BT&&BT.o.b;BT=null;zb.hidden=true;startArena(bb)}else zc(a)};
+zb.onclick=e=>{const b=e.target.closest("[data-z]");if(!b)return;const a=b.dataset.z;if(a=="close"){BT=null;zb.hidden=true;PASS=0;upd();render(1)}else if(a=="inf"){BT=null;zb.hidden=true;startInf()}else if(a=="again"){const bb=BT&&BT.o.b;BT=null;zb.hidden=true;startArena(bb)}else zc(a)};
 // ----- ABA BATALHA -----
 const btl=()=>{const h=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Batalha</span></div>`,nt=t=>`<p class="mut ctr" style="margin:0 0 14px;letter-spacing:.04em;text-transform:none">${t}</p>`;
  const k=S.ar,nx=TR[k+1],fd=S.fd.d===day()?S.fd.n:0;
- return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button>${bossOK()?`<button class="bt cy" data-bz="boss" style="margin-top:10px">👑 Desafiar o chefe</button>`:""}<button class="bt gh" data-bz="deck" style="margin-top:10px">Meu deck · ${dkv().length}/12</button></div>`+
+ return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button>${bossOK()?`<button class="bt cy" data-bz="boss" style="margin-top:10px">👑 Desafiar o chefe</button>`:""}<button class="bt gh" data-bz="deck" style="margin-top:10px">Meu deck · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
  `<details class="fd"><summary>Lutar com amigo</summary><div class="cvb"><p>No mesmo celular. Seu amigo manda o código do deck dele. Vencendo: ${gem}<b>${CONFIG.amigoFrag}</b> · hoje <b>${Math.min(fd,3)}/3</b> lutas · sem troféus.</p><input class="cdi" id="fcd" placeholder="Cole o código do deck do amigo" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="bt cy" data-bz="friend" style="margin-top:10px">Lutar com amigo</button><button class="bt gh" data-bz="mycode" style="margin-top:10px">Copiar o código do meu deck</button></div></details>`};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-bz]");if(!b)return;const a=b.dataset.bz;
  if(a=="fight")startArena();else if(a=="boss")startArena(1);else if(a=="deck"){if(!dkv().length)dkf();DSEL=null;tab="a";render()}else if(a=="back"){BV="";render(1)}else if(a=="auto"){dkf();render(1)}
@@ -1676,7 +1684,8 @@ const saveCode=()=>"CP1:"+b64(JSON.stringify(S)),loadCode=t=>{t=String(t).trim()
 const ADM=Object.assign({c:[],p:[],d:"",o:{},po:{},ab:[],ca:{},xp:[]},ADM0);
 const sADM=()=>{try{localStorage.setItem("colprimata_adm",JSON.stringify(ADM));localStorage.setItem("colprimata_img",JSON.stringify(IMG))}catch(e){toast("Sem espaço no aparelho · exporte o conteúdo")}};
 function addCard(x){let p=P.find(q=>q.id==x.pk);if(!p){const d=ADM.p.find(q=>q.id==x.pk);if(!d)return;p={id:d.id,n:d.n,e:d.e,h:d.h,cost:d.cost,cards:[]};P.push(p)}const c={...x};prep(p,c,0);p.cards.push(c);ALL.push(c)}
-ADM.c.forEach(addCard);P.forEach(p=>p.dest=p.id==ADM.d);
+ADM.c.filter(x=>!x.dr).forEach(addCard);P.forEach(p=>p.dest=p.id==ADM.d); // v1.9: dr=1 = rascunho (guardada, fora do jogo até lançar)
+const drGo=()=>{sADM();try{sessionStorage.cpad="";sessionStorage.cpad2="ds_l";sessionStorage.cptab=tab}catch(e){}location.reload()};
 const adxRm=(a,x)=>{const k=a.indexOf(x);k>=0&&a.splice(k,1)};
 Object.keys(ADM.po).forEach(i=>{const p=P.find(q=>q.id==i);p&&Object.assign(p,ADM.po[i])});P.forEach(p=>{if(IMG["pk_"+p.id])p.img=IMG["pk_"+p.id]});P.forEach(p=>{if(!p.bk&&IMG["pkb_"+p.id])p.bk=IMG["pkb_"+p.id];p.cards.forEach(c=>{if(!c.bk&&IMG["bk_"+c.id])c.bk=IMG["bk_"+c.id]})}); // foto do pacote fica em IMG["pk_"+id]
 Object.keys(ADM.o).forEach(i=>{const c=byId(i),o=ADM.o[i];if(!c)return;const p=c.p;
@@ -1709,7 +1718,7 @@ q("[data-p]").filter(x=>x.checked).forEach(x=>{const p=QP[+x.dataset.p];if(!p)re
 ADM.ca[id]=z;ADM.cx[id]=L.map(a=>a[0]).filter((n,i)=>{const c=cfg.querySelector(`#qab [data-i="${i}"]`);return c&&!c.checked});QP=[]}
 function YNEW(){const g=i=>$(i).value,n=g("en").trim(),pk=g("ek2");if(!n)return toast("Dê um nome à carta.");if(!pk)return toast("Escolha o pacote.");
 const x={id:"a"+rid(),pk,r:R[+g("er")][0],n,d:g("eh").trim()||undefined},ch=parseFloat(g("ech")),hp=+g("ehp"),at=+g("eatk");if(ch>0)x.ch=ch;if(hp>0)x.hp=hp;if(at>0)x.atk=at;
-if(PEND&&PW=="fj")IMG[x.id]=PEND;ADM.c.push(x);YAB(x.id);adxGo()}
+if(PEND&&PW=="fj")IMG[x.id]=PEND;{const d=$("adr2");if(d&&d.checked)x.dr=1}ADM.c.push(x);YAB(x.id);x.dr?drGo():adxGo()}
 document.addEventListener("change",e=>{const t=e.target;if(!t||!t.id)return;
 if(t.id=="ec"){QP=[];const h=$("hc");if(h&&t.value!="__"){h.value=t.value;try{hcLoad()}catch(x){}}yMode();yPaint()}
 else if(t.id=="qad"&&t.value){const v=t.value;let p;if(v[0]=="m")p={k:"m",i:+v.slice(1),n:hxEx[+v.slice(1)][0]};else{const a=ADM.ab.find(x=>x.id==v.slice(1));if(a)p={k:"l",id:a.id,n:a.n}}if(p)QP.push(p);t.value="";yPaint()}});
@@ -1722,11 +1731,11 @@ let AD=0,PEND=null,PW="";
 function cfgView(v){cfg.hidden=false;PEND=null;
  const T=`<div class="in2"><h2>${v=="a"?"Modo ADM":"Ajustes"}</h2>`,E=`<button class="bt gh" data-k="x">Fechar</button></div>`;
  if(v=="a"){
-  const op=P.map(p=>`<option value="${p.id}">${p.e} ${p.n}</option>`).join("")+'<option value="__">➕ Novo pacote…</option>',rk=R.map(r=>`<option>${r[0]}</option>`).join(""),ca=ALL.map(c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`).join(""),pd=P.map(p=>`<option value="${p.id}"${p.dest?" selected":""}>${p.n}</option>`).join("");
+  const op=P.map(p=>`<option value="${p.id}">${p.e} ${p.n}</option>`).join("")+ADM.p.filter(d=>!P.some(p=>p.id==d.id)).map(d=>`<option value="${d.id}">${d.e} ${d.n} · não lançado</option>`).join("")+'<option value="__">➕ Novo pacote…</option>',rk=R.map(r=>`<option>${r[0]}</option>`).join(""),ca=ALL.map(c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`).join(""),pd=P.map(p=>`<option value="${p.id}"${p.dest?" selected":""}>${p.n}</option>`).join("");
   cfg.innerHTML=T+adxEd()+adxHb()+adxPk()+cpxEvForm()+adxRl()+adxGv()+`<details class="fd" id="ds_n"><summary>➕ Nova carta ou pacote</summary><p class="mut" style="margin:0;text-transform:none;letter-spacing:0">As cartas criadas ficam salvas neste aparelho. Para levar aos amigos, use Exportar conteúdo.</p>`
   +cpFl("Pacote",`<select id="ap">${op}</select>`)+`<div id="np" hidden>`+cpFl("Nome do pacote",'<input id="pn">')+cpFl("Emoji",'<input id="pe" value="🎴">')+cpFl("Cor (0 a 360)",'<input id="ph" type="number" value="200">')+cpFl("Preço em fragmentos",`<input id="pc" type="number" value="${CUSTO}">`)+`</div>`
   +cpFl("Nome da carta",'<input id="an">')+cpFl("Rank",`<select id="ar2">${rk}</select>`)
-  +cpFl("Chance % (vazio = automática)",'<input id="ac" type="number" step="any">')+cpFl("História",'<textarea id="ah" rows="3"></textarea>')+cpFl("Habilidades da carta (marque várias)",`<select id="ahb" multiple size="5">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="${a.id}">${a.n}</option>`).join("")}</select>`)+cpFl("Habilidade só desta carta (não entra na lista geral)",`<select id="aqs"><option value="">Nenhuma</option>${hxEx.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join("")}</select>`)+cpFl("Imagem (vira WebP leve, até "+CONFIG.imgKB+" KB)",'<input id="fi" type="file" accept="image/*">')+`<button class="bt" data-k="nc">Salvar carta</button></details>`
+  +cpFl("Chance % (vazio = automática)",'<input id="ac" type="number" step="any">')+cpFl("História",'<textarea id="ah" rows="3"></textarea>')+cpFl("Habilidades da carta (marque várias)",`<select id="ahb" multiple size="5">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="${a.id}">${a.n}</option>`).join("")}</select>`)+cpFl("Habilidade só desta carta (não entra na lista geral)",`<select id="aqs"><option value="">Nenhuma</option>${hxEx.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join("")}</select>`)+cpFl("Imagem (vira WebP leve, até "+CONFIG.imgKB+" KB)",'<input id="fi" type="file" accept="image/*">')+`<label class="yck"><input type="checkbox" id="adr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt" data-k="nc">Salvar carta</button></details>`
   
   +cpFl("Pacote em destaque",`<select id="ad"><option value="">Rodízio automático</option>${pd}</select>`)+`<button class="bt cy" data-k="nd">Salvar destaque</button><button class="bt cy" data-k="nf">+1.000 fragmentos (teste)</button>`
   +cpFl("Conteúdo (cartas, pacotes e imagens)",cpTa("cc"))+cpFl("Arquivo de conteúdo",'<input id="fcc" type="file" accept=".json,.txt">')+`<button class="bt cy" data-k="xc">Exportar conteúdo</button><button class="bt gh" data-k="ic">Importar conteúdo</button><button class="bt gh" data-k="m">Ajustes do save</button>`+E;
@@ -1735,7 +1744,7 @@ function cfgView(v){cfg.hidden=false;PEND=null;
 function nCard(){const n=$("an").value.trim(),pv=$("ap").value;if(!n)return toast("Dê um nome à carta.");let pk=pv;
  if(pv=="__"){const pn=$("pn").value.trim();if(!pn)return toast("Dê um nome ao pacote.");pk="p"+rid();ADM.p.push({id:pk,n:pn,e:$("pe").value||"🎴",h:+$("ph").value||200,cost:+$("pc").value||0})}
  const x={id:"a"+rid(),pk,r:$("ar2").value,n,d:$("ah").value.trim()||undefined},ch=parseFloat($("ac").value);if(ch>0)x.ch=ch;
- if(PEND&&PW=="fi")IMG[x.id]=PEND;ADM.c.push(x);YCA(x);sADM();addCard(x);toast(`✅ <b>${n}</b> criada!`);try{sessionStorage.cpad2="ds_c"}catch(e){}if(window.__yca){adxGo();return}cfgView("a");const dn=$("ds_n");if(dn)dn.open=true}
+ const dr=$("adr")&&$("adr").checked;if(dr)x.dr=1;if(PEND&&PW=="fi")IMG[x.id]=PEND;ADM.c.push(x);YCA(x);sADM();if(!dr)addCard(x);toast(dr?`📦 <b>${n}</b> guardada · lance em Lançamentos`:`✅ <b>${n}</b> criada!`);try{sessionStorage.cpad2="ds_c"}catch(e){}if(window.__yca){dr?drGo():adxGo();return}cfgView("a");const dn=$("ds_n");if(dn)dn.open=true}
 gear.onclick=()=>cfgView("m");
 cfg.onchange=e=>{const t=e.target;if((t.id=="fi"||t.id=="fj"||t.id=="fbk"||t.id=="fpb")&&t.files[0])imgOK(t.files[0],u=>{PEND=u;PW=t.id;toast(u?`Imagem pronta · ${Math.round(u.length*.75/1024)} KB`:"Não consegui ler a imagem")})};
 cfg.onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;const k=b.dataset.k;
@@ -1758,10 +1767,10 @@ adxD=(i,t,h)=>`<details class="fd" id="ds_${i}"><summary>${t}</summary>${h}</det
 adxB=(k,t,c="")=>`<button class="bt ${c}" data-k="@${k}">${t}</button>`,
 adxS=(i,l,h)=>cpFl(l,`<select id="${i}">${h}</select>`),
 adxT=(i,l,v,r)=>cpFl(l,`<textarea id="${i}" rows="${r}">${v}</textarea>`),
-adxL={admPin:"PIN do modo ADM",limiteDia:"Lutas por dia que dão prêmio",pacVit:"Vitórias para ganhar 1 pacote",tw:"Troféus ganhos por vitória",tl:"Troféus perdidos por derrota",mk:"Troféus por marco (e fragmentos do marco)",mkPacote:"Troféus por pacote de marco",mkMax:"Teto de troféus dos marcos",chefeFinal:"Troféus do chefe final",chefe:"Força do chefe (×)",diaria:"Fragmentos do login diário",amigoFrag:"Fragmentos por luta com amigo",amigoDia:"Lutas com amigo por dia",derrota:"Fragmentos por derrota",nDia:"Missões diárias por dia",mDia:"Fragmentos por missão diária",mSem:"Fragmentos por missão semanal",mSemPac:"Pacotes por missão semanal",mDiaBonus:"Missões diárias para 1 pacote bônus",arenaPac:"Pacotes do chefe da arena 1",arenaPacMais:"Pacotes a mais por arena",arenaFrag:"Fragmentos do chefe × nº da arena",campPac:"Pacotes do Campeão",campFrag:"Fragmentos do Campeão",gratisLivre:"Pacotes do dia sem jogar",gratisJogar:"Pacotes do dia por batalha",imgKB:"Tamanho máx. da imagem (KB)",arf0:"Fragmentos da 1ª vitória de arena",arfK:"+ fragmentos a cada arena",fusArena:"Arena que libera as fusões (1 = livre)",sArena:"Arena que libera o rank S e acima (1 = livre)",fusMult:"Preço das fusões (× o padrão)",faixa:"Folga da faixa de status por rank (± %)",som:"Sons do jogo (1 = ligado, 0 = desligado)",musica:"Música de fundo (1 = ligada, 0 = desligada)",botErro:"Erro dos bots na Arena 1 (% de jogadas ao acaso · cai até 2% na Arena 8)",botForca:"Força extra dos bots por arena (%)",botNivel:"Nível de fusão dos bots (× · 0 = sem fusão)"},
+adxL={vidas:"Vidas de cada jogador na luta",acoes:"Ações por turno",acaoIni:"Ações do primeiro turno",turnos:"Máximo de turnos da luta",iaMs:"Tempo de reação do rival (ms)",danoMult:"Dano de todas as cartas na luta (×)",vidaMult:"Vida de todas as cartas na luta (×)",admPin:"PIN do modo ADM",limiteDia:"Lutas por dia que dão prêmio",pacVit:"Vitórias para ganhar 1 pacote",tw:"Troféus ganhos por vitória",tl:"Troféus perdidos por derrota",mk:"Troféus por marco (e fragmentos do marco)",mkPacote:"Troféus por pacote de marco",mkMax:"Teto de troféus dos marcos",chefeFinal:"Troféus do chefe final",chefe:"Força do chefe (×)",diaria:"Fragmentos do login diário",amigoFrag:"Fragmentos por luta com amigo",amigoDia:"Lutas com amigo por dia",derrota:"Fragmentos por derrota",nDia:"Missões diárias por dia",mDia:"Fragmentos por missão diária",mSem:"Fragmentos por missão semanal",mSemPac:"Pacotes por missão semanal",mDiaBonus:"Missões diárias para 1 pacote bônus",arenaPac:"Pacotes do chefe da arena 1",arenaPacMais:"Pacotes a mais por arena",arenaFrag:"Fragmentos do chefe × nº da arena",campPac:"Pacotes do Campeão",campFrag:"Fragmentos do Campeão",gratisLivre:"Pacotes do dia sem jogar",gratisJogar:"Pacotes do dia por batalha",imgKB:"Tamanho máx. da imagem (KB)",arf0:"Fragmentos da 1ª vitória de arena",arfK:"+ fragmentos a cada arena",fusArena:"Arena que libera as fusões (1 = livre)",sArena:"Arena que libera o rank S e acima (1 = livre)",fusMult:"Preço das fusões (× o padrão)",faixa:"Folga da faixa de status por rank (± %)",som:"Sons do jogo (1 = ligado, 0 = desligado)",musica:"Música de fundo (1 = ligada, 0 = desligada)",botErro:"Erro dos bots na Arena 1 (% de jogadas ao acaso · cai até 2% na Arena 8)",botForca:"Força extra dos bots por arena (%)",botNivel:"Nível de fusão dos bots (× · 0 = sem fusão)"},
 adxPo=()=>adxO(P,p=>`<option value="${p.id}">${p.e} ${p.n}</option>`),
 adxCo=()=>adxO(ALL,c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`),
-adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",`<option value="__">➕ Nova carta…</option>`+adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("ek2","Pacote",adxPo())+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+adxI("ebk","Verso desta carta (link da imagem 3:4 · vazio = o do pacote)")+cpFl("Ou envie a imagem do verso desta carta",'<input id="fbk" type="file" accept="image/*">')+adxI("ega","Ganha de prêmio ao chegar na arena (0 = não ganha)","","number")+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+`<p class="mut" style="margin:12px 0 2px">✨ Habilidades desta carta (desmarque para remover)</p><div id="qab">${qabHtml(ALL[0]&&ALL[0].id)}</div>`+adxS("qad","",`<option value="">➕ Adicionar habilidade…</option><optgroup label="Modelos prontos (só desta carta)">${hxEx.map((h,i)=>`<option value="m${i}">${h[0]}</option>`).join("")}</optgroup><optgroup label="Biblioteca">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="l${a.id}">${a.n}</option>`).join("")}</optgroup>`)+adxB("sc","💾 Salvar carta e habilidades")+adxB("dc","Excluir carta","gh")),
+adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",`<option value="__">➕ Nova carta…</option>`+adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("ek2","Pacote",adxPo())+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+adxI("ebk","Verso desta carta (link da imagem 3:4 · vazio = o do pacote)")+cpFl("Ou envie a imagem do verso desta carta",'<input id="fbk" type="file" accept="image/*">')+adxI("ega","Ganha de prêmio ao chegar na arena (0 = não ganha)","","number")+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+`<p class="mut" style="margin:12px 0 2px">✨ Habilidades desta carta (desmarque para remover)</p><div id="qab">${qabHtml(ALL[0]&&ALL[0].id)}</div>`+adxS("qad","",`<option value="">➕ Adicionar habilidade…</option><optgroup label="Modelos prontos (só desta carta)">${hxEx.map((h,i)=>`<option value="m${i}">${h[0]}</option>`).join("")}</optgroup><optgroup label="Biblioteca">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="l${a.id}">${a.n}</option>`).join("")}</optgroup>`)+`<label class="yck"><input type="checkbox" id="adr2" checked> 📦 Se for carta nova: guardar sem lançar</label>`+adxB("sc","💾 Salvar carta e habilidades")+adxB("dc","Excluir carta","gh")),
 adxPk=()=>adxD("k","📦 Editar pacotes",adxS("ek","Pacote",adxPo())+adxI("kn","Nome")+adxI("ke","Emoji")+adxI("kh","Cor (0 a 360)","","number")+adxI("kc","Preço em fragmentos (vazio = padrão)","","number")+adxI("ko","Chances % por raridade F,E,D,C,B,A,S,SS,SSS (vazio = padrão)")+adxI("kb","Verso das cartas deste pacote (link da imagem 3:4 · vazio = verso padrão)")+cpFl("Ou envie a imagem do verso do pacote",'<input id="fpb" type="file" accept="image/*">')+adxI("kt","Pacote some em (data e hora · vazio = nunca sai)","","datetime-local")+adxI("kx","Pacote especial (1 = não vende · cartas só como prêmio)","","number")+adxB("sk","Salvar pacote")+adxB("dk","Excluir pacote","gh")),
 adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("cf_"+k,adxL[k]||k,CONFIG[k],typeof CONFIG[k]=="number"?"number":"text")).join("")
 +adxI("rfr","Fragmentos por repetida · F,E,D,C,B,A,S,SS,SSS",FRAG.join(","))+adxI("rcu","Preço padrão do pacote",CUSTO,"number")+adxI("rini","Fragmentos de quem começa",INICIO,"number")
@@ -1788,8 +1797,8 @@ ask("Excluir carta?",ult?`<b>${c.n}</b> é a última carta do pacote <b>${p.n}</
 function cpxEvOn(){const e=ADM.ev;return e&&e.ate>Date.now()&&!(e.ini>Date.now())?e:null}
 function cpxEvM(){const e=cpxEvOn();return e&&e.mf>0?e.mf:1}
 function cpxShake(d,t){const el=document.getElementById("zb");if(!el||el.hidden)return;const f=Math.min(1,d/((t&&t.mx)||100)),a=2+10*f;el.animate([{transform:"translate(0,0)"},{transform:`translate(${-a}px,${a/2}px)`},{transform:`translate(${a}px,${-a/2}px)`},{transform:`translate(${-a/2}px,${a/3}px)`},{transform:"translate(0,0)"}],{duration:160+240*f});if(f>.18){let v=document.getElementById("zfl");if(!v){v=document.createElement("div");v.id="zfl";document.body.append(v)}v.animate([{opacity:0},{opacity:.25+.5*f},{opacity:0}],{duration:300+200*f})}}
-function cpxEvForm(){const e=ADM.ev||{},f=t=>t?new Date(t-new Date(t).getTimezoneOffset()*6e4).toISOString().slice(0,16):"";return adxD("ev","🎉 Evento (bônus por período)",`<p class="mut" style="margin:0;text-transform:none;letter-spacing:0">Enquanto o evento estiver ativo, cada vitória na arena dá fragmentos multiplicados e todo jogador recebe um aviso.</p>`+adxI("evn","Nome do evento",e.n||"")+adxI("evi","Começa em (vazio = já começou)",f(e.ini),"datetime-local")+adxI("eva","Termina em",f(e.ate),"datetime-local")+adxI("evm","Fragmentos nas vitórias (× · ex.: 2)",String(e.mf||2),"number")+adxB("sev","Salvar evento")+adxB("dev","Encerrar evento","gh"))}
-function cpxEvSave(){const n=$("evn").value.trim(),a=$("eva").value?new Date($("eva").value).getTime():0,i=$("evi").value?new Date($("evi").value).getTime():0,m=+$("evm").value||2;if(!n||!(a>Date.now()))return toast("Dê um nome e uma data de fim no futuro.");ADM.ev={n,ini:i,ate:a,mf:m};adxGo()}
+function cpxEvForm(){const e=ADM.ev||{},f=t=>t?new Date(t-new Date(t).getTimezoneOffset()*6e4).toISOString().slice(0,16):"";return adxD("ev","🎉 Evento (bônus por período)",`<p class="mut" style="margin:0;text-transform:none;letter-spacing:0">Enquanto o evento estiver ativo, cada vitória na arena dá fragmentos multiplicados e todo jogador recebe um aviso.</p>`+adxI("evn","Nome do evento",e.n||"")+adxI("evi","Começa em (vazio = já começou)",f(e.ini),"datetime-local")+adxI("eva","Termina em",f(e.ate),"datetime-local")+adxI("evm","Fragmentos nas vitórias (× · ex.: 2)",String(e.mf||2),"number")+adxI("evf","Presente: fragmentos para cada jogador (uma vez)",String(e.gf||0),"number")+adxI("evq","Presente: quantidade de pacotes (uma vez)",String(e.gq||0),"number")+adxS("evk","Pacote do presente",`<option value="">🎲 Aleatório</option>`+P.map(p=>`<option value="${p.id}"${e.gk==p.id?" selected":""}>${p.n}</option>`).join(""))+adxB("sev","Salvar evento")+adxB("dev","Encerrar evento","gh"))}
+function cpxEvSave(){const n=$("evn").value.trim(),a=$("eva").value?new Date($("eva").value).getTime():0,i=$("evi").value?new Date($("evi").value).getTime():0,m=+$("evm").value||2;if(!n||!(a>Date.now()))return toast("Dê um nome e uma data de fim no futuro.");ADM.ev={n,ini:i,ate:a,mf:m,gf:Math.max(0,Math.floor(+$("evf").value||0)),gq:Math.max(0,Math.floor(+$("evq").value||0)),gk:$("evk").value};adxGo()}
 function cpxEvEnd(){delete ADM.ev;adxGo()}
 function adxSk(){const id=$("ek").value,v=$("ko").value.trim(),od=v?v.split(",").map(Number):null;if(od&&(od.length!=9||od.some(x=>!(x>=0))))return toast("Chances: 9 números separados por vírgula.");
 ADM.po[id]=Object.assign(ADM.po[id]||{},{n:$("kn").value.trim()||"Pacote",e:$("ke").value||"🎴",h:+$("kh").value||0,cost:+$("kc").value||0,odds:od,bk:$("kb").value.trim(),ate:$("kt").value?new Date($("kt").value).getTime():0,esp:+$("kx").value>0?1:0});if(PEND&&PW=="fpb"){IMG["pkb_"+id]=PEND;ADM.po[id].bk=""}else if($("kb").value.trim())delete IMG["pkb_"+id];adxGo()}
@@ -1807,7 +1816,7 @@ if(Object.values(mc).some(v=>isNaN(v[0])||isNaN(v[1])))return toast("Coleção e
 Object.assign(ADM,{cfg:cf,fr,cu:+g("rcu"),ini:+g("rini"),rc,st,tr,an,dp,wp,mc});adxGo()}
 function adxRr(){ask("Restaurar padrões?","Regras e recompensas voltam aos valores originais do jogo (cartas e pacotes não mudam).","Restaurar",()=>{["cfg","fr","cu","ini","rc","st","tr","an","dp","wp","mc"].forEach(k=>delete ADM[k]);adxGo()})}
 function adxG(w){const n=Math.floor(+$("gn").value);if(!(n>0))return toast("Informe uma quantidade.");
-if(w=="gf")S.fr+=n;else if(w=="gg")gift($("gp").value,n);else if(w=="gk"){const i=$("gc").value;S.inv[i]=(S.inv[i]||0)+n}else ALL.forEach(c=>S.inv[c.id]=S.inv[c.id]||1);
+if(w=="gf")S.fr+=n;else if(w=="gg"){const v=$("gp").value;if(v=="__r")for(let k=0;k<n;k++)gift(P[Math.floor(Math.random()*P.length)].id,1);else gift(v,n)}else if(w=="gk"){const i=$("gc").value;S.inv[i]=(S.inv[i]||0)+n}else ALL.forEach(c=>S.inv[c.id]=S.inv[c.id]||1);
 save();upd();sync();toast("✓ Pronto")}
 const adxA={sc:adxSc,dc:adxDc,sk:adxSk,dk:adxDk,sr:adxSr,rr:adxRr,sev:cpxEvSave,dev:cpxEvEnd};
 function adx(k){adxA[k]?adxA[k]():adxG(k)}
@@ -2020,7 +2029,7 @@ document.addEventListener("pointerdown",e=>{const b=e.target.closest&&e.target.c
 const tb=document.createElement("button");tb.id="tb";tb.setAttribute("aria-label","Voltar ao topo");tb.textContent="↑";document.body.append(tb);
 tb.onclick=()=>scrollTo({top:0,behavior:NO()?"auto":"smooth"});addEventListener("scroll",()=>tb.classList.toggle("on",scrollY>700),{passive:true});
 // batalha: não deixa a tela apagar, avisa antes de recarregar no meio da luta e vibra nos golpes
-addEventListener("beforeunload",e=>{if(BT&&!BT.over){e.preventDefault();e.returnValue=""}});
+
 let wk=null;new MutationObserver(async()=>{try{if(!zb.hidden&&!wk&&navigator.wakeLock)wk=await navigator.wakeLock.request("screen");else if(zb.hidden&&wk){wk.release();wk=null}}catch(e){wk=null}}).observe(zb,{attributes:true,attributeFilter:["hidden"]});
 const dm=FXH.dmg;FXH.dmg=function(e,st,P){const at=st.imp;dm.apply(this,arguments);fat(at,()=>vib(e.dead?[40,30,60]:e.d>=e.mx*.5?30:14))};
 if(!document.querySelector('meta[name="theme-color"]')){const t=document.createElement("meta");t.name="theme-color";t.content="#161618";document.head.append(t)}
@@ -2029,14 +2038,14 @@ if(!document.querySelector('meta[name="theme-color"]')){const t=document.createE
 <script>
 // ===== v1.0 (17/11/2026): MODO ADM organizado · categorias, busca, botão de salvar fixo, campos em grupos e zona de risco =====
 (()=>{try{
-const T={ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Dar itens e liberar cartas"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"]},
-FT={ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"]},
+const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_ev:["🎉","Eventos","Bônus, presentes e aviso na tela inicial"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"]},
+FT={ds_ev:["@sev","Salvar evento"],ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"]},
 GR={ds_r:[["Login e pacotes",["cf_diaria","cf_pacVit","cf_gratisLivre","cf_gratisJogar"]],["Fragmentos e preços",["rfr","rcu","rini","rrc","cf_fusMult"]],["Liberações por arena",["cf_fusArena","cf_sArena"]],["Faixa de status por rank",["cf_faixa"]],["Bots de batalha",["cf_botErro","cf_botForca","cf_botNivel"]]],
 ds_b:[["Troféus",["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax"]],["Prêmios das lutas",["cf_limiteDia","cf_derrota","cf_arf0","cf_arfK","cf_amigoFrag","cf_amigoDia"]],["Chefes e campeão",["cf_chefe","cf_chefeFinal","cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag"]],["Arenas e força das cartas",["rtr","ran","rst"]]],
 ds_m:[["Missões",["cf_nDia","cf_mDia","cf_mSem","cf_mSemPac","cf_mDiaBonus"]],["Listas de missões",["rdp","rwp","rmc"]]],
 ds_s:[["Sistema",["cf_admPin","cf_imgKB","cf_som","cf_musica"]],["Conteúdo do jogo",["cc","fcc"]]],
 ds_k:[["Pacote em destaque",["ad"]]]},
-GRP=[["Visão geral",["ds_p"]],["Cartas",["ds_x","ds_c","ds_h"]],["Pacotes",["ds_k","ds_v"]],["Regras do jogo",["ds_r","ds_b","ds_m"]],["Sistema",["ds_g","ds_s"]]],
+GRP=[["Criar e lançar",["ds_l","ds_i","ds_c","ds_h"]],["Pacotes",["ds_k","ds_v"]],["Regras do jogo",["ds_r","ds_b","ds_m","ds_ev"]],["Painel e sistema",["ds_p","ds_x","ds_g","ds_s"]]],
 HALF=/^(er|et|ar2|at2|ke|pe|kh|ph|pc|kc|cf_admPin)$/,N=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),
 PG=()=>[...cfg.querySelectorAll("details.adp")],act=()=>cfg.querySelector("details.adp[open]"),
 el=(t,c,h)=>{const e=document.createElement(t);e.className=c;if(h!=null)e.innerHTML=h;return e};
@@ -2053,9 +2062,9 @@ function tidy(){const w=cfg.querySelector(".in2");if(!w||!$("ds_c"))return;dirty
 w.querySelectorAll("input[id],select[id],textarea[id]").forEach(c=>{const l=c.previousElementSibling;if(!l||l.tagName!="LABEL")return;const f=el("div","afl"+(HALF.test(c.id)||(c.type=="number"&&l.textContent.length<35)?"":" w"));c.before(f);f.append(l,c)});
 const F=i=>{const e=$(i);return e&&e.closest(".afl")},B=k=>w.querySelector(`[data-k="${k}"]`);
 Object.keys(T).forEach(id=>{let d=$(id);if(!d){d=el("details","fd","<summary></summary>");d.id=id;w.append(d)}d.classList.add("adp");d.querySelector("summary").textContent=T[id][0]+" "+T[id][1]});try{adxNew(w)}catch(e){console.warn("adm13",e)}
-["ds_c","ds_k","ds_r","ds_g","ds_n"].forEach(i=>{const d=$(i),g=el("div","fg");[...d.children].forEach(c=>c.tagName!="SUMMARY"&&g.append(c));d.append(g)});
+["ds_c","ds_k","ds_r","ds_g","ds_n","ds_ev"].forEach(i=>{const d=$(i),g=el("div","fg");[...d.children].forEach(c=>c.tagName!="SUMMARY"&&g.append(c));d.append(g)});
 // o botão de salvar fica só na barra fixa de baixo: esconde do formulário os que repetiam a mesma ação ("nc" = criar carta, "@hs" = salvar habilidade)
-["@sc","@sk","@sr","@hs","nc"].forEach(k=>{const b=B(k);b&&b.classList.add("ph")});["@dc","@dk","@rr"].forEach(k=>B(k).classList.add("dg"));
+["@sc","@sk","@sr","@hs","@sev","nc"].forEach(k=>{const b=B(k);b&&b.classList.add("ph")});["@dc","@dk","@rr"].forEach(k=>B(k).classList.add("dg"));
 $("ds_c").append($("ds_n"));
 // as regras, que eram uma lista única, são divididas por assunto
 Object.entries(GR).forEach(([p,gs])=>gs.forEach(([t,ids])=>{const fs=ids.map(F).filter(Boolean);if(!fs.length)return;const g=el("div","fg");fs.forEach(f=>g.append(f));$(p).append(el("h3","ash",t),g)}));
@@ -2064,7 +2073,7 @@ const rg=el("div","fg");rg.append(B("@rr"));$("ds_s").append(el("h3","ash","Zona
 const hd=el("div","ah",'<button class="ab" data-adm="home" aria-label="Voltar">‹</button><div><b></b><small></small></div><button class="ab" data-k="x" aria-label="Fechar">✕</button>'),
 sr=el("input","asr"),rs=el("div","asl"),tl=el("div","ag",GRP.map(([g,ids])=>`<h3 class="ags">${g}</h3><div class="agg">${ids.map(id=>`<button class="at" data-adm="p${id}" style="--i:${Object.keys(T).indexOf(id)}"><i>${T[id][0]}</i><b>${T[id][1]}</b><small>${T[id][2]}</small></button>`).join("")}</div>`).join("")),ft=el("div","af",'<button class="bt" data-k="@sr">Salvar</button>');
 sr.id="asq";sr.type="search";sr.placeholder="Buscar ajuste (ex.: troféus, missão, preço)";sr.autocomplete="off";ft.hidden=true;
-w.prepend(hd,sr,rs,tl);w.append(...Object.keys(T).map(i=>$(i)),ft);
+w.prepend(hd,sr,rs,tl);w.append(...GRP.flatMap(g=>g[1]).map(i=>$(i)),ft);
 idx=[...w.querySelectorAll(".afl")].filter(f=>!f.closest("#np")&&f.closest(".adp")&&!f.dataset.hid).map(f=>{const c=f.querySelector("[id]"),t=f.querySelector("label").textContent,d=f.closest(".adp");return{id:c.id,t,n:N(t),p:T[d.id][0]+" "+T[d.id][1]}});
 cfg.classList.add("adm");const r=sessionStorage.cpad2;sessionStorage.removeItem("cpad2");show(T[r]?r:"")}
 cfg.addEventListener("click",e=>{const b=e.target.closest("[data-adm]");if(!b||!cfg.classList.contains("adm"))return;const k=b.dataset.adm;
@@ -2168,6 +2177,260 @@ if(i=="er"||i=="ec"||i=="ar2")upd()});
 cfg.addEventListener("input",e=>{const i=e.target.id;if(e.target.closest("#ds_v")&&i!="z_vk"&&i!="v_f")pv()});
 })();
 </script>
+<style id="imp-css">
+/* v1.8 · ADM · importar ficha de carta */
+#z_iv{display:grid;gap:8px}
+.ivc{padding:12px 14px;border-radius:14px;background:#ffffff0a;border:1px solid #ffffff1f;display:grid;gap:6px}
+.ivc .n{font-size:1rem;line-height:1.2}
+.ivc small{color:var(--mut);font-size:.74rem}
+.ivc p{margin:0;font-size:.76rem;line-height:1.45;color:var(--mut)}
+.iva{padding:9px 11px;border-radius:10px;background:#ffffff0d;font-size:.76rem;line-height:1.45}
+.iva i{color:var(--mut)}
+.xw p.er{background:#f4566a1a;border-color:#f4566a55;color:#ff8a96}
+.ivb{display:flex;gap:8px}
+.ivb .bt{flex:1;min-width:0;width:auto}
+</style>
+<script id="imp-js">
+// ===== v1.8 (20/11/2026): ADM · IMPORTAR FICHA DE CARTA · cole o texto que a IA criou e o jogo monta a carta (nome, história, status e habilidades) =====
+(()=>{try{
+const E=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
+N=s=>String(s==null?"":s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(),
+SL=s=>N(s).replace(/[^a-z0-9%]+/g,"_").replace(/^_+|_+$/g,""),
+has=(o,k)=>Object.prototype.hasOwnProperty.call(o,k),
+num=v=>{const m=String(v==null?"":v).replace(",",".").match(/-?\d+(?:\.\d+)?/);return m?parseFloat(m[0]):NaN},
+smart=s=>String(s).replace(/"([^"]*)"/g,"“$1”").replace(/"/g,"”");
+// texto que vai para o jogo: sem tags, sem aspas retas (nomes entram em atributos HTML), com limite de tamanho
+const txt=(s,max,W,nm)=>{let t=smart(String(s==null?"":s).replace(/[<>`\u0000-\u001f]/g," ").replace(/\s+/g," ").trim());
+ if(max&&t.length>max){W&&W(`${nm} muito longo: cortei em ${max} letras.`);t=t.slice(0,max).replace(/\s+\S*$/,"")+"…"}return t};
+
+// ---- vocabulário da ficha (nome em português → código interno do jogo). O código curto do jogo também vale.
+const TY={dano:"d",dano_percentual:"dp",dano_fixo:"dv",dano_vida_atual:"dh",golpes_multiplos:"mh",eliminar:"ex",execucao:"ex",tirar_vida_inimigo:"lx",
+ cura:"h",cura_fixa:"hv",vida_maxima:"mx",regeneracao:"rg",roubo_de_vida:"ls",reviver:"rv",ganhar_vida:"lf",trocar_vida:"sp",
+ ataque:"at",defesa:"df",escudo:"sh",reflexo:"rf",esquiva:"ev",critico:"cr",invulneravel:"im",provocar:"tn",purificar:"pu",copiar_ataque:"ca",mudar_elemento:"el",
+ veneno:"po",sangramento:"bl",atordoar:"st",silenciar:"cu",desarmar:"dz",atrasar_habilidades:"ci",dissipar:"di",
+ recarga:"cd",acao_extra:"ac",comprar:"dr",recuar:"bk",convocar:"pl",devolver_baralho:"rd",descartar_reserva:"dc",queimar_baralho:"mm"};
+const TA={si:"s",si_mesma:"s",propria_carta:"s",a_propria_carta:"s",inimigo:"e",um_inimigo:"e",todos_inimigos:"E",todos_os_inimigos:"E",inimigos:"E",
+ aliado:"a",um_aliado:"a",todos_aliados:"A",todos_os_aliados:"A",aliados:"A",inimigo_aleatorio:"r",inimigo_menos_vida:"w",inimigo_mais_fraco:"w",
+ inimigo_mais_vida:"x",inimigo_mais_forte:"x",aliado_aleatorio:"q",aliado_menos_vida:"m",aliado_mais_fraco:"m",outros_aliados:"o",todas_cartas:"T",todas_as_cartas:"T"};
+const CAN={s:"si",e:"inimigo",E:"todos_inimigos",a:"aliado",A:"todos_aliados",r:"inimigo_aleatorio",w:"inimigo_menos_vida",x:"inimigo_mais_vida",q:"aliado_aleatorio",m:"aliado_menos_vida",o:"outros_aliados",T:"todas_cartas"};
+const CDM={alvo_vida_ate:"tl",alvo_vida_baixa:"tl",alvo_vida_acima:"th",eu_vida_ate:"ul",eu_vida_baixa:"ul",eu_vida_acima:"uh",alvo_envenenado:"pz",alvo_com_debuff:"bd",alvo_com_buff:"bg",vantagem_elemento:"el",menos_vidas:"pe",mais_vidas:"ga"};
+const PA={m:"m",mult:"m",multiplicador:"m",p:"p",pct:"p",porcentagem:"p",percentual:"p","%":"p",n:"n",turnos:"n",turno:"n",golpes:"n",duracao:"n",v:"v",valor:"v",vidas:"v",cartas:"v",acoes:"v",quantidade:"v",o:"o",poupar:"o",x:"x",elemento:"x"};
+const LB={nome:"n",rank:"r",raridade:"r",elemento:"el",selo:"sl",vida:"hp",hp:"hp",dano:"atk",ataque:"atk",atk:"atk",historia:"d",frase:"q",quando:"tr",gatilho:"tr",recarga:"rc",chance:"ch",pacote:"pk",tipo:"tp"};
+const HURT=new Set(["d","dp","dv","dh","mh","ex","po","bl","st","cu","dz","ci","di","rd"]),HELP=new Set(["h","hv","rg","sh","ev","cr","im","tn","pu","ls","rf","rv"]),
+ ENM=new Set(["e","E","r","w","x"]),ALY=new Set(["s","a","A","q","m","o"]),SIGN=new Set(["at","df","mx"]),BIGP=new Set(["rv","lf","ac","pl","ex","lx","im","dc","mm","rd"]);
+const LIM={m:[.1,6],p:[-100,300],n:[1,10],v:[0,5000]},VL={dr:[1,3],lx:[1,2],lf:[1,2],ac:[1,2],pl:[1,3],dc:[1,3],mm:[1,5],cd:[0,6],ci:[1,5],dv:[1,2000],hv:[1,2000]};
+const pn=(k,t)=>k=="m"?"mult":k=="p"?"pct":k=="n"?(t=="mh"?"golpes":"turnos"):k=="v"?"valor":k=="o"?"poupar":"elemento";
+const dflt=(t,g)=>HURT.has(t)?"e":SIGN.has(t)?(num(g.p)<0?"e":"s"):"s";
+const rk=v=>{const m=String(v).toUpperCase().replace(/[^A-Z]+/g," ").match(/(?:^|\s)(SSS|SS|S|A|B|C|D|E|F)(?=\s|$)/);return m?R.findIndex(x=>x[0]==m[1]):-1};
+const trg=s=>{const n=SL(s);if(!n)return"u";if(has(TRG,n))return n;
+ for(const[k,x]of[["u",/^ativ|manual|^usar/],["in",/entr|chega/],["mo",/morr|mort/],["ti",/inicio|comeco/],["te",/fim|final/],["da",/receb|sofr|dano/],["at",/atac/],["ki",/elimin|mata|derrot/]])if(x.test(n))return k;return null};
+
+// ---- números dentro dos limites do jogo (com aviso)
+function cl(x,k,t,L,wa,nm){
+ let[lo,hi]=(k=="v"&&VL[t])||(k=="n"&&t=="mh"?[1,8]:LIM[k]);
+ if(k=="p"&&!SIGN.has(t))lo=Math.max(lo,1);
+ if(k=="p"&&(t=="ev"||t=="cr"||t=="rv"))hi=Math.min(hi,100);
+ x=k=="m"?Math.round(x*100)/100:Math.round(x);
+ const y=Math.min(hi,Math.max(lo,x));
+ if(y!==x)wa.push(`${L}${nm}=${x} fora do limite (${lo} a ${hi}): usei ${y}.`);
+ return y}
+
+// ---- uma linha de efeito:  nome | alvo=... | mult=... | se=... | limite=... | prob=...
+function pEf(s,ln,er,wa){
+ const L=`Linha ${ln}: `,parts=String(s).split("|").map(x=>x.trim()).filter(Boolean);
+ if(!parts.length){er.push(L+"efeito vazio.");return null}
+ const tk=SL(parts[0]),t=has(FX,tk)?tk:has(TY,tk)?TY[tk]:null;
+ if(!t){er.push(`${L}o efeito "${parts[0]}" não existe no jogo. Use um dos nomes da tabela de efeitos do PDF.`);return null}
+ const F=FX[t],e={t},g={};let alvo=null,se=null,lim=null,pro=null;
+ for(const p of parts.slice(1)){
+  const m=p.match(/^([^=:：]+?)\s*[=:：]\s*(.*)$/);
+  if(!m){er.push(`${L}não entendi "${p}" (escreva nome=valor).`);continue}
+  const k=SL(m[1]),v=m[2].trim();
+  if(k=="alvo"||k=="alvos"){alvo=v;continue}
+  if(k=="se"||k=="condicao"){se=v;continue}
+  if(k=="limite"||k=="se_valor"||k=="cv"){lim=v;continue}
+  if(k=="prob"||k=="probabilidade"||k=="chance"||k=="ch"){pro=v;continue}
+  const pk=has(PA,k)?PA[k]:null;
+  if(!pk||!F.f.some(q=>q[0]==pk)){er.push(`${L}"${m[1].trim()}" não é parâmetro do efeito ${tk}`+(F.f.length?` (use: ${F.f.map(q=>pn(q[0],t)).join(", ")}).`:" (esse efeito não tem parâmetros)."));continue}
+  g[pk]=v}
+ if(!F.own){
+  let a=null;
+  if(alvo==null||alvo===""){a=dflt(t,g);wa.push(`${L}efeito ${tk} sem alvo: usei "${CAN[a]}".`)}
+  else{const z=alvo.trim(),y=SL(z);a=has(TG,z)?z:has(TA,y)?TA[y]:null;
+   if(!a){er.push(`${L}alvo "${alvo}" não existe. Use: si, inimigo, todos_inimigos, aliado, todos_aliados, inimigo_aleatorio, inimigo_menos_vida, inimigo_mais_vida, aliado_aleatorio, aliado_menos_vida, outros_aliados ou todas_cartas.`);a="e"}}
+  e.a=a}
+ F.f.forEach(q=>{const k=q[0],nm=pn(k,t),v=g[k];
+  if(v===undefined){e[k]=q[2];return}
+  if(k=="x"){const z=SL(v);if((q[3]||[]).includes(z))e[k]=z;else{er.push(`${L}elemento "${v}" não existe (use fogo, planta, agua, luz ou sombra).`);e[k]=q[2]}return}
+  if(k=="o"){e[k]=/^(1|sim|s|true|yes|verdadeiro)$/.test(SL(v))?1:0;return}
+  const x=num(v);if(isNaN(x)){er.push(`${L}"${v}" não é um número em ${nm}.`);e[k]=q[2];return}
+  e[k]=cl(x,k,t,L,wa,nm)});
+ if(se!=null&&se!==""){const y=SL(se),c=has(CO,y)?y:has(CDM,y)?CDM[y]:null;
+  if(!c)er.push(`${L}condição "${se}" não existe (use alvo_vida_ate, alvo_vida_acima, eu_vida_ate, eu_vida_acima, alvo_envenenado, alvo_com_debuff, alvo_com_buff, vantagem_elemento, menos_vidas ou mais_vidas).`);
+  else{e.co=c;if(/X%/.test(CO[c][0])){const x=num(lim);if(isNaN(x)){e.cv=50;wa.push(`${L}condição ${se} sem "limite": usei 50.`)}else e.cv=Math.min(99,Math.max(1,Math.round(x)))}}}
+ else if(lim!=null)wa.push(`${L}"limite" sem "se": ignorei.`);
+ if(pro!=null&&pro!==""){const x=num(pro);if(!isNaN(x)&&x>=1&&x<100)e.ch=Math.round(x);else if(!(x>=100))wa.push(`${L}prob "${pro}" inválida: ignorei.`)}
+ if(e.a){const nm=F.n;
+  if(HURT.has(t)&&ALY.has(e.a)&&!(t=="dp"&&e.a=="s"))wa.push(`${L}${nm} em aliado ou na própria carta: confira.`);
+  if(HELP.has(t)&&ENM.has(e.a))wa.push(`${L}${nm} em inimigo: confira.`);
+  if(SIGN.has(t)){if(e.p<0&&ALY.has(e.a))wa.push(`${L}${nm} negativo em aliado: confira.`);if(e.p>0&&ENM.has(e.a))wa.push(`${L}${nm} positivo em inimigo: confira.`)}}
+ if(t=="ex"&&!e.co)wa.push(`${L}eliminar sem condição elimina SEMPRE: use se=alvo_vida_ate e limite.`);
+ return e}
+
+// ---- uma ficha (linhas já separadas) → carta pronta + erros + avisos
+function parseSheet(sh){
+ const er=[],wa=[],card={},abs=[];let ab=null,st=null;
+ const E_=(ln,m)=>er.push((ln?`Linha ${ln}: `:"")+m),W_=(ln,m)=>wa.push((ln?`Linha ${ln}: `:"")+m);
+ const LBL=s=>{const k=SL(s);return has(LB,k)?LB[k]:/^efeitos?(_\d+)?$/.test(k)?"ef":null};
+ sh.lines.forEach(([ln,raw])=>{
+  const t=raw.trim().replace(/^[\-–—•·*>#=]+\s*/,"");
+  if(!t){st=null;return}
+  const hm=t.replace(/[\s\-=*_#]+$/,"").match(/^habilidade\s*(\d+)?\s*(?:[:\-–—]+\s*(.*?)|\(.*\))?\s*$/i);
+  if(hm){ab={ln,n:hm[2]?hm[2].trim():undefined,ef:[],i:abs.length+1};abs.push(ab);st=null;return}
+  const lm=t.match(/^([^:：=|]{1,26}?)\s*[:：=]\s*(.*)$/),key=lm&&LBL(lm[1]);
+  if(key){
+   const v=lm[2].trim();
+   if(key=="ef"){if(!ab){E_(ln,"o efeito precisa ficar dentro de uma HABILIDADE.");st=null;return}if(v)ab.ef.push([ln,v]);st=null;return}
+   if(key=="ch"){W_(ln,"a chance de sair da carta não vai na ficha: ignorei (você define em Cartas).");st=null;return}
+   if(key=="pk"||key=="tp"){W_(ln,`campo "${lm[1].trim()}" ignorado.`);st=null;return}
+   const inAb=ab&&["n","q","tr","rc"].includes(key),o=inAb?ab:card;
+   o[key]=v;o["$"+key]=ln;st=(key=="d"||key=="q")?{o,key}:null;return}
+  if(ab&&t.includes("|")){ab.ef.push([ln,t]);st=null;return}
+  if(st){st.o[st.key]+=" "+t;return}
+  if(ab||card.n!==undefined)W_(ln,`linha ignorada: "${t.slice(0,40)}${t.length>40?"…":""}"`)});
+ // ---- carta
+ const c={abs:[]};
+ c.n=txt(card.n,32,m=>W_(card.$n,m),"Nome");
+ if(!c.n)E_(card.$n,"falta o Nome da carta.");
+ let ri=0;
+ if(card.r===undefined)W_(0,"sem Rank na ficha: usei F (troque em Cartas depois).");
+ else{ri=rk(card.r);if(ri<0){W_(card.$r,`Rank "${card.r}" não reconhecido: usei F.`);ri=0}}
+ c.r=ri;
+ c.el="";if(card.el!==undefined){const n=SL(card.el);if(n&&!/^(nenhum|nenhuma|sem|neutro|nao_tem|vazio|nada|nulo)$/.test(n)){if(has(EL,n))c.el=n;else W_(card.$el,`Elemento "${card.el}" não existe: deixei sem elemento.`)}}
+ c.sl="";if(card.sl!==undefined){const n=SL(card.sl);if(n&&!/^(nenhum|nenhuma|sem|nao_tem|vazio|nada|nulo)$/.test(n)){if(has(SLS,n))c.sl=n;else W_(card.$sl,`Selo "${card.sl}" não existe: deixei sem selo.`)}}
+ const base=ST[ri],bd=(+CONFIG.faixa>=0?+CONFIG.faixa:15)/100;
+ [["hp","Vida",0],["atk","Dano",1]].forEach(([k,nm,i])=>{
+  const lo=Math.round(base[i]*(1-bd)),hi=Math.round(base[i]*(1+bd));
+  if(card[k]===undefined||card[k]===""){c[k]=base[i];W_(0,`sem ${nm}: usei o padrão do rank (${base[i]}).`);return}
+  let x=num(card[k]);
+  if(isNaN(x)){W_(card["$"+k],`${nm} "${card[k]}" não é número: usei ${base[i]}.`);c[k]=base[i];return}
+  x=Math.round(x);
+  if(x<lo||x>hi){const y=Math.min(hi,Math.max(lo,x));W_(card["$"+k],`${nm} ${x} fora da faixa do rank ${R[ri][0]} (${lo} a ${hi}): usei ${y}.`);x=y}
+  c[k]=x});
+ c.d=txt(card.d,700,m=>W_(card.$d,m),"História");
+ if(!c.d)W_(0,"sem História.");
+ // ---- habilidades
+ if(!abs.length)W_(0,"a ficha não tem nenhuma habilidade.");
+ if(abs.length>4)W_(0,`a ficha tem ${abs.length} habilidades: usei só as 4 primeiras.`);
+ abs.slice(0,4).forEach(a=>{
+  const lb=`Habilidade ${a.i}`,o={};
+  o.n=txt(a.n,28,m=>W_(a.ln,m),lb+" · nome");
+  if(!o.n)E_(a.ln,`${lb}: falta o Nome.`);
+  o.q=txt(String(a.q||"").replace(/^["“”'‘’«»\s]+|["“”'‘’«»\s]+$/g,""),120,m=>W_(a.$q,m),lb+" · frase");
+  let tr="u";
+  if(a.tr!==undefined&&a.tr!==""){tr=trg(a.tr);if(!tr){E_(a.$tr,`${lb}: "Quando: ${a.tr}" não existe. Use ativa, entrar, morrer, inicio_turno, fim_turno, receber_dano, atacar ou eliminar.`);tr="u"}}
+  else W_(a.ln,`${lb}: sem "Quando": usei ativa.`);
+  o.tr=tr=="u"?undefined:tr;
+  if(tr=="u"){let x=a.rc===undefined||a.rc===""?NaN:num(a.rc);
+   if(isNaN(x)){x=3;W_(a.ln,`${lb}: sem Recarga: usei 3.`)}else{const y=Math.min(8,Math.max(1,Math.round(x)));if(y!=x)W_(a.$rc,`${lb}: Recarga ${x} ajustada para ${y}.`);x=y}
+   o.rc=x}else o.rc=3;
+  o.ef=[];
+  if(!a.ef.length)E_(a.ln,`${lb}: falta ao menos 1 Efeito.`);
+  if(a.ef.length>6)W_(a.ln,`${lb}: tem ${a.ef.length} efeitos (muitos): usei os 6 primeiros.`);
+  a.ef.slice(0,6).forEach(([ln,s])=>{const e=pEf(s,ln,er,wa);if(e)o.ef.push(e)});
+  if(o.tr)o.ef.forEach(e=>{if(BIGP.has(e.t))W_(a.ln,`${lb}: ${FX[e.t].n} em habilidade passiva (sem recarga) costuma desequilibrar o jogo.`)});
+  c.abs.push(o)});
+ return{card:c,er,wa}}
+
+// ---- texto colado → uma ou várias fichas (cada uma começa em "FICHA DE CARTA")
+function parse(text){
+ const L=String(text||"").replace(/[\u200b-\u200d\u2060\ufeff]/g,"").replace(/[\u00a0\u2007\u202f]/g," ").replace(/\r\n?/g,"\n").split("\n"),S=[],pre=[];let cur=null,any=false;
+ L.forEach((raw,i)=>{const t=raw.replace(/\*\*|__|`/g,""),n=N(t);
+  if(/^[\s\-=#*•_>]*ficha\s+de\s+carta\b/.test(n)){cur={lines:[]};S.push(cur);any=true;return}
+  if(/^[\s\-=#*•_>]*fim\s+da\s+ficha\b/.test(n)){cur=null;return}
+  if(cur)cur.lines.push([i+1,t]);else if(!any)pre.push([i+1,t])});
+ if(!any&&pre.some(x=>x[1].trim()))S.push({lines:pre});
+ const sheets=S.map(parseSheet);
+ return{sheets,ok:sheets.length>0&&sheets.every(s=>!s.er.length)}}
+
+// ---- cria as cartas no ADM (carta + habilidades "só desta carta", igual ao editor de cartas)
+function apply(cards,pk){
+ const ids=[];
+ cards.forEach(c=>{
+  let id;do{id="a"+rid()}while(byId(id)||ADM.c.some(x=>x.id==id));
+  const x={id,pk,r:R[c.r][0],n:c.n,hp:c.hp,atk:c.atk};
+  if(c.d)x.d=c.d;if(c.el)x.el=c.el;if(c.sl)x.sl=c.sl;
+  ADM.c.push(x);
+  const hs=[];
+  c.abs.forEach(a=>{let hid;do{hid="h"+rid()}while(ADM.ab.some(q=>q.id==hid));
+   const o={id:hid,n:a.n,q:a.q,rc:a.rc,ef:a.ef,solo:id};if(a.tr)o.tr=a.tr;ADM.ab.push(o);hs.push(hid)});
+  if(hs.length)ADM.ca[id]=hs;
+  ids.push(id)});
+ return ids}
+
+// ---- salva, recarrega e abre a carta nova no editor (falta só a foto e o rank)
+function done(ids){
+ const c=ADM.c.find(x=>x.id==ids[0]);sADM();
+ try{sessionStorage.cpad="";sessionStorage.cpad2=c&&c.dr?"ds_l":"ds_c";sessionStorage.zimp=ids[0];sessionStorage.zimn=(c&&c.n)||"";sessionStorage.cptab=typeof tab!="undefined"?tab:"h"}catch(e){}
+ location.reload()}
+function sel(){
+ const z=sessionStorage.zimp,e=$("ec");if(!z||!e||![...e.options].some(o=>o.value==z))return;
+ const n=sessionStorage.zimn||"";sessionStorage.removeItem("zimp");sessionStorage.removeItem("zimn");
+ e.value=z;e.dispatchEvent(new Event("change",{bubbles:true}));
+ setTimeout(()=>{toast(`✅ Carta criada${n?": "+E(n):""}. Falta a foto e conferir o rank.`);const f=$("fj");f&&f.scrollIntoView&&f.scrollIntoView({block:"center",behavior:"smooth"})},400)}
+
+// ---- tela "Importar ficha" do ADM
+const rkTxt=c=>`Rank ${R[c.r][0]}`+(c.el?` · ${EL[c.el]} ${c.el}`:"")+(c.sl?` · ${SLS[c.sl]} ${c.sl}`:"")+` · ❤ ${c.hp} · ⚔ ${c.atk}`;
+function html(r){
+ const t=$("z_it");if(!t||!t.value.trim())return"";
+ if(!r.sheets.length)return'<div class="xw"><p class="er">✖ Não achei nenhuma ficha no texto. Ela começa com “FICHA DE CARTA”.</p></div>';
+ const many=r.sheets.length>1;let h=many?`<div class="exm">${r.sheets.length} fichas encontradas: todas serão criadas de uma vez.</div>`:"";
+ r.sheets.forEach((s,i)=>{const c=s.card,pf=many?`Carta ${i+1} · `:"";
+  h+=`<div class="ivc"><b class="n">${E(c.n||"(sem nome)")}</b><small>${E(rkTxt(c))}</small>`+(c.d?`<p>${E(c.d.length>230?c.d.slice(0,230)+"…":c.d)}</p>`:"");
+  c.abs.forEach(a=>{let d="";try{d=dsc({tr:a.tr,ef:a.ef,rc:a.rc})}catch(e){d="?"}
+   h+=`<div class="iva"><b>✦ ${E(a.n||"(sem nome)")}</b>${a.q?` <i>“${E(a.q)}”</i>`:""}<br>${E(d)}</div>`});
+  h+="</div>";
+  const m=s.er.map(x=>`<p class="er">✖ ${E(pf+x)}</p>`).concat(s.wa.map(x=>`<p>⚠ ${E(pf+x)}</p>`));
+  if(m.length)h+=`<div class="xw">${m.join("")}</div>`});
+ return h+(r.ok?'<div class="xw"><p class="ok">✔ Ficha OK. Toque em Criar carta.</p></div>':'<button class="bt gh" data-k="@ixe">📋 Copiar os erros para pedir a correção à IA</button>')}
+let S=null,tm=0;
+function paint(){const t=$("z_it"),v=$("z_iv");if(!t||!v)return;S=parse(t.value);v.innerHTML=html(S);const b=$("z_ix");if(b)b.classList.toggle("off",!(S.ok&&S.sheets.length))}
+function build(){
+ const d=$("ds_i");if(!d||$("z_it"))return;
+ let last="";try{last=localStorage.getItem("cp_impk")||""}catch(e){}
+ const ops=P.concat(ADM.p.filter(d=>!P.some(p=>p.id==d.id))).map(p=>`<option value="${E(p.id)}"${p.id==last?" selected":""}>${E(p.e||"")} ${E(p.n)}${p.cards?"":" · não lançado"}</option>`).join("");
+ d.insertAdjacentHTML("beforeend",`<div class="fg">
+<div class="exm">📥 <b>Como usar:</b> peça a carta para a IA (com o PDF de regras), copie a ficha que ela devolver e cole abaixo. O jogo monta a carta com nome, história, status e habilidades. Depois é só colocar a <b>foto</b> e conferir o <b>rank</b> em Cartas. A <b>chance de sair</b> não vem na ficha: fica automática até você mudar em Cartas.</div>
+<div class="afl w"><label for="z_ip">Em qual pacote a carta entra?</label><select id="z_ip">${ops}</select></div>
+<div class="afl w"><label for="z_it">Ficha da carta (texto)</label><textarea id="z_it" rows="9" placeholder="FICHA DE CARTA&#10;Nome: …" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
+<div class="ivb"><button class="bt gh" data-k="@ixp">📋 Colar</button><button class="bt gh" data-k="@ixl">🧹 Limpar</button></div>
+<div id="z_iv"></div>
+<label class="yck"><input type="checkbox" id="z_dr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt off" id="z_ix" data-k="@ix">Criar carta</button></div>`)}
+function ix(){
+ const t=$("z_it");if(!t||!t.value.trim())return toast("Cole a ficha da carta primeiro.");
+ paint();
+ if(!S.ok)return toast("A ficha tem erros: veja abaixo e peça à IA para corrigir.");
+ const pk=$("z_ip").value;if(!pk)return toast("Escolha o pacote.");
+ try{localStorage.setItem("cp_impk",pk)}catch(e){}
+ const ids=apply(S.sheets.map(s=>s.card),pk);{const d=$("z_dr");if(d&&d.checked)ids.forEach(i=>{const c=ADM.c.find(x=>x.id==i);if(c)c.dr=1})}
+ toast(ids.length>1?`✅ ${ids.length} cartas criadas`:"✅ Carta criada");
+ setTimeout(()=>done(ids),350)}
+const cp=s=>{const f=()=>{const a=document.createElement("textarea");a.value=s;a.style.cssText="position:fixed;opacity:0";document.body.append(a);a.select();try{document.execCommand("copy");toast("📋 Copiado! Cole na conversa com a IA.")}catch(e){toast("Não consegui copiar.")}a.remove()};
+ try{navigator.clipboard.writeText(s).then(()=>toast("📋 Copiado! Cole na conversa com a IA."),f)}catch(e){f()}};
+Object.assign(adxA,{
+ ix,
+ ixl:()=>{const t=$("z_it");if(t){t.value="";paint();t.focus()}},
+ ixp:async()=>{const t=$("z_it");if(!t)return;try{const s=await navigator.clipboard.readText();if(!s||!s.trim())return toast("A área de transferência está vazia.");t.value=s;paint();toast("Ficha colada. Confira abaixo.")}catch(e){toast("Não consegui colar sozinho: segure no campo e toque em Colar.");t.focus()}},
+ ixe:()=>{if(!S)return;const L=[];S.sheets.forEach((s,i)=>s.er.forEach(x=>L.push("- "+(S.sheets.length>1?`Carta ${i+1} · `:"")+x)));
+  cp("A ficha da carta deu erro ao importar no jogo:\n"+L.join("\n")+"\n\nCorrija e me mande a ficha COMPLETA de novo, no mesmo formato do PDF, dentro de um bloco de código.")}});
+cfg.addEventListener("input",e=>{if(e.target.id=="z_it"){clearTimeout(tm);tm=setTimeout(paint,250)}});
+cfg.addEventListener("change",e=>{if(e.target.id=="z_it")paint();if(e.target.id=="z_ip")try{localStorage.setItem("cp_impk",e.target.value)}catch(x){}});
+const o0=window.adxOpen;
+window.adxOpen=function(id){try{if(id=="ds_i"){build();paint()}else if(id=="ds_c")sel()}catch(e){console.warn("imp",e)}return o0&&o0.apply(this,arguments)};
+window.cpImp={parse,apply,done,html,sel,paint,build};
+try{if(!cfg.hidden&&$("ec"))sel()}catch(e){}
+}catch(e){console.warn("imp",e)}})();
+</script>
 <script type="module">
 // ===== COLEÇÃO PRIMATA · ONLINE (Firebase) · etapa 1: contas, save na nuvem, ADM e fotos para todos =====
 // Cole aqui o firebaseConfig do seu projeto (Firebase > Configurações do projeto > Seus apps).
@@ -2209,9 +2472,12 @@ async function pushAdm(){ // só o administrador consegue (as regras do Firebase
 window.cpAdm=async pin=>{if(!U)return null;try{await setDoc(doc(db,"admins",U.uid),{c:pin});canAdm=true;pa();return true}catch(e){return e.code==="permission-denied"?false:null}};
 function upd(){if(bt())return setTimeout(upd,3000);toast("🔄 Atualizando o jogo…");setTimeout(reload,900)}
 function put(id,d,t){IMG[id]=d;meta[id]={k:H(d),t};if(id.slice(0,3)==="pk_"){const p=P.find(x=>"pk_"+x.id===id);if(p)p.img=d}else{const c=byId(id);if(c)c.img=d}}
-async function fotos(f){await PEND;CF=f;const ids=Object.keys(f).filter(i=>!(meta[i]&&(meta[i].t===f[i]||meta[i].t<0)));let n=0;
- const w=async()=>{while(n<ids.length){const id=ids[n++];try{let c=await ig(id);if(!c||c.t!==f[id]){const s=await getDoc(doc(db,"fotos",id));if(!s.exists())continue;c={t:f[id],d:s.data().d};is(id,c)}put(id,c.d,c.t)}catch(e){warn("fotos",e)}}};
- await Promise.all([w(),w(),w(),w()]);ready=1;if(ids.length&&!bt())render(1)}
+let rt=0;const rf=now=>{clearTimeout(rt);rt=setTimeout(()=>{try{if(bt()){BT&&!BT.zq&&zr()}else render(1)}catch(e){console.warn(e)}},now?0:700)};
+// ao abrir, mostra logo as fotos já guardadas no aparelho (sem esperar a nuvem)
+(async()=>{try{const f=JSON.parse(L.getItem("cp_f")||"{}");let n=0;await Promise.all(Object.keys(f).map(async id=>{const c=await ig(id);if(!c||!c.d||c.t!==f[id])return;if(id.slice(0,3)==="pk_"){const p=P.find(x=>"pk_"+x.id===id);if(p&&!p.img){p.img=c.d;n++}}else{const x=byId(id);if(x&&!x.img){x.img=c.d;n++}}}));if(n)rf()}catch(e){}})();
+async function fotos(f){try{ls("cp_f",JSON.stringify(f))}catch(e){}await PEND;CF=f;const ids=Object.keys(f).filter(i=>!(meta[i]&&(meta[i].t===f[i]||meta[i].t<0)));let n=0;const tr={};
+ const w=async()=>{while(n<ids.length){const id=ids[n++];try{let c=await ig(id);if(!c||c.t!==f[id]){const s=await getDoc(doc(db,"fotos",id));if(!s.exists())continue;c={t:f[id],d:s.data().d};is(id,c)}put(id,c.d,c.t);rf()}catch(e){const q=tr[id]=(tr[id]||0)+1;if(q<4){await new Promise(r=>setTimeout(r,1500*q));ids.push(id)}else warn("fotos",e)}}};
+ await Promise.all([w(),w(),w(),w()]);ready=1;if(ids.length)rf(1)}
 // ===== PERFIL · JOGADORES · TROCAS E DUELOS ONLINE =====
 
 const ME={n:"",f:""},esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -2391,10 +2657,10 @@ function cpxConfetti(){const f=document.createDocumentFragment(),cs=["#ffd24a","
 function on(){var b=q('sndb');return !(b&&b.textContent.indexOf('🔇')>-1)}
 function cl(){var o=q('yrm');o&&o.remove()}
 function op(){if(q('yrm'))return cl();var o=document.createElement('div');o.id='yrm';
-o.innerHTML='<div class="yb"><h3>Menu</h3><button data-y="s">'+(on()?'🔊 Som: ligado':'🔇 Som: desligado')+'</button><button data-y="p">👤 Perfil, jogadores e batalha em grupo</button><button data-y="a">🛠 Ajustes e Modo ADM</button><button data-y="x" class="g">Fechar</button><small>Criado por Yrogerg</small></div>';
+o.innerHTML='<div class="yb"><h3>Menu</h3><button data-y="s">'+(on()?'🔊 Som: ligado':'🔇 Som: desligado')+'</button><button data-y="p">👤 Perfil, jogadores e batalha em grupo</button><button data-y="a">🛠 Ajustes e Modo ADM</button><small>Tema</small><div class="yt">'+window.tmHtml()+'</div><button data-y="x" class="g">Fechar</button><small>Criado por Yrogerg</small></div>';
 o.onclick=function(e){var b=e.target.closest('[data-y]');if(!b){if(e.target===o)cl();return}var k=b.dataset.y;
 if(k=='s'){var s=q('sndb');s&&s.click();b.textContent=on()?'🔊 Som: ligado':'🔇 Som: desligado'}
-else if(k=='x')cl();else{cl();var t=q(k=='p'?'cpchip':'gear');if(t)t.click();else if(k=='p')alert('Entre na conta para abrir o perfil.')}};
+else if(k=='x')cl();else if(k.charAt(0)=='t'){window.setTema(k.slice(1));o.querySelector('.yt').innerHTML=window.tmHtml()}else{cl();var t=q(k=='p'?'cpchip':'gear');if(t)t.click();else if(k=='p')alert('Entre na conta para abrir o perfil.')}};
 document.body.appendChild(o)}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-yu]');if(b){e.stopPropagation();e.preventDefault();op()}},true);
 })();</script><style id="yr-css2">
@@ -2415,5 +2681,437 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 .yab{background:#ffffff0d;border-radius:12px;padding:10px 12px}.yab small{display:block;opacity:.6;font-size:.7rem}.yab p{margin:4px 0 0;font-size:.8rem;line-height:1.45}
 .yrn{display:block;font-size:1.2rem;font-weight:900;letter-spacing:.04em;color:#fff}
 .yck{display:flex;gap:8px;align-items:center;padding:8px 10px;margin:4px 0;border-radius:10px;background:#ffffff0d;font-size:.85rem;text-transform:none;letter-spacing:0}.yck input{width:18px;height:18px;flex:none}.yrs,.yra{display:block;font-size:.82rem;font-weight:700;color:#fff;text-shadow:0 1px 3px #000;white-space:normal}.yra{font-size:.72rem;font-weight:500;opacity:.85}
+</style><style id="fx4-css">
+.adm .in2>details.fd:not(.adp){display:none!important}
+#evb{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);transform:translateX(-50%);z-index:30;max-width:92vw;padding:8px 14px;border-radius:999px;background:linear-gradient(90deg,#ff7a18,#ff2d6f);color:#fff;font:700 .8rem system-ui;box-shadow:0 6px 20px #0008;display:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.f3d{display:block;width:max-content;margin:0 auto;perspective:900px;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.f3d>.in{position:relative;transform-style:preserve-3d}
+.f3d .cd{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:none!important}
+.f3d .cb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);opacity:1!important;border-radius:14px}
+.f3h{margin:8px 0 0;text-align:center;font-size:.72rem;opacity:.6}
+</style>
+<script>
+(function(){
+const N=t=>t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+function ss(id){const s=document.getElementById(id);if(!s||s.dataset.sq||s.multiple||s.options.length<8)return;s.dataset.sq=1;const all=[...s.options].map(o=>[o.value,o.textContent]),q=document.createElement("input");q.type="search";q.placeholder="🔎 Buscar por nome ou rank…";q.className="cdi";q.autocomplete="off";s.before(q);
+q.oninput=()=>{const k=N(q.value.trim()),cur=s.value,l=all.filter(o=>!k||N(o[1]).includes(k));if(!l.length)return;s.replaceChildren(...l.map(o=>new Option(o[1],o[0])));if(l.some(o=>o[0]==cur))s.value=cur;else s.dispatchEvent(new Event("change",{bubbles:true}))}}
+function enh(){["ec","hc","gc","hb","ek"].forEach(ss);const gp=document.getElementById("gp");if(gp&&!gp.querySelector('[value="__r"]'))gp.insertAdjacentHTML("afterbegin",'<option value="__r">🎲 Aleatório</option>')}
+const c3=cfgView;cfgView=function(v){const r=c3.apply(this,arguments);if(v=="a")try{enh()}catch(e){}return r};
+if(!cfg.hidden&&document.getElementById("ec"))try{enh()}catch(e){}
+function f3(){const f=document.getElementById("fc"),c=f&&f.querySelector(".fch>.cd");if(!c||!FC||c.parentNode.classList.contains("in"))return;
+const w=document.createElement("div"),i=document.createElement("div");w.className="f3d";i.className="in";c.replaceWith(w);w.append(i);i.append(c);i.insertAdjacentHTML("beforeend",bkH(FC,FC.p));w.insertAdjacentHTML("afterend",'<p class="f3h">Arraste em qualquer direção para girar · toque para virar</p>');
+let a=0,t=0,x0=0,y0=0,d=0,m=0;const set=z=>{i.style.transition=z?"transform .5s cubic-bezier(.2,.8,.2,1)":"none";i.style.transform="rotateX("+t+"deg) rotateY("+a+"deg)"};
+w.onpointerdown=e=>{d=1;m=0;x0=e.clientX;y0=e.clientY;try{w.setPointerCapture(e.pointerId)}catch(x){}set(0)};
+w.onpointermove=e=>{const b=w.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-b.left)/b.width*100+"%");c.style.setProperty("--my",(e.clientY-b.top)/b.height*100+"%");if(!d)return;const dx=e.clientX-x0,dy=e.clientY-y0;m+=Math.abs(dx)+Math.abs(dy);x0=e.clientX;y0=e.clientY;a+=dx*.6;t=Math.max(-70,Math.min(70,t-dy*.5));set(0)};
+w.onpointerup=w.onpointercancel=()=>{if(!d)return;d=0;if(m<6){a=Math.round(a/180)*180+180;t=0;set(1)}}}
+const v0=view;view=function(){const r=v0.apply(this,arguments);try{f3()}catch(e){}return r};
+const b=document.createElement("div");b.id="evb";document.body.append(b);
+setInterval(()=>{try{const e=cpxEvOn(),o=typeof ov!="undefined"&&ov&&!ov.hidden,fc=document.getElementById("fc");
+if(!e||tab!="h"||!cfg.hidden||o||(fc&&!fc.hidden)||document.getElementById("cpl")){b.style.display="none";return}
+const t=Math.max(0,e.ate-Date.now()),d=Math.floor(t/864e5),h=Math.floor(t%864e5/36e5),n=Math.floor(t%36e5/6e4);
+b.textContent="🎉 "+e.n+" · fragmentos ×"+e.mf+" · termina em "+(d?d+"d ":"")+h+"h "+n+"min";b.style.display="block"}catch(x){}},1000);
+})();
+</script>
+<style id="inf-css">
+.inf{display:grid;gap:10px}.infh{display:flex;gap:12px;align-items:center}.infh small{display:block;opacity:.65;font-size:.72rem}.infh b{font-size:1.15rem}
+.infb{height:8px;border-radius:99px;background:#fff2;overflow:hidden}.infb i{display:block;height:100%;background:linear-gradient(90deg,#ffb347,#ff4d6d);border-radius:99px}
+.mdl{display:inline-grid;place-items:center;width:54px;height:54px;flex:none;border-radius:50%;font:900 1.2rem system-ui;color:#1a1208;background:radial-gradient(circle at 30% 25%,#fff9,#fff0 45%),var(--mc);box-shadow:inset 0 0 0 3px #0003,0 0 16px var(--mc)}
+.mdg{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding-top:8px}.mdc{display:grid;justify-items:center;gap:2px;width:72px;text-align:center}.mdc small{font-size:.62rem;opacity:.8}.mdc.lk{opacity:.35;filter:grayscale(.8)}.mdc.on .mdl{outline:2px solid #fff;outline-offset:2px}
+</style>
+<script>
+(function(){
+// Batalhas infinitas: depois das arenas · fases estilo Candy Crush · medalhões pelos troféus (acima do chefe final)
+const MDN=[["Bronze","#cd7f32"],["Prata","#cfd6dd"],["Ouro","#ffc933"],["Platina","#7fe3d4"],["Diamante","#5cc8ff"]],need=t=>300+40*t,
+mo=t=>t<25?{n:MDN[t/5|0][0]+" "+(t%5+1),c:MDN[t/5|0][1],g:String(t%5+1)}:t==25?{n:"Master",c:"#b266ff",g:"★"}:{n:"Overlord",c:"#ff4d4d",g:"♛"};
+window.mdInfo=function(){let r=Math.max(0,(S.tp||0)-(CONFIG.chefeFinal||0)),t=0;while(t<26&&r>=need(t)){r-=need(t);t++}const o=mo(t);return{t,rest:r,need:t<26?need(t):0,name:o.n,col:o.c,g:o.g}};
+const mdl=(o,z)=>`<span class="mdl" style="--mc:${o.c||o.col};${z?"width:"+z+"px;height:"+z+"px;font-size:"+z*.42+"px":""}">${o.g}</span>`,
+fr=(n,t)=>Math.round(arf(8)*(1+n*.06)*(1+t*.12)*(n%10==0?3:1));
+window.infHtml=function(){if(!(S.camp||(typeof AD!="undefined"&&AD)))return"";const m=mdInfo(),n=S.il||1,p=m.need?Math.min(100,Math.round(m.rest/m.need*100)):100;let ch="";
+for(let t=0;t<27;t++){const o=mo(t);ch+=`<span class="mdc${t<=m.t?"":" lk"}${t==m.t?" on":""}">${mdl(o,30)}<small>${o.n}</small></span>`}
+return`<div class="cvb inf"><div class="infh">${mdl(m)}<div><small>Batalhas infinitas${S.camp?"":" · teste ADM"}</small><b>${m.name}</b></div></div><div class="infb"><i style="width:${p}%"></i></div><p class="mut ctr" style="margin:0">${m.need?fmt(m.rest)+" / "+fmt(m.need)+" 🏆 para o próximo medalhão":"Medalhão máximo!"}</p><button class="bt cy" data-inf="go">${n%10==0?"👑 Chefe · ":""}Fase ${n}</button><p class="mut ctr" style="margin:0">Vencendo: ${gem}+${fmt(fr(n,m.t))}${n%5==0?" · 🎁 pacotes":""} · +${TW} 🏆</p><details class="fd"><summary>Todos os medalhões</summary><div class="mdg">${ch}</div></details></div>`};
+window.startInf=function(){const u=mineDeck();if(!u)return;const n=S.il||1,t=mdInfo().t,bs=n%10==0,k=Math.min(90,Math.round(8+n*.35+t*1.1)),e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*CONFIG.chefe*1.15}:x);
+zgo({n:"Você",u},{n:(bs?"Chefe · ":"")+"Fase "+n,u:e},{m:"a",k:8,ai:2,b:0,inf:n})};
+window.zendI=function(B){const w=B.w,n=B.o.inf,win=w===0,t0=S.tp||0,m0=mdInfo().t,rw=[],g0=gifts();fxEnd(B);bump("play");bump("kill",B.kl[0]);
+if(B.why!="desistiu"){const d=day();if(!S.pj||S.pj.d!==d)S.pj={d,n:0};S.pj.n++}
+try{SND[win?"win":"lose"]();win&&cpxConfetti()}catch(e){}
+if(S.im==null)S.im=m0;
+if(win){bump("win");const f=fr(n,m0),pk=n%10==0?2+(m0/5|0):n%5==0?1:0;S.fr+=f;rw.push(`${gem}+${fmt(f)}`);if(pk)gift(dpk().id,pk);S.il=n+1;S.tp=t0+TW}
+else if(w==1){if(B.why!="desistiu")S.fr+=CONFIG.derrota;S.tp=Math.max(CONFIG.chefeFinal||0,t0-TL)}
+const m1=mdInfo();for(let q=S.im+1;q<=m1.t;q++){const f=500*(q+1),pk=1+(q/5|0);S.fr+=f;gift(dpk().id,pk);rw.push(`🏅 ${mo(q).n}: ${gem}+${fmt(f)} · 🎁 +${pk}`)}S.im=Math.max(S.im,m1.t);
+const dt=S.tp-t0,np=gifts()-g0;if(np>0)rw.unshift(`🎁 +${np} pacote${np>1?"s":""}`);save();upd();
+zb.innerHTML=`<div class="zres"><h2>${win?"Fase "+n+" vencida!":w<0?"Empate":"Derrota"}</h2>${dt?`<p class="ztr${dt<0?" ls":""}">${dt>0?"+":"−"}${Math.abs(dt)} 🏆${m1.t>m0?" · "+mo(m1.t).n:""}</p>`:""}${rw.length?`<p class="zrw">${rw.join(" · ")}</p>`:""}<div class="two"><button class="bt gh" data-z="close">Voltar</button><button class="bt" data-z="inf">${win?"Fase "+S.il:"Tentar de novo"}</button></div></div>`};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-inf]");if(b&&b.dataset.inf=="go")startInf()});
+try{if(tab=="b")render(1)}catch(e){}
+})();
+</script>
+<script>
+(function(){
+// ADM: duas habilidades por carta · dois campos simples no lugar da lista de marcar várias (a lista antiga continua por trás)
+function two(){const hg=document.getElementById("hg");if(!hg||document.getElementById("hs1"))return;
+const mk=(id,t)=>{const d=document.createElement("div"),l=document.createElement("label"),x=document.createElement("select");d.className="afl w";l.textContent=t;x.id=id;x.append(new Option("— nenhuma —",""),...[...hg.options].map(o=>new Option(o.textContent,o.value)));d.append(l,x);return d},
+a=mk("hs1","Habilidade 1"),b=mk("hs2","Habilidade 2 (opcional)"),n=document.createElement("p"),w=hg.closest(".afl")||hg;n.className="mut";n.style.cssText="margin:0;text-transform:none;letter-spacing:0";
+w.before(a,b,n);w.style.display="none";
+const s1=a.querySelector("select"),s2=b.querySelector("select"),
+sync=()=>{const v=[s1.value,s2.value].filter((x,i,r)=>x&&r.indexOf(x)==i);[...hg.options].forEach(o=>o.selected=v.includes(o.value))},
+fill=()=>{const v=[...hg.options].filter(o=>o.selected).map(o=>o.value);s1.value=v[0]||"";s2.value=v[1]||"";n.textContent=v.length>2?"Esta carta tem "+v.length+" habilidades da biblioteca · ao salvar ficam só estas duas.":"Na batalha a carta mostra um botão por habilidade, cada uma com a sua recarga. Depois toque em Salvar habilidades da carta."};
+s1.onchange=s2.onchange=sync;cfg.addEventListener("change",e=>{if(e.target.id=="hc")setTimeout(fill,0)});fill()}
+const c4=cfgView;cfgView=function(v){const r=c4.apply(this,arguments);if(v=="a")try{two()}catch(e){}return r};
+if(!cfg.hidden&&document.getElementById("hg"))try{two()}catch(e){}
+})();
+</script>
+<script>
+// ===== BATALHA SALVA: recarregar a página não perde a luta em andamento (roda por último, depois de todo o jogo) =====
+(function(){
+const K="cp_bt";
+function sync(){try{
+ const B=typeof BT!=="undefined"?BT:null;
+ if(!B||B.over||B.zq||B.lv){localStorage.removeItem(K);return}
+ const D={},s=JSON.stringify(B,function(k,v){
+  if(k==="ev")return[];
+  if(k==="c"&&v&&typeof v==="object"&&v.id!=null&&v.hp!=null){const r={};for(const q in v)if(q!=="img"&&q!=="bk")r[q]=v[q];D[v.id]=r;return{$c:v.id}}
+  return v});
+ localStorage.setItem(K,JSON.stringify({t:Date.now(),D,s}))
+}catch(e){}}
+function back(){try{
+ const j=JSON.parse(localStorage.getItem(K)||"null");
+ if(!j||Date.now()-j.t>864e5||BT)return;
+ const B=JSON.parse(j.s,(k,v)=>v&&typeof v==="object"&&"$c" in v?(byId(v.$c)||j.D[v.$c]):v);
+ if(!B||!B.p||B.over)return localStorage.removeItem(K);
+ B.ev=[];BT=B;SEL=null;PASS=!B.ai&&!B.lv&&B.t!=B.v?1:0;
+ try{zth(B.o&&B.o.m=="a"?B.o.k:S.ar)}catch(e){}
+ zb.hidden=false;zr();aiRun()
+}catch(e){console.warn("batalha",e);try{localStorage.removeItem(K)}catch(x){}}}
+back();
+const z1=zr;zr=function(){const r=z1.apply(this,arguments);sync();return r};
+setInterval(sync,1500);addEventListener("pagehide",sync);addEventListener("visibilitychange",()=>{document.hidden&&sync()})
+})();
+</script>
+<script>
+// ===== ADM · TESTES: ganhar troféus, ir para uma arena e reiniciar o próprio save =====
+(function(){
+const st=()=>{const e=$("tst_st");if(!e)return;e.innerHTML=`${AR[S.ar][1]} Arena ${S.ar+1}/9 · ${AR[S.ar][0]} · 🏆 ${fmt(S.tp)}<br>${S.camp?"Campeão (chefe final vencido)":"Chefe libera com "+fmt(bcap())+" 🏆"+(bossOK()?" · <b>liberado</b>":"")}`;const s=$("tst_ar");if(s)s.value=S.ar},
+box=()=>{const g=$("ds_g")&&$("ds_g").querySelector(".fg");if(!g||$("tst_box"))return;const d=document.createElement("div");d.id="tst_box";
+d.innerHTML=`<style>#tst_box{display:grid;gap:10px}#tst_box .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}</style><h3 class="ash">Troféus e arenas</h3><p class="mut" id="tst_st" style="text-transform:none;letter-spacing:.02em;margin:0"></p><div class="r2"><button class="bt cy" data-tst="t100">+100 🏆</button><button class="bt cy" data-tst="t500">+500 🏆</button><button class="bt cy" data-tst="t1000">+1.000 🏆</button><button class="bt cy" data-tst="boss">⚔ Liberar o chefe</button></div><select id="tst_ar">${AR.map((a,k)=>`<option value="${k}">${a[1]} Arena ${k+1} · ${a[0]} · ${fmt(TR[k])} 🏆</option>`).join("")}</select><button class="bt cy" data-tst="go">Ir para a arena escolhida</button><h3 class="ash">Zona de risco</h3><button class="bt dg" data-tst="reset">🗑 Reiniciar meu save</button>`;g.append(d);st()};
+cfg.addEventListener("click",e=>{const b=e.target.closest("[data-tst]");if(!b)return;const k=b.dataset.tst,ok=m=>{save();try{upd()}catch(x){}try{render(1)}catch(x){}st();toast(m)};
+ if(k[0]=="t"){const n=+k.slice(1);S.tp+=n;ok("+"+fmt(n)+" 🏆"+prog())}
+ else if(k=="boss"){if(S.camp)return toast("Você já venceu o chefe final.");S.tp=Math.max(S.tp,bcap());ok("Chefe liberado · vá na aba Batalha"+prog())}
+ else if(k=="go"){const a=+$("tst_ar").value;for(let j=S.ar+1;j<=a;j++){const c=EX.cards[j];c&&(S.inv[c.id]=(S.inv[c.id]||0)+1)}S.ar=a;S.tp=Math.max(S.tp,TR[a]);ok(AR[a][1]+" "+AR[a][0]+" liberada"+prog())}
+ else if(k=="reset")ask("Reiniciar seu save?","Apaga <b>todo o seu progresso</b> (cartas, fragmentos, troféus, arenas e deck) neste aparelho e na sua conta. Cartas criadas, imagens e regras do ADM não mudam.","Reiniciar",()=>{try{BT=null;S={inv:{},opened:0};localStorage.removeItem("cartas1");localStorage.removeItem("cp_bt");localStorage.setItem("colprimata_save",JSON.stringify(S));sessionStorage.cpad="";sessionStorage.cpad2="ds_g";sessionStorage.cptab=tab}catch(x){return toast("Não deu para reiniciar.")}location.reload()},1)});
+const c1=cfgView;cfgView=function(v){const r=c1.apply(this,arguments);try{if(v=="a")box()}catch(x){console.warn("testes",x)}return r};
+try{box()}catch(x){}
+})();
+</script>
+<script>
+// ===== ADM v2: navegação rápida entre seções, regras da luta, atalhos de teste e checagem do jogo =====
+(function(){
+const css=document.createElement("style");css.textContent=`.ah{flex-wrap:wrap}.anv{flex:0 0 100%;display:flex;gap:6px;overflow-x:auto;padding:2px 0;scrollbar-width:none}.anv::-webkit-scrollbar{display:none}.anv button{flex:0 0 auto;padding:7px 12px;border-radius:99px;font-size:.72rem;font-weight:800;white-space:nowrap;color:inherit;background:#ffffff10;border:1px solid #ffffff14}.anv button.on{background:#6c5cff;border-color:transparent;color:#fff}#tst2{display:grid;gap:10px}#tst2 .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}#chk_out p{margin:0 0 8px;font-size:.82rem}#chk_out small{opacity:.75}`;document.head.append(css);
+const mark=()=>{const a=cfg.querySelector("details.adp[open]");cfg.querySelectorAll(".anv button").forEach(b=>{const on=!!a&&b.dataset.nv==a.id;b.classList.toggle("on",on);on&&b.scrollIntoView({inline:"center",block:"nearest"})})},
+nav=()=>{const h=cfg.querySelector(".ah");if(!h||h.querySelector(".anv"))return;const n=document.createElement("nav");n.className="anv";n.innerHTML=[...cfg.querySelectorAll("details.adp")].map(d=>`<button data-adm="p${d.id}" data-nv="${d.id}">${d.querySelector("summary").textContent}</button>`).join("");h.append(n);mark()},
+rules=()=>{const b=$("ds_b");if(!b||$("rl_g"))return;const fs=["vidas","acoes","acaoIni","turnos","iaMs","danoMult","vidaMult"].map(k=>$("cf_"+k)).map(e=>e&&e.closest(".afl")).filter(Boolean);if(!fs.length)return;const g=document.createElement("div"),t=document.createElement("h3");g.id="rl_g";g.className="fg";t.className="ash";t.textContent="Regras da luta";fs.forEach(f=>g.append(f));b.querySelector("summary").after(t,g)},
+extra=()=>{const g=$("ds_g")&&$("ds_g").querySelector(".fg");if(!g||$("tst2"))return;const d=document.createElement("div");d.id="tst2";
+d.innerHTML=`<h3 class="ash">Atalhos de teste</h3><div class="r2"><button class="bt cy" data-t2="fr">+10.000 ${gem}</button><button class="bt cy" data-t2="pk">🎁 +5 pacotes</button><button class="bt cy" data-t2="day">⏱ Zerar o dia</button><button class="bt cy" data-t2="camp">👑 Virar campeão</button></div><button class="bt cy" data-t2="all">🃏 Liberar todas as cartas</button><h3 class="ash">Checagem do jogo</h3><button class="bt cy" data-t2="chk">🔎 Rodar checagem</button><div id="chk_out"></div>`;g.append(d)},
+chk=()=>{const o=[],rk={},dup={},add=(t,l)=>{l.length&&o.push(`<p><b>${t}</b> · ${l.length}<br><small>${l.slice(0,8).join(", ")}${l.length>8?" …":""}</small></p>`)};
+ALL.forEach(c=>{rk[c.r]=(rk[c.r]||0)+1;dup[c.n]=(dup[c.n]||0)+1});
+add("Cartas sem imagem",ALL.filter(c=>!(c.img||IMG[c.id])).map(c=>c.n));
+add("Vida ou dano inválido",ALL.filter(c=>!(c.hp>0&&c.atk>0)).map(c=>c.n));
+add("Nomes repetidos",Object.keys(dup).filter(n=>dup[n]>1));
+add("Habilidade sem efeito",ALL.filter(c=>{const s=c.sk||[],l=Array.isArray(s[0])?s:s.length?[s]:[];return l.some(a=>!(a[3]&&a[3].ef&&a[3].ef.length))}).map(c=>c.n));
+const tr=[],cf=[];for(let i=1;i<TR.length;i++)TR[i]<=TR[i-1]&&tr.push("arena "+(i+1));add("Troféus das arenas fora de ordem",tr);
+CONFIG.chefeFinal<TR[TR.length-1]&&cf.push("chefe final abaixo da última arena");CONFIG.mkMax<CONFIG.mk&&cf.push("limite de marcos menor que 1 marco");["vidas","acoes","acaoIni","turnos","iaMs"].forEach(k=>CONFIG[k]>0||cf.push(k+" precisa ser maior que 0"));add("Regras com valor estranho",cf);
+const n=o.length;o.unshift(`<p><b>${ALL.length} cartas</b><br><small>${Object.keys(rk).map(r=>R[r][0]+": "+rk[r]).join(" · ")}</small></p>`);if(!n)o.push("<p>✅ Nenhum problema encontrado.</p>");$("chk_out").innerHTML=o.join("")};
+cfg.addEventListener("click",e=>{const b=e.target.closest("[data-t2]");if(!b)return;const k=b.dataset.t2,ok=m=>{save();try{upd()}catch(x){}try{render(1)}catch(x){}toast(m)};
+ if(k=="chk")return chk();
+ if(k=="fr"){S.fr+=1e4;ok("+10.000 "+gem)}
+ else if(k=="pk"){gift(dpk().id,5);ok("🎁 +5 pacotes")}
+ else if(k=="day"){S.fd={};S.pj={d:day(),n:0};S.fp=6;S.md={};S.mw={};ok("Limites e missões do dia zerados")}
+ else if(k=="camp"){S.camp=1;ok("👑 Campeão · batalhas infinitas liberadas")}
+ else if(k=="all"){ALL.forEach(c=>{S.inv[c.id]||(S.inv[c.id]=1)});ok("🃏 Todas as cartas liberadas")}});
+cfg.addEventListener("toggle",()=>setTimeout(mark,0),true);
+const c2=cfgView;cfgView=function(v){const r=c2.apply(this,arguments);try{if(v=="a"){nav();rules();extra()}}catch(x){console.warn("adm2",x)}return r};
+try{nav();rules();extra()}catch(x){}
+})();
+</script>
+<script>
+// ===== v1.9 (20/11/2026): ADM · LANÇAMENTOS · cartas novas ficam guardadas (rascunho) e são lançadas de uma vez · atalhos no início do ADM =====
+(function(){
+const css=document.createElement("style");css.textContent=`.aq{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.aq button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 4px;border-radius:14px;background:#6c5cff22;border:1px solid #6c5cff66;font-size:1.25rem;color:inherit}.aq b{font-size:.68rem;font-weight:900}.aq em{position:absolute;top:-6px;right:-4px;font-style:normal;background:#ff4d6d;color:#fff;border-radius:99px;padding:1px 7px;font-size:.66rem;font-weight:900}.aq em:empty{display:none}.at.hot{border-color:#6c5cff;box-shadow:0 0 0 1px #6c5cff66}#dr_box{display:grid;gap:12px}.drg{display:grid;gap:8px;padding:12px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff12}.drg>small{color:var(--mut);font-size:.68rem;font-weight:700;line-height:1.35}.drc{display:grid;grid-template-columns:22px 52px 1fr;gap:8px;align-items:start;padding:8px;border-radius:12px;background:#0003}#cfg .drc>input{width:22px;height:22px;padding:0;margin-top:2px}.drt{width:52px;height:69px;border-radius:8px;background:#222 center/cover;display:grid;place-items:center;font-size:1.1rem}.drb{display:grid;gap:4px;min-width:0}.drb small{color:var(--mut);font-size:.66rem;font-weight:700}.dr4{grid-column:1/-1;display:grid;grid-template-columns:.8fr 1fr 1fr 1fr;gap:6px}.drx{grid-column:1/-1;display:flex;gap:6px}#cfg .drb input,#cfg .dr4 input,#cfg .dr4 select{padding:8px;font-size:.78rem;min-width:0}#cfg .drx .bt{margin:0;flex:1;padding:8px;font-size:.74rem;text-align:center}.dra{position:sticky;bottom:0;display:grid;gap:8px;padding:12px 0 2px;background:linear-gradient(#0000,var(--bg,#161618) 35%)}`;document.head.append(css);
+const E=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
+L=()=>ADM.c.filter(x=>x.dr),live=k=>P.some(p=>p.id==k),pl=(n,a,b)=>n>1?b:a,
+sel=()=>[...cfg.querySelectorAll('#ds_l [data-dr="sel"]:checked')],
+cnt=()=>{const b=cfg.querySelector('#ds_l [data-dr="go"]');if(b)b.textContent=`🚀 Lançar selecionadas (${sel().length})`},
+row=(x,on)=>{const n=(ADM.ca[x.id]||[]).length,im=IMG[x.id];
+ return `<div class="drc" data-i="${x.id}"><input type="checkbox" data-dr="sel" data-p="${x.pk}" data-i="${x.id}"${on?" checked":""}><div class="drt"${im?` style="background-image:url(${im})"`:""}>${im?"":"📷"}</div><div class="drb"><input data-dr="n" value="${E(x.n)}" aria-label="Nome"><small>${n?`✨ ${n} habilidade${pl(n,"","s")}`:"sem habilidade"}${im?"":" · ⚠ sem foto"}</small></div><div class="dr4"><select data-dr="r" aria-label="Rank">${R.map(r=>`<option${r[0]==x.r?" selected":""}>${r[0]}</option>`).join("")}</select><input type="number" data-dr="hp" placeholder="❤ auto" value="${x.hp||""}"><input type="number" data-dr="atk" placeholder="⚔ auto" value="${x.atk||""}"><input type="number" step="any" data-dr="ch" placeholder="% auto" value="${x.ch||""}"></div><div class="drx"><label class="bt gh">📷 ${im?"Trocar foto":"Foto"}<input type="file" accept="image/*" hidden data-dr="img"></label><button class="bt gh dg" data-dr="del">🗑 Excluir</button></div></div>`};
+function paint(){let b=$("dr_box");
+ if(!b){const d=$("ds_l");if(!d)return;d.insertAdjacentHTML("beforeend",'<div class="fg"><div class="exm">📦 Cartas guardadas ficam escondidas dos jogadores. Marque as que quer lançar e toque em <b>Lançar</b>: tudo entra no jogo de uma vez. O que você editar aqui salva sozinho.</div><div id="dr_box"></div></div>');b=$("dr_box")}
+ const keep=sel().map(c=>c.dataset.i),l=L(),g={};l.forEach(x=>(g[x.pk]=g[x.pk]||[]).push(x));
+ b.innerHTML=l.length?Object.keys(g).map(k=>{const p=P.find(q=>q.id==k),d=p||ADM.p.find(q=>q.id==k)||{e:"🎴",n:"Pacote"},n=g[k].length;
+  return `<div class="drg"><label class="yck"><input type="checkbox" data-dr="all" data-p="${k}"> <b>${E(d.e)} ${E(d.n)}</b></label><small>${p?"Pacote já lançado · as cartas entram nele":"🆕 Pacote novo · só aparece no jogo quando você lançar"} · ${n} carta${pl(n,"","s")}</small>${g[k].map(x=>row(x,keep.includes(x.id))).join("")}<button class="bt gh" data-dr="add" data-p="${k}">➕ Mais uma carta neste pacote</button></div>`}).join("")+'<div class="dra"><label class="yck"><input type="checkbox" data-dr="all"> Marcar todas</label><button class="bt" data-dr="go">🚀 Lançar selecionadas (0)</button></div>'
+ :'<div class="exm">Nenhuma carta guardada agora. Crie em <b>Cartas</b> ou <b>Importar ficha</b> com “Guardar sem lançar” marcado.</div><button class="bt cy" data-adm="fds_n">➕ Nova carta</button><button class="bt gh" data-adm="pds_i">📥 Importar ficha</button>';
+ cnt()}
+function badges(){const n=L().length,ag=cfg.querySelector(".ag");if(!ag)return;
+ if(!ag.querySelector(".aq"))ag.insertAdjacentHTML("afterbegin",'<div class="aq"><button data-adm="fds_n">➕<b>Nova carta</b></button><button data-adm="pds_i">📥<b>Importar ficha</b></button><button data-adm="pds_l">🚀<b>Lançar</b><em></em></button></div>');
+ const t=ag.querySelector('.at[data-adm="pds_l"]');if(t){t.classList.toggle("hot",n>0);t.querySelector("small").textContent=n?`${n} guardada${pl(n,"","s")} · toque para lançar`:"Guarde cartas e lance tudo de uma vez"}
+ ag.querySelector(".aq em").textContent=n||""}
+function rel(){const s=sel().map(c=>c.dataset.i);if(!s.length)return toast("Marque as cartas que quer lançar.");
+ const sf=s.filter(i=>!IMG[i]).length,np=new Set(s.map(i=>(ADM.c.find(x=>x.id==i)||{}).pk).filter(k=>!live(k))).size;
+ ask(`Lançar ${s.length} carta${pl(s.length,"","s")}?`,`Entram no jogo de uma vez, para todos os jogadores.${np?`<br>🆕 ${np} pacote${pl(np,"","s")} novo${pl(np,"","s")} junto.`:""}${sf?`<br>⚠ ${sf} sem foto.`:""}`,"🚀 Lançar",()=>{ADM.c.forEach(x=>{if(s.includes(x.id))delete x.dr});drGo()})}
+function del(id){const x=ADM.c.find(q=>q.id==id);if(!x)return;
+ ask("Excluir rascunho?",`<b>${E(x.n)}</b> será apagada de vez.`,"Excluir",()=>{(ADM.ca[id]||[]).forEach(h=>{const a=ADM.ab.find(q=>q.id==h);if(a&&a.solo==id)ADM.ab=ADM.ab.filter(q=>q.id!=h)});delete ADM.ca[id];delete IMG[id];ADM.c=ADM.c.filter(q=>q.id!=id);ADM.p=ADM.p.filter(d=>live(d.id)||ADM.c.some(c=>c.pk==d.id));sADM();paint();badges()},1)}
+// editar o rascunho salva na hora · "input" não conta como alteração pendente do resto do ADM
+cfg.addEventListener("input",e=>{if(e.target.closest("#ds_l"))e.stopPropagation()},true);
+cfg.addEventListener("change",e=>{const t=e.target,k=t.dataset&&t.dataset.dr;if(!k||!t.closest("#ds_l"))return;
+ if(k=="all"){cfg.querySelectorAll(`#ds_l [data-dr="sel"]${t.dataset.p?`[data-p="${t.dataset.p}"]`:""}`).forEach(c=>c.checked=t.checked);return cnt()}
+ if(k=="sel")return cnt();
+ const c=t.closest(".drc"),x=c&&ADM.c.find(q=>q.id==c.dataset.i);if(!x)return;
+ if(k=="img"){const f=t.files[0];if(f)imgOK(f,u=>{if(!u)return toast("Não consegui ler a imagem");IMG[x.id]=u;sADM();paint();toast("Foto salva ✓")});return}
+ if(k=="n"){x.n=t.value.trim()||x.n;t.value=x.n}
+ else if(k=="r"){x.r=t.value;delete x.hp;delete x.atk;c.querySelectorAll('[data-dr="hp"],[data-dr="atk"]').forEach(i=>i.value="")}
+ else{const v=+t.value;if(v>0)x[k]=v;else delete x[k]}
+ sADM()});
+cfg.addEventListener("click",e=>{const t=e.target.closest("#ds_l [data-dr]");if(!t||/^(INPUT|SELECT)$/.test(t.tagName))return;const k=t.dataset.dr;
+ if(k=="go")rel();else if(k=="del")del(t.closest(".drc").dataset.i);
+ else if(k=="add"){const b=document.createElement("button");b.dataset.adm="fds_n";cfg.append(b);b.click();b.remove();const s=$("ap");if(s){s.value=t.dataset.p;s.dispatchEvent(new Event("change"))}}});
+const c3=cfgView;cfgView=function(v){const r=c3.apply(this,arguments);try{if(v=="a")badges()}catch(e){console.warn("dr",e)}return r};
+const o1=window.adxOpen;window.adxOpen=function(id){try{if(id=="ds_l")paint()}catch(e){console.warn("dr",e)}return o1&&o1.apply(this,arguments)};
+try{if(!cfg.hidden&&$("ds_c")){badges();const a=cfg.querySelector("details.adp[open]");if(a&&a.id=="ds_l")paint()}}catch(e){console.warn("dr",e)}
+})();
+</script>
+<style id="tema-css">
+#yrm .yt{display:flex;gap:8px}#yrm .yt button{flex:1;min-height:48px;padding:0 4px;text-align:center;font-size:.78rem}
+#yrm .yt button[aria-pressed=true]{background:#f4566a;color:#141414;border-color:#f4566a}
+html[data-tema="royale"]{--bg:#2a68ad;--sf:#2f5f9f;--fg:#fff;--mut:#c4dcff;--ac:#ffc83b;--fr:#d9a6ff;--ol:#0b2447;--fd:"Lilita One","Luckiest Guy","Arial Rounded MT Bold","Arial Black",system-ui,sans-serif}
+html[data-tema="royale"] body{font-family:var(--fd);font-weight:400;font-synthesis:none;letter-spacing:.015em;text-shadow:0 1.5px 0 #0b2447b0;background:radial-gradient(120% 50% at 50% 0,#9bd6ff55,transparent 62%),radial-gradient(130% 55% at 50% 104%,#04143aa0,transparent 66%),linear-gradient(135deg,transparent 47%,#ffffff14 48% 52%,transparent 53%) 0 0/64px 64px,linear-gradient(45deg,transparent 47%,#0a2a6a24 48% 52%,transparent 53%) 0 0/64px 64px,#2a68ad}
+html[data-tema="royale"] #m{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+html[data-tema="royale"] .dka{bottom:calc(env(safe-area-inset-bottom,0px) + 88px)}
+html[data-tema="royale"] #gear,html[data-tema="royale"] #tb{bottom:calc(env(safe-area-inset-bottom,0px) + 96px)}
+html[data-tema="royale"] .tst{bottom:calc(env(safe-area-inset-bottom,0px) + 100px)}
+html[data-tema="royale"] h1,html[data-tema="royale"] h2,html[data-tema="royale"] h3,html[data-tema="royale"] .tab,html[data-tema="royale"] .pn small,html[data-tema="royale"] .zres h2,html[data-tema="royale"] .a3h b,html[data-tema="royale"] .chips .on,html[data-tema="royale"] .pke,html[data-tema="royale"] .nv .on span,html[data-tema="royale"] .bt,html[data-tema="royale"] .qc{text-shadow:0 2px 0 var(--ol),1px 1px 0 var(--ol),-1px 1px 0 var(--ol),1px -1px 0 var(--ol),-1px -1px 0 var(--ol)}
+@supports (paint-order:stroke fill){html[data-tema="royale"] h1,html[data-tema="royale"] h2,html[data-tema="royale"] h3,html[data-tema="royale"] .tab,html[data-tema="royale"] .pn small,html[data-tema="royale"] .zres h2,html[data-tema="royale"] .a3h b,html[data-tema="royale"] .chips .on,html[data-tema="royale"] .pke,html[data-tema="royale"] .nv .on span,html[data-tema="royale"] .bt,html[data-tema="royale"] .qc{-webkit-text-stroke:var(--sw,3px) var(--ol);paint-order:stroke fill}}
+html[data-tema="royale"] h1{font-size:1.45rem;line-height:1.05;font-weight:400;letter-spacing:.03em;text-transform:none;--sw:4px}
+html[data-tema="royale"] h2,html[data-tema="royale"] h3{font-weight:400;letter-spacing:.03em;text-transform:none}
+html[data-tema="royale"] .rsh h2{font-size:1.3rem;letter-spacing:.03em;text-transform:none}
+html[data-tema="royale"] .tab{padding:0;font-size:1.5rem;font-weight:400;letter-spacing:.03em;color:#fff;--sw:4px}
+html[data-tema="royale"] .mut{color:var(--mut);font-size:.82rem;font-weight:400;letter-spacing:.03em;text-transform:none;text-shadow:0 1px 0 var(--ol)}
+html[data-tema="royale"] .hd.top{align-items:center;padding:8px 10px 8px 14px;margin-bottom:12px;border:2px solid #07142d;border-radius:14px;background:linear-gradient(#12356a99,#0a1f44bb);box-shadow:inset 0 2px 0 #ffffff24,0 3px 0 #07142d66}
+html[data-tema="royale"] .wal{position:relative;gap:0;height:36px;padding:0 38px 0 44px;border:2px solid #07142d;border-radius:10px;background:linear-gradient(#0a1b3a,#17335f);box-shadow:inset 0 2px 0 #ffffff1f,0 2px 0 #07142d}
+html[data-tema="royale"] .wal::before{content:"+";position:absolute;left:-2px;top:-2px;bottom:-2px;width:36px;display:grid;place-items:center;border:2px solid #14430a;border-radius:10px 3px 3px 10px;background:linear-gradient(#a6ee5a,#47b21f);box-shadow:inset 0 2px 0 #e1ffbd;color:#fff;font-size:1.7rem;line-height:1;text-shadow:0 2px 0 #14430a;pointer-events:none}
+html[data-tema="royale"] .wal small{display:none}
+html[data-tema="royale"] .wal span{display:block}
+html[data-tema="royale"] .wal b{font-size:1.2rem;font-weight:400;letter-spacing:.03em;color:#fff;text-shadow:0 2px 0 #000a}
+html[data-tema="royale"] .wal .gi{position:absolute;right:-9px;top:50%;width:36px;height:36px;transform:translateY(-52%);filter:drop-shadow(0 2px 0 #07142d)}
+html[data-tema="royale"] .bt,html[data-tema="royale"] .qc{--ol:#3b1d03;--hl:#fff3b0;--sh:#d9760c;--c1:#ffe07a;--c2:#ffbd2e;--c3:#f59a18}
+html[data-tema="royale"] .bt.gh,html[data-tema="royale"] .x2 .bt:nth-child(2){--ol:#0b2a63;--hl:#c9e8ff;--sh:#1d56b3;--c1:#7cc4ff;--c2:#3b8cf0;--c3:#2a6fd6}
+html[data-tema="royale"] .bt.cy,html[data-tema="royale"] #acts .cy{--ol:#154a0b;--hl:#e1ffbd;--sh:#2f8a12;--c1:#b5f26a;--c2:#6fd02e;--c3:#3fa81c}
+html[data-tema="royale"] .qc{--ol:#0e2a55;--hl:#9fd0ff;--sh:#234f94;--c1:#5b9be6;--c2:#3b73bf;--c3:#2f62ae}
+html[data-tema="royale"] .bt.bt,html[data-tema="royale"] .qc.qc,html[data-tema="royale"] #acts .cy{border:3px solid var(--ol);border-radius:14px;color:#fff;background:linear-gradient(var(--c1),var(--c2) 45%,var(--c3));box-shadow:inset 0 3px 0 var(--hl),inset 0 -6px 0 var(--sh),0 4px 0 var(--ol),0 7px 10px #0006;clip-path:none;font-weight:400;font-size:1.15rem;letter-spacing:.03em;text-transform:none;padding:13px 8px 17px}
+html[data-tema="royale"] .qc.qc{font-size:.95rem;padding:9px 14px 12px;border-radius:12px}
+html[data-tema="royale"] .dkb .bt.bt,html[data-tema="royale"] .zc .bt.bt{font-size:.92rem;padding:9px 6px 13px}
+html[data-tema="royale"] .bt.bt:active,html[data-tema="royale"] .qc.qc:active{transform:translateY(3px);filter:none;background:linear-gradient(var(--c1),var(--c2) 45%,var(--c3));box-shadow:inset 0 3px 0 var(--hl),inset 0 -3px 0 var(--sh),0 1px 0 var(--ol)}
+html[data-tema="royale"] .off{background:linear-gradient(#cdd6e4,#8f9cb2)!important;color:#fff!important;--ol:#3a475c;--hl:#e8eef8;--sh:#6f7d94;box-shadow:inset 0 3px 0 var(--hl),inset 0 -6px 0 var(--sh),0 4px 0 var(--ol)!important}
+html[data-tema="royale"] .pr,html[data-tema="royale"] .qc .pr{background:#0a1b3acc;border:2px solid #07142d;color:#fff;font-size:.85rem;letter-spacing:.02em;padding:1px 10px;-webkit-text-stroke:0;text-shadow:none}
+@keyframes qpl-r{50%{box-shadow:inset 0 3px 0 var(--hl),inset 0 -6px 0 var(--sh),0 4px 0 var(--ol),0 0 0 5px #ffd54a66,0 0 20px #ffd54a}}
+html[data-tema="royale"] .cvb,html[data-tema="royale"] .fd,html[data-tema="royale"] .dkb,html[data-tema="royale"] .at,html[data-tema="royale"] .asr,html[data-tema="royale"] .dka{background:linear-gradient(#3f7bc8,#2b5aa0);border:3px solid #0e2a55;border-radius:14px;box-shadow:inset 0 3px 0 #ffffff30,0 3px 0 #091c3d}
+html[data-tema="royale"] .fd>.cvb,html[data-tema="royale"] .fd>.rl{box-shadow:none}
+html[data-tema="royale"] .cvb p{font-size:.88rem;line-height:1.5;letter-spacing:.02em;text-transform:none;color:#e4f0ff}
+html[data-tema="royale"] .cvb p b{color:var(--ac)}
+html[data-tema="royale"] .fd>summary{color:#fff;font-size:1.05rem;letter-spacing:.02em;text-transform:none;text-shadow:0 2px 0 var(--ol)}
+html[data-tema="royale"] .rl button,html[data-tema="royale"] .asl button{background:linear-gradient(#4a86d2,#3568b3);border:2px solid #0e2a55;border-radius:12px;box-shadow:inset 0 2px 0 #ffffff30,0 2px 0 #091c3d;padding:10px 12px}
+html[data-tema="royale"] .rl span{font-weight:400;font-size:1rem;letter-spacing:.02em;text-transform:none}
+html[data-tema="royale"] .sq::before{filter:none;border-radius:9px;background:#0a1f4466}
+html[data-tema="royale"] .chips button{background:linear-gradient(#5b9be6,#2f62ae);border:2px solid #0e2a55;border-radius:10px;color:#fff;font-size:.9rem;letter-spacing:.02em;text-transform:none;box-shadow:inset 0 2px 0 #ffffff40,0 2px 0 #0e2a55}
+html[data-tema="royale"] .chips .on{background:linear-gradient(#ffe07a,#f59a18);border-color:#3b1d03;--ol:#3b1d03;color:#fff;box-shadow:inset 0 2px 0 #fff3b0,0 2px 0 #3b1d03}
+html[data-tema="royale"] .dks.em{border-color:#ffffff66;background:#0a2a6a55;color:#ffffffaa}
+html[data-tema="royale"] .dkc.sel{outline-color:var(--ac)}
+html[data-tema="royale"] .dkb.pick .dks{outline-color:var(--ac)}
+html[data-tema="royale"] .dkh b{font-size:1rem;letter-spacing:.02em;text-transform:none}
+html[data-tema="royale"] .dkh span{background:#0a1b3a99;border:2px solid #07142d}
+html[data-tema="royale"] .dkx{background:linear-gradient(#ff7b7b,#d62b2b);border:2px solid #5a0f0f}
+html[data-tema="royale"] .dku,html[data-tema="royale"] .dkh .ok,html[data-tema="royale"] .sg b,html[data-tema="royale"] .pke{background:linear-gradient(#ffe07a,#f59a18);color:#fff;border:2px solid #4a2604;--ol:#4a2604;--sw:2px}
+html[data-tema="royale"] .nv{padding-top:4px;background:linear-gradient(#2c5189,#142a50);border-top:3px solid #07142d;box-shadow:inset 0 3px 0 #6fa4e6,0 -4px 14px #0007;-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-tema="royale"] .nv button{gap:1px;padding:8px 2px 6px;border-radius:12px 12px 0 0;color:#b9d3f5;font-size:.64rem;font-weight:400;letter-spacing:.02em;text-transform:none;text-shadow:0 1px 0 #07142d}
+html[data-tema="royale"] .nv svg{width:26px;height:26px;stroke-width:2.2;filter:drop-shadow(0 2px 0 #07142d)}
+html[data-tema="royale"] .nv .on{flex:1.5!important;margin:-12px 0 calc(-1*env(safe-area-inset-bottom,0px));padding-top:10px;color:#fff;background:linear-gradient(#69abf5,#3a77c8);border:3px solid #07142d;border-bottom:0;box-shadow:inset 0 3px 0 #c4e4ff}
+html[data-tema="royale"] .nv .on svg{stroke:#fff;width:32px;height:32px}
+html[data-tema="royale"] .nv .on span{font-size:.9rem}
+html[data-tema="royale"] .nv b{top:2px;left:calc(50% + 8px);min-width:18px;height:18px;line-height:15px;border:2px solid #fff;background:linear-gradient(#ff7b7b,#d62b2b);color:#fff;font-size:.7rem;text-shadow:none}
+html[data-tema="royale"] .pn::before{content:"";position:absolute;inset:-4% -8%;background:radial-gradient(closest-side,#fff3a8aa,#ffc83b44 55%,transparent 74%);pointer-events:none;animation:crg-r 3s ease-in-out infinite alternate}
+html[data-tema="royale"] .pn>small,html[data-tema="royale"] .pn>.dots{position:relative;z-index:1}
+html[data-tema="royale"] .pn small{font-size:1.2rem;letter-spacing:.02em;text-transform:none;color:#fff;--sw:4px}
+@keyframes crg-r{from{opacity:.7;transform:scale(.96)}to{opacity:1;transform:scale(1.04)}}
+html[data-tema="royale"] .dots i{width:12px;height:12px;border-radius:50%;background:#0a2a6a80;border:2px solid var(--ol)}
+html[data-tema="royale"] .dots i.on{background:var(--ac)}
+html[data-tema="royale"] .ar button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:3px solid #0b2a63;border-radius:50%;background:linear-gradient(#7cc4ff,#2a6fd6);color:#fff;font-size:1.7rem;line-height:1;box-shadow:inset 0 2px 0 #c9e8ff,0 3px 0 #0b2a63}
+html[data-tema="royale"] .bd{background:#041030cc}
+html[data-tema="royale"] .rsh{background:linear-gradient(#3f7bc8,#244b8a);border:3px solid #07142d;border-bottom:0;border-radius:22px 22px 0 0;box-shadow:inset 0 3px 0 #ffffff40}
+html[data-tema="royale"] .x0{background:linear-gradient(#ff7b7b,#d62b2b);border:3px solid #5a0f0f;border-radius:11px;color:#fff;box-shadow:inset 0 2px 0 #ffc0c0,0 3px 0 #5a0f0f}
+html[data-tema="royale"] .ab,html[data-tema="royale"] .ib{background:linear-gradient(#7cc4ff,#2a6fd6);border:3px solid #0b2a63;border-radius:12px;color:#fff;font-style:normal;box-shadow:inset 0 2px 0 #c9e8ff,0 3px 0 #0b2a63}
+html[data-tema="royale"] .tst{background:linear-gradient(#12356a,#0a1f44);color:#fff;border:3px solid var(--ac);border-radius:14px;box-shadow:0 4px 0 #04102a,0 10px 20px #0008}
+html[data-tema="royale"] .tst b{color:var(--ac)}
+html[data-tema="royale"] #gear,html[data-tema="royale"] #tb{background:linear-gradient(#5b9be6,#2f62ae);border:2px solid #07142d;box-shadow:inset 0 2px 0 #ffffff55,0 2px 0 #07142d}
+html[data-tema="royale"] #gear{opacity:.9}
+html[data-tema="royale"] #cfg{background:linear-gradient(135deg,transparent 47%,#ffffff14 48% 52%,transparent 53%) 0 0/64px 64px,linear-gradient(45deg,transparent 47%,#0a2a6a24 48% 52%,transparent 53%) 0 0/64px 64px,#2a68ad}
+html[data-tema="royale"] .ah{background:#0d2447f2;border-bottom:3px solid #07142d}
+html[data-tema="royale"] .at b{font-size:1rem;font-weight:400}
+html[data-tema="royale"] .at small{font-size:.74rem}
+html[data-tema="royale"] input:not([type=range],[type=checkbox],[type=radio],[type=color],[type=file]),html[data-tema="royale"] select,html[data-tema="royale"] textarea{color:#fff;background:#0f2a55;border:2px solid #07142d;border-radius:10px;box-shadow:inset 0 3px 0 #0006;text-shadow:none}
+html[data-tema="royale"] .cd{outline:2px solid #07142d}
+html[data-tema="royale"] .rk,html[data-tema="royale"] .x{border:2px solid #07142d;border-radius:8px;box-shadow:0 2px 0 #07142d}
+html[data-tema="royale"] .a3{border:4px solid #07142d;border-radius:16px;background:linear-gradient(#5aa0ee,#2a5fa8);box-shadow:inset 0 3px 0 #ffffff55,0 4px 0 #061230}
+html[data-tema="royale"] .a3h button{color:#ffd54a;font-size:2rem;text-shadow:0 2px 0 #4a2604,0 0 6px #4a2604}
+html[data-tema="royale"] .a3h b{font-size:1.25rem;text-transform:none;letter-spacing:.03em}
+html[data-tema="royale"] .a3h small{color:var(--mut);font-size:.8rem;letter-spacing:.03em;text-transform:none}
+html[data-tema="royale"] .zt b{font-size:1.05rem;letter-spacing:.03em;text-shadow:0 2px 0 var(--ol)}
+html[data-tema="royale"] #zb .zlog{padding:6px 14px;border:2px solid #07142d;border-radius:12px;background:linear-gradient(#12356aee,#0a1f44ee);box-shadow:inset 0 2px 0 #ffffff24;color:#fff;font-size:.9rem;font-weight:400}
+html[data-tema="royale"] #zb .zs{box-shadow:0 0 0 4px #07142d,0 0 0 7px #ffc83b66}
+html[data-tema="royale"] #zb .zhp{border:2px solid #07142d;background:#07142d;box-shadow:none}
+html[data-tema="royale"] #zb .zhp i{border-radius:99px;box-shadow:inset 0 3px 0 #ffffff55,inset 0 -3px 0 #0003}
+html[data-tema="royale"] .zu.on{box-shadow:0 0 0 3px var(--ac),0 0 14px var(--ac)}
+html[data-tema="royale"] .zu.vt{box-shadow:0 0 0 3px var(--ac)}
+@keyframes zp-r{50%{box-shadow:0 0 0 3px #fff,0 0 18px #ffc83b}}
+html[data-tema="royale"] .zpl>i,html[data-tema="royale"] .zgh{border-color:#ffd54a;background:repeating-linear-gradient(45deg,#1d4a92 0 4px,#2d62b4 4px 8px)}
+html[data-tema="royale"] .zpl>b{background:#0a1b3a;border:2px solid #ffd54a}
+html[data-tema="royale"] .zst{font-size:.9rem;letter-spacing:.03em;text-transform:none}
+html[data-tema="royale"] #zb .zres{padding:22px 16px;border:4px solid #07142d;border-radius:20px;background:linear-gradient(#3f7bc8ee,#1f457fee);backdrop-filter:none;box-shadow:inset 0 3px 0 #ffffff40,0 6px 0 #061230,0 14px 30px #0008}
+html[data-tema="royale"] .zres h2{font-size:2.4rem;letter-spacing:.03em;color:#ffd54a;--ol:#4a2604;--sw:6px}
+@media (prefers-reduced-motion:reduce){html[data-tema="royale"] .pn::before{animation:none}}
+html[data-tema="royale"] #yrm{background:#041030cc}
+html[data-tema="royale"] #yrm .yb,html[data-tema="royale"] .yib{background:linear-gradient(#3f7bc8,#244b8a);border:3px solid #07142d;border-radius:22px;box-shadow:inset 0 3px 0 #ffffff40}
+html[data-tema="royale"] #yrm h3{font:400 1.6rem/1 var(--fd);color:#fff;-webkit-text-stroke:3px #0b2447;paint-order:stroke fill;text-shadow:0 3px 0 #0b2447}
+html[data-tema="royale"] #yrm button{min-height:48px;font:400 1.05rem var(--fd);color:#fff;border:3px solid #0b2a63;border-radius:14px;background:linear-gradient(#7cc4ff,#3b8cf0 45%,#2a6fd6);box-shadow:inset 0 3px 0 #c9e8ff,0 4px 0 #0b2a63;text-shadow:0 2px 0 #0b2a63}
+html[data-tema="royale"] #yrm button.g{background:none;border-color:transparent;box-shadow:none;color:#dbe9ff}
+html[data-tema="royale"] #yrm .yt button{font-size:.9rem;text-align:center}
+html[data-tema="royale"] #yrm .yt button[aria-pressed=true]{background:linear-gradient(#ffe07a,#ffbd2e 45%,#f59a18);border-color:#3b1d03;box-shadow:inset 0 3px 0 #fff3b0,0 4px 0 #3b1d03;text-shadow:0 2px 0 #3b1d03}
+html[data-tema="royale"] #yrm small{color:#dbe9ff;opacity:.85;font:400 .9rem var(--fd);letter-spacing:.04em}
+html[data-tema="royale"] .yhp{border:2px solid #07142d;background:#07142d;box-shadow:none}
+html[data-tema="royale"] .yhp i{box-shadow:inset 0 3px 0 #ffffff55,inset 0 -3px 0 #0003}
+html[data-tema="royale"] .qc[data-d]{animation-name:qpl-r}
+html[data-tema="royale"] .zu.vt{animation-name:zp-r}
+html[data-tema="v2"]{--pk:#ff1f5b;--ac:#ff1f5b;--fr:#ff1f5b;--pp:#f1f0ec;--ik:#0a0a0a;--fh:"Anton","Bebas Neue",Impact,"Arial Narrow Bold",sans-serif;--fb:"Archivo Narrow","Oswald","Arial Narrow",Arial,sans-serif;
+--spk:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 0 0 0 -9.8'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E");
+--spw:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 14 0 0 0 -9.2'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E");
+background:var(--spk),radial-gradient(#00000024 1px,transparent 1.7px) 0 0/7px 7px,var(--pp)}
+html[data-tema="v2"] body{background:none;font-family:var(--fb);font-weight:700}
+html[data-tema="v2"] #m,html[data-tema="v2"] .rsh,html[data-tema="v2"] #cfg{--fg:var(--ik);--mut:#55535b;color:var(--ik)}
+html[data-tema="v2"] #m{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+html[data-tema="v2"] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:var(--spk) 40px 20px,var(--spk) 0 0;-webkit-mask:radial-gradient(120% 90% at 50% 45%,transparent 42%,#000 100%);mask:radial-gradient(120% 90% at 50% 45%,transparent 42%,#000 100%)}
+html[data-tema="v2"] body::after{content:"PRIMATA · COLEÇÃO · ESCAPE · READY, GO · PRIMATA · COLEÇÃO · ESCAPE · READY, GO · PRIMATA · COLEÇÃO · ESCAPE · READY, GO";position:fixed;top:0;right:0;bottom:0;width:12px;z-index:1;overflow:hidden;white-space:nowrap;pointer-events:none;background:var(--pk);color:var(--ik);font:700 8px/12px var(--fb);letter-spacing:.18em;writing-mode:vertical-rl}
+html[data-tema="v2"] h1,html[data-tema="v2"] h2,html[data-tema="v2"] h3,html[data-tema="v2"] .tab,html[data-tema="v2"] .bt,html[data-tema="v2"] .qc,html[data-tema="v2"] .nv button,html[data-tema="v2"] .wal b,html[data-tema="v2"] .zres h2,html[data-tema="v2"] .chips button,html[data-tema="v2"] .dkh b,html[data-tema="v2"] .fd>summary,html[data-tema="v2"] .a3h b,html[data-tema="v2"] .at b,html[data-tema="v2"] .rl span,html[data-tema="v2"] .pn small,html[data-tema="v2"] .rsh h2{font-family:var(--fh);font-weight:400;font-synthesis:none;text-transform:uppercase;letter-spacing:.03em}
+html[data-tema="v2"] h1{font-size:clamp(2rem,10vw,2.7rem);line-height:.88;letter-spacing:-.005em;text-shadow:3px 3px 0 var(--pk)}
+html[data-tema="v2"] .tab{font-size:2.3rem;line-height:1;color:var(--ik);text-shadow:3px 3px 0 var(--pk)}
+html[data-tema="v2"] .hd.top{position:relative;align-items:flex-end;padding:0 0 10px;margin-bottom:16px;border-bottom:5px solid var(--ik)}
+html[data-tema="v2"] .hd.top::after{content:"";position:absolute;left:0;bottom:-11px;width:42%;height:6px;background:var(--pk)}
+html[data-tema="v2"] .mut{display:inline-block;margin:6px 0 0;padding:1px 7px 0;background:var(--ik);color:#fff;font:700 .68rem/1.5 var(--fb);letter-spacing:.08em;text-transform:uppercase}
+html[data-tema="v2"] .mut.ctr{display:block;padding:0;background:none;color:#4a4850;font-size:.78rem;letter-spacing:.02em}
+html[data-tema="v2"] .wal{gap:8px;padding:4px 12px 4px 8px;border:0;border-radius:0;clip-path:none;background:var(--spw),var(--ik);color:#fff;box-shadow:4px 4px 0 var(--pk)}
+html[data-tema="v2"] .wal .gi{width:26px;height:26px;filter:hue-rotate(75deg) saturate(1.7)}
+html[data-tema="v2"] .wal small{justify-self:start;padding:0 5px;background:var(--pk);color:var(--ik);font:700 .56rem/1.5 var(--fb);letter-spacing:.1em}
+html[data-tema="v2"] .wal b{font:400 1.35rem/1.05 var(--fh);letter-spacing:.04em;color:#fff}
+html[data-tema="v2"] .bt.bt,html[data-tema="v2"] #acts .cy{border:3px solid var(--ik);border-radius:0;clip-path:none;background:var(--spw),var(--ik);color:#fff;box-shadow:5px 5px 0 var(--pk);font:400 1.25rem/1 var(--fh);letter-spacing:.06em;text-transform:uppercase;padding:14px 10px 12px;transition:transform .08s,box-shadow .08s}
+html[data-tema="v2"] .bt.gh.gh,html[data-tema="v2"] .x2 .bt.bt:nth-child(2){background:var(--pp);color:var(--ik);box-shadow:5px 5px 0 var(--ik)}
+html[data-tema="v2"] .bt.cy.cy,html[data-tema="v2"] #acts .cy{background:var(--pk);color:var(--ik);box-shadow:5px 5px 0 var(--ik)}
+html[data-tema="v2"] .bt.bt:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--pk);filter:none}
+html[data-tema="v2"] .bt.gh.gh:active,html[data-tema="v2"] .bt.cy.cy:active{box-shadow:1px 1px 0 var(--ik)}
+html[data-tema="v2"] .dkb .bt.bt,html[data-tema="v2"] .zc .bt.bt{font-size:1rem;padding:9px 6px 8px}
+html[data-tema="v2"] #zb .bt.bt{border-color:#fff}
+html[data-tema="v2"] .off{background:#d9d8d4!important;color:#8b8a90!important;border-color:#8b8a90!important;box-shadow:5px 5px 0 #b6b5b1!important}
+html[data-tema="v2"] .pr,html[data-tema="v2"] .qc .pr{border-radius:0;background:var(--pk);color:var(--ik);font:700 .72rem/1.5 var(--fb);letter-spacing:.06em;padding:1px 8px}
+html[data-tema="v2"] .qc.qc{border:3px solid var(--ik);border-radius:0;background:#fff;color:var(--ik);box-shadow:4px 4px 0 var(--ik);font:400 1rem/1 var(--fh);letter-spacing:.05em;text-transform:uppercase;padding:9px 12px 8px}
+html[data-tema="v2"] .qc.qc:active{background:var(--pk);transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ik)}
+@keyframes qpl-m{50%{box-shadow:4px 4px 0 var(--pk),0 0 0 3px var(--pk)}}
+html[data-tema="v2"] .cvb,html[data-tema="v2"] .fd,html[data-tema="v2"] .dkb,html[data-tema="v2"] .at,html[data-tema="v2"] .asr,html[data-tema="v2"] .dka,html[data-tema="v2"] .asl button{background:var(--spk),#fff;border:3px solid var(--ik);border-radius:0;clip-path:none;box-shadow:6px 6px 0 var(--ik)}
+html[data-tema="v2"] .fd>.cvb,html[data-tema="v2"] .fd>.rl{box-shadow:none}
+html[data-tema="v2"] .asl button{border-width:2px;box-shadow:3px 3px 0 var(--ik)}
+html[data-tema="v2"] .cvb p{color:#2a2830;letter-spacing:.03em}
+html[data-tema="v2"] .cvb p b{color:var(--pk)}
+html[data-tema="v2"] .fd>summary{color:var(--ik);font-size:1.1rem;letter-spacing:.06em}
+html[data-tema="v2"] .rl{gap:10px}
+html[data-tema="v2"] .rl button{background:#fff;border:2px solid var(--ik);border-radius:0;box-shadow:4px 4px 0 var(--pk);padding:9px 10px}
+html[data-tema="v2"] .rl span{font-size:1.05rem;line-height:1.1;letter-spacing:.04em}
+html[data-tema="v2"] .rl em{color:#55535b}
+html[data-tema="v2"] .sq::before{filter:none;border-width:3px;border-radius:0}
+html[data-tema="v2"] .chips button{border:2px solid var(--ik);border-radius:0;background:#fff;color:var(--ik);font-size:.95rem;line-height:1;letter-spacing:.06em;padding:8px 14px 7px}
+html[data-tema="v2"] .chips .on{background:var(--ik);color:#fff;box-shadow:0 4px 0 var(--pk)}
+html[data-tema="v2"] .dks.em{border:2px dashed var(--ik);background:none;color:var(--ik)}
+html[data-tema="v2"] .dkc.sel{outline:4px solid var(--pk)}
+html[data-tema="v2"] .dkb.pick .dks{outline-color:var(--pk)}
+html[data-tema="v2"] .dkh b{font-size:1.15rem;letter-spacing:.06em}
+html[data-tema="v2"] .dkh span{border-radius:0;background:var(--ik);color:#fff}
+html[data-tema="v2"] .dkh .ok{background:var(--pk);color:var(--ik)}
+html[data-tema="v2"] .dkx{border-radius:0;background:var(--ik);border:2px solid #fff}
+html[data-tema="v2"] .dku{border-radius:0;background:var(--pk);color:var(--ik)}
+html[data-tema="v2"] .pn::before{content:"";position:absolute;left:12%;right:-3%;top:10%;bottom:-2%;background:var(--spw),var(--pk);pointer-events:none}
+html[data-tema="v2"] .pn::after{content:"";position:absolute;left:-3%;right:34%;bottom:-4px;height:8px;background:var(--ik);pointer-events:none}
+html[data-tema="v2"] .pn>small,html[data-tema="v2"] .pn>.dots{position:relative;z-index:1}
+html[data-tema="v2"] .pn small{display:inline-block;justify-self:center;padding:2px 12px 0;background:var(--ik);color:#fff;font-size:1.15rem;line-height:1.4;letter-spacing:.06em}
+html[data-tema="v2"] .dots i{width:22px;height:6px;border-radius:0;background:#0a0a0a33}
+html[data-tema="v2"] .dots i.on{background:var(--ik)}
+html[data-tema="v2"] .ar button{display:grid;place-items:center;width:40px;height:40px;padding:0;background:var(--ik);color:#fff;font:400 1.6rem/1 var(--fh);box-shadow:3px 3px 0 var(--pk)}
+html[data-tema="v2"] .nv{background:var(--spw),var(--ik);border-top:5px solid var(--ik);box-shadow:0 -5px 0 var(--pk);-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-tema="v2"] .nv button{color:#fff;font-size:.8rem;line-height:1;letter-spacing:.08em;padding:10px 2px 8px}
+html[data-tema="v2"] .nv .on{background:var(--pk);color:var(--ik);box-shadow:inset 0 4px 0 #fff}
+html[data-tema="v2"] .nv .on svg{stroke:var(--ik)}
+html[data-tema="v2"] .nv b{border-radius:0;background:#fff;color:var(--ik);font:700 .62rem/15px var(--fb)}
+html[data-tema="v2"] .bd{background:#000d}
+html[data-tema="v2"] .rsh{background:var(--spk),var(--pp);border:4px solid var(--ik);border-bottom:0;border-radius:0;box-shadow:0 -6px 0 var(--pk)}
+html[data-tema="v2"] .rsh h2{font-size:1.7rem;line-height:1}
+html[data-tema="v2"] .x0,html[data-tema="v2"] .ab,html[data-tema="v2"] .ib{border:0;border-radius:0;background:var(--ik);color:#fff;font-style:normal;box-shadow:3px 3px 0 var(--pk)}
+html[data-tema="v2"] .tst{border:0;border-radius:0;background:var(--ik);color:#fff;box-shadow:5px 5px 0 var(--pk);font:700 .9rem/1.3 var(--fb);letter-spacing:.04em;text-transform:uppercase}
+html[data-tema="v2"] .tst b{color:var(--pk)}
+html[data-tema="v2"] #gear,html[data-tema="v2"] #tb{border:0;border-radius:0;background:var(--ik);color:#fff;box-shadow:3px 3px 0 var(--pk)}
+html[data-tema="v2"] #cfg{background:var(--spk),radial-gradient(#00000024 1px,transparent 1.7px) 0 0/7px 7px,var(--pp)}
+html[data-tema="v2"] .ah{background:var(--ik);color:#fff;border-bottom:5px solid var(--pk)}
+html[data-tema="v2"] .ah small{color:#d0d0d0}
+html[data-tema="v2"] .at b{font-size:1.15rem;line-height:1.1}
+html[data-tema="v2"] .at small{color:#55535b}
+html[data-tema="v2"] #cfg input:not([type=range],[type=checkbox],[type=radio],[type=color],[type=file]),html[data-tema="v2"] #cfg select,html[data-tema="v2"] #cfg textarea,html[data-tema="v2"] .cdi{background:#fff;color:var(--ik);border:2px solid var(--ik);border-radius:0;box-shadow:3px 3px 0 var(--ik)}
+html[data-tema="v2"] .cd{border-radius:3px;outline:3px solid var(--ik)}
+html[data-tema="v2"] .rk,html[data-tema="v2"] .x{border-radius:0}
+html[data-tema="v2"] .a3{border:4px solid var(--ik);border-radius:0;background:var(--ik);box-shadow:6px 6px 0 var(--pk)}
+html[data-tema="v2"] .a3 canvas{filter:grayscale(1) contrast(1.2)}
+html[data-tema="v2"] .a3h b{font-size:1.4rem;line-height:1;color:#fff;text-shadow:2px 2px 0 var(--pk)}
+html[data-tema="v2"] .a3h small{color:#d8d8d8}
+html[data-tema="v2"] #zb{--fg:#fff;--mut:#d6d6d6;color:#fff}
+html[data-tema="v2"] #zbg{filter:grayscale(1) contrast(1.15)}
+html[data-tema="v2"] #zb .zlog{padding:6px 12px;border:0;border-left:6px solid var(--pk);border-radius:0;background:#000;color:#fff;font:700 .8rem/1.3 var(--fb);letter-spacing:.04em;text-transform:uppercase}
+html[data-tema="v2"] #zb .zs{border-radius:0;box-shadow:none}
+html[data-tema="v2"] #zb .zhp{border:2px solid #fff;border-radius:0;background:#000;box-shadow:none}
+html[data-tema="v2"] #zb .zhp i{border-radius:0}
+html[data-tema="v2"] #zb .zhp::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 8px,#000a 8px 9px)}
+html[data-tema="v2"] .zu{border-radius:3px}
+html[data-tema="v2"] .zu.on{box-shadow:0 0 0 3px #fff,5px 5px 0 3px var(--pk)}
+html[data-tema="v2"] .zu.vt{box-shadow:0 0 0 3px var(--pk)}
+@keyframes zp-m{50%{box-shadow:0 0 0 4px #fff,0 0 0 8px var(--pk)}}
+html[data-tema="v2"] .zpl>i,html[data-tema="v2"] .zgh{border-radius:0;border-color:#fff;background:repeating-linear-gradient(45deg,var(--ik) 0 4px,#2a2a2a 4px 8px)}
+html[data-tema="v2"] .zpl>b{border:0;border-radius:0;background:var(--pk);color:var(--ik)}
+html[data-tema="v2"] .zst{font:400 .95rem/1 var(--fh);letter-spacing:.08em;color:#fff}
+html[data-tema="v2"] #zb .zres{padding:22px 16px;border:4px solid var(--ik);border-radius:0;background:var(--spk),var(--pp);color:var(--ik);backdrop-filter:none;box-shadow:8px 8px 0 var(--pk)}
+html[data-tema="v2"] #zb .zres p{color:#2a2830}
+html[data-tema="v2"] .zres h2{font-size:3.4rem;line-height:.9;letter-spacing:.01em;color:var(--ik);text-shadow:4px 4px 0 var(--pk)}
+html[data-tema="v2"] #yrm{background:#000d}
+html[data-tema="v2"] #yrm .yb{background:var(--spk),var(--pp);color:var(--ik);border:4px solid var(--ik);border-radius:0;box-shadow:6px 6px 0 var(--pk)}
+html[data-tema="v2"] .yib{background:var(--ik);border:3px solid #fff;border-radius:0;box-shadow:6px 6px 0 var(--pk)}
+html[data-tema="v2"] #yrm h3{font:400 1.8rem/1 var(--fh);text-transform:uppercase;color:var(--ik);text-shadow:3px 3px 0 var(--pk)}
+html[data-tema="v2"] #yrm button{min-height:48px;border:3px solid var(--ik);border-radius:0;background:#fff;color:var(--ik);font:400 1.05rem var(--fh);letter-spacing:.04em;text-transform:uppercase;box-shadow:4px 4px 0 var(--ik)}
+html[data-tema="v2"] #yrm button.g{background:none;border-color:transparent;box-shadow:none;color:#55535b}
+html[data-tema="v2"] #yrm .yt button{font-size:.9rem;text-align:center}
+html[data-tema="v2"] #yrm .yt button[aria-pressed=true]{background:var(--ik);color:#fff;box-shadow:4px 4px 0 var(--pk)}
+html[data-tema="v2"] #yrm small{color:var(--ik);opacity:1;font:700 .7rem var(--fb);letter-spacing:.1em;text-transform:uppercase}
+html[data-tema="v2"] .yhp{border:2px solid #fff;border-radius:0;background:#000;box-shadow:none}
+html[data-tema="v2"] .yhp i{border-radius:0}
+html[data-tema="v2"] .yhp span{z-index:1}
+html[data-tema="v2"] .yhp::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 8px,#000a 8px 9px)}
+html[data-tema="v2"] .qc[data-d]{animation-name:qpl-m}
+html[data-tema="v2"] .zu.vt{animation-name:zp-m}
+
+/* v1.9 · Lançamentos e atalhos do ADM nos temas */
+html[data-tema="v2"] .exm,html[data-tema="v2"] .yck,html[data-tema="v2"] .drg,html[data-tema="v2"] .drc{background:#fff;border:2px solid var(--ik);border-radius:0}
+html[data-tema="v2"] .exm{border-style:dashed}
+html[data-tema="v2"] .drc{box-shadow:3px 3px 0 var(--ik)}
+html[data-tema="v2"] .drt{border-radius:0;background-color:var(--ik)}
+html[data-tema="v2"] .dra{background:linear-gradient(#0000,var(--pp) 35%)}
+html[data-tema="v2"] .aq button{border:0;border-radius:0;background:var(--ik);color:#fff;box-shadow:4px 4px 0 var(--pk)}
+html[data-tema="v2"] .aq b{font:400 .95rem/1 var(--fh);letter-spacing:.05em;text-transform:uppercase}
+html[data-tema="v2"] .aq em{border-radius:0;background:var(--pk);color:var(--ik)}
+html[data-tema="v2"] .at.hot{border-color:var(--pk);box-shadow:5px 5px 0 var(--pk)}
 </style></body>
 </html>
