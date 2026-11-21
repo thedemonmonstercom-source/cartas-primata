@@ -774,9 +774,6 @@ return api})();
 .cpxsk b{display:block;font-weight:900;font-size:1.7rem;color:hsl(var(--h) 100% 78%);letter-spacing:.03em;padding:.25em .9em;border-radius:99px;background:linear-gradient(90deg,transparent,hsl(var(--h) 80% 20%/.85),transparent)}
 .cpxsk i{display:block;font-style:normal;font-weight:700;font-size:.78rem;color:#fff;opacity:.85;margin-top:.2em}
 .cpxcf{position:fixed;top:0;width:9px;height:14px;z-index:99985;pointer-events:none;border-radius:2px}
-.cpxn{position:sticky;top:0;z-index:6;display:flex;gap:6px;overflow-x:auto;padding:8px 2px;background:#161618f2;scrollbar-width:none}
-.cpxn::-webkit-scrollbar{display:none}
-.cpxn button{flex:none;padding:7px 12px;border-radius:99px;border:1px solid #ffffff22;background:#ffffff0d;color:#e9e6f0;font:700 .72rem Montserrat,system-ui,sans-serif;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -2634,7 +2631,6 @@ A.onAuthStateChanged(au,u=>u?start(u).catch(e=>{console.warn(e);login("Falha ao 
 <script>
 function cpxSkill(c,ab){const z=document.getElementById("zb");if(!z||z.hidden)return;const d=document.createElement("div"),b=document.createElement("b"),i=document.createElement("i");d.className="cpxsk";d.style.setProperty("--h",(typeof HU!="undefined"&&HU[c.r])||40);b.textContent=ab.n;i.textContent=c.n;d.append(b,i);document.body.append(d);d.animate([{opacity:0,transform:"translate(-50%,-50%) scale(.6)"},{opacity:1,transform:"translate(-50%,-50%) scale(1.05)",offset:.2},{opacity:1,transform:"translate(-50%,-50%) scale(1)",offset:.75},{opacity:0,transform:"translate(-50%,-60%) scale(1.1)"}],{duration:1100,easing:"ease-out"}).onfinish=()=>d.remove();try{SND.flip()}catch(e){}}
 function cpxConfetti(){const f=document.createDocumentFragment(),cs=["#ffd24a","#f4566a","#5ad1ff","#9b6bff","#6bff9b"];for(let i=0;i<28;i++){const e=document.createElement("i"),dx=(Math.random()-.5)*30,r=Math.random()*720;e.className="cpxcf";e.style.left=Math.random()*100+"vw";e.style.background=cs[i%5];e.animate([{transform:"translate(0,-5vh) rotate(0deg)"},{transform:"translate("+dx+"vw,105vh) rotate("+r+"deg)"}],{duration:1500+Math.random()*1200,delay:Math.random()*400,easing:"cubic-bezier(.2,.6,.4,1)",fill:"backwards"}).onfinish=()=>e.remove();f.append(e)}document.body.append(f);return 1}
-(function(){const c=document.getElementById("cfg");if(!c)return;new MutationObserver(()=>{if(c.hidden||c.querySelector(".cpxn"))return;const ds=[...c.querySelectorAll("details.fd")];if(ds.length<3)return;const n=document.createElement("div");n.className="cpxn";ds.forEach(d=>{const s=d.querySelector("summary");if(!s)return;const b=document.createElement("button");b.type="button";b.textContent=s.textContent.trim();b.onclick=()=>{d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"})};n.append(b)});const x=document.createElement("button");x.type="button";x.textContent="⤒ Recolher";x.onclick=()=>ds.forEach(d=>d.open=false);n.append(x);c.prepend(n)}).observe(c,{childList:true})})();
 </script>
 <style id="yr-css">
 #sndb,#gear,#cpchip{display:none!important}
