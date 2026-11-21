@@ -2683,7 +2683,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 .yck{display:flex;gap:8px;align-items:center;padding:8px 10px;margin:4px 0;border-radius:10px;background:#ffffff0d;font-size:.85rem;text-transform:none;letter-spacing:0}.yck input{width:18px;height:18px;flex:none}.yrs,.yra{display:block;font-size:.82rem;font-weight:700;color:#fff;text-shadow:0 1px 3px #000;white-space:normal}.yra{font-size:.72rem;font-weight:500;opacity:.85}
 </style><style id="fx4-css">
 .adm .in2>details.fd:not(.adp){display:none!important}
-#evb{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);transform:translateX(-50%);z-index:30;max-width:92vw;padding:8px 14px;border-radius:999px;background:linear-gradient(90deg,#ff7a18,#ff2d6f);color:#fff;font:700 .8rem system-ui;box-shadow:0 6px 20px #0008;display:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#evb{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 68px);transform:translateX(-50%);z-index:30;max-width:92vw;padding:8px 14px;border-radius:999px;background:linear-gradient(90deg,#ff7a18,#ff2d6f);color:#fff;font:700 .8rem system-ui;box-shadow:0 6px 20px #0008;display:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .f3d{display:block;width:max-content;margin:0 auto;perspective:900px;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
 .f3d>.in{position:relative;transform-style:preserve-3d}
 .f3d .cd{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:none!important}
@@ -2709,7 +2709,7 @@ const b=document.createElement("div");b.id="evb";document.body.append(b);
 setInterval(()=>{try{const e=cpxEvOn(),o=typeof ov!="undefined"&&ov&&!ov.hidden,fc=document.getElementById("fc");
 if(!e||tab!="h"||!cfg.hidden||o||(fc&&!fc.hidden)||document.getElementById("cpl")){b.style.display="none";return}
 const t=Math.max(0,e.ate-Date.now()),d=Math.floor(t/864e5),h=Math.floor(t%864e5/36e5),n=Math.floor(t%36e5/6e4);
-b.textContent="🎉 "+e.n+" · fragmentos ×"+e.mf+" · termina em "+(d?d+"d ":"")+h+"h "+n+"min";b.style.display="block"}catch(x){}},1000);
+b.textContent="🎉 "+e.n+" · fragmentos ×"+e.mf+" · termina em "+(d?d+"d ":"")+h+"h "+n+"min";const nv=document.querySelector(".nv");let nh=0;if(nv){const r=nv.getBoundingClientRect();let y=r.top;[...nv.children].forEach(k=>{y=Math.min(y,k.getBoundingClientRect().top)});nh=r.bottom-y}b.style.bottom=nh>20?Math.round(nh+10)+"px":"";b.style.display="block"}catch(x){}},1000);
 })();
 </script>
 <style id="inf-css">
@@ -2736,7 +2736,7 @@ if(B.why!="desistiu"){const d=day();if(!S.pj||S.pj.d!==d)S.pj={d,n:0};S.pj.n++}
 try{SND[win?"win":"lose"]();win&&cpxConfetti()}catch(e){}
 if(S.im==null)S.im=m0;
 if(win){bump("win");const f=fr(n,m0),pk=n%10==0?2+(m0/5|0):n%5==0?1:0;S.fr+=f;rw.push(`${gem}+${fmt(f)}`);if(pk)gift(dpk().id,pk);S.il=n+1;S.tp=t0+TW}
-else if(w==1){if(B.why!="desistiu")S.fr+=CONFIG.derrota;S.tp=Math.max(CONFIG.chefeFinal||0,t0-TL)}
+else if(w==1){if(B.why!="desistiu")S.fr+=CONFIG.derrota;S.tp=Math.min(t0,Math.max(CONFIG.chefeFinal||0,t0-TL))}
 const m1=mdInfo();for(let q=S.im+1;q<=m1.t;q++){const f=500*(q+1),pk=1+(q/5|0);S.fr+=f;gift(dpk().id,pk);rw.push(`🏅 ${mo(q).n}: ${gem}+${fmt(f)} · 🎁 +${pk}`)}S.im=Math.max(S.im,m1.t);
 const dt=S.tp-t0,np=gifts()-g0;if(np>0)rw.unshift(`🎁 +${np} pacote${np>1?"s":""}`);save();upd();
 zb.innerHTML=`<div class="zres"><h2>${win?"Fase "+n+" vencida!":w<0?"Empate":"Derrota"}</h2>${dt?`<p class="ztr${dt<0?" ls":""}">${dt>0?"+":"−"}${Math.abs(dt)} 🏆${m1.t>m0?" · "+mo(m1.t).n:""}</p>`:""}${rw.length?`<p class="zrw">${rw.join(" · ")}</p>`:""}<div class="two"><button class="bt gh" data-z="close">Voltar</button><button class="bt" data-z="inf">${win?"Fase "+S.il:"Tentar de novo"}</button></div></div>`};
