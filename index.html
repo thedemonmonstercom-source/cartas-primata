@@ -441,6 +441,8 @@ body.nofr .wl,body.nofr .dl{visibility:hidden}
 .dkb{margin:0 0 16px;padding:12px;border-radius:16px;background:linear-gradient(#2a2a30,#202024);border:1px solid #ffffff14}
 .dkb.pick{border-color:var(--ac)}
 .dkh{display:flex;align-items:center;justify-content:space-between;margin:0 2px 10px}
+.dkt{display:flex;gap:8px;margin:0 0 12px}.dkt button{flex:1;padding:10px 0;border-radius:12px;border:1.5px solid #ffffff2e;background:#ffffff0d;color:var(--fg);font:800 .92rem system-ui;cursor:pointer}.dkt button.on{background:var(--ac);border-color:var(--ac);color:#fff}.dkt button:active{transform:scale(.96)}
+.zlt{margin-left:6px;font-weight:900;letter-spacing:0}.zlt.lo{color:#ff6b6b}#zab[hidden]{display:none}
 .dkh b{font-size:.78rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
 .dkh span{padding:2px 10px;border-radius:99px;background:#ffffff14;font-size:.72rem;font-weight:900;font-variant-numeric:tabular-nums}.dkh .ok{background:var(--ac);color:#111}
 .dkg{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
@@ -860,6 +862,11 @@ setTimeout(iniciar,3200);
 // • v1.9: ADM · LANÇAMENTOS (cartas novas ficam guardadas e são lançadas de uma vez) + atalhos e menu reorganizado
 // • v1.9: TEMAS · escolha no Menu: Primata 1.0, 2.0 (mangá) e Royale
 // • v2.0: ADM · EXCLUIR · várias cartas, vários pacotes ou jogadores (ou todos) de uma vez
+// • 23/11/2026: BATALHA · comprar do baralho é grátis e sem limite (só enquanto o banco de 3 reservas não estiver cheio), ativar a carta gasta 1 ação, e status e habilidades das cartas (suas e do rival) podem ser vistos também fora da sua vez
+// • 23/11/2026: FUSÃO · não dá mais para comprar a cópia que falta (só funde com todas as repetidas em mãos) · MISSÃO "Fazer uma troca com um amigo" agora conta também as trocas online (Jogadores)
+// • 23/11/2026: BATALHAS INFINITAS · a dificuldade agora sobe pelo medalhão (troféus): começa na força da Arena 9, sobe aos poucos e fica bem difícil de Platina para cima · rival erra um pouco mais no começo · chefe mais leve no início · a curva fica em KD (procure DIFICULDADE)
+// • 23/11/2026: DECKS A/B/C · troca com um toque na aba Deck e na aba Batalha · o deck ativo continua em S.dk (o resto do jogo não mudou) · S.dks guarda os outros e S.dka a letra ativa · deck novo começa como cópia do atual
+// • 23/11/2026: DUELO AO VIVO · reconecta sozinho ao reabrir o jogo (refaz a luta pela semente + jogadas) · tempo por turno (CONFIG.turnoSeg, padrão 60 s) com passe automático, desistência após 2 turnos sem jogar e "vencer por abandono" quando o amigo some (CONFIG.sumiuSeg) · ver bloco /*LV2*/
 const ADM0=(()=>{try{return JSON.parse(localStorage.getItem("colprimata_adm")||"{}")||{}}catch(e){return{}}})();
 // REGRAS DO DECK E DAS REPETIDAS (18/11/2026): o deck tem 12 cartas DIFERENTES (a mesma carta nunca entra 2×, mesmo com várias cópias; vale também para o rival da arena e para decks de amigos). Só a carta ORIGINAL tem nível: as cópias repetidas ficam sempre sem melhoria e servem para trocar, converter ou fundir.
 // CARTAS: cada carta é um objeto dentro de "cards" (r = raridade: F E D C B A S SS SSS).
@@ -879,7 +886,7 @@ const ST=[[133,50],[165,62],[208,78],[261,98],[325,122],[405,152],[507,190],[640
 const FRAG=ADM0.fr&&ADM0.fr.length==9?ADM0.fr:[10,15,25,40,70,130,300,800,3000],CUSTO=ADM0.cu||500,INICIO=ADM0.ini??2500;
 // CONFIG (v0.5): números do jogo num só lugar. admPin = PIN do modo ADM (mude aqui).
 // RECOMPENSAS (rebalanceadas): limiteDia = lutas por dia que dão prêmio · pacVit = vitórias para ganhar 1 pacote · mk = troféus por marco (e fragmentos do marco) · mkPacote = troféus por pacote de marco (100 = 1 pacote a cada marco) · diaria = fragmentos do login · mDia / mSem = fragmentos por missão diária / semanal · mDiaBonus = missões diárias para ganhar 1 pacote de bônus · mSemPac = pacotes por missão semanal · derrota = fragmentos por derrota · arenaPac = pacotes do chefe da arena 1 (+arenaPacMais a cada arena seguinte) · arenaFrag = fragmentos do chefe × número da arena · campPac / campFrag = prêmio do Campeão · gratisLivre = pacotes do dia sem jogar · gratisJogar = batalhas para liberar +1 pacote do dia (0.5 = 2 pacotes por batalha) · amigoFrag / amigoDia = prêmio e limite diário das lutas com amigo.
-const CONFIG={admPin:"0000",limiteDia:10,pacVit:2,tw:30,tl:20,mk:100,mkPacote:100,mkMax:6000,chefeFinal:6000,chefe:1.2,diaria:300,amigoFrag:60,amigoDia:3,derrota:20,nDia:6,mDia:100,mSem:500,mSemPac:3,mDiaBonus:2,arenaPac:15,arenaPacMais:3,arenaFrag:500,campPac:60,campFrag:10000,gratisLivre:1,gratisJogar:.5,imgKB:90,arf0:60,arfK:10,fusArena:3,sArena:5,fusMult:1,faixa:15,som:1,musica:1,botErro:40,botForca:5,botNivel:1,vidas:5,acoes:2,acaoIni:1,turnos:20,iaMs:1200,danoMult:1,vidaMult:1};
+const CONFIG={admPin:"0000",limiteDia:10,pacVit:2,tw:30,tl:20,mk:100,mkPacote:100,mkMax:6000,chefeFinal:6000,chefe:1.2,diaria:300,amigoFrag:60,amigoDia:3,derrota:20,nDia:6,mDia:100,mSem:500,mSemPac:3,mDiaBonus:2,arenaPac:15,arenaPacMais:3,arenaFrag:500,campPac:60,campFrag:10000,gratisLivre:1,gratisJogar:.5,imgKB:90,arf0:60,arfK:10,fusArena:3,sArena:5,fusMult:1,faixa:15,som:1,musica:1,botErro:40,botForca:5,botNivel:1,vidas:5,acoes:2,acaoIni:1,turnos:20,iaMs:1200,danoMult:1,vidaMult:1,turnoSeg:60,sumiuSeg:45};
 Object.assign(CONFIG,ADM0.cfg||{});if("bauVit" in CONFIG){if(!(ADM0.cfg&&ADM0.cfg.pacVit!=null))CONFIG.pacVit=CONFIG.bauVit;delete CONFIG.bauVit} // saves antigos usavam outro nome para esta regra
 // relógio: fuso fixo de Brasília (UTC−3); hora que volta para o passado é ignorada
 const nowT=()=>{const t=Date.now(),r=S.rl||0;return t>r?(S.rl=t):r},lnow=()=>nowT()-108e5;
@@ -897,7 +904,7 @@ const ov=$("ov"),stage=$("stage"),hint=$("hint"),acts=$("acts");
 let S={inv:{},opened:0},tab="h",as=0,cur=0;
 try{const j=JSON.parse(localStorage.getItem("colprimata_save")||localStorage.getItem("cartas1")||"null");if(j&&j.inv)S=j}catch(e){}
 S.fr=Number.isFinite(S.fr)?Math.max(0,Math.floor(S.fr)):INICIO; // save antigo (sem fragmentos) começa com o saldo inicial
-S.lv=S.lv||{};S.sk=S.sk||0;S.gp=S.gp||{};S.tp=S.tp||0;S.ar=S.ar||0;S.wn=S.wn||0;S.tm=S.tm||0;S.dk=Array.isArray(S.dk)?[...new Set(S.dk)]:[];S.cn=S.cn||{};S.md=S.md||{};S.mw=S.mw||{};S.fd=S.fd||{};if(!S.v){S.tm=Math.floor((S.tm||0)*250/CONFIG.mk);S.v=2}
+S.lv=S.lv||{};S.sk=S.sk||0;S.gp=S.gp||{};S.tp=S.tp||0;S.ar=S.ar||0;S.wn=S.wn||0;S.tm=S.tm||0;S.dk=Array.isArray(S.dk)?[...new Set(S.dk)]:[];S.dks=S.dks&&typeof S.dks=="object"?S.dks:{};S.dka=S.dka=="B"||S.dka=="C"?S.dka:"A";S.cn=S.cn||{};S.md=S.md||{};S.mw=S.mw||{};S.fd=S.fd||{};if(!S.v){S.tm=Math.floor((S.tm||0)*250/CONFIG.mk);S.v=2}
 const save=()=>{try{avisos()}catch(e){}try{localStorage.setItem("colprimata_save",JSON.stringify(S))}catch(e){}};
 function avisos(){if(!$("tc"))return;const a=S.ar+1,n=!S.av,v=S.av=S.av||{},L=[];
  if(a>=(CONFIG.fusArena||1)&&!v.fus){v.fus=1;L.push("🔓 <b>Fusões liberadas!</b> Suas cartas já podem subir de nível.")}
@@ -923,8 +930,8 @@ const pull=(p,m)=>{
 const gem='<svg class="gi" aria-hidden="true"><use href="#fgem"/></svg>',fmt=n=>n.toLocaleString("pt-BR"),costOf=p=>p.cost||CUSTO,extra=c=>Math.max(0,(S.inv[c.id]||0)-1);
 let shown=S.fr,bt=0,tt=0,SUMR=null,OD=0,LN=10;
 // ===== FUSÃO + RECOMPENSA DIÁRIA (ajuste os números aqui) =====
-// Preços v0.4 (pacote = 500): cada fusão pede NEED[nível] repetidas (1,1,2,2,3) e 2×(passo)×valor de conversão em fragmentos. Em S, SS e SSS a cópia que falta pode ser paga com 10× o valor de conversão do rank (pit). Cada nível dá +40% do status base (Mítico = 3× o base, em todas as raridades). Converter vale valor × (nível+1).
-const NEED=[[3,4,6,8,10],[2,3,4,6,8],[1,1,2,2,3]],FM=[4,9,18,32,57],lvl=c=>Math.min(S.lv[c.id]||0,5),mxLv=c=>5,need=c=>NEED[c.r<3?0:c.r<6?1:2][lvl(c)],fcost=c=>Math.round(FRAG[c.r]*FM[lvl(c)]*(CONFIG.fusMult||1)),pit=c=>c.r>5?Math.round(FRAG[c.r]*([17,25][c.r-6]||0)*(CONFIG.fusMult||1)):0,gain=c=>.4,mult=c=>1+gain(c)*lvl(c),fv=c=>FRAG[c.r];
+// Preços v0.4 (pacote = 500): cada fusão pede NEED[nível] repetidas (1,1,2,2,3) e 2×(passo)×valor de conversão em fragmentos. Só funde com todas as repetidas em mãos (não dá para comprar a cópia que falta). Cada nível dá +40% do status base (Mítico = 3× o base, em todas as raridades). Converter vale valor × (nível+1).
+const NEED=[[3,4,6,8,10],[2,3,4,6,8],[1,1,2,2,3]],FM=[4,9,18,32,57],lvl=c=>Math.min(S.lv[c.id]||0,5),mxLv=c=>5,need=c=>NEED[c.r<3?0:c.r<6?1:2][lvl(c)],fcost=c=>Math.round(FRAG[c.r]*FM[lvl(c)]*(CONFIG.fusMult||1)),gain=c=>.4,mult=c=>1+gain(c)*lvl(c),fv=c=>FRAG[c.r];
 // ===== MISSÕES: diárias (CONFIG.nDia por dia, CONFIG.mDia fragmentos cada; a cada CONFIG.mDiaBonus cumpridas = +1 pacote), semanais (3 por semana, CONFIG.mSem fragmentos + CONFIG.mSemPac pacotes cada), de coleção (metas únicas, pacotes na lista CL) e secretas (escondidas até cumprir, pacotes na lista SC) =====
 // bump("chave") conta o que o jogador fez (por dia, por semana e no total). As diárias e as semanais são sorteadas das listas DP e WP (mesmo sorteio o dia todo / a semana toda).
 const wk=()=>Math.floor((day()+3)/7);
@@ -985,8 +992,8 @@ function fzAnim(c,L,done){
  [a,b].forEach((e,i)=>{const s=i?1:-1,m=A(e,[{transform:`translateX(${s*dx}px) rotate(${s*10}deg) scale(.9)`,opacity:0},{opacity:1,offset:.3},{transform:`translateX(${s*5}%) rotate(0) scale(1)`,opacity:1}],T,{easing:"cubic-bezier(.6,0,.9,.5)"});if(!i)m.onfinish=swap});
  setTimeout(swap,T+150);
 }
-function fuse(c){if(fusLock())return toast(`🔒 Fusões liberam na <b>Arena ${CONFIG.fusArena}</b>.`);const l=lvl(c),n=need(c),k=fcost(c),m=Math.max(0,n-extra(c)),t=k+m*pit(c);if(l>=mxLv(c))return;if(m&&!pit(c))return toast(`Faltam <b>${m}</b> repetida${m>1?"s":""} para fundir.`);if(S.fr<t)return lack(t-S.fr);fzAnim(c,l+1,()=>pop("−"+fmt(t),"neg"));S.inv[c.id]-=n-m;S.fr-=t;S.lv[c.id]=l+1;bump("fuse");save();sync();upd();toast(`✨ <b>${c.n}</b> subiu para <b>${NIVEIS[l+1]}</b>`)}
-const fzb=(c,n)=>{if(!n)return"";if(fusLock())return`<div class="cvb"><p>🔒 Fusões liberam na <b>Arena ${CONFIG.fusArena}</b></p></div>`;const l=lvl(c),m=mxLv(c);if(l>=m)return`<div class="cvb"><p>Fusão máxima: <b>${NIVEIS[m]}</b></p></div>`;const nd=need(c),k=fcost(c),e=n-1,ms=Math.max(0,nd-e),t=k+ms*pit(c),ok=(!ms||pit(c))&&S.fr>=t;return`<div class="cvb"><p>Fusão <b>${NIVEIS[l]} → ${NIVEIS[l+1]}</b> · repetidas <b>${Math.min(e,nd)}/${nd}</b> · +${Math.round(gain(c)*100)}% de status${ms&&pit(c)?`<br>Cada cópia que falta custa ${gem}<b>${fmt(pit(c))}</b>`:""}</p><div class="two"><button class="bt cy${ok?"":" off"}" data-x="f" style="grid-column:1/-1">Fundir<span class="pr">${gem}${fmt(t)}</span></button></div></div>`};
+function fuse(c){if(fusLock())return toast(`🔒 Fusões liberam na <b>Arena ${CONFIG.fusArena}</b>.`);const l=lvl(c),n=need(c),t=fcost(c),m=Math.max(0,n-extra(c));if(l>=mxLv(c))return;if(m)return toast(`Faltam <b>${m}</b> repetida${m>1?"s":""} para fundir.`);if(S.fr<t)return lack(t-S.fr);fzAnim(c,l+1,()=>pop("−"+fmt(t),"neg"));S.inv[c.id]-=n;S.fr-=t;S.lv[c.id]=l+1;bump("fuse");save();sync();upd();toast(`✨ <b>${c.n}</b> subiu para <b>${NIVEIS[l+1]}</b>`)}
+const fzb=(c,n)=>{if(!n)return"";if(fusLock())return`<div class="cvb"><p>🔒 Fusões liberam na <b>Arena ${CONFIG.fusArena}</b></p></div>`;const l=lvl(c),m=mxLv(c);if(l>=m)return`<div class="cvb"><p>Fusão máxima: <b>${NIVEIS[m]}</b></p></div>`;const nd=need(c),t=fcost(c),e=n-1,ok=e>=nd&&S.fr>=t;return`<div class="cvb"><p>Fusão <b>${NIVEIS[l]} → ${NIVEIS[l+1]}</b> · repetidas <b>${Math.min(e,nd)}/${nd}</b> · +${Math.round(gain(c)*100)}% de status</p><div class="two"><button class="bt cy${ok?"":" off"}" data-x="f" style="grid-column:1/-1">Fundir<span class="pr">${gem}${fmt(t)}</span></button></div></div>`};
 const dly=()=>S.dl===day()?`<p class="mut ctr" style="margin-top:14px">Recompensa diária coletada · volte amanhã</p>`:`<button class="bt cy" data-d="1" style="margin-top:10px">Recompensa diária<span class="pr">${gem}+${fmt(dr())}</span></button>`;
 const wal=()=>`<div class="wal">${gem}<span><small>Fragmentos</small><b class="bal">${fmt(shown)}</b></span></div>`,wlt=()=>`<div class="wl">${wal()}</div>`;
 // saldo na tela: conta até o valor novo (todas as carteiras ao mesmo tempo)
@@ -1274,7 +1281,7 @@ const pickRanks=cs=>{
  cfOK=()=>convert(cs.filter(c=>sel.has(c.r)));
  draw();cfm.hidden=false
 };
-const askFuse=c=>{const l=lvl(c),n=need(c),k=fcost(c),ms=Math.max(0,n-extra(c)),t=k+ms*pit(c);if(l>=mxLv(c)||(ms&&!pit(c))||S.fr<t)return fuse(c);ask(`Fundir ${c.n}?`,`Gasta ${n-ms?`<b>${n-ms}</b> repetida${n-ms>1?"s":""} e `:""}${gem}<b>${fmt(t)}</b>${ms?` (já inclui ${ms} cópia${ms>1?"s":""} que falta${ms>1?"m":""})`:""} para subir de <b>${NIVEIS[l]}</b> para <b>${NIVEIS[l+1]}</b>.`,"Fundir",()=>fuse(c))};
+const askFuse=c=>{const l=lvl(c),n=need(c),t=fcost(c);if(l>=mxLv(c)||extra(c)<n||S.fr<t)return fuse(c);ask(`Fundir ${c.n}?`,`Gasta <b>${n}</b> repetida${n>1?"s":""} e ${gem}<b>${fmt(t)}</b> para subir de <b>${NIVEIS[l]}</b> para <b>${NIVEIS[l+1]}</b>.`,"Fundir",()=>fuse(c))};
 const askConv=(c,k)=>{const m=Math.min(k,extra(c));if(m<1)return;if(m==1&&c.r<5)return convert([c],k);ask(`Converter ${m>1?m+" repetidas":"1 repetida"}?`,`<b>${c.n}</b> (rank ${R[c.r][0]}): você ganha ${gem}<b>+${fmt(m*fv(c))}</b> e perde ${m>1?"essas cópias":"essa cópia"}. Não dá para desfazer.`,"Converter",()=>convert([c],k),1)};
 const askMany=(i,n)=>{const c=costOf(P[i])*n;if(n<2||S.fr<c)return openMany(i,n);ask(`Abrir ${n} pacotes?`,`Vai gastar ${gem}<b>${fmt(c)}</b> fragmentos.`,"Abrir",()=>openMany(i,n))};
 const askTrade=id=>{const c=byId(id),x=TV&&TV.o&&TV.o.c;if(!c||!x)return takeT(id);ask("Confirmar a troca?",`Você dá <b>${c.n}</b> (rank ${R[c.r][0]}) e recebe <b>${x.n}</b> (rank ${R[x.r][0]}). A troca não pode ser desfeita.`,"Trocar",()=>takeT(id),1)};
@@ -1340,7 +1347,7 @@ at:{n:"Buff/debuff de ataque",v:"at",f:[["p","±%",30],["n","turnos",2]],ds:e=>`
 df:{n:"Buff/debuff de defesa",v:"at",f:[["p","±% (positivo = recebe menos dano)",30],["n","turnos",2]],ds:e=>`Dano recebido ${e.p>0?"−":"+"}${Math.abs(e.p)}% por ${e.n||2} turnos em ${TG[e.a]}`,run:(B,u,t,e)=>{t.bf.push({k:"df",p:e.p,n:e.n||2})}},
 po:{n:"Veneno",v:"at",vp:-1,f:[["p","% da vida máx. por turno",10],["n","turnos",3]],ds:e=>`Veneno de ${e.p}% da vida máxima por turno, ${e.n||3} turnos, em ${TG[e.a]}`,run:(B,u,t,e)=>{t.bf.push({k:"po",p:e.p,n:e.n||3})}},
 cd:{n:"Recarga de habilidades",v:"h",f:[["v","turnos a reduzir (0 = zera tudo)",0],["o","poupar a habilidade usada (1 = sim)",1]],ds:e=>`Recarga das habilidades ${e.v>0?"−"+e.v+" turno(s)":"zerada"} em ${TG[e.a]}${e.o?" (menos a usada)":""}`,run:(B,u,t,e,i)=>{t.cd=t.cd.map((x,j)=>e.o&&t==u&&j==i?x:e.v>0?Math.max(0,x-e.v):0)}},
-dr:{n:"Comprar carta",v:"h",own:1,f:[["v","cartas",1]],ds:e=>`Compra ${e.v} carta(s)`,run:(B,u,t,e)=>{const s=cur_(B);for(let k=0;k<e.v;k++){if(cn_(s)>=6||!s.dk.length)break;const x=s.dk.shift();if(s.r.length<3)s.r.push(x);else s.f[s.f.indexOf(null)]=x;lg(B,`${s.n} comprou ${x.c.n}`);B.ev.push({k:"draw",s:B.t,id:x.id,r:x.c.r,el:x.c.el})}}},
+dr:{n:"Comprar carta",v:"h",own:1,f:[["v","cartas",1]],ds:e=>`Compra ${e.v} carta(s) para o banco (se couber)`,run:(B,u,t,e)=>{const s=cur_(B);for(let k=0;k<e.v;k++){if(s.r.length>=3||!s.dk.length)break;const x=s.dk.shift();s.r.push(x);lg(B,`${s.n} comprou ${x.c.n}`);B.ev.push({k:"draw",s:B.t,id:x.id,r:x.c.r,el:x.c.el})}}},
 bk:{n:"Recuar (vai para a reserva)",v:"h",f:[],ds:e=>`${TG[e.a]} recua para a reserva`,ai:(e,t,u)=>e.a=="e"||e.a=="E"?20:-25,run:(B,u,t)=>{const s=B.p[sdx(B,t)];if(!s||s.r.length>2)return;s.f[s.f.indexOf(t)]=null;s.r.push(t);lg(B,`↩ ${t.c.n} recuou`)}}
 };
 // ===== v1.6: MAIS BLOCOS · condições ("só se...") · gatilhos (ativa ou passiva) =====
@@ -1415,7 +1422,7 @@ const pjn=()=>S.pj&&S.pj.d===day()?S.pj.n:0,fon=()=>S.fo&&S.fo.d===day()?S.fo.n:
 function openFree(){tickFp();if(!(S.fp>0))return toast(`Sem pacotes grátis agora · o próximo chega em <b>${nxt()}</b>`);if(!fpOK())return toast("🔒 Jogue uma batalha para liberar o próximo pacote do dia");let p=dpk();if(pkExp(p))p=P.find(q=>!pkExp(q))||p;const d=[];S.fo={d:day(),n:fon()+1};S.fp--;rollPack(p,d);S.opened++;save();play(p,d,P.indexOf(p),1,1)}
 setInterval(()=>{const b=$("fpb");if(b&&tab=="h"&&ov.hidden)b.outerHTML=fpb()},3e4);
 // ----- MOTOR DE BATALHA (regras v0.4 + sugestões da v0.3) -----
-// 12 cartas por deck embaralhadas e viradas · 5 vidas · campo: 3 ativas + 3 reservas · 2 ações por turno (comprar 1×, atacar 1×/carta, habilidade, colocar) · quem começa faz 1 ação · sem crítico · sem trocar ativa por reserva · máx. MAXT turnos por jogador.
+// 12 cartas por deck embaralhadas e viradas · 5 vidas · campo: 3 ativas + 3 reservas · 2 ações por turno (atacar 1×/carta, habilidade, colocar em campo; COMPRAR é grátis, sem limite por turno, mas só enquanto o banco de 3 reservas não estiver cheio) · quem começa faz 1 ação · sem crítico · sem trocar ativa por reserva · máx. MAXT turnos por jogador.
 // DANO = dano × múltiplo × elemento (sem defesa). Com o status por raridade, 3 golpes derrubam uma carta do mesmo rank e nível. Buff/debuff de "n turnos" dura n turnos do dono da carta.
 const abs=c=>{const s=c.sk||[],l=Array.isArray(s[0])?s:s.length?[s]:[];return l.filter(a=>a[3]&&a[3].ef&&!a[3].tr).map(a=>({n:a[0],rc:a[3].rc||3,ef:a[3].ef}))},pas=c=>{const s=c.sk||[];return(Array.isArray(s[0])?s:s.length?[s]:[]).filter(a=>a[3]&&a[3].ef&&a[3].tr).map(a=>({n:a[0],tr:a[3].tr,ef:a[3].ef}))};
 const mk=(c,lv,k=1)=>{const m=(1+.4*lv)*k,ab=abs(c);return{c,lv,hp:Math.round(c.hp*m*(CONFIG.vidaMult||1)),mx:Math.round(c.hp*m*(CONFIG.vidaMult||1)),atk:Math.round(c.atk*m),ab,ps:pas(c),cd:ab.map(()=>0),bf:[],u:0,id:Math.random().toString(36).slice(2,8)}};
@@ -1433,7 +1440,8 @@ function stT(B,first){const s=cur_(B);B.ac=first?(CONFIG.acaoIni||1):(CONFIG.aco
 function fin(B,why){B.over=1;if(B.p.length>2)return finG(B,why);const[a,b]=B.p;let w=a.life>b.life?0:a.life<b.life?1:-1;if(w<0){const h=s=>[...s.f,...s.r].filter(Boolean).reduce((x,u)=>x+u.hp,0);w=h(a)>h(b)?0:h(a)<h(b)?1:-1}B.w=w;B.why=why;return 1}
 const chk=B=>B.p.length>2?(new Set(B.p.map((s,i)=>s.life>0?B.tm[i]:-1).filter(t=>t>=0)).size<2?fin(B,"vidas"):0):B.p[0].life<1||B.p[1].life<1?fin(B,"vidas"):0;
 function hurt(B,t,d,src){if(d>0){SND.hit();try{cpxShake(d,t)}catch(e){}}const i=B.p.findIndex(x=>x.f.includes(t));if(i<0||t.hp<1)return;if(bs(t,"im")>0)d=0;if(src&&d>0){if(bs(t,"ev")>0&&Math.random()*100<bs(t,"ev"))d=0;else if(bs(src,"cr")>0&&Math.random()*100<bs(src,"cr"))d*=2}const sh=t.bf.find(b=>b.k=="sh"&&b.p>0);if(sh&&d>0){const a=Math.min(sh.p,d);sh.p-=a;d-=a}d=Math.min(d,t.hp);t.hp-=d;const dead=!t.hp;B.ev.push({k:"dmg",id:t.id,s:i,d,mx:t.mx,dead,r:src?src.c.r:t.c.r,el:src&&src.c.el,tr:t.c.r});if(d>0&&src){const l=bs(src,"ls"),rf=bs(t,"rf");if(l>0&&src.hp>0)src.hp=Math.min(src.mx,src.hp+Math.round(d*l/100));if(rf>0&&src!=t&&src.hp>0&&sdx(B,src)>=0)hurt(B,src,Math.max(1,Math.round(d*rf/100)),null)}if(!dead){d>0&&trg(B,t,i,"da");return}const s=B.p[i];s.f[s.f.indexOf(t)]=null;gy(s,t);s.life--;B.ev.push({k:"life",s:i,n:s.life});{const kk=B.p.length>2?(src?sdx(B,src):-1):1-i;if(kk>=0)B.kl[kk]++}lg(B,`💥 ${t.c.n} caiu · ${s.n} perde 1 vida`);trg(B,t,i,"mo");if(src){const j=sdx(B,src);j>=0&&trg(B,src,j,"ki")}}
-function aDraw(B){const s=cur_(B);if(B.ac<1||s.drew||cn_(s)>=6||!s.dk.length)return 0;const u=s.dk.shift();if(s.r.length<3)s.r.push(u);else s.f[s.f.indexOf(null)]=u;s.drew=1;B.ac--;B.hit=[];lg(B,`${s.n} comprou ${u.c.n}`);B.ev.push({k:"draw",s:B.t,id:u.id,r:u.c.r,el:u.c.el});s.f.includes(u)&&trg(B,u,B.t,"in");return 1}
+// COMPRAR não gasta ação e dá para comprar quantas quiser na sua vez; a carta vai sempre para o banco (reservas) e só entra em campo quando ativada (colocar gasta 1 ação). Banco cheio (3) ou baralho vazio = não compra.
+function aDraw(B){const s=cur_(B);if(s.r.length>=3||!s.dk.length)return 0;const u=s.dk.shift();s.r.push(u);B.hit=[];lg(B,`${s.n} comprou ${u.c.n}`);B.ev.push({k:"draw",s:B.t,id:u.id,r:u.c.r,el:u.c.el});return 1}
 function aPlace(B,u){const s=cur_(B),i=s.f.indexOf(null);if(B.ac<1||i<0||!s.r.includes(u))return 0;s.r.splice(s.r.indexOf(u),1);s.f[i]=u;B.ac--;B.hit=[];lg(B,`${s.n} colocou ${u.c.n} em campo`);B.ev.push({k:"place",s:B.t,id:u.id,r:u.c.r,el:u.c.el});trg(B,u,B.t,"in");return 1}
 function aAtk(B,u,t){const s=cur_(B);if(B.ac<1||u.u||!s.f.includes(u)||!tg_(B).includes(t))return 0;B.ac--;u.u=1;const d=dm(u,t);B.hit=[t.id];lg(B,`⚔ ${u.c.n} atacou ${t.c.n}: −${d}`);B.ev.push({k:"atk",a:u.id,t:t.id,s:B.t,r:u.c.r,el:u.c.el});hurt(B,t,d,u);u.hp>0&&trg(B,u,B.t,"at");chk(B);return 1}
 const tgt=(B,u,a,g)=>{const E=B.p.length>2?en_(B):foe_(B).f.filter(Boolean),A=cur_(B).f.filter(Boolean),rn=l=>l.length?[l[Math.random()*l.length|0]]:[],mn=(l,f)=>l.length?[l.reduce((m,x)=>f(x)<f(m)?x:m)]:[];return a=="s"?[u]:a=="E"?E:a=="A"?A:a=="r"?rn(E):a=="w"?mn(E,x=>x.hp):a=="x"?mn(E,x=>-x.hp):a=="q"?rn(A):a=="m"?mn(A,x=>x.hp/x.mx):a=="o"?A.filter(x=>x!=u):a=="T"?[...E,...A]:a=="e"?[E.includes(g.e)?g.e:E[0]].filter(Boolean):[A.includes(g.a)?g.a:A.includes(u)?u:A[0]].filter(Boolean)};
@@ -1449,10 +1457,11 @@ function aiActs(B){const s=cur_(B),E=tn(foe_(B).f.filter(Boolean)),A=s.f.filter(
    ab.ef.forEach(e=>{const T=e.a=="s"?[u]:e.a=="E"||"rwx".includes(e.a)?E:e.a=="A"||e.a=="o"||e.a=="T"?A:e.a=="e"?[g.e=(e.t=="d"?lo(E):hi(E))].filter(Boolean):[g.a=(e.t=="h"?lp(A):hi(A))].filter(Boolean);T.forEach(t=>{if(e.t=="d")sc+=ev(t,dm(u,t,e.m));else if(e.t=="h")sc+=Math.min(t.mx-t.hp,e.p?t.mx*e.p/100:e.v)/t.mx*130;else sc+=FX[e.t]&&FX[e.t].ai?FX[e.t].ai(e,t,u):26})});
    if(E.length||ab.ef.every(e=>!"eErwx".includes(e.a)))L.push({k:"s",u,i,g,sc:sc*.95})})});
  if(s.f.includes(null))s.r.forEach(u=>L.push({k:"p",u,sc:(A.length>1?30:A.length?62:220)+AT(u)/10}));
- if(!s.drew&&cn_(s)<6&&s.dk.length)L.push({k:"d",sc:(cn_(s)<4?36:20)+(!A.length&&!s.r.length?200:0)});
+ if(s.r.length<3&&s.dk.length)L.push({k:"d",sc:500}); // comprar é grátis: o rival compra antes de agir, até encher o banco
  return L}
-function aiMove(B){const L=aiActs(B),ep=B.o.m=="a"?Math.max(.02,(CONFIG.botErro??40)/100*(1-Math.min(B.o.k||0,7)/7)+.02*Math.min(B.o.k||0,7)/7)*(B.o.b?.5:1):[.6,.3,.02][B.o.ai||0];if(!L.length)return endT(B);L.forEach(x=>x.sc+=Math.random()*(B.o.m=="a"?Math.max(1.5,6-(B.o.k||0)*.6):6));const a=Math.random()<ep?L[Math.random()*L.length|0]:L.sort((x,y)=>y.sc-x.sc)[0];if(a.k=="a")aAtk(B,a.u,a.t);else if(a.k=="s")aSk(B,a.u,a.i,a.g);else if(a.k=="p")aPlace(B,a.u);else aDraw(B)}
-function aiRun(){const B=BT;if(!B||B.over||!B.ai||B.t!=1)return;setTimeout(()=>{if(BT!==B||B.over)return;const a0=B.ac,t0=B.t;aiMove(B);if(!B.over&&B.t==t0&&(B.ac<1||B.ac==a0))endT(B);zr();if(B.over)return zend();aiRun()},CONFIG.iaMs||1200)}
+function aiMove(B){const L=aiActs(B),ep=B.o.ie!=null?B.o.ie:B.o.m=="a"?Math.max(.02,(CONFIG.botErro??40)/100*(1-Math.min(B.o.k||0,7)/7)+.02*Math.min(B.o.k||0,7)/7)*(B.o.b?.5:1):[.6,.3,.02][B.o.ai||0];if(!L.length)return endT(B);L.forEach(x=>x.sc+=Math.random()*(B.o.ir!=null?B.o.ir:B.o.m=="a"?Math.max(1.5,6-(B.o.k||0)*.6):6));const a=Math.random()<ep?L[Math.random()*L.length|0]:L.sort((x,y)=>y.sc-x.sc)[0];if(a.k=="a")aAtk(B,a.u,a.t);else if(a.k=="s")aSk(B,a.u,a.i,a.g);else if(a.k=="p")aPlace(B,a.u);else aDraw(B)}
+function aiRun(fast){const B=BT;if(!B||B.over||!B.ai||B.t!=1)return;setTimeout(()=>{if(BT!==B||B.over)return;const a0=B.ac,t0=B.t,n0=cur_(B).dk.length;aiMove(B);const dr=B.t==t0&&B.ac==a0&&cur_(B).dk.length<n0; // compra grátis: não gasta ação, então não encerra a vez
+ if(!B.over&&B.t==t0&&!dr&&(B.ac<1||B.ac==a0))endT(B);zr();if(B.over)return zend();aiRun(dr)},fast?Math.min(550,CONFIG.iaMs||1200):(CONFIG.iaMs||1200))}
 // ----- DECK DE BATALHA (12 cartas DIFERENTES: a mesma carta nunca entra 2×, mesmo com várias cópias) e código para lutar com amigo -----
 const dkv=()=>{const u={};return(S.dk||[]).map(byId).filter(c=>c&&(S.inv[c.id]||0)>0&&!u[c.id]&&(u[c.id]=1))};
 const dkf=()=>{const d=dkv(),u={},p=[];d.forEach(c=>u[c.id]=1);ALL.forEach(c=>{if(!u[c.id]&&(S.inv[c.id]||0)>0)p.push(c)});p.sort((a,b)=>b.r-a.r||lvl(b)-lvl(a));while(d.length<12&&p.length)d.push(p.shift());S.dk=d.map(c=>c.id);save();return d};
@@ -1461,7 +1470,12 @@ const dkcode=()=>"DECK~"+dkv().map(c=>c.id+":"+lvl(c)).join(",");
 let DSEL=null;
 const dkIds=()=>dkv().map(c=>c.id),dkUsed=ids=>{const u={};ids.forEach(i=>u[i]=(u[i]||0)+1);return u};
 const dkSlot=(c,i)=>c?`<div class="dks" data-ds="${i}" style="--l:${lvl(c)}">${card(c)}<button class="dkx" data-dx="${i}" aria-label="Tirar ${c.n} do deck">×</button></div>`:`<div class="dks em" data-ds="${i}"><span>+</span></div>`;
-const dkPanel=()=>{const d=dkv();return `<div class="dkh"><b>Deck de batalha<small>12 cartas diferentes · 1 de cada</small></b><span class="${d.length==12?"ok":""}">${d.length}/12</span></div><div class="dkg">${Array.from({length:12},(_,i)=>dkSlot(d[i],i)).join("")}</div><div class="two"><button class="bt gh" data-dk="auto">Preencher</button><button class="bt gh" data-dk="clear">Limpar</button></div>`};
+// ----- 3 DECKS (A, B, C): o deck ATIVO fica sempre em S.dk (todo o resto do jogo continua lendo dali) · os outros ficam em S.dks · S.dka = letra ativa -----
+const DKS=["A","B","C"],
+dkTabs=m=>`<div class="dkt"${m?' style="margin:10px 0 0"':""}>${DKS.map(x=>`<button data-dkt="${x}" class="${(S.dka||"A")==x?"on":""}">Deck ${x}</button>`).join("")}</div>`,
+dkTrocar=x=>{const a=S.dka||"A";if(x==a||!DKS.includes(x))return;const cur=dkIds();S.dks=S.dks||{};S.dks[a]=cur;const novo=!S.dks[x];S.dk=(novo?cur:S.dks[x]).slice();S.dka=x;DSEL=null;save();tab=="a"?dkPaint():render(1);toast(novo?`<b>Deck ${x}</b> criado a partir do ${a} · mude as cartas à vontade`:`<b>Deck ${x}</b> ativo`)};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-dkt]");b&&dkTrocar(b.dataset.dkt)});
+const dkPanel=()=>{const d=dkv();return `${dkTabs()}<div class="dkh"><b>Deck de batalha<small>12 cartas diferentes · 1 de cada</small></b><span class="${d.length==12?"ok":""}">${d.length}/12</span></div><div class="dkg">${Array.from({length:12},(_,i)=>dkSlot(d[i],i)).join("")}</div><div class="two"><button class="bt gh" data-dk="auto">Preencher</button><button class="bt gh" data-dk="clear">Limpar</button></div>`};
 function dkBar(){const el=$("dka");if(!el)return;const c=DSEL&&byId(DSEL);el.hidden=!c;if(c)el.innerHTML=`<span><b>${c.n}</b> · Rank ${R[c.r][0]}</span><button class="bt" data-dk="use">Usar</button><button class="bt gh" data-dk="info">Ficha</button>`}
 function dkPaint(){
  const p=$("dkp");if(!p)return;if(DSEL&&!(S.inv[DSEL]>0))DSEL=null;
@@ -1609,24 +1623,31 @@ const zu=(u,en,act)=>{if(!u)return'<div class="zu ze"></div>';const B=BT,q=SEL&&
 const zs=(s,en)=>{const f=`<div class="zrow">${s.f.map(u=>zu(u,en,1)).join("")}</div>`,r=`<div class="zrow zrs">${[0,1,2].map(i=>zu(s.r[i],en,0)).join("")}</div>`;return `<div class="zs">${en?r+f:f+r}</div>`};
 
 function yhb(u){const pc=Math.max(0,Math.min(100,Math.round(u.hp/u.mx*100))),k=n=>n>999?(n/1e3).toFixed(1).replace(".",",").replace(",0","")+"k":n;return `<div class="yhp" style="--p:${pc}%;--hc:${pc>50?"#4fd36b":pc>25?"#f2b632":"#f4566a"}"><i></i><span>${u.u?"✓ ":""}❤ ${k(u.hp)}/${k(u.mx)}</span></div>`}
-function yinf(u){let e=document.getElementById("yinf");if(!e){e=document.createElement("div");e.id="yinf";document.body.append(e)}
-const bf=u.bf.map(b=>(BI[b.k]||"✦")+" "+((b.k=="at"||b.k=="df")?(b.p>0?"+":"")+b.p+"% ":"")+b.n+"t").join(" · ")||"nenhum",
-ab=u.ab.map((a,i)=>`<div class="yab"><b>✦ ${a.n}</b><small>${u.cd[i]?"recarrega em "+u.cd[i]+" turno"+(u.cd[i]>1?"s":""):"pronta"} · recarga ${a.rc}</small><p>${a.ef.map(x=>FX[x.t]&&FX[x.t].ds?FX[x.t].ds(x):"").filter(Boolean).join(" · ")}</p></div>`).join("")||"<p>Sem habilidades.</p>";
-e.innerHTML=`<div class="yib"><div class="yih"><b>${u.c.n}</b><span style="color:${R[u.c.r][1]}">Rank ${R[u.c.r][0]}</span></div><div class="yis"><span>❤ ${u.hp}/${u.mx}</span><span>⚔ ${Math.round(AT(u))}</span><span>${(u.el||u.c.el)?EL[u.el||u.c.el]:""}</span></div><p class="yif">Efeitos ativos: ${bf}</p>${ab}<button class="bt gh" data-yx="1">Fechar</button></div>`;e.onclick=ev=>{if(ev.target===e||ev.target.closest("[data-yx]"))e.remove()}}
+let YU=null;const ZH='<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta para ver status e habilidades</p>',zfnd=(B,id)=>{for(const x of B.p){const u=[...x.f,...x.r].find(c=>c&&c.id==id);if(u)return u}return null};
+// painel de status e habilidades (também ativas fora da sua vez): mostra as ativas e as passivas (gatilhos); se a carta mudar enquanto o painel está aberto, ele se atualiza
+function yinf(u){YU=u;let e=document.getElementById("yinf");const nw=!e;if(nw){e=document.createElement("div");e.id="yinf";document.body.append(e)}
+const fx=x=>{const X=FX[x.t];return X&&X.ds?X.ds(x)+(x.co&&CO[x.co]?` · se ${CO[x.co][0].replace("X",x.cv||50)}`:"")+(x.ch&&x.ch<100?` (${x.ch}% de chance)`:""):""},
+bf=u.bf.map(b=>(BI[b.k]||"✦")+" "+((b.k=="at"||b.k=="df")?(b.p>0?"+":"")+b.p+"% ":"")+b.n+"t").join(" · ")||"nenhum",
+ab=u.ab.map((a,i)=>`<div class="yab"><b>✦ ${a.n}</b><small>${u.cd[i]?"recarrega em "+u.cd[i]+" turno"+(u.cd[i]>1?"s":""):"pronta"} · recarga ${a.rc}</small><p>${a.ef.map(fx).filter(Boolean).join(" · ")}</p></div>`).join(""),
+ps=(u.ps||[]).map(p=>`<div class="yab"><b>✦ ${p.n}</b><small>${TRG[p.tr]||"Passiva"}</small><p>${p.ef.map(fx).filter(Boolean).join(" · ")}</p></div>`).join(""),
+h=`<div class="yib"><div class="yih"><b>${u.c.n}</b><span style="color:${R[u.c.r][1]}">Rank ${R[u.c.r][0]}</span></div><div class="yis"><span>❤ ${u.hp}/${u.mx}</span><span>⚔ ${Math.round(AT(u))}</span><span>${(u.el||u.c.el)?EL[u.el||u.c.el]:""}</span></div><p class="yif">Efeitos ativos: ${bf}</p>${ab+ps||"<p>Sem habilidades.</p>"}<button class="bt gh" data-yx="1">Fechar</button></div>`;
+if(e._h!==h){const o=e.querySelector(".yib"),st=o?o.scrollTop:0;e.innerHTML=h;e._h=h;const n=e.querySelector(".yib");if(n){if(!nw)n.style.animation="none";n.scrollTop=st}}
+e.onclick=ev=>{if(ev.target===e||ev.target.closest("[data-yx]")){e.remove();YU=null}}}
+function yref(){const e=document.getElementById("yinf");if(!e||!YU)return;if(!BT){e.remove();YU=null;return}yinf(YU)}
 function yrv(c){const s=c.sk||[],L=(Array.isArray(s[0])?s:[s]).filter(a=>a&&a[0]);return `<b class="yrn">${c.n}</b><span class="yrs">❤ ${c.hp||"?"} · ⚔ ${c.atk||"?"}</span>`+L.map(a=>`<span class="yra">✦ ${a[0]}${a[2]?": "+String(a[2]).slice(0,90):""}</span>`).join("")+"<br>"}
 function YCA(x){window.__yca=0;const ids=[...$("ahb").selectedOptions].map(o=>o.value),q=$("aqs").value;if(q!==""){const h=hxEx[+q],id="h"+rid();ADM.ab.push({id,n:h[0],q:"",rc:h[1],ef:JSON.parse(JSON.stringify(h[2])),tr:h[3],solo:x.id});ids.push(id)}if(ids.length){ADM.ca[x.id]=ids;window.__yca=1}}
 function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],s=cur_(B);let pn="";
  if(PASS)pn=`<div class="zres"><h2>Vez de ${B.p[B.t].n}</h2><p>Passe o celular.</p><button class="bt" data-z="go">Começar</button></div>`;
- else if(B.p.length>2&&A.life<1)pn=`<p class="zst">Você saiu da luta · acompanhando</p><button class="bk" data-z="leave">Sair da mesa</button>`;else if(B.lv&&B.t!=B.v)pn=`<p class="zst">Vez de ${B.p[B.t].n}…</p><button class="bk" data-z="sync">↻ Atualizar</button>${B.p.length>2?`<button class="bk" data-z="kick">Remover ${B.p[B.t].n} (ausente)</button>`:""}<button class="bk" data-z="quit">Desistir</button>`;else if(B.ai&&B.t==1)pn=`<p class="zst">Vez do rival…</p>`;
+ else if(B.p.length>2&&A.life<1)pn=`<p class="zst">Você saiu da luta · acompanhando</p>${ZH}<button class="bk" data-z="leave">Sair da mesa</button>`;else if(B.lv&&B.t!=B.v)pn=`<p class="zst">Vez de ${B.p[B.t].n}…<span id="zlt"></span></p>${ZH}${B.p.length==2?'<button class="bk" data-lvab id="zab" hidden>⏳ Amigo sumiu · vencer por abandono</button>':""}<button class="bk" data-z="sync">↻ Atualizar</button>${B.p.length>2?`<button class="bk" data-z="kick">Remover ${B.p[B.t].n} (ausente)</button>`:""}<button class="bk" data-z="quit">Desistir</button>`;else if(B.ai&&B.t==1)pn=`<p class="zst">Vez do rival…</p>${ZH}`;
  else{const u=SEL&&SEL.u,fo=tg_(B).length>0,emp=s.f.includes(null);
-  pn=`<p class="zst">${s.n} · ações ${"●".repeat(B.ac)}${"○".repeat(Math.max(0,(CONFIG.acoes||2)-B.ac))}${B.n==1&&B.t==B.st?" · quem começa faz 1 ação":""}</p>`;
+  pn=`<p class="zst">${s.n} · ações ${"●".repeat(B.ac)}${"○".repeat(Math.max(0,(CONFIG.acoes||2)-B.ac))}${B.n==1&&B.t==B.st?" · quem começa faz 1 ação":""}<span id="zlt"></span></p>`;
   if(SEL&&SEL.m=="a")pn+=`<p class="zst">Toque no inimigo que vai apanhar</p><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else if(SEL&&SEL.m=="s")pn+=`<p class="zst">Escolha o alvo (${SEL.q[0]=="e"?"inimigo":"aliado"})</p><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else if(u&&!SEL.r)pn+=`${u.ab.length>1?`<p class="zst" style="text-transform:none;letter-spacing:.03em">Escolha: atacar ou uma das ${u.ab.length} habilidades (cada uma tem sua recarga)</p>`:""}<div class="two"${u.ab.length>1?` style="grid-template-columns:1fr"`:""}><button class="bt${!u.u&&fo&&B.ac?"":" off"}" data-z="atk">Atacar</button>${u.ab.map((a,i)=>`<button class="bt cy${u.cd[i]||!B.ac?" off":""}" data-z="k${i}">✦ ${a.n}${u.cd[i]?` (${u.cd[i]})`:""}</button>`).join("")}</div><button class="bt gh" data-z="cancel">Cancelar</button>`;
-  else if(u)pn+=`<button class="bt${emp&&B.ac?"":" off"}" data-z="place">Colocar em campo</button><button class="bt gh" data-z="cancel">Cancelar</button>`;
+  else if(u)pn+=`<button class="bt${emp&&B.ac?"":" off"}" data-z="place">Colocar em campo · 1 ação</button><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else pn+=`<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta para agir · toque de novo (ou no inimigo) para ver status e habilidades</p>`;
-  pn+=`<div class="two"><button class="bt gh${!B.ac||s.drew||cn_(s)>=6||!s.dk.length?" off":""}" data-z="draw">Comprar · ${s.dk.length}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
- fxSnap();ME=me;zb.innerHTML=B.p.length>2?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div><div class="zc">${pn}</div>`;fxFlush()}
+  pn+=`<div class="two"><button class="bt gh${s.r.length>=3||!s.dk.length?" off":""}" data-z="draw">${s.r.length>=3?"Banco cheio":!s.dk.length?"Baralho vazio":"Comprar grátis"}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
+ fxSnap();ME=me;zb.innerHTML=B.p.length>2?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div><div class="zc">${pn}</div>`;fxFlush();yref()}
 function zpost(){const B=BT;SEL=null;if(!B.over&&B.ac<1)endT(B);if(B.over)return zend();if(!B.ai&&!B.lv&&B.t!=B.v)PASS=1;zr();aiRun()}
 function usk(){const B=BT,u=SEL.u,i=SEL.i,g=SEL.g;if(aSk(B,u,i,g)&&B.t==0)bump("abil");zpost()}
 function zc(a){const B=BT;if(!B)return;
@@ -1635,10 +1656,11 @@ function zc(a){const B=BT;if(!B)return;
   if(a=="sync")return window.lvSync&&window.lvSync();
   if(a=="leave"){window.mzLeave&&window.mzLeave();BT=null;zb.hidden=true;PASS=0;upd();return render(1)}
   if(a=="kick")return ask("Remover "+B.p[B.t].n+"?","Use só se "+B.p[B.t].n+" sumiu da partida.","Remover",()=>{const s=B.t;if(B.over||!window.LV||s==B.v)return;window.lvq&&window.lvq(s);qtL(B,s);zpost()},1);
+ if(a[0]=="u"&&!B.over&&!PASS&&((B.ai&&B.t!=0)||(B.lv&&B.t!=B.v))){const x=zfnd(B,a.slice(2));x&&yinf(x);return} // fora da sua vez: toque em qualquer carta (sua ou do rival) para ver status e habilidades
  if(B.over||PASS||(B.ai&&B.t!=0)||(B.lv&&B.t!=B.v))return;
  const s=cur_(B),f=B.p.length>2?{f:en_(B)}:foe_(B);
  if(a=="cancel"){SEL=null;return zr()}
- if(a=="draw"){if(!aDraw(B))toast("Não dá para comprar agora · só 1 por turno, e o campo não pode estar cheio.");return zpost()}
+ if(a=="draw"){if(!aDraw(B))toast(s.r.length>=3?"Banco cheio · coloque uma carta em campo (gasta 1 ação) para abrir espaço.":"O baralho acabou · não há mais cartas para comprar.");return zpost()}
  if(a=="end")return B.ac>0?ask("Passar o turno?","As ações que sobraram serão perdidas.","Passar",()=>{endT(B);zpost()}):(endT(B),zpost());
  if(a=="atk"&&SEL&&!SEL.u.u){SEL.m="a";return zr()}
  if(a=="place"&&SEL){aPlace(B,SEL.u);return zpost()}
@@ -1646,7 +1668,7 @@ function zc(a){const B=BT;if(!B)return;
  if(a[0]=="u"){const id=a.slice(2),own=[...s.f,...s.r].find(u=>u&&u.id==id),en=f.f.find(u=>u&&u.id==id);
   if(SEL&&SEL.m=="a"){if(en&&aAtk(B,SEL.u,en))zpost();return}
   if(SEL&&SEL.m=="s"){const k=SEL.q[0];if(k=="e"&&en)SEL.g.e=en;else if(k=="a"&&s.f.includes(own))SEL.g.a=own;else return;SEL.q.shift();return SEL.q.length?zr():usk()}
-  if(own){if(SEL&&SEL.u==own&&!SEL.m)return yinf(own);SEL={u:own,r:s.r.includes(own)};zr()}else{const x=[...f.f,...(f.r||[])].find(u=>u&&u.id==id);x&&yinf(x)}}}
+  if(own){if(SEL&&SEL.u==own&&!SEL.m)return yinf(own);SEL={u:own,r:s.r.includes(own)};zr()}else{const x=zfnd(B,id);x&&yinf(x)}}}
 function zend(){const B=BT;if(B.zq)return;B.zq=1;const d=B.ev.length?1300:0;if(d)zr();setTimeout(()=>{if(BT===B)zend2()},d)}
 const gifts=()=>Object.values(S.gp||{}).reduce((a,b)=>a+(+b||0),0);
 // RESULTADO DA BATALHA: só o essencial · troféus ganhos ou perdidos (tr) e, quando houver, pacotes e avisos curtos (rw). Fragmentos e demais prêmios continuam sendo dados, só não aparecem aqui.
@@ -1678,7 +1700,7 @@ zb.onclick=e=>{const b=e.target.closest("[data-z]");if(!b)return;const a=b.datas
 // ----- ABA BATALHA -----
 const btl=()=>{const h=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Batalha</span></div>`,nt=t=>`<p class="mut ctr" style="margin:0 0 14px;letter-spacing:.04em;text-transform:none">${t}</p>`;
  const k=S.ar,nx=TR[k+1],fd=S.fd.d===day()?S.fd.n:0;
- return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button>${bossOK()?`<button class="bt cy" data-bz="boss" style="margin-top:10px">👑 Desafiar o chefe</button>`:""}<button class="bt gh" data-bz="deck" style="margin-top:10px">Meu deck · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
+ return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button>${bossOK()?`<button class="bt cy" data-bz="boss" style="margin-top:10px">👑 Desafiar o chefe</button>`:""}${dkTabs(1)}<button class="bt gh" data-bz="deck" style="margin-top:10px">Deck ${S.dka||"A"} · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
  `<details class="fd"><summary>Lutar com amigo</summary><div class="cvb"><p>No mesmo celular. Seu amigo manda o código do deck dele. Vencendo: ${gem}<b>${CONFIG.amigoFrag}</b> · hoje <b>${Math.min(fd,3)}/3</b> lutas · sem troféus.</p><input class="cdi" id="fcd" placeholder="Cole o código do deck do amigo" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="bt cy" data-bz="friend" style="margin-top:10px">Lutar com amigo</button><button class="bt gh" data-bz="mycode" style="margin-top:10px">Copiar o código do meu deck</button></div></details>`};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-bz]");if(!b)return;const a=b.dataset.bz;
  if(a=="fight")startArena();else if(a=="boss")startArena(1);else if(a=="deck"){if(!dkv().length)dkf();DSEL=null;tab="a";render()}else if(a=="back"){BV="";render(1)}else if(a=="auto"){dkf();render(1)}
@@ -1778,7 +1800,7 @@ adxD=(i,t,h)=>`<details class="fd" id="ds_${i}"><summary>${t}</summary>${h}</det
 adxB=(k,t,c="")=>`<button class="bt ${c}" data-k="@${k}">${t}</button>`,
 adxS=(i,l,h)=>cpFl(l,`<select id="${i}">${h}</select>`),
 adxT=(i,l,v,r)=>cpFl(l,`<textarea id="${i}" rows="${r}">${v}</textarea>`),
-adxL={vidas:"Vidas de cada jogador na luta",acoes:"Ações por turno",acaoIni:"Ações do primeiro turno",turnos:"Máximo de turnos da luta",iaMs:"Tempo de reação do rival (ms)",danoMult:"Dano de todas as cartas na luta (×)",vidaMult:"Vida de todas as cartas na luta (×)",admPin:"PIN do modo ADM",limiteDia:"Lutas por dia que dão prêmio",pacVit:"Vitórias para ganhar 1 pacote",tw:"Troféus ganhos por vitória",tl:"Troféus perdidos por derrota",mk:"Troféus por marco (e fragmentos do marco)",mkPacote:"Troféus por pacote de marco",mkMax:"Teto de troféus dos marcos",chefeFinal:"Troféus do chefe final",chefe:"Força do chefe (×)",diaria:"Fragmentos do login diário",amigoFrag:"Fragmentos por luta com amigo",amigoDia:"Lutas com amigo por dia",derrota:"Fragmentos por derrota",nDia:"Missões diárias por dia",mDia:"Fragmentos por missão diária",mSem:"Fragmentos por missão semanal",mSemPac:"Pacotes por missão semanal",mDiaBonus:"Missões diárias para 1 pacote bônus",arenaPac:"Pacotes do chefe da arena 1",arenaPacMais:"Pacotes a mais por arena",arenaFrag:"Fragmentos do chefe × nº da arena",campPac:"Pacotes do Campeão",campFrag:"Fragmentos do Campeão",gratisLivre:"Pacotes do dia sem jogar",gratisJogar:"Pacotes do dia por batalha",imgKB:"Tamanho máx. da imagem (KB)",arf0:"Fragmentos da 1ª vitória de arena",arfK:"+ fragmentos a cada arena",fusArena:"Arena que libera as fusões (1 = livre)",sArena:"Arena que libera o rank S e acima (1 = livre)",fusMult:"Preço das fusões (× o padrão)",faixa:"Folga da faixa de status por rank (± %)",som:"Sons do jogo (1 = ligado, 0 = desligado)",musica:"Música de fundo (1 = ligada, 0 = desligada)",botErro:"Erro dos bots na Arena 1 (% de jogadas ao acaso · cai até 2% na Arena 8)",botForca:"Força extra dos bots por arena (%)",botNivel:"Nível de fusão dos bots (× · 0 = sem fusão)"},
+adxL={vidas:"Vidas de cada jogador na luta",acoes:"Ações por turno",acaoIni:"Ações do primeiro turno",turnos:"Máximo de turnos da luta",iaMs:"Tempo de reação do rival (ms)",turnoSeg:"Duelo ao vivo · segundos por turno (0 = sem limite)",sumiuSeg:"Duelo ao vivo · segundos extras até poder vencer por abandono",danoMult:"Dano de todas as cartas na luta (×)",vidaMult:"Vida de todas as cartas na luta (×)",admPin:"PIN do modo ADM",limiteDia:"Lutas por dia que dão prêmio",pacVit:"Vitórias para ganhar 1 pacote",tw:"Troféus ganhos por vitória",tl:"Troféus perdidos por derrota",mk:"Troféus por marco (e fragmentos do marco)",mkPacote:"Troféus por pacote de marco",mkMax:"Teto de troféus dos marcos",chefeFinal:"Troféus do chefe final",chefe:"Força do chefe (×)",diaria:"Fragmentos do login diário",amigoFrag:"Fragmentos por luta com amigo",amigoDia:"Lutas com amigo por dia",derrota:"Fragmentos por derrota",nDia:"Missões diárias por dia",mDia:"Fragmentos por missão diária",mSem:"Fragmentos por missão semanal",mSemPac:"Pacotes por missão semanal",mDiaBonus:"Missões diárias para 1 pacote bônus",arenaPac:"Pacotes do chefe da arena 1",arenaPacMais:"Pacotes a mais por arena",arenaFrag:"Fragmentos do chefe × nº da arena",campPac:"Pacotes do Campeão",campFrag:"Fragmentos do Campeão",gratisLivre:"Pacotes do dia sem jogar",gratisJogar:"Pacotes do dia por batalha",imgKB:"Tamanho máx. da imagem (KB)",arf0:"Fragmentos da 1ª vitória de arena",arfK:"+ fragmentos a cada arena",fusArena:"Arena que libera as fusões (1 = livre)",sArena:"Arena que libera o rank S e acima (1 = livre)",fusMult:"Preço das fusões (× o padrão)",faixa:"Folga da faixa de status por rank (± %)",som:"Sons do jogo (1 = ligado, 0 = desligado)",musica:"Música de fundo (1 = ligada, 0 = desligada)",botErro:"Erro dos bots na Arena 1 (% de jogadas ao acaso · cai até 2% na Arena 8)",botForca:"Força extra dos bots por arena (%)",botNivel:"Nível de fusão dos bots (× · 0 = sem fusão)"},
 adxPo=()=>adxO(P,p=>`<option value="${p.id}">${p.e} ${p.n}</option>`),
 adxCo=()=>adxO(ALL,c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`),
 adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",`<option value="__">➕ Nova carta…</option>`+adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("eel","Elemento",ELOPT)+adxS("ek2","Pacote",adxPo()+'<option value="ind">🎉 Sem pacote · carta especial</option>')+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+adxI("ebk","Verso desta carta (link da imagem 3:4 · vazio = o do pacote)")+cpFl("Ou envie a imagem do verso desta carta",'<input id="fbk" type="file" accept="image/*">')+adxI("ega","Ganha de prêmio ao chegar na arena (0 = não ganha)","","number")+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+`<p class="mut" style="margin:12px 0 2px">✨ Habilidades desta carta (desmarque para remover)</p><div id="qab">${qabHtml(ALL[0]&&ALL[0].id)}</div>`+adxS("qad","",`<option value="">➕ Adicionar habilidade…</option><optgroup label="Modelos prontos (só desta carta)">${hxEx.map((h,i)=>`<option value="m${i}">${h[0]}</option>`).join("")}</optgroup><optgroup label="Biblioteca">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="l${a.id}">${a.n}</option>`).join("")}</optgroup>`)+`<label class="yck"><input type="checkbox" id="adr2" checked> 📦 Se for carta nova: guardar sem lançar</label>`+adxB("sc","💾 Salvar carta e habilidades")+adxB("dc","Excluir carta","gh")),
@@ -2052,7 +2074,7 @@ if(!document.querySelector('meta[name="theme-color"]')){const t=document.createE
 const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_ev:["🎉","Eventos","Bônus, presentes e aviso na tela inicial"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina o elemento de cada carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"]},
 FT={ds_ev:["@sev","Salvar evento"],ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"]},
 GR={ds_r:[["Login e pacotes",["cf_diaria","cf_pacVit","cf_gratisLivre","cf_gratisJogar"]],["Fragmentos e preços",["rfr","rcu","rini","rrc","cf_fusMult"]],["Liberações por arena",["cf_fusArena","cf_sArena"]],["Faixa de status por rank",["cf_faixa"]],["Bots de batalha",["cf_botErro","cf_botForca","cf_botNivel"]]],
-ds_b:[["Troféus",["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax"]],["Prêmios das lutas",["cf_limiteDia","cf_derrota","cf_arf0","cf_arfK","cf_amigoFrag","cf_amigoDia"]],["Chefes e campeão",["cf_chefe","cf_chefeFinal","cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag"]],["Arenas e força das cartas",["rtr","ran","rst"]]],
+ds_b:[["Troféus",["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax"]],["Prêmios das lutas",["cf_limiteDia","cf_derrota","cf_arf0","cf_arfK","cf_amigoFrag","cf_amigoDia"]],["Duelo ao vivo",["cf_turnoSeg","cf_sumiuSeg"]],["Chefes e campeão",["cf_chefe","cf_chefeFinal","cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag"]],["Arenas e força das cartas",["rtr","ran","rst"]]],
 ds_m:[["Missões",["cf_nDia","cf_mDia","cf_mSem","cf_mSemPac","cf_mDiaBonus"]],["Listas de missões",["rdp","rwp","rmc"]]],
 ds_s:[["Sistema",["cf_admPin","cf_imgKB","cf_som","cf_musica"]],["Conteúdo do jogo",["cc","fcc"]]],
 ds_k:[["Pacote em destaque",["ad"]]]},
@@ -2556,12 +2578,13 @@ async function enviar(){const p=PL[CP],a=byId(g("tm")&&g("tm").value),b=byId(g("
 async function aceitar(id){const t=TIN.find(x=>x.id==id),a=byId(t&&t.o),b=byId(t&&t.q);if(!t||!a||!b)return toast("Troca inválida.");
  if(extra(b)<1)return toast(`Você não tem mais <b>${esc(b.n)}</b> repetida · recuse a troca.`);
  try{await updateDoc(doc(db,"trocas",id),{s:"ok"})}catch(e){return warn("troca",e)}
- S.ot=S.ot||{};S.inv[b.id]--;S.inv[a.id]=(S.inv[a.id]||0)+1;S.ot[id]=1;t.s="ok";save();toast(`🔁 Você recebeu <b>${esc(a.n)}</b>!`);bt()||render(1);jogadores()}
+ S.ot=S.ot||{};S.inv[b.id]--;S.inv[a.id]=(S.inv[a.id]||0)+1;S.ot[id]=1;S.nt=(S.nt||0)+1;t.s="ok";save();toast(`🔁 Você recebeu <b>${esc(a.n)}</b>!`);bt()||render(1);jogadores()}
 async function fim(id,s){const t=TIN.find(x=>x.id==id)||TOUT.find(x=>x.id==id);try{await updateDoc(doc(db,"trocas",id),{s})}catch(e){return warn("troca",e)}if(t)t.s=s;jogadores()}
-function procOut(){S.ot=S.ot||{};let ch=0;for(const t of TOUT){if(S.ot[t.id])continue;if(t.s=="ok"){S.inv[t.q]=(S.inv[t.q]||0)+1;toast(`🔁 <b>${esc(t.pn)}</b> aceitou! Você recebeu <b>${cn(t.q)}</b>`)}else if(t.s=="no"||t.s=="ca"){S.inv[t.o]=(S.inv[t.o]||0)+1;t.s=="no"&&toast(`<b>${esc(t.pn)}</b> recusou · sua carta voltou`)}else continue;S.ot[t.id]=1;ch=1}if(ch){save();bt()||render(1)}}
+function procOut(){S.ot=S.ot||{};let ch=0;for(const t of TOUT){if(S.ot[t.id])continue;if(t.s=="ok"){S.inv[t.q]=(S.inv[t.q]||0)+1;S.nt=(S.nt||0)+1;toast(`🔁 <b>${esc(t.pn)}</b> aceitou! Você recebeu <b>${cn(t.q)}</b>`)}else if(t.s=="no"||t.s=="ca"){S.inv[t.o]=(S.inv[t.o]||0)+1;t.s=="no"&&toast(`<b>${esc(t.pn)}</b> recusou · sua carta voltou`)}else continue;S.ot[t.id]=1;ch=1}if(ch){save();bt()||render(1)}}
+function nTr(){const n=TIN.concat(TOUT).filter(t=>t.s=="ok").length;if(n>(S.nt||0)){S.nt=n;save();bt()||render(1)}}
 function watchTr(){const c=collection(db,"trocas"),m=s=>s.docs.filter(d=>!d.metadata.hasPendingWrites).map(d=>({id:d.id,...d.data()}));
- onSnapshot(query(c,where("para","==",U.uid)),s=>{TIN=m(s);chip()},e=>warn("trocas",e));
- onSnapshot(query(c,where("de","==",U.uid)),s=>{TOUT=m(s);procOut();chip()},e=>warn("trocas",e))}
+ onSnapshot(query(c,where("para","==",U.uid)),s=>{TIN=m(s);nTr();chip()},e=>warn("trocas",e));
+ onSnapshot(query(c,where("de","==",U.uid)),s=>{TOUT=m(s);procOut();nTr();chip()},e=>warn("trocas",e))}
 
 /*LV0*/
 window.LV=null;let DW=null,DID=null;const INV={};
@@ -2572,22 +2595,23 @@ const prng=a=>()=>{let t=a+=1831565813;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(
  if(mine&&rec&&(n=="endT"?(ex||(au&&(B.t!=B.v||B.over))):r)){const c=rec.apply(null,arguments);if(n=="endT"&&!ex)c.k="ae";c.s=B.v;lvSend(c)}return r}};
 // o sorteio do motor usa uma semente comum: os dois celulares jogam as mesmas ações e chegam ao mesmo resultado
 eng("nb");eng("aDraw",()=>({k:"dr"}));eng("aPlace",(B,u)=>({k:"pl",u:u.id}));eng("aAtk",(B,u,t)=>({k:"at",u:u.id,t:t.id}));eng("aSk",(B,u,i,g)=>({k:"sk",u:u.id,i,e:g&&g.e&&g.e.id,a:g&&g.a&&g.a.id}));eng("endT",()=>({k:"en"}));
-function lvSend(c){const L=window.LV;if(!L)return;c.n=L.qn++;updateDoc(doc(db,L.g?"mesas":"duelos",L.id),{cm:arrayUnion(JSON.stringify(c))}).catch(e=>warn("duelo",e))}
+function lvSend(c){const L=window.LV;if(!L)return;c.n=L.qn++;c.t=L.lt=Date.now();if(!L.ap)L.to=0;lvSave();updateDoc(doc(db,L.g?"mesas":"duelos",L.id),{cm:arrayUnion(JSON.stringify(c))}).catch(e=>warn("duelo",e))}
 // botão "↻ Atualizar" da tela de espera: busca as jogadas do outro agora
 window.lvSync=async()=>{const L=window.LV;if(!L)return;try{const d=(await getDoc(doc(db,L.g?"mesas":"duelos",L.id))).data(),q0=L.qn;if(!d)return toast("Duelo não encontrado");lvCm(d);toast(L.qn>q0?"↻ Atualizado":"Tudo em dia · esperando o outro jogar")}catch(e){warn("duelo",e)}};
 // enquanto espera o outro jogar, confere a cada 5 s se há jogada nova (caso o aviso em tempo real se perca, ex.: app em segundo plano)
 setInterval(()=>{const L=window.LV,B=bt();if(!L||!B||!B.lv||B.over||B.t==B.v||document.hidden||L.pf)return;L.pf=1;getDoc(doc(db,L.g?"mesas":"duelos",L.id)).then(sn=>{const d=sn.data();if(d&&window.LV===L)lvCm(d)}).catch(()=>{}).finally(()=>{L.pf=0})},5000);
 window.lvq=s=>window.LV&&lvSend({k:"qt",s});
-function rply(c){const B=BT,L=window.LV;if(!B||!L||B.over)return;L.rm=1;try{
+function rply(c){const B=BT,L=window.LV;if(!B||!L||B.over)return;L.rm=1;L.lt=Date.now();lvSave();try{
  if(c.k=="en"||c.k=="ae"){if(c.s==null||B.t==c.s)endT(B);return zpost()} // se a vez já passou por aqui, ignora (não passa duas vezes)
- if(c.k!="qt"&&c.s!=null&&B.t!=c.s)for(let z=0;z<B.p.length&&B.t!=c.s&&!B.over;z++)endT(B); // celulares fora de sincronia: devolve a vez a quem está jogando
+ if(c.k!="qt"&&c.k!="ab"&&c.s!=null&&B.t!=c.s)for(let z=0;z<B.p.length&&B.t!=c.s&&!B.over;z++)endT(B); // celulares fora de sincronia: devolve a vez a quem está jogando
  const s=cur_(B),o=i=>[...s.f,...s.r].find(u=>u&&u.id==i),e=i=>(B.p.length>2?en_(B):foe_(B).f).find(u=>u&&u.id==i),k=c.k;
  if(k=="qt"){if(B.p.length>2){qtS(B,c.s);return zpost()}B.over=1;B.w=B.v;B.why="desistiu";return zend()}
+  if(k=="ab"){B.over=1;B.w=1-c.s;B.why="abandono";return zend()}
  if(k=="dr")aDraw(B);else if(k=="pl")aPlace(B,o(c.u));else if(k=="at")aAtk(B,o(c.u),e(c.t));else if(k=="sk")aSk(B,o(c.u),c.i,{e:e(c.e),a:o(c.a)});else if(k=="en")endT(B);
  zpost()}catch(x){console.warn("duelo",x)}finally{L.rm=0}}
 function lvCm(d){const L=window.LV;if(!L||!d.cm)return;d.cm.map(x=>{try{return JSON.parse(x)}catch(e){}}).filter(Boolean).sort((a,b)=>a.n-b.n).forEach(c=>{if(c.n==L.qn){L.q.push(c);L.qn++}});pump()}
 function pump(){const L=window.LV;if(!L||L.pb)return;L.pb=1;const nx=()=>{const c=L.q.shift();if(!c||window.LV!==L){L.pb=0;return}rply(c);setTimeout(nx,c.k=="en"?400:700)};nx()}
-function lvStart(id,d,me){const A=prs(d.da),C=prs(d.db);if(!A||!C)return toast("Deck inválido · duelo cancelado");window.LV={id,me,qn:0,q:[],d:0,rr:prng(+d.sd||1)};g("cpm")&&g("cpm").remove();zgo({n:d.an,u:A},{n:d.bn,u:C},{m:"f"})}
+function lvStart(id,d,me){const A=prs(d.da),C=prs(d.db);if(!A||!C)return toast("Deck inválido · duelo cancelado");window.LV={id,me,qn:0,q:[],d:0,rr:prng(+d.sd||1),lt:Date.now()};lvSave();g("cpm")&&g("cpm").remove();zgo({n:d.an,u:A},{n:d.bn,u:C},{m:"f"})}
 /*LV1*/
 function lvWatch(id){DW&&DW();DW=onSnapshot(doc(db,"duelos",id),sn=>{const d=sn.data();if(!d)return;if(!window.LV){if(d.s=="p"&&d.a==U.uid&&d.db){DID=null;lvStart(id,d,0)}else if(d.s=="x"){DW&&DW();DW=null;DID=null;g("cpm")&&g("cpm").remove();toast(`⚔️ <b>${esc(d.bn)}</b> recusou o duelo`)}}else lvCm(d)},e=>warn("duelo",e))}
 async function desafiar(i){const p=PL[i],da=stats().dk;if(!p)return;if(!da)return toast("Você precisa de 12 cartas para duelar.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
@@ -2637,9 +2661,46 @@ function mzSnap(id,d){if(window.LV&&window.LV.g)return lvCm(d);
  if(d.s=="p"&&d.st&&d.st.includes(U.uid)&&!window.LV&&!bt())mzBegin(id,d)}
 // cada jogador entra com o deck de 12 cartas e a luta roda no motor normal do jogo, com a mesma semente nos celulares
 function mzBegin(id,d){const sd=d.st.map(u=>({n:d.j[u]&&d.j[u].n||"?",u:prs(d.j[u]&&d.j[u].dk)}));if(sd.some(x=>!x.u))return toast("Deck inválido · mesa cancelada");
- window.LV={id,me:d.st.indexOf(U.uid),qn:0,q:[],d:0,rr:prng(+d.sd||1),g:1};g("cpm")&&g("cpm").remove();
+ window.LV={id,me:d.st.indexOf(U.uid),qn:0,q:[],d:0,rr:prng(+d.sd||1),g:1,lt:Date.now()};lvSave();g("cpm")&&g("cpm").remove();
  zgo(sd,null,{m:"g",tm:d.m=="d"?[0,1,0,1]:sd.map((_,i)=>i)})}
 window.mzLeave=()=>{MZW&&MZW();MZW=null;MZH="";if(window.LV&&window.LV.g)window.LV=null};
+/*LV2*/
+// ===== RECONECTAR O DUELO AO VIVO + TEMPO POR TURNO =====
+// A luta é só: semente + deck dos dois + lista de jogadas (cm). Ao recarregar a página (ou se o app fechar), o jogo lembra qual duelo estava aberto,
+// baixa a lista de jogadas e REFAZ a luta de uma vez, sem animação, no ponto em que parou. Tempo por turno: CONFIG.turnoSeg (0 = sem limite) e CONFIG.sumiuSeg.
+const LVK="cp_lv",TSEG=()=>Math.max(0,+CONFIG.turnoSeg||0),SSEG=()=>Math.max(10,+CONFIG.sumiuSeg||45);
+function lvSave(){const x=window.LV;if(!x||typeof U==="undefined"||!U)return;try{ls(LVK,JSON.stringify({id:x.id,me:x.me,g:x.g?1:0,u:U.uid,t:Date.now()}))}catch(e){}}
+function lvDrop(){try{L.removeItem(LVK)}catch(e){}}
+function lvFast(d){const x=window.LV,B=bt();if(!x||!B||!d||!d.cm)return;const z1=zr;zr=function(){};
+ try{d.cm.map(q=>{try{return JSON.parse(q)}catch(e){}}).filter(Boolean).sort((a,b)=>a.n-b.n).forEach(c=>{if(B.over||bt()!==B||c.n!=x.qn)return;x.qn++;rply(c);x.lt=c.t||Date.now()})}finally{zr=z1}
+ B.ev=[];zr()}
+async function lvResume(){
+ if(window.LV||bt())return;let r=null;try{r=JSON.parse(L.getItem(LVK)||"null")}catch(e){}
+ if(!r||r.u!==U.uid||!r.id||Date.now()-(r.t||0)>18e5)return lvDrop();
+ const d=(await getDoc(doc(db,r.g?"mesas":"duelos",r.id))).data();if(window.LV||bt())return;
+ if(!d||(d.s!="p"&&d.s!="e")||!Array.isArray(d.cm))return lvDrop();
+ if(r.g)mzBegin(r.id,d);else lvStart(r.id,d,r.me);
+ const x=window.LV;if(!x)return lvDrop();
+ lvFast(d);if(bt()&&bt().t==bt().v)x.lt=Date.now();
+ if(r.g)mzWatch(r.id);else lvWatch(r.id);
+ toast("🔄 Duelo retomado de onde parou")}
+function lvTick(){
+ const x=window.LV,B=bt();if(!x||!B||!B.lv||B.over||B.zq)return;const T=TSEG();if(!T)return;
+ const gone=Math.floor((Date.now()-(x.lt||Date.now()))/1000),left=T-gone,e=g("zlt"),ab=g("zab");
+ if(e){e.textContent=" · ⏱ "+Math.floor(Math.max(0,left)/60)+":"+String(Math.max(0,left)%60).padStart(2,"0");e.className="zlt"+(left<=10?" lo":"")}
+ if(B.t==B.v){if(left<=0&&!x.ap)lvAuto(B,x)}else if(ab)ab.hidden=!(B.p.length==2&&gone>=T+SSEG())}
+// acabou o tempo da SUA vez: passa o turno · duas vezes seguidas sem jogar = desiste (como o botão Desistir)
+function lvAuto(B,x){x.ap=1;try{x.to=(x.to||0)+1;
+ if(x.to>=2){toast("⏱ Você ficou sem jogar duas vezes · a luta foi encerrada");if(B.p.length>2){window.lvq(B.v);qtL(B,B.v);zpost()}else{window.lvq();B.over=1;B.w=1-B.v;B.why="desistiu";zend()}return}
+ toast("⏱ Tempo esgotado · turno passado");endT(B);zpost()}finally{x.ap=0}}
+// o amigo (1x1) sumiu: passado o tempo + a folga, quem espera pode encerrar com vitória (a jogada "ab" também chega ao outro, se ele voltar)
+function lvAband(){const x=window.LV,B=bt();if(!x||!B||B.over||B.p.length!=2||B.t==B.v||Date.now()-(x.lt||0)<(TSEG()+SSEG())*1000)return;
+ ask("Vencer por abandono?","Seu amigo não jogou dentro do tempo. A luta termina e você vence.","Vencer",()=>{const b=bt();if(!b||b.over||b.t==b.v||window.LV!==x)return;
+  lvSend({k:"ab",s:b.t});updateDoc(doc(db,"duelos",x.id),{s:"e"}).catch(()=>{});b.over=1;b.w=b.v;b.why="abandono";zend()})}
+document.addEventListener("click",e=>{if(e.target.closest("[data-lvab]"))lvAband()});
+setInterval(lvTick,1000);const zrA=zr;zr=function(){const r=zrA.apply(this,arguments);try{lvTick()}catch(e){}return r};
+{const zA=window.zend2;if(typeof zA=="function")window.zend2=function(){const r=zA.apply(this,arguments);if(!window.LV)lvDrop();return r}}
+{const mA=window.mzLeave;window.mzLeave=function(){lvDrop();return mA.apply(this,arguments)}}
 
 function login(msg){
  let o=g("cpl");if(!o){o=document.createElement("div");o.id="cpl";o.style.cssText="position:fixed;inset:0;z-index:99999;background:#0b0a12f2;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff;text-align:center";document.body.append(o)}
@@ -2672,7 +2733,7 @@ async function start(u){
  let n=p.exists()?p.data().n:"";
  if(!n){n=(NK||prompt("Escolha seu apelido (seus amigos vão ver):",(u.displayName||"").split(" ")[0])||"Jogador").trim().slice(0,20);setDoc(doc(db,"perfis",id),{n})}
  U=u;ME.n=n;ME.f=p.exists()?p.data().f||"":"";if(L.getItem("colprimata_save")&&(!c||L.cp_d))pushSave();
- g("cpl")&&g("cpl").remove();chip();watchTr();watchDu();try{watchMz()}catch(e){console.warn("mesa",e)}try{watchPres()}catch(e){console.warn("presentes",e)}pf();
+ g("cpl")&&g("cpl").remove();chip();watchTr();watchDu();try{lvResume()}catch(e){console.warn("duelo",e)}try{watchMz()}catch(e){console.warn("mesa",e)}try{watchPres()}catch(e){console.warn("presentes",e)}pf();
  onSnapshot(doc(db,"conteudo","adm"),s=>{const d=s.data();if(!d){ready=1;L.cp_pa&&pa();return}lastA=d.adm;
   if(L.cp_pa)pa();else if(d.v!==+L.cp_v){ls("cp_v",d.v);if(d.adm!==L.getItem("colprimata_adm")){ls("colprimata_adm",d.adm);upd()}}
   fotos(d.f||{})},e=>{console.warn(e);if(e.code==="permission-denied")convite(u)});
@@ -2779,8 +2840,12 @@ fr=(n,t)=>Math.round(arf(8)*(1+n*.06)*(1+t*.12)*(n%10==0?3:1));
 window.infHtml=function(){if(!(S.camp||(typeof AD!="undefined"&&AD)))return"";const m=mdInfo(),n=S.il||1,p=m.need?Math.min(100,Math.round(m.rest/m.need*100)):100;let ch="";
 for(let t=0;t<27;t++){const o=mo(t);ch+=`<span class="mdc${t<=m.t?"":" lk"}${t==m.t?" on":""}">${mdl(o,30)}<small>${o.n}</small></span>`}
 return`<div class="cvb inf"><div class="infh">${mdl(m)}<div><small>Batalhas infinitas${S.camp?"":" · teste ADM"}</small><b>${m.name}</b></div></div><div class="infb"><i style="width:${p}%"></i></div><p class="mut ctr" style="margin:0">${m.need?fmt(m.rest)+" / "+fmt(m.need)+" 🏆 para o próximo medalhão":"Medalhão máximo!"}</p><button class="bt cy" data-inf="go">${n%10==0?"👑 Chefe · ":""}Fase ${n}</button><p class="mut ctr" style="margin:0">Vencendo: ${gem}+${fmt(fr(n,m.t))}${n%5==0?" · 🎁 pacotes":""} · +${TW} 🏆</p><details class="fd"><summary>Todos os medalhões</summary><div class="mdg">${ch}</div></details></div>`};
-window.startInf=function(){const u=mineDeck();if(!u)return;const n=S.il||1,t=mdInfo().t,bs=n%10==0,k=Math.min(90,Math.round(8+n*.35+t*1.1)),e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*CONFIG.chefe*1.15}:x);
-zgo({n:"Você",u},{n:(bs?"Chefe · ":"")+"Fase "+n,u:e},{m:"a",k:8,ai:2,b:0,inf:n})};
+// DIFICULDADE: sobe pelos troféus (medalhão), não pelo número da fase. D = medalhão + progresso dentro dele (0 = Bronze 1 · 5 = Prata 1 · 10 = Ouro 1 · 15 = Platina 1 · 20 = Diamante 1 · 25 = Master · 26+ = Overlord)
+// KD = [D, k] · k é o nível do rival (k=8 é a Arena 9 · cada +1 de k ≈ +18% de força e as cartas vão subindo de rank) · EDITE AQUI para deixar mais fácil ou mais difícil
+const KD=[[0,8],[5,9.2],[10,10.7],[15,12.5],[20,14.8],[25,17.3],[26,18],[34,22]],
+kD=d=>{for(let i=1;i<KD.length;i++)if(d<=KD[i][0]){const a=KD[i-1],b=KD[i];return a[1]+(b[1]-a[1])*(d-a[0])/(b[0]-a[0])}return KD[KD.length-1][1]};
+window.startInf=function(){const u=mineDeck();if(!u)return;const n=S.il||1,m=mdInfo(),D=m.t+(m.need?m.rest/m.need:Math.min(8,m.rest/400)),bs=n%10==0,k=Math.round(kD(D)*100)/100,bm=Math.min(1.35,1.1+D*.01),e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*bm}:x);
+zgo({n:"Você",u},{n:(bs?"Chefe · ":"")+"Fase "+n,u:e},{m:"a",k:8,ai:2,b:0,inf:n,ie:Math.max(.01,.06-.008*D),ir:Math.max(.8,3-.2*D)})};
 window.zendI=function(B){const w=B.w,n=B.o.inf,win=w===0,t0=S.tp||0,m0=mdInfo().t,rw=[],g0=gifts();fxEnd(B);bump("play");bump("kill",B.kl[0]);
 if(B.why!="desistiu"){const d=day();if(!S.pj||S.pj.d!==d)S.pj={d,n:0};S.pj.n++}
 try{SND[win?"win":"lose"]();win&&cpxConfetti()}catch(e){}
@@ -3490,5 +3555,50 @@ html[data-tema="v2"] #cfg #el_go:not(:disabled){background:var(--pk);color:#fff;
 
 /* v2.2 · Presentes nos temas */
 html[data-tema="v2"] #cfg .pr-h{background:#fff;border:2px solid var(--ik);border-radius:0;color:var(--ik);box-shadow:3px 3px 0 var(--ik)}
-</style></body>
+</style>
+<style>
+/* v2.3 · ADM: criar e editar no mesmo lugar */
+#cfg #ds_n,#cfg .at[data-adm="pds_h"],#cfg .at[data-adm="pds_e"],#cfg .at[data-adm="pds_v"]{display:none!important}
+#cfg .ytb{display:flex;gap:4px;margin:0 0 14px;padding:4px;border-radius:14px;background:#ffffff0d}
+#cfg .ytb button{flex:1;padding:10px 4px;border-radius:11px;font-size:.74rem;font-weight:800;color:var(--mut)}
+#cfg .ytb button.on{background:#ffffff2e;color:#fff}
+html[data-tema="v2"] #cfg .ytb{background:#fff;border:2px solid var(--ik);border-radius:0}
+html[data-tema="v2"] #cfg .ytb button{border-radius:0;color:var(--ik)}
+html[data-tema="v2"] #cfg .ytb button.on{background:var(--pk);color:#fff}
+</style>
+<script>
+// ===== v2.3: ADM · criar e editar no MESMO lugar (Cartas+Habilidades+Elementos · Pacote+Visual) e 1 botão só =====
+(()=>{try{
+const G=[["ds_c","🃏 Cartas"],["ds_h","✨ Habilidades"],["ds_e","🔥 Elementos"]],K=[["ds_k","📦 Pacote"],["ds_v","🎨 Visual"]],
+bar=(g,id)=>`<div class="ytb">${g.map(([i,t])=>`<button data-adm="p${i}"${i==id?' class="on"':""}>${t}</button>`).join("")}</div>`,
+ck=()=>{["kn","ko","kb","kt","kx","kc"].forEach(i=>$(i).value="");$("ke").value="🎴";$("kh").value=200;$("kf").value=0},
+fk=v=>{const d=ADM.p.find(x=>x.id==v);if(!d||P.concat(PX).some(p=>p.id==v))return;const o=Object.assign({},d,ADM.po[v]||{});
+$("kn").value=o.n;$("ke").value=o.e;$("kh").value=o.h;$("kc").value=o.cost||"";$("ko").value=o.odds?o.odds.join(","):"";$("kb").value=o.bk||"";$("kt").value=o.ate?new Date(o.ate-new Date(o.ate).getTimezoneOffset()*6e4).toISOString().slice(0,16):"";$("kx").value=o.esp||"";$("kf").value=o.fim||0},
+lab=()=>{const f=cfg.querySelector(".af .bt");if(!f||f.hidden)return;const k=f.dataset.k;
+if(k=="@sc"&&$("ec"))f.textContent=$("ec").value=="__"?"Criar carta":"Salvar carta";
+else if(k=="@sk"&&$("ek"))f.textContent=$("ek").value=="__"?"Criar pacote":"Salvar pacote"},
+newPk=()=>{const g=i=>$(i).value,n=g("kn").trim();if(!n)return toast("Dê um nome ao pacote.");
+const v=g("ko").trim(),od=v?v.split(",").map(Number):null;if(od&&(od.length!=9||od.some(x=>!(x>=0))))return toast("Chances: 9 números separados por vírgula.");
+const id="p"+rid(),e=g("ke")||"🎴",h=+g("kh")||200,cost=+g("kc")||0;ADM.p.push({id,n,e,h,cost});
+ADM.po[id]={n,e,h,cost,odds:od,bk:g("kb").trim(),ate:g("kt")?new Date(g("kt")).getTime():0,esp:+g("kx")>0?1:0,fim:+g("kf")||0};
+if(PEND&&PW=="fpb"){IMG["pkb_"+id]=PEND;ADM.po[id].bk=""}adxGo()};
+function unify(){if(!$("ds_c")||$("y_on"))return;cfg.insertAdjacentHTML("beforeend",'<i id="y_on" hidden></i>');
+[[G],[K]].forEach(([g])=>g.forEach(([id])=>{const s=$(id)&&$(id).querySelector("summary");s&&s.insertAdjacentHTML("afterend",bar(g,id))}));
+const t=(p,b,s)=>{const x=cfg.querySelector(`.at[data-adm="p${p}"]`);if(x){x.querySelector("b").textContent=b;x.querySelector("small").textContent=s}};
+t("ds_c","Cartas","Criar e editar cartas, habilidades e elementos");t("ds_k","Pacotes","Criar e editar pacotes e o visual deles");
+const nl=ADM.p.filter(d=>!P.some(p=>p.id==d.id)).map(d=>`<option value="${d.id}">${d.e} ${d.n} · sem cartas ainda</option>`).join(""),ek=$("ek"),k2=$("ek2");
+if(ek){ek.insertAdjacentHTML("afterbegin",'<option value="__">➕ Novo pacote…</option>');nl&&ek.insertAdjacentHTML("beforeend",nl)}
+nl&&k2&&k2.insertAdjacentHTML("beforeend",nl)}
+// novo pacote pelo mesmo formulário de editar
+cfg.addEventListener("click",e=>{const b=e.target.closest('[data-k="@sk"]');if(b&&$("ek")&&$("ek").value=="__"){e.stopPropagation();e.preventDefault();newPk()}},true);
+document.addEventListener("change",e=>{const t=e.target;if(!t||!t.id)return;if(t.id=="ek")t.value=="__"?ck():fk(t.value);else if(t.id=="ap")window.__ypk=t.value},true);
+// "Nova carta" (atalhos, busca, Lançamentos) abre o formulário de editar já em "➕ Nova carta…"
+cfg.addEventListener("toggle",e=>{const d=e.target;if(d.id!="ds_n"||!d.open)return;d.open=false;const ec=$("ec");if(!ec)return;
+if(ec.value!="__"){ec.value="__";ec.dispatchEvent(new Event("change",{bubbles:true}))}if(window.__ypk&&$("ek2"))$("ek2").value=window.__ypk;window.__ypk="";ec.scrollIntoView({block:"center",behavior:"smooth"})},true);
+["change","click","toggle"].forEach(t=>cfg.addEventListener(t,()=>setTimeout(lab,40),true));
+const c9=cfgView;cfgView=function(v){const r=c9.apply(this,arguments);if(v=="a")try{unify()}catch(x){console.warn("v2.3",x)}return r};
+if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
+}catch(x){console.warn("v2.3",x)}})();
+</script>
+</body>
 </html>
