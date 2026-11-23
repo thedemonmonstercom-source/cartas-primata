@@ -302,7 +302,7 @@ h1{margin:0;font-weight:900;font-size:clamp(2.4rem,13vw,3.7rem);line-height:.92;
 .fl .fo::before,.fch .fo::before{mix-blend-mode:color-dodge;opacity:var(--f)}
 .fch .cd.fo::before{inset:0;width:auto;background-size:260% 260%;transform:none;animation:none;background-position:var(--mx,50%) var(--my,50%)}
 .cd.sss{border-width:0;background:#170f26;animation:none}
-.rbw{position:absolute;inset:0;z-index:5;padding:3px;border-radius:12px;overflow:hidden;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+.rbw{position:absolute;inset:0;z-index:5;padding:3px;border-radius:inherit;overflow:hidden;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
 .rbw i{position:absolute;left:-45%;top:-18%;width:190%;aspect-ratio:1;background:conic-gradient(#f55,#fb3,#5e5,#3cf,#a5f,#f55);animation:spin 3.5s linear infinite}
 .aura{position:absolute;inset:-14% -22%;z-index:-1;pointer-events:none;background:radial-gradient(closest-side,var(--rc),transparent 72%);opacity:.45;animation:aur 2.2s ease-in-out infinite alternate;will-change:transform,opacity}@keyframes aur{to{opacity:.85;transform:scale(1.1)}}
 .rays{width:110vmax;height:110vmax;margin:-55vmax 0 0 -55vmax;will-change:transform}.fi{will-change:transform}
@@ -402,6 +402,8 @@ body.nofr .wl,body.nofr .dl{visibility:hidden}
 @keyframes scin{from{opacity:0}}
 /* ===== v0.4: selos, batalha e arenas ===== */
 .slo{position:absolute;z-index:3;left:5px;bottom:calc(15cqw + 8px);font-style:normal;font-size:9cqw;line-height:1.2;padding:0 5px;border-radius:6px;background:#000b}
+.elo{position:absolute;z-index:3;right:5px;bottom:calc(15cqw + 8px);font-style:normal;font-size:9cqw;line-height:1.2;padding:0 5px;border-radius:6px;background:#000b}
+.elv{margin:12px 2px 0;font-size:.8rem;line-height:1.55;color:var(--mut)}.elv b{color:var(--fg,#f4f2ee)}
 #zb{position:fixed;inset:0;z-index:12;display:flex;flex-direction:column;gap:8px;width:100%;max-width:460px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px calc(env(safe-area-inset-bottom,0px) + 12px);background:radial-gradient(90% 40% at 50% 0,#2a2140,transparent 70%),var(--bg);overflow-y:auto}
 #zb[hidden]{display:none}
 .zt{display:flex;justify-content:space-between;align-items:flex-end;gap:8px}.zt b{display:block;font-size:.9rem;font-weight:900;letter-spacing:.06em}
@@ -412,12 +414,13 @@ body.nofr .wl,body.nofr .dl{visibility:hidden}
 .zs{display:grid;gap:6px}
 .zrow{--cw:clamp(76px,calc(var(--zr)*.22),calc((100% - 12px)/3));display:grid;grid-template-columns:repeat(3,var(--cw));justify-content:center;gap:6px}
 .zrs{--cw:clamp(56px,calc(var(--zr)*.158),calc((100% - 12px)/3))}
-.zu{--zf:8px;position:relative;display:block;aspect-ratio:3/4;padding:0;border:0;border-radius:12px;background:none;color:#fff;text-align:left;font-weight:800;line-height:1.2}
+.zu{--zf:8px;position:relative;display:block;aspect-ratio:3/4;padding:0;border:0;--rq:calc(14 - var(--l,0)*2.5);border-radius:calc(var(--rq)*1%) / calc(var(--rq)*.7%);background:none;color:#fff;text-align:left;font-weight:800;line-height:1.2}
 .zrs .zu{--zf:6.5px;opacity:.9}
 .zu.ze{border:2px dashed #ffffff1f}
 .zu>.cd{display:flex;flex-direction:column;justify-content:flex-end;width:100%;border-width:2px;pointer-events:none}
 .zu .nm{position:relative;order:3;padding:2.4cqw 2cqw 3cqw;background:#000d;font-size:max(calc(var(--zf) - .5px),8.4cqw);letter-spacing:.03em;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .zu .slo{position:relative;order:1;align-self:flex-start;left:auto;bottom:auto;margin:0 0 1.2cqw 2.4cqw;font-size:max(var(--zf),9cqw)}
+.zu .elo{position:relative;order:1;align-self:flex-end;right:auto;bottom:auto;margin:0 2.4cqw 1.2cqw 0;font-size:max(var(--zf),9cqw)}
 .zhud{position:relative;z-index:4;order:2;display:grid;gap:1.4cqw;padding:3cqw 2.4cqw 0;background:linear-gradient(transparent,#000c 40%,#000d)}
 .zu .cd.img .zhud{padding-bottom:1.6cqw}
 .zhp{position:relative;height:max(calc(var(--zf) + 3px),13cqw);border-radius:99px;background:#0009;box-shadow:inset 0 0 0 1px #ffffff2e;overflow:hidden}
@@ -441,13 +444,13 @@ body.nofr .wl,body.nofr .dl{visibility:hidden}
 .dkh b{font-size:.78rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
 .dkh span{padding:2px 10px;border-radius:99px;background:#ffffff14;font-size:.72rem;font-weight:900;font-variant-numeric:tabular-nums}.dkh .ok{background:var(--ac);color:#111}
 .dkg{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.dks{position:relative;aspect-ratio:3/4;border-radius:8px;cursor:pointer}
+.dks{position:relative;aspect-ratio:3/4;--rq:calc(14 - var(--l,0)*2.5);border-radius:calc(var(--rq)*1%) / calc(var(--rq)*.75%);cursor:pointer}
 .dks>.cd{width:100%;border-width:2px;pointer-events:none}
 .dks.em{display:grid;place-items:center;border:2px dashed #ffffff30;background:#ffffff08;color:#ffffff55;font-size:1.3rem;font-weight:900}
 .dkb.pick .dks{outline:2px dashed var(--ac);outline-offset:1px}
 .dkx{position:absolute;top:-6px;right:-6px;z-index:8;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#000d;border:1px solid #ffffff55;color:#fff;font-size:.8rem;line-height:1}
 .dkb .two{margin-top:12px}.dkb .bt{padding:11px 6px;font-size:.7rem}
-.dkc{position:relative;isolation:isolate;border-radius:14px;cursor:pointer}#dka{z-index:40}
+.dkc{position:relative;isolation:isolate;--rq:calc(14 - var(--l,0)*2.5);border-radius:calc(var(--rq)*1%) / calc(var(--rq)*.75%);cursor:pointer}#dka{z-index:40}
 .dkc.sel{outline:3px solid var(--fg);outline-offset:3px}
 .dkc.fu>.cd{filter:brightness(.5)}
 .dku{position:absolute;z-index:1;top:6px;left:50%;transform:translateX(-50%);padding:1px 8px;border-radius:99px;background:var(--ac);color:#111;font-style:normal;font-size:.56rem;font-weight:900;white-space:nowrap;pointer-events:none}.dkb .dkh{margin:0 0 12px}.dkh b small{display:block;margin-top:3px;font-size:.6rem;font-weight:700;letter-spacing:.03em;text-transform:none;color:var(--mut)}.dkr{position:absolute;z-index:2;right:-4px;bottom:-6px;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--fr,#c084fc);color:#14091f;font:900 .68rem/24px system-ui;text-align:center;font-variant-numeric:tabular-nums;box-shadow:0 0 0 2px var(--bg);pointer-events:none}.dkn{margin:0 2px 14px;font-size:.66rem;line-height:1.6;color:var(--mut)}.dkn b{display:inline-block;padding:0 6px;border-radius:9px;background:var(--fr,#c084fc);color:#14091f;font-weight:900}.rpv{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:10px;border-radius:12px;background:#ffffff0d;text-align:left}.rpm{flex:none;width:58px}.fch .rpm .cd{width:100%;margin:0;transform:none;pointer-events:none}.rpv span{font-size:.72rem;line-height:1.55;color:var(--mut)}.rpv b{color:var(--fg)}#ds_n>.fg{padding-bottom:28px}
@@ -650,7 +653,7 @@ body:has(#cfg:not([hidden])) #cpchip{display:none}#cpchip{position:fixed;right:8
 .zqh b{flex:1 1 100%;font-size:.68rem;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .zq:not(.me) .zrow{grid-template-columns:repeat(3,1fr);gap:3px}
 .zql .zrow,.zqr .zrow{grid-template-columns:1fr!important}
-.zq:not(.me) .zu{--zf:5.5px;border-radius:8px}
+.zq:not(.me) .zu{--zf:5.5px}
 .zq.me .zrow{--cw:min(96px,calc((100% - 12px)/3))}
 .zq.me .zs{gap:4px}
 .mzm{display:grid;gap:6px}
@@ -733,11 +736,12 @@ body:has(#cfg:not([hidden])) #cpchip{display:none}#cpchip{position:fixed;right:8
 <script id="snd">
 /* SONS · sintetizados no próprio navegador (sem arquivos) */
 const SND=(()=>{
+const RND=Math.random; // sorteio próprio do som: no duelo ao vivo Math.random é trocado pelo sorteio compartilhado, e o som ligado/desligado gastava números diferentes em cada celular
 let A,G,M,on=localStorage.getItem("colprimata_som")!=="0",mv=0,tm,nx=0,st=0,lh=0;
 const cf=k=>{try{return CONFIG[k]!==0}catch(e){return true}};
 const ok=()=>{if(!on||!cf("som"))return 0;try{if(!A){A=new(window.AudioContext||window.webkitAudioContext)();G=A.createGain();G.gain.value=.6;G.connect(A.destination);M=A.createGain();M.gain.value=.5;M.connect(G)}if(A.state=="suspended")A.resume();return A}catch(e){return 0}};
 const T=(f,a,d,ty,v,f2)=>{const c=ok();if(!c)return;const o=c.createOscillator(),g=c.createGain(),s=c.currentTime+a;o.type=ty||"sine";o.frequency.setValueAtTime(f,s);if(f2)o.frequency.exponentialRampToValueAtTime(f2,s+d);g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(v||.15,s+.012);g.gain.exponentialRampToValueAtTime(.0001,s+d);o.connect(g);g.connect(G);o.start(s);o.stop(s+d+.03)};
-const N=(a,d,v,fq,q)=>{const c=ok();if(!c)return;const n=c.sampleRate*d|0,b=c.createBuffer(1,n,c.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*(1-i/n);const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type="bandpass";f.frequency.value=fq;f.Q.value=q||.8;g.gain.value=v;s.connect(f);f.connect(g);g.connect(G);s.start(c.currentTime+a)};
+const N=(a,d,v,fq,q)=>{const c=ok();if(!c)return;const n=c.sampleRate*d|0,b=c.createBuffer(1,n,c.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(RND()*2-1)*(1-i/n);const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type="bandpass";f.frequency.value=fq;f.Q.value=q||.8;g.gain.value=v;s.connect(f);f.connect(g);g.connect(G);s.start(c.currentTime+a)};
 const mf=m=>440*Math.pow(2,(m-69)/12),CH=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],AP=[0,1,2,1,0,2,1,2];
 const sch=()=>{const c=ok();if(!c||!mv)return;while(nx<c.currentTime+1.2){const ch=CH[(st>>3)%4],i=st%8,s=Math.max(nx,c.currentTime),o=c.createOscillator(),g=c.createGain();o.frequency.value=mf(ch[AP[i]]+(i%4==3?12:0));g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(.09,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+.5);o.connect(g);g.connect(M);o.start(s);o.stop(s+.55);if(!i){const p=c.createOscillator(),q=c.createGain();p.type="triangle";p.frequency.value=mf(ch[0]-12);q.gain.setValueAtTime(.0001,s);q.gain.exponentialRampToValueAtTime(.08,s+.3);q.gain.exponentialRampToValueAtTime(.0001,s+3.6);p.connect(q);q.connect(M);p.start(s);p.stop(s+3.7)}nx=s+.46;st++}};
 const mus=()=>{if(mv||!on||!cf("musica")||!ok())return;mv=1;nx=0;sch();tm=setInterval(sch,400)};
@@ -855,6 +859,7 @@ setTimeout(iniciar,3200);
 // • v1.8: ADM · IMPORTAR FICHA DE CARTA (texto feito por IA vira carta com história e habilidades)
 // • v1.9: ADM · LANÇAMENTOS (cartas novas ficam guardadas e são lançadas de uma vez) + atalhos e menu reorganizado
 // • v1.9: TEMAS · escolha no Menu: Primata 1.0, 2.0 (mangá) e Royale
+// • v2.0: ADM · EXCLUIR · várias cartas, vários pacotes ou jogadores (ou todos) de uma vez
 const ADM0=(()=>{try{return JSON.parse(localStorage.getItem("colprimata_adm")||"{}")||{}}catch(e){return{}}})();
 // REGRAS DO DECK E DAS REPETIDAS (18/11/2026): o deck tem 12 cartas DIFERENTES (a mesma carta nunca entra 2×, mesmo com várias cópias; vale também para o rival da arena e para decks de amigos). Só a carta ORIGINAL tem nível: as cópias repetidas ficam sempre sem melhoria e servem para trocar, converter ou fundir.
 // CARTAS: cada carta é um objeto dentro de "cards" (r = raridade: F E D C B A S SS SSS).
@@ -942,8 +947,8 @@ function claim(id){const it=mit().flatMap(x=>x[1]).find(m=>m.id==id);if(!it||!mo
  if(k=="d"){if(S.md.d!==day())S.md={d:day(),c:[]};S.md.c.push(id);if(S.md.c.length%CONFIG.mDiaBonus==0){gift(dpk().id);b=` · 🎁 bônus do dia: 1 pacote do ${dpk().n}`}}
  else if(k=="w"){if(S.mw.w!==wk())S.mw={w:wk(),c:[]};S.mw.c.push(id);}
  else(S.ms=S.ms||{})[id]=1;
- if(it.f)S.fr+=it.f;if(it.p)gift(dpk().id,it.p);save();render(1);upd();it.f&&pop("+"+fmt(it.f),"pos");
- toast(`${it.f?`${gem} <b>+${fmt(it.f)}</b>`:""}${it.p?`${it.f?" · ":""}🎁 <b>${it.p} pacote${it.p>1?"s":""}</b> do ${dpk().n}`:""}${b} · missão cumprida`)}
+ if(it.f)S.fr+=it.f;if(it.p)gift(dpk().id,it.p);const rcx=window.rcDar?rcDar("m",it.t):[];save();render(1);upd();it.f&&pop("+"+fmt(it.f),"pos");
+ toast(`${it.f?`${gem} <b>+${fmt(it.f)}</b>`:""}${it.p?`${it.f?" · ":""}🎁 <b>${it.p} pacote${it.p>1?"s":""}</b> do ${dpk().n}`:""}${b}${rcx.length?" · "+rcx.join(" · "):""} · missão cumprida`)}
 const msn=()=>`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Missões</span></div><p class="mut ctr" style="margin:0 0 6px;letter-spacing:.04em;text-transform:none">Toque numa missão cumprida para pegar o prêmio.</p>`+mit().map(([h,l])=>`<p class="mut" style="margin:18px 0 4px">${h}</p><div class="rl">${l.map(m=>{const d=mok(m),g=m.got,hd=m.sec&&!d&&!g,v=Math.min(m.v,m.g);return`<button${d&&!g?` data-g="${m.id}"`:""} style="--rc:${d&&!g?"var(--fr)":"#8f8d96"};opacity:${g?0.45:1}"><b class="sq">${g?"✓":d?"!":"·"}</b><span style="letter-spacing:.05em;font-size:.84rem">${hd?"???":m.t}<small style="display:block;color:var(--mut);letter-spacing:.12em">${hd?"Missão secreta":v+"/"+m.g}</small></span><em class="fv">${m.f?gem+fmt(m.f):""}${m.p?` 🎁×${m.p}`:""}</em></button>`}).join("")}</div>`).join("");
 // diária: CONFIG.diaria fragmentos por dia (valor fixo)
 const day=()=>Math.floor(lnow()/864e5),nsk=()=>S.dl===day()-1?S.sk+1:1,dr=()=>CONFIG.diaria;
@@ -1101,7 +1106,7 @@ const ill=r=>{
  // cada parte animada vira uma camada própria (só transform/opacity => roda na GPU, sem repintar)
  return `<div class="art"><i class="bg"></i>${r>7?'<i class="nb lyr"></i>':""}${r>3?'<i class="ry lyr"></i>':""}${r>5?'<i class="au lyr"></i>':""}${V("",o,0,140,0,"slice")}${r>3?V("wgs lyr",w,28,108):""}${r>6?V("fk lyr",Z("M28 58C24 44 36 38 34 22 44 28 46 36 50 12 54 36 56 28 66 22 64 38 76 44 72 58Z",L(58,.95)),20,76):""}${r>7?V("rg lyr",`<ellipse cx="50" cy="54" rx="43" ry="13" fill="none" stroke="${L(82)}" stroke-width="1.2" stroke-dasharray="4 3"/>`,52,84)+V("rg r2 lyr",`<ellipse cx="50" cy="54" rx="38" ry="11" fill="none" stroke="${L(70,.7)}" stroke-width=".8"/>`,52,84):""}${V("gm lyr",`<g transform="translate(50 54) scale(${(.78+r*.07).toFixed(2)}) translate(-50 -54)">${g}</g>`,34,104)}${st[0]?V("t1 lyr",st[0],10,84):""}${st[1]?V("t2 lyr",st[1],10,84):""}${pt}</div>`};
 const LK=`<div class="art"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1.5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zm2 0h6V7a3 3 0 0 0-6 0z" fill="currentColor"/></svg></div>`;
-const card=(c,cl="",n=0,lk=0,xt="",lv)=>{const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),im=!lk&&(c.img||IMG[c.id]),fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;return `<div class="cd k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r};--f:${F[r]};--sd:${(4.2-r*.3).toFixed(1)}s">${lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r)}${lk?"":`${r>5?'<ins class="aur"></ins><ins class="emb"></ins>':""}<b class="rk">${R[r][0]}</b>${n>1?`<i class="x">×${n}</i>`:""}<u class="in"></u>${L?`<s class="fz">${"<i></i>".repeat(L)}</s>`:""}${r==8?'<u class="rbw"><i class="lyr"></i></u>':""}<div class="nm">${c.n}</div>${c.sl?`<em class="slo">${SLS[c.sl]||""}</em>`:""}`}${xt}</div>`};
+const card=(c,cl="",n=0,lk=0,xt="",lv)=>{const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),im=!lk&&(c.img||IMG[c.id]),fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;return `<div class="cd k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r};--f:${F[r]};--sd:${(4.2-r*.3).toFixed(1)}s">${lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r)}${lk?"":`${r>5?'<ins class="aur"></ins><ins class="emb"></ins>':""}<b class="rk">${R[r][0]}</b>${n>1?`<i class="x">×${n}</i>`:""}<u class="in"></u>${L?`<s class="fz">${"<i></i>".repeat(L)}</s>`:""}${r==8?'<u class="rbw"><i class="lyr"></i></u>':""}<div class="nm">${c.n}</div>${c.sl?`<em class="slo">${SLS[c.sl]||""}</em>`:""}${c.el&&EL[c.el]?`<em class="elo" title="${ELN[c.el]}">${EL[c.el]}</em>`:""}`}${xt}</div>`};
 // se a foto de uma carta não carregar, mostra a ilustração gerada
 document.addEventListener("error",e=>{const t=e.target,d=t.tagName=="IMG"&&t.closest(".cd");if(d){d.classList.remove("img");t.parentNode.outerHTML=ill(+d.dataset.r)}},true);
 function updCs(){const c=$("cs");if(!c)return;const mid=c.scrollLeft+c.clientWidth/2;let b=9;[...c.children].forEach((s,i)=>{const d=Math.min(1,Math.abs(s.offsetLeft+s.offsetWidth/2-mid)/s.offsetWidth);s.style.transform=`scale(${(1-d*.22).toFixed(3)})`;s.style.opacity=(1-d*.6).toFixed(2);if(d<b){b=d;cur=i}});$("cap").textContent=P[cur].n;updOpen();document.querySelectorAll(".dots i").forEach((e,i)=>e.classList.toggle("on",i==cur));document.querySelectorAll(".ar button").forEach((e,i)=>e.style.opacity=(i?cur<P.length-1:cur>0)?1:.25)}
@@ -1124,9 +1129,9 @@ const flBar=()=>{const n=FLT.r.length+FLT.e.length+FLT.x.length+(FLT.st?1:0)+(FL
  +(P.length>1?`<div class="chips"><button class="${FLT.all?"on":""}" data-fl="all">Todos</button>${P.map((x,i)=>`<button data-s="${i}" class="${i==as&&!FLT.all?"on":""}">${x.n}</button>`).join("")}</div>`:"")
  +`<div class="flp"${FLT.open?"":" hidden"}>`+row("Rank",R.map((r,i)=>ch("r",i,r[0],FLT.r)).join(""))+row("Elemento",Object.keys(EL).map(k=>ch("e",k,EL[k],FLT.e)).join(""))+row("Mostrar",[["own","Tenho"],["miss","Faltam"],["dup","Repetidas"],["in","No deck"],["out","Fora do deck"]].map(x=>ch("st",x[0],x[1],FLT.st)).join(""))+row("Habilidade",[["com","Com"],["sem","Sem"],["pas","Passiva"]].map(x=>ch("ab",x[0],x[1],FLT.ab)).join(""))+row("Efeito",FXG.map(g=>ch("x",g[0],g[0],FLT.x)).join(""))+row("Ordenar",[["r","Rank ↑"],["R","Rank ↓"],["n","Nome"],["l","Nível"],["d","Dano"],["v","Vida"],["q","Cópias"]].map(x=>ch("o",x[0],x[1],FLT.o)).join(""))+`<button class="flc" data-fl="clr">Limpar tudo</button></div>`};
 // ladrilho do álbum: a carta ORIGINAL aparece com o nível dela; as cópias repetidas viram só o contador "+N" (sem melhoria, para trocar ou converter)
-const dkTile=c=>{const n=S.inv[c.id]||0,r=n-1;return n?`<div class="dkc" data-dc="${c.id}">${card(c,"",1)}${r>0?`<b class="dkr" title="${r} repetida${r>1?"s":""} · sem melhoria" aria-label="${r} repetida${r>1?"s":""}, sem melhoria">+${r}</b>`:""}</div>`:card(c,"",0,1)};
+const dkTile=c=>{const n=S.inv[c.id]||0,r=n-1;return n?`<div class="dkc" data-dc="${c.id}" style="--l:${lvl(c)}">${card(c,"",1)}${r>0?`<b class="dkr" title="${r} repetida${r>1?"s":""} · sem melhoria" aria-label="${r} repetida${r>1?"s":""}, sem melhoria">+${r}</b>`:""}</div>`:card(c,"",0,1)};
 const flGrid=()=>{const q=P[as],a=flOn()||FLT.all,l=a?flList():[...q.cards].sort((x,y)=>x.r-y.r);
- return `<div class="sr"><p class="mut">${a?`${l.length} ${l.length==1?"carta":"cartas"} · ${FLT.all||FLT.q?"todos os pacotes":q.n}`:`${own(q)}/${q.cards.length} cartas`}</p>${a?"":cvBtn(q.cards,"p","qc")}</div>`+(ALL.some(c=>(S.inv[c.id]||0)>1)?`<p class="dkn"><b>+N</b> = repetidas (sem melhoria). Só a original tem nível; as repetidas servem para trocar, converter ou fundir.</p>`:"")+(l.length?`<div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:`<div class="fle">Nenhuma carta encontrada<br><button class="flc" data-fl="clr">Limpar filtros</button></div>`)+(a?"":exAl())};
+ return `<div class="sr"><p class="mut">${a?`${l.length} ${l.length==1?"carta":"cartas"} · ${FLT.all||FLT.q?"todos os pacotes":q.n}`:`${own(q)}/${q.cards.length} cartas`}</p>${a?"":cvBtn(q.cards,"p","qc")}</div>`+(ALL.some(c=>(S.inv[c.id]||0)>1)?`<p class="dkn"><b>+N</b> = repetidas (sem melhoria). Só a original tem nível; as repetidas servem para trocar, converter ou fundir.</p>`:"")+(l.length?`<div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:`<div class="fle">Nenhuma carta encontrada<br><button class="flc" data-fl="clr">Limpar filtros</button></div>`)+(a?"":exAl()+indAl())};
 const flPaint=bar=>{if(!$("dkal"))return;if(bar)$("flt").innerHTML=flBar();$("dkal").innerHTML=flGrid();dkPaint()};
 document.addEventListener("click",e=>{if(e.target.closest(".flt [data-s]")){FLT.all=0;return}const b=e.target.closest("[data-fl]");if(!b)return;const k=b.dataset.fl,v=b.dataset.fv;if(k=="tg")FLT.open=!FLT.open;else if(k=="all")FLT.all=FLT.all?0:1;else if(k=="clr")Object.assign(FLT,{q:"",r:[],e:[],x:[],st:"",ab:"",o:"r",all:0});else if(k=="r"||k=="e"||k=="x"){const a=FLT[k],x=k=="r"?+v:v,i=a.indexOf(x);i<0?a.push(x):a.splice(i,1)}else FLT[k]=FLT[k]==v?(k=="o"?"r":""):v;flPaint(1)},true);
 document.addEventListener("input",e=>{if(e.target.id!="flq")return;FLT.q=e.target.value;clearTimeout(flT);flT=setTimeout(()=>flPaint(0),140)});
@@ -1318,6 +1323,10 @@ document.addEventListener("pointerout",e=>{const c=e.target.closest&&e.target.cl
 // ELEMENTO (campo reservado): el:"fogo"|"planta"|"agua"|"luz"|"sombra". SELO (só visual): sl:"amigo"|"especial"|"secreta"|"evento" (a secreta aparece como ??? no álbum até sair).
 const EL={fogo:"🔥",planta:"🌿",agua:"💧",luz:"✨",sombra:"🌑"},BEAT={fogo:"planta",planta:"agua",agua:"fogo",luz:"sombra",sombra:"luz"},SLS={amigo:"🤝",especial:"⭐",secreta:"🕶️",evento:"🎉"};
 const elm=(a,d)=>a&&d?(BEAT[a]==d?1.5:BEAT[d]==a?.67:1):1;
+// v2.1: nomes, lista do editor e "forte/fraco contra" de cada elemento (sem elemento = sem vantagem nem desvantagem)
+const ELN={fogo:"Fogo",planta:"Planta",agua:"Água",luz:"Luz",sombra:"Sombra"},ELOPT='<option value="">— Nenhum (sem vantagem nem desvantagem)</option>'+Object.keys(EL).map(k=>`<option value="${k}">${EL[k]} ${ELN[k]}</option>`).join(""),
+elFraco=e=>Object.keys(BEAT).find(k=>BEAT[k]==e),
+elInfo=e=>{if(!e||!EL[e])return"";const f=BEAT[e],w=elFraco(e);return`${EL[e]} ${ELN[e]} · forte contra ${EL[f]} ${ELN[f]} · fraco contra ${EL[w]} ${ELN[w]}`};
 const QQ='<div class="art" style="display:grid;place-items:center;font-size:24cqw;font-weight:900;color:#ffffff66">???</div>';
 const TG={s:"a própria carta",e:"1 inimigo à escolha",E:"todos os inimigos ativos",a:"1 aliado ativo à escolha",A:"todos os aliados ativos",r:"1 inimigo aleatório",w:"o inimigo com menos vida",x:"o inimigo com mais vida",q:"1 aliado aleatório",m:"o aliado com menos vida",o:"os outros aliados",T:"todas as cartas em campo"};
 // ===== v1.5: BLOCOS DE EFEITO · uma habilidade = lista de blocos. Motor, descrição e editor do ADM leem desta tabela: tipo novo = 1 item aqui.
@@ -1389,7 +1398,9 @@ const XS=[[{rc:3,ef:[{t:"d",a:"e",m:1.5}]},"Apito do Recreio"],[{rc:3,ef:[{t:"h"
 const EX={id:"are",n:"Cartas de Arena",e:"🏆",h:20,ex:1};
 EX.cards=AR.map((a,k)=>{const t=ST[k],x=XS[k];return{id:"are"+k,p:EX,r:k,n:"Guardião · "+a[0],hp:t[0],atk:t[1],sl:"especial",d:`Exclusiva da arena ${k+1} (${a[0]}). Quem chega lá ganha esta carta; ela não sai em pacotes.`,sk:[x[1],"",dsc(x[0]),x[0]]}});
 ALL.push(...EX.cards);
-const exAl=()=>`<p class="mut" style="margin:22px 0 8px">Cartas de arena · ${EX.cards.filter(c=>S.inv[c.id]).length}/9</p><div class="fr al"><div class="grid">${EX.cards.map(dkTile).join("")}</div></div>`;
+// v2.1: cartas ESPECIAIS (sem pacote): criadas no ADM (pacote "Sem pacote"), não saem em pacotes; vêm de presente, de missão ou de batalha. Também recebem as cartas de um pacote temporário que acabou com "manter as cartas".
+const IND={id:"ind",n:"Cartas especiais",e:"🎉",h:300,ex:1,exl:"Exclusiva · só como prêmio ou presente",cards:[]},PX=[]; // PX = pacotes temporários que já acabaram e sumiram da loja
+const indAl=()=>{const l=IND.cards.filter(c=>S.inv[c.id]||(typeof AD!="undefined"&&AD));return l.length?`<p class="mut" style="margin:22px 0 8px">Cartas especiais · ${IND.cards.filter(c=>S.inv[c.id]).length}${typeof AD!="undefined"&&AD?"/"+IND.cards.length+" (ADM vê todas)":""}</p><div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:""},exAl=()=>`<p class="mut" style="margin:22px 0 8px">Cartas de arena · ${EX.cards.filter(c=>S.inv[c.id]).length}/9</p><div class="fr al"><div class="grid">${EX.cards.map(dkTile).join("")}</div></div>`;
 function arenaInit(){if(!S.ag){S.ag=1;S.inv[EX.cards[0].id]=(S.inv[EX.cards[0].id]||0)+1;save()}}
 function prog(){let s="";while((S.tm+1)*MK<=Math.min(S.tp,CONFIG.mkMax)){S.tm++;S.fr+=MK;s+=` · 🏅 ${fmt(S.tm*MK)} 🏆: ${gem}+${MK}`;if(S.tm*MK%CONFIG.mkPacote==0){gift(dpk().id);s+=" · 🎁 +1 pacote"}}return s}
 const bcap=()=>S.ar<8?TR[S.ar+1]:CONFIG.chefeFinal,bossOK=()=>!S.camp&&S.tp>=bcap();
@@ -1449,7 +1460,7 @@ const dkcode=()=>"DECK~"+dkv().map(c=>c.id+":"+lvl(c)).join(",");
 // ----- DECK NA ABA DECK (estilo Clash Royale): deck no topo, a pessoa escolhe cartas do álbum para colocar -----
 let DSEL=null;
 const dkIds=()=>dkv().map(c=>c.id),dkUsed=ids=>{const u={};ids.forEach(i=>u[i]=(u[i]||0)+1);return u};
-const dkSlot=(c,i)=>c?`<div class="dks" data-ds="${i}">${card(c)}<button class="dkx" data-dx="${i}" aria-label="Tirar ${c.n} do deck">×</button></div>`:`<div class="dks em" data-ds="${i}"><span>+</span></div>`;
+const dkSlot=(c,i)=>c?`<div class="dks" data-ds="${i}" style="--l:${lvl(c)}">${card(c)}<button class="dkx" data-dx="${i}" aria-label="Tirar ${c.n} do deck">×</button></div>`:`<div class="dks em" data-ds="${i}"><span>+</span></div>`;
 const dkPanel=()=>{const d=dkv();return `<div class="dkh"><b>Deck de batalha<small>12 cartas diferentes · 1 de cada</small></b><span class="${d.length==12?"ok":""}">${d.length}/12</span></div><div class="dkg">${Array.from({length:12},(_,i)=>dkSlot(d[i],i)).join("")}</div><div class="two"><button class="bt gh" data-dk="auto">Preencher</button><button class="bt gh" data-dk="clear">Limpar</button></div>`};
 function dkBar(){const el=$("dka");if(!el)return;const c=DSEL&&byId(DSEL);el.hidden=!c;if(c)el.innerHTML=`<span><b>${c.n}</b> · Rank ${R[c.r][0]}</span><button class="bt" data-dk="use">Usar</button><button class="bt gh" data-dk="info">Ficha</button>`}
 function dkPaint(){
@@ -1594,7 +1605,7 @@ function fxEnd(B){if(FXOFF())return;const w=B.w,win=B.ai?w==0:w>=0,lose=B.ai&&w=
 const hrt=n=>"♥".repeat(Math.max(0,n))+"♡".repeat(Math.max(0,5-n)),ico=u=>u.bf.map(b=>(b.k=="at"||b.k=="df"?(b.p>0?"▲":"▼"):"")+(BI[b.k]||"✦")+b.n).join(" ")+((u.el||u.c.el)?" "+EL[u.el||u.c.el]:"");
 const zu=(u,en,act)=>{if(!u)return'<div class="zu ze"></div>';const B=BT,q=SEL&&SEL.q&&SEL.q[0],v=act&&SEL&&(en?SEL.m=="a"||q=="e":q=="a"),kf=n=>n>999?(n/1e3).toFixed(1).replace(".",",").replace(",0","")+"k":n,pc=Math.max(0,Math.min(100,Math.round(u.hp/u.mx*100))),ic=ico(u).trim();
  const xt=`${ic?`<i class="zic">${ic}</i>`:""}${u.u?'<b class="zdn">atacou</b>':""}<div class="zhud"><div class="zhp" style="--p:${pc}%;--hc:${pc>50?"#4fd36b":pc>25?"#f2b632":"#f4566a"}"><i></i><span>❤ ${kf(u.hp)}/${kf(u.mx)}</span></div><div class="zsx"><span>⚔ ${kf(Math.round(AT(u)))}</span><span>${u.ab.map((a,i)=>u.cd[i]?"✦"+u.cd[i]:"✦").join(" ")}</span></div></div>`;
- return`<button class="zu${B.hit.includes(u.id)?" ht":""}${SEL&&SEL.u==u?" on":""}${v?" vt":""}${u.u?" dn":""}" data-z="u:${u.id}" data-r="${u.c.r}" style="--rc:${R[u.c.r][1]}">${card(u.c,"",0,0,"",u.lv)}${yhb(u)}</button>`};
+ return`<button class="zu${B.hit.includes(u.id)?" ht":""}${SEL&&SEL.u==u?" on":""}${v?" vt":""}${u.u?" dn":""}" data-z="u:${u.id}" data-r="${u.c.r}" style="--rc:${R[u.c.r][1]};--l:${u.lv==null?lvl(u.c):Math.min(u.lv,5)}">${card(u.c,"",0,0,"",u.lv)}${yhb(u)}</button>`};
 const zs=(s,en)=>{const f=`<div class="zrow">${s.f.map(u=>zu(u,en,1)).join("")}</div>`,r=`<div class="zrow zrs">${[0,1,2].map(i=>zu(s.r[i],en,0)).join("")}</div>`;return `<div class="zs">${en?r+f:f+r}</div>`};
 
 function yhb(u){const pc=Math.max(0,Math.min(100,Math.round(u.hp/u.mx*100))),k=n=>n>999?(n/1e3).toFixed(1).replace(".",",").replace(",0","")+"k":n;return `<div class="yhp" style="--p:${pc}%;--hc:${pc>50?"#4fd36b":pc>25?"#f2b632":"#f4566a"}"><i></i><span>${u.u?"✓ ":""}❤ ${k(u.hp)}/${k(u.mx)}</span></div>`}
@@ -1606,7 +1617,7 @@ function yrv(c){const s=c.sk||[],L=(Array.isArray(s[0])?s:[s]).filter(a=>a&&a[0]
 function YCA(x){window.__yca=0;const ids=[...$("ahb").selectedOptions].map(o=>o.value),q=$("aqs").value;if(q!==""){const h=hxEx[+q],id="h"+rid();ADM.ab.push({id,n:h[0],q:"",rc:h[1],ef:JSON.parse(JSON.stringify(h[2])),tr:h[3],solo:x.id});ids.push(id)}if(ids.length){ADM.ca[x.id]=ids;window.__yca=1}}
 function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],s=cur_(B);let pn="";
  if(PASS)pn=`<div class="zres"><h2>Vez de ${B.p[B.t].n}</h2><p>Passe o celular.</p><button class="bt" data-z="go">Começar</button></div>`;
- else if(B.p.length>2&&A.life<1)pn=`<p class="zst">Você saiu da luta · acompanhando</p><button class="bk" data-z="leave">Sair da mesa</button>`;else if(B.lv&&B.t!=B.v)pn=`<p class="zst">Vez de ${B.p[B.t].n}…</p>${B.p.length>2?`<button class="bk" data-z="kick">Remover ${B.p[B.t].n} (ausente)</button>`:""}<button class="bk" data-z="quit">Desistir</button>`;else if(B.ai&&B.t==1)pn=`<p class="zst">Vez do rival…</p>`;
+ else if(B.p.length>2&&A.life<1)pn=`<p class="zst">Você saiu da luta · acompanhando</p><button class="bk" data-z="leave">Sair da mesa</button>`;else if(B.lv&&B.t!=B.v)pn=`<p class="zst">Vez de ${B.p[B.t].n}…</p><button class="bk" data-z="sync">↻ Atualizar</button>${B.p.length>2?`<button class="bk" data-z="kick">Remover ${B.p[B.t].n} (ausente)</button>`:""}<button class="bk" data-z="quit">Desistir</button>`;else if(B.ai&&B.t==1)pn=`<p class="zst">Vez do rival…</p>`;
  else{const u=SEL&&SEL.u,fo=tg_(B).length>0,emp=s.f.includes(null);
   pn=`<p class="zst">${s.n} · ações ${"●".repeat(B.ac)}${"○".repeat(Math.max(0,(CONFIG.acoes||2)-B.ac))}${B.n==1&&B.t==B.st?" · quem começa faz 1 ação":""}</p>`;
   if(SEL&&SEL.m=="a")pn+=`<p class="zst">Toque no inimigo que vai apanhar</p><button class="bt gh" data-z="cancel">Cancelar</button>`;
@@ -1621,6 +1632,7 @@ function usk(){const B=BT,u=SEL.u,i=SEL.i,g=SEL.g;if(aSk(B,u,i,g)&&B.t==0)bump("
 function zc(a){const B=BT;if(!B)return;
  if(a=="go"){PASS=0;B.v=B.t;return zr()}
  if(a=="quit")return ask("Desistir da luta?","Conta como derrota.","Desistir",()=>{if(B.p.length>2){if(B.over||B.p[B.v].life<1)return;if(B.t!=B.v)return toast("Em grupo, só dá para desistir na sua vez.");window.lvq&&window.lvq(B.v);qtL(B,B.v);return zpost()}B.over=1;B.w=B.ai?1:1-B.v;B.why="desistiu";window.lvq&&window.lvq();zend()},1);
+  if(a=="sync")return window.lvSync&&window.lvSync();
   if(a=="leave"){window.mzLeave&&window.mzLeave();BT=null;zb.hidden=true;PASS=0;upd();return render(1)}
   if(a=="kick")return ask("Remover "+B.p[B.t].n+"?","Use só se "+B.p[B.t].n+" sumiu da partida.","Remover",()=>{const s=B.t;if(B.over||!window.LV||s==B.v)return;window.lvq&&window.lvq(s);qtL(B,s);zpost()},1);
  if(B.over||PASS||(B.ai&&B.t!=0)||(B.lv&&B.t!=B.v))return;
@@ -1640,8 +1652,8 @@ const gifts=()=>Object.values(S.gp||{}).reduce((a,b)=>a+(+b||0),0);
 // RESULTADO DA BATALHA: só o essencial · troféus ganhos ou perdidos (tr) e, quando houver, pacotes e avisos curtos (rw). Fragmentos e demais prêmios continuam sendo dados, só não aparecem aqui.
 function zend2(){if(BT&&BT.o&&BT.o.m=="g")return zendG(BT);if(BT&&BT.o&&BT.o.inf)return zendI(BT);const B=BT,w=B.w,k=B.o.k,t0=S.tp,_sn=(B.o.m=="a"||B.o.m=="f")&&w>=0&&SND[w===0?"win":"lose"](),_cf=(B.o.m=="a"||B.o.m=="f")&&w===0&&cpxConfetti(),a0=S.ar,g0=gifts(),rw=[];let tr="";fxEnd(B);bump("play");if(B.why!="desistiu"){const d0=day();if(!S.pj||S.pj.d!==d0)S.pj={d:d0,n:0};S.pj.n++}bump("kill",B.kl[0]);
  if(B.o.m=="a"){const d=day();if(!S.ba||S.ba.d!==d)S.ba={d,n:0};const ok=S.ba.n++<CONFIG.limiteDia,bs=B.o.b;
-  if(w==0){S.fr+=ok?arf(k):0;bump("win");if(ok){S.wn++;if(S.wn%CHX==0)gift(dpk().id)}else rw.push("Limite diário de prêmios atingido");
-   if(bs){arenaUp();tr="👑 Chefe derrotado!";rw.push(S.ar>a0?`🏟 Arena nova: ${AR[S.ar][0]} · 🃏 carta exclusiva`:"🏆 Campeão!")}
+  if(w==0){S.fr+=ok?arf(k):0;bump("win");if(ok){S.wn++;if(S.wn%CHX==0)gift(dpk().id);window.rcDar&&rcDar("v",k+1).forEach(x=>rw.push(x))}else rw.push("Limite diário de prêmios atingido");
+   if(bs){arenaUp();window.rcDar&&rcDar("b",a0+1).forEach(x=>rw.push(x));tr="👑 Chefe derrotado!";rw.push(S.ar>a0?`🏟 Arena nova: ${AR[S.ar][0]} · 🃏 carta exclusiva`:"🏆 Campeão!")}
    else{S.tp=Math.max(S.tp,Math.min(S.tp+TW,bcap()));prog();if(S.tp>=bcap()&&!S.camp)rw.push("🔒 Derrote o chefe!")}}
   else if(w==1){if(ok&&B.why!="desistiu")S.fr+=CONFIG.derrota;if(!bs)S.tp=Math.max(TR[S.ar],S.tp-TL)}}
  else{const d=day();if(S.fd.d!==d)S.fd={d,n:0};const pz=S.fd.n<CONFIG.amigoDia;S.fd.n++;if(w==0&&pz){S.fr+=CONFIG.amigoFrag;bump("frd");bump("win")}}
@@ -1680,17 +1692,19 @@ const b64=s=>btoa(unescape(encodeURIComponent(s))),unb=s=>decodeURIComponent(esc
 const saveCode=()=>"CP1:"+b64(JSON.stringify(S)),loadCode=t=>{t=String(t).trim();if(t.slice(0,4)=="CP1:")t=unb(t.slice(4));const j=JSON.parse(t);if(!j||!j.inv)throw 0;return j};
 const ADM=Object.assign({c:[],p:[],d:"",o:{},po:{},ab:[],ca:{},xp:[]},ADM0);
 const sADM=()=>{try{localStorage.setItem("colprimata_adm",JSON.stringify(ADM));localStorage.setItem("colprimata_img",JSON.stringify(IMG))}catch(e){toast("Sem espaço no aparelho · exporte o conteúdo")}};
-function addCard(x){let p=P.find(q=>q.id==x.pk);if(!p){const d=ADM.p.find(q=>q.id==x.pk);if(!d)return;p={id:d.id,n:d.n,e:d.e,h:d.h,cost:d.cost,cards:[]};P.push(p)}const c={...x};prep(p,c,0);p.cards.push(c);ALL.push(c)}
+function addCard(x){let p=x.pk=="ind"?IND:P.find(q=>q.id==x.pk);if(!p){const d=ADM.p.find(q=>q.id==x.pk);if(!d)return;p={id:d.id,n:d.n,e:d.e,h:d.h,cost:d.cost,cards:[]};P.push(p)}const c={...x};prep(p,c,0);p.cards.push(c);ALL.push(c)}
 ADM.c.filter(x=>!x.dr).forEach(addCard);P.forEach(p=>p.dest=p.id==ADM.d); // v1.9: dr=1 = rascunho (guardada, fora do jogo até lançar)
 const drGo=()=>{sADM();try{sessionStorage.cpad="";sessionStorage.cpad2="ds_l";sessionStorage.cptab=tab}catch(e){}location.reload()};
 const adxRm=(a,x)=>{const k=a.indexOf(x);k>=0&&a.splice(k,1)};
 Object.keys(ADM.po).forEach(i=>{const p=P.find(q=>q.id==i);p&&Object.assign(p,ADM.po[i])});P.forEach(p=>{if(IMG["pk_"+p.id])p.img=IMG["pk_"+p.id]});P.forEach(p=>{if(!p.bk&&IMG["pkb_"+p.id])p.bk=IMG["pkb_"+p.id];p.cards.forEach(c=>{if(!c.bk&&IMG["bk_"+c.id])c.bk=IMG["bk_"+c.id]})}); // foto do pacote fica em IMG["pk_"+id]
 Object.keys(ADM.o).forEach(i=>{const c=byId(i),o=ADM.o[i];if(!c)return;const p=c.p;
 if(o.del){adxRm(p.cards,c);adxRm(ALL,c);return}
-const q=P.find(z=>z.id==o.pk);if(q&&q!=p){adxRm(p.cards,c);q.cards.push(c);c.p=q}
+const q=o.pk=="ind"?IND:P.find(z=>z.id==o.pk);if(q&&q!=p){adxRm(p.cards,c);q.cards.push(c);c.p=q}
 Object.assign(c,o);if(!(o.ch>0))delete c.ch;if(!o.tipo)delete c.tipo});
 (ADM.xp||[]).forEach(id=>{const i=P.findIndex(q=>q.id==id);if(i>=0&&P.length>1){P[i].cards.forEach(c=>adxRm(ALL,c));P.splice(i,1)}});
 for(let i=P.length-1;i>=0;i--)if(!P[i].cards.length&&P.length>1)P.splice(i,1);
+// v2.1: pacote temporário que acabou e tem "fim": some da loja · fim=1 mantém as cartas (viram cartas especiais) · fim=2 exclui as cartas junto
+for(let i=P.length-1;i>=0;i--){const q=P[i];if(P.length>1&&q.ate>0&&Date.now()>q.ate&&q.fim>0){if(q.fim==1)q.cards.forEach(c=>{c.p=IND;IND.cards.push(c)});else q.cards.forEach(c=>adxRm(ALL,c));P.splice(i,1);PX.push(q)}}
 // v1.5: habilidades da biblioteca (ADM.ab) dadas às cartas (ADM.ca) viram itens de c.sk
 
 function qbiHtml(id){const c=byId(id);if(!c)return"";const o=c.sk0||c.sk||[],L=Array.isArray(o[0])?o:o.length?[o]:[],rm=(ADM.cx||{})[id]||[],so=ADM.ab.filter(a=>a.solo==id);
@@ -1714,7 +1728,7 @@ ADM.ab=ADM.ab.filter(a=>!del.includes(a.id));const z=(ADM.ca[id]||[]).filter(x=>
 q("[data-p]").filter(x=>x.checked).forEach(x=>{const p=QP[+x.dataset.p];if(!p)return;if(p.k=="l")z.push(p.id);else{const h=hxEx[p.i],n="h"+rid();ADM.ab.push({id:n,n:h[0],q:"",rc:h[1],ef:JSON.parse(JSON.stringify(h[2])),tr:h[3],solo:id});z.push(n)}});
 ADM.ca[id]=z;ADM.cx[id]=L.map(a=>a[0]).filter((n,i)=>{const c=cfg.querySelector(`#qab [data-i="${i}"]`);return c&&!c.checked});QP=[]}
 function YNEW(){const g=i=>$(i).value,n=g("en").trim(),pk=g("ek2");if(!n)return toast("Dê um nome à carta.");if(!pk)return toast("Escolha o pacote.");
-const x={id:"a"+rid(),pk,r:R[+g("er")][0],n,d:g("eh").trim()||undefined},ch=parseFloat(g("ech")),hp=+g("ehp"),at=+g("eatk");if(ch>0)x.ch=ch;if(hp>0)x.hp=hp;if(at>0)x.atk=at;
+const x={id:"a"+rid(),pk,r:R[+g("er")][0],n,d:g("eh").trim()||undefined},ch=parseFloat(g("ech")),hp=+g("ehp"),at=+g("eatk");if(ch>0)x.ch=ch;if(hp>0)x.hp=hp;if(at>0)x.atk=at;{const el=g("eel");if(el)x.el=el}
 if(PEND&&PW=="fj")IMG[x.id]=PEND;{const d=$("adr2");if(d&&d.checked)x.dr=1}ADM.c.push(x);YAB(x.id);x.dr?drGo():adxGo()}
 document.addEventListener("change",e=>{const t=e.target;if(!t||!t.id)return;
 if(t.id=="ec"){QP=[];const h=$("hc");if(h&&t.value!="__"){h.value=t.value;try{hcLoad()}catch(x){}}yMode();yPaint()}
@@ -1767,8 +1781,8 @@ adxT=(i,l,v,r)=>cpFl(l,`<textarea id="${i}" rows="${r}">${v}</textarea>`),
 adxL={vidas:"Vidas de cada jogador na luta",acoes:"Ações por turno",acaoIni:"Ações do primeiro turno",turnos:"Máximo de turnos da luta",iaMs:"Tempo de reação do rival (ms)",danoMult:"Dano de todas as cartas na luta (×)",vidaMult:"Vida de todas as cartas na luta (×)",admPin:"PIN do modo ADM",limiteDia:"Lutas por dia que dão prêmio",pacVit:"Vitórias para ganhar 1 pacote",tw:"Troféus ganhos por vitória",tl:"Troféus perdidos por derrota",mk:"Troféus por marco (e fragmentos do marco)",mkPacote:"Troféus por pacote de marco",mkMax:"Teto de troféus dos marcos",chefeFinal:"Troféus do chefe final",chefe:"Força do chefe (×)",diaria:"Fragmentos do login diário",amigoFrag:"Fragmentos por luta com amigo",amigoDia:"Lutas com amigo por dia",derrota:"Fragmentos por derrota",nDia:"Missões diárias por dia",mDia:"Fragmentos por missão diária",mSem:"Fragmentos por missão semanal",mSemPac:"Pacotes por missão semanal",mDiaBonus:"Missões diárias para 1 pacote bônus",arenaPac:"Pacotes do chefe da arena 1",arenaPacMais:"Pacotes a mais por arena",arenaFrag:"Fragmentos do chefe × nº da arena",campPac:"Pacotes do Campeão",campFrag:"Fragmentos do Campeão",gratisLivre:"Pacotes do dia sem jogar",gratisJogar:"Pacotes do dia por batalha",imgKB:"Tamanho máx. da imagem (KB)",arf0:"Fragmentos da 1ª vitória de arena",arfK:"+ fragmentos a cada arena",fusArena:"Arena que libera as fusões (1 = livre)",sArena:"Arena que libera o rank S e acima (1 = livre)",fusMult:"Preço das fusões (× o padrão)",faixa:"Folga da faixa de status por rank (± %)",som:"Sons do jogo (1 = ligado, 0 = desligado)",musica:"Música de fundo (1 = ligada, 0 = desligada)",botErro:"Erro dos bots na Arena 1 (% de jogadas ao acaso · cai até 2% na Arena 8)",botForca:"Força extra dos bots por arena (%)",botNivel:"Nível de fusão dos bots (× · 0 = sem fusão)"},
 adxPo=()=>adxO(P,p=>`<option value="${p.id}">${p.e} ${p.n}</option>`),
 adxCo=()=>adxO(ALL,c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`),
-adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",`<option value="__">➕ Nova carta…</option>`+adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("ek2","Pacote",adxPo())+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+adxI("ebk","Verso desta carta (link da imagem 3:4 · vazio = o do pacote)")+cpFl("Ou envie a imagem do verso desta carta",'<input id="fbk" type="file" accept="image/*">')+adxI("ega","Ganha de prêmio ao chegar na arena (0 = não ganha)","","number")+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+`<p class="mut" style="margin:12px 0 2px">✨ Habilidades desta carta (desmarque para remover)</p><div id="qab">${qabHtml(ALL[0]&&ALL[0].id)}</div>`+adxS("qad","",`<option value="">➕ Adicionar habilidade…</option><optgroup label="Modelos prontos (só desta carta)">${hxEx.map((h,i)=>`<option value="m${i}">${h[0]}</option>`).join("")}</optgroup><optgroup label="Biblioteca">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="l${a.id}">${a.n}</option>`).join("")}</optgroup>`)+`<label class="yck"><input type="checkbox" id="adr2" checked> 📦 Se for carta nova: guardar sem lançar</label>`+adxB("sc","💾 Salvar carta e habilidades")+adxB("dc","Excluir carta","gh")),
-adxPk=()=>adxD("k","📦 Editar pacotes",adxS("ek","Pacote",adxPo())+adxI("kn","Nome")+adxI("ke","Emoji")+adxI("kh","Cor (0 a 360)","","number")+adxI("kc","Preço em fragmentos (vazio = padrão)","","number")+adxI("ko","Chances % por raridade F,E,D,C,B,A,S,SS,SSS (vazio = padrão)")+adxI("kb","Verso das cartas deste pacote (link da imagem 3:4 · vazio = verso padrão)")+cpFl("Ou envie a imagem do verso do pacote",'<input id="fpb" type="file" accept="image/*">')+adxI("kt","Pacote some em (data e hora · vazio = nunca sai)","","datetime-local")+adxI("kx","Pacote especial (1 = não vende · cartas só como prêmio)","","number")+adxB("sk","Salvar pacote")+adxB("dk","Excluir pacote","gh")),
+adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",`<option value="__">➕ Nova carta…</option>`+adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("eel","Elemento",ELOPT)+adxS("ek2","Pacote",adxPo()+'<option value="ind">🎉 Sem pacote · carta especial</option>')+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+adxI("ebk","Verso desta carta (link da imagem 3:4 · vazio = o do pacote)")+cpFl("Ou envie a imagem do verso desta carta",'<input id="fbk" type="file" accept="image/*">')+adxI("ega","Ganha de prêmio ao chegar na arena (0 = não ganha)","","number")+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+`<p class="mut" style="margin:12px 0 2px">✨ Habilidades desta carta (desmarque para remover)</p><div id="qab">${qabHtml(ALL[0]&&ALL[0].id)}</div>`+adxS("qad","",`<option value="">➕ Adicionar habilidade…</option><optgroup label="Modelos prontos (só desta carta)">${hxEx.map((h,i)=>`<option value="m${i}">${h[0]}</option>`).join("")}</optgroup><optgroup label="Biblioteca">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="l${a.id}">${a.n}</option>`).join("")}</optgroup>`)+`<label class="yck"><input type="checkbox" id="adr2" checked> 📦 Se for carta nova: guardar sem lançar</label>`+adxB("sc","💾 Salvar carta e habilidades")+adxB("dc","Excluir carta","gh")),
+adxPk=()=>adxD("k","📦 Editar pacotes",adxS("ek","Pacote",adxPo()+(PX.length?`<optgroup label="Encerrados (já sumiram da loja)">${PX.map(p=>`<option value="${p.id}">${p.e} ${p.n}</option>`).join("")}</optgroup>`:""))+adxI("kn","Nome")+adxI("ke","Emoji")+adxI("kh","Cor (0 a 360)","","number")+adxI("kc","Preço em fragmentos (vazio = padrão)","","number")+adxI("ko","Chances % por raridade F,E,D,C,B,A,S,SS,SSS (vazio = padrão)")+adxI("kb","Verso das cartas deste pacote (link da imagem 3:4 · vazio = verso padrão)")+cpFl("Ou envie a imagem do verso do pacote",'<input id="fpb" type="file" accept="image/*">')+adxI("kt","Pacote some em (data e hora · vazio = nunca sai)","","datetime-local")+adxI("kx","Pacote especial (1 = não vende · cartas só como prêmio)","","number")+adxS("kf","Depois que o pacote acabar (precisa da data acima)",'<option value="0">Continuar na loja como “Encerrado”</option><option value="1">Sumir da loja e manter as cartas (viram cartas especiais)</option><option value="2">Sumir da loja e excluir as cartas junto</option>')+adxB("sk","Salvar pacote")+adxB("dk","Excluir pacote","gh")),
 adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("cf_"+k,adxL[k]||k,CONFIG[k],typeof CONFIG[k]=="number"?"number":"text")).join("")
 +adxI("rfr","Fragmentos por repetida · F,E,D,C,B,A,S,SS,SSS",FRAG.join(","))+adxI("rcu","Preço padrão do pacote",CUSTO,"number")+adxI("rini","Fragmentos de quem começa",INICIO,"number")
 +adxI("rrc","Chance % de cada raridade (padrão dos pacotes)",R.map(r=>r[2]).join(","))
@@ -1780,16 +1794,16 @@ adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("
 +adxT("rmc","Coleção e secretas · id|meta|pacotes (o texto depois de # é só o nome)",CL.concat(SC).map(m=>`${m[0]}|${m[3]}|${m[4]} # ${m[1]}`).join("\n"),10)
 +adxB("sr","Salvar regras")+adxB("rr","Restaurar padrões","gh")),
 adxGv=()=>adxD("g","🧪 Dar itens e testes",adxI("gn","Quantidade",10,"number")+adxS("gp","Pacote de presente",adxPo())+adxS("gc","Carta",adxCo())+adxB("gf","Dar fragmentos","cy")+adxB("gg","Dar pacotes de presente","cy")+adxB("gk","Dar a carta","cy")+adxB("ga","Liberar todas as cartas","gh"));
-function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("ek2").value=c.p.id;$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||"";$("ebk").value=c.bk||"";$("ega").value=c.ga||""}
-function adxFk(){const p=P.find(q=>q.id==$("ek").value);if(!p)return;$("kn").value=p.n;$("ke").value=p.e;$("kh").value=p.h;$("kc").value=p.cost||"";$("ko").value=p.odds?p.odds.join(","):"";$("kb").value=p.bk||"";$("kt").value=p.ate?new Date(p.ate-new Date(p.ate).getTimezoneOffset()*6e4).toISOString().slice(0,16):"";$("kx").value=p.esp||""}
+function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("eel").value=c.el||"";$("ek2").value=c.p.id;$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||"";$("ebk").value=c.bk||"";$("ega").value=c.ga||""}
+function adxFk(){const p=P.concat(PX).find(q=>q.id==$("ek").value);if(!p)return;$("kn").value=p.n;$("ke").value=p.e;$("kh").value=p.h;$("kc").value=p.cost||"";$("ko").value=p.odds?p.odds.join(","):"";$("kb").value=p.bk||"";$("kt").value=p.ate?new Date(p.ate-new Date(p.ate).getTimezoneOffset()*6e4).toISOString().slice(0,16):"";$("kx").value=p.esp||"";$("kf").value=p.fim||0}
 function adxGo(){sADM();sessionStorage.cpad=[...cfg.querySelectorAll("details[open]")].map(d=>d.id).join();try{sessionStorage.cptab=tab}catch(e){}location.reload()}
 function adxSc(){if($("ec").value=="__")return YNEW();const c=byId($("ec").value);if(!c)return;const g=i=>$(i).value,r=+g("er"),pk=g("ek2");let f=[+g("ehp"),+g("eatk")];
-if(pk!=c.p.id&&c.p.cards.length<2)return toast("O pacote precisa ficar com ao menos 1 carta.");
+if(pk!=c.p.id&&c.p.cards.length<2&&c.p!==IND&&!c.p.ex)return toast("O pacote precisa ficar com ao menos 1 carta.");
 if(f.some(x=>!(x>0)))return toast("Vida e dano precisam ser maiores que 0.");
 if(r!=c.r&&f[0]==c.hp&&f[1]==c.atk)f=[ST[r][0],ST[r][1]];
-ADM.o[c.id]={n:g("en").trim()||c.n,r,pk,hp:f[0],atk:f[1],ch:parseFloat(g("ech"))||0,d:g("eh").trim(),bk:g("ebk").trim(),ga:Math.max(0,Math.floor(+g("ega")||0))};if(PEND&&PW=="fj")IMG[c.id]=PEND;if(PEND&&PW=="fbk"){IMG["bk_"+c.id]=PEND;ADM.o[c.id].bk=""}else if(g("ebk").trim())delete IMG["bk_"+c.id];YAB(c.id);adxGo()}
+ADM.o[c.id]={n:g("en").trim()||c.n,r,pk,el:g("eel"),hp:f[0],atk:f[1],ch:parseFloat(g("ech"))||0,d:g("eh").trim(),bk:g("ebk").trim(),ga:Math.max(0,Math.floor(+g("ega")||0))};if(PEND&&PW=="fj")IMG[c.id]=PEND;if(PEND&&PW=="fbk"){IMG["bk_"+c.id]=PEND;ADM.o[c.id].bk=""}else if(g("ebk").trim())delete IMG["bk_"+c.id];YAB(c.id);adxGo()}
 function adxXp(p){const id=p.id;ADM.p=ADM.p.filter(q=>q.id!=id);ADM.xp=[...new Set([...(ADM.xp||[]),id])];ADM.c.filter(x=>x.pk==id).forEach(x=>delete IMG[x.id]);ADM.c=ADM.c.filter(x=>x.pk!=id);if(ADM.d==id)ADM.d="";delete ADM.po[id];delete IMG["pk_"+id];p.cards.forEach(x=>{delete IMG[x.id];delete S.inv[x.id]})}
-function adxDc(){const c=byId($("ec").value);if(!c)return;const p=c.p,ult=p.cards.length<2;if(ult&&P.length<2)return toast("O jogo precisa ter ao menos 1 pacote com 1 carta.");
+function adxDc(){const c=byId($("ec").value);if(!c)return;const p=c.p,ult=p.cards.length<2&&p!==IND&&!p.ex;if(ult&&P.length<2)return toast("O jogo precisa ter ao menos 1 pacote com 1 carta.");
 ask("Excluir carta?",ult?`<b>${c.n}</b> é a última carta do pacote <b>${p.n}</b> · o pacote também será excluído.`:`<b>${c.n}</b> some do jogo e dos pacotes.`,"Excluir",()=>{ADM.c=ADM.c.filter(x=>x.id!=c.id);delete IMG[c.id];ADM.o[c.id]={del:1};delete S.inv[c.id];if(ult)adxXp(p);save();adxGo()})}
 function cpxEvOn(){const e=ADM.ev;return e&&e.ate>Date.now()&&!(e.ini>Date.now())?e:null}
 function cpxEvM(){const e=cpxEvOn();return e&&e.mf>0?e.mf:1}
@@ -1798,8 +1812,8 @@ function cpxEvForm(){const e=ADM.ev||{},f=t=>t?new Date(t-new Date(t).getTimezon
 function cpxEvSave(){const n=$("evn").value.trim(),a=$("eva").value?new Date($("eva").value).getTime():0,i=$("evi").value?new Date($("evi").value).getTime():0,m=+$("evm").value||2;if(!n||!(a>Date.now()))return toast("Dê um nome e uma data de fim no futuro.");ADM.ev={n,ini:i,ate:a,mf:m,gf:Math.max(0,Math.floor(+$("evf").value||0)),gq:Math.max(0,Math.floor(+$("evq").value||0)),gk:$("evk").value};adxGo()}
 function cpxEvEnd(){delete ADM.ev;adxGo()}
 function adxSk(){const id=$("ek").value,v=$("ko").value.trim(),od=v?v.split(",").map(Number):null;if(od&&(od.length!=9||od.some(x=>!(x>=0))))return toast("Chances: 9 números separados por vírgula.");
-ADM.po[id]=Object.assign(ADM.po[id]||{},{n:$("kn").value.trim()||"Pacote",e:$("ke").value||"🎴",h:+$("kh").value||0,cost:+$("kc").value||0,odds:od,bk:$("kb").value.trim(),ate:$("kt").value?new Date($("kt").value).getTime():0,esp:+$("kx").value>0?1:0});if(PEND&&PW=="fpb"){IMG["pkb_"+id]=PEND;ADM.po[id].bk=""}else if($("kb").value.trim())delete IMG["pkb_"+id];adxGo()}
-function adxDk(){const id=$("ek").value,p=P.find(q=>q.id==id);if(!p)return;if(P.length<2)return toast("O jogo precisa ter ao menos 1 pacote.");
+ADM.po[id]=Object.assign(ADM.po[id]||{},{n:$("kn").value.trim()||"Pacote",e:$("ke").value||"🎴",h:+$("kh").value||0,cost:+$("kc").value||0,odds:od,bk:$("kb").value.trim(),ate:$("kt").value?new Date($("kt").value).getTime():0,esp:+$("kx").value>0?1:0,fim:+$("kf").value||0});if(PEND&&PW=="fpb"){IMG["pkb_"+id]=PEND;ADM.po[id].bk=""}else if($("kb").value.trim())delete IMG["pkb_"+id];adxGo()}
+function adxDk(){const id=$("ek").value,p=P.find(q=>q.id==id);if(!p)return PX.some(q=>q.id==id)?toast("Esse pacote já acabou e saiu da loja."):0;if(P.length<2)return toast("O jogo precisa ter ao menos 1 pacote.");
 ask("Excluir pacote?",`<b>${p.n}</b> e as ${p.cards.length} cartas dele somem do jogo.`,"Excluir",()=>{adxXp(p);save();adxGo()})}
 function adxSr(){const g=i=>$(i).value,n=i=>g(i).split(",").map(x=>+x.trim()),ln=i=>g(i).split("\n").map(x=>x.trim()).filter(Boolean),ok=a=>a.length==9&&a.every(x=>x>=0),
 ms=i=>ln(i).map(l=>{const p=l.split("|");return[p[0].trim(),(p[1]||"").trim(),+p[2]]}),cf={},mc={};
@@ -2035,14 +2049,14 @@ if(!document.querySelector('meta[name="theme-color"]')){const t=document.createE
 <script>
 // ===== v1.0 (17/11/2026): MODO ADM organizado · categorias, busca, botão de salvar fixo, campos em grupos e zona de risco =====
 (()=>{try{
-const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_ev:["🎉","Eventos","Bônus, presentes e aviso na tela inicial"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"]},
+const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_ev:["🎉","Eventos","Bônus, presentes e aviso na tela inicial"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina o elemento de cada carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"]},
 FT={ds_ev:["@sev","Salvar evento"],ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"]},
 GR={ds_r:[["Login e pacotes",["cf_diaria","cf_pacVit","cf_gratisLivre","cf_gratisJogar"]],["Fragmentos e preços",["rfr","rcu","rini","rrc","cf_fusMult"]],["Liberações por arena",["cf_fusArena","cf_sArena"]],["Faixa de status por rank",["cf_faixa"]],["Bots de batalha",["cf_botErro","cf_botForca","cf_botNivel"]]],
 ds_b:[["Troféus",["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax"]],["Prêmios das lutas",["cf_limiteDia","cf_derrota","cf_arf0","cf_arfK","cf_amigoFrag","cf_amigoDia"]],["Chefes e campeão",["cf_chefe","cf_chefeFinal","cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag"]],["Arenas e força das cartas",["rtr","ran","rst"]]],
 ds_m:[["Missões",["cf_nDia","cf_mDia","cf_mSem","cf_mSemPac","cf_mDiaBonus"]],["Listas de missões",["rdp","rwp","rmc"]]],
 ds_s:[["Sistema",["cf_admPin","cf_imgKB","cf_som","cf_musica"]],["Conteúdo do jogo",["cc","fcc"]]],
 ds_k:[["Pacote em destaque",["ad"]]]},
-GRP=[["Criar e lançar",["ds_l","ds_i","ds_c","ds_h"]],["Pacotes",["ds_k","ds_v"]],["Regras do jogo",["ds_r","ds_b","ds_m","ds_ev"]],["Painel e sistema",["ds_p","ds_x","ds_g","ds_s"]]],
+GRP=[["Criar e lançar",["ds_l","ds_i","ds_c","ds_h","ds_e"]],["Presentes e prêmios",["ds_t","ds_q"]],["Limpeza",["ds_z"]],["Pacotes",["ds_k","ds_v"]],["Regras do jogo",["ds_r","ds_b","ds_m","ds_ev"]],["Painel e sistema",["ds_p","ds_x","ds_g","ds_s"]]],
 HALF=/^(er|et|ar2|at2|ke|pe|kh|ph|pc|kc|cf_admPin)$/,N=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),
 PG=()=>[...cfg.querySelectorAll("details.adp")],act=()=>cfg.querySelector("details.adp[open]"),
 el=(t,c,h)=>{const e=document.createElement(t);e.className=c;if(h!=null)e.innerHTML=h;return e};
@@ -2101,8 +2115,8 @@ mx=k=>Math.max(...ALL.map(x=>x[k]*(1+gain(x)*5))),
 t=(i,l,v,b,k)=>`<div class="st2"><i>${i}</i><small>${l}</small><b>${v}</b><div class="tr"><u style="width:${Math.min(100,Math.max(6,v/mx(k)*100)).toFixed(1)}%"></u></div><em>${v>b?`base ${b} · <span>+${v-b}</span> de nível`:`base ${b}`}</em></div>`,
 pw=Math.round(Math.sqrt(hp*dn)),po=ALL.filter(x=>x.hp*x.atk>c.hp*c.atk).length+1,
 ch=(k,v)=>v?`<div class="ch2"><small>${k}</small><b>${v}</b></div>`:"",
-el=c.el?EL[c.el]+" "+({agua:"Água"}[c.el]||c.el[0].toUpperCase()+c.el.slice(1)):"";
-return `<div class="sg2">${t("❤","Vida",hp,c.hp,"hp")}${t("⚔","Dano",dn,c.atk,"atk")}</div><div class="pw"><div><small>Poder</small><b>${pw}</b></div><span>#${po} de ${ALL.length} cartas</span></div><div class="cg2">${ch("Elemento",el)}${ch("Chance de sair",c.p.ex?"Exclusiva de arena":cch(c))}${ch("Selo",c.sl?(SLS[c.sl]||"")+" "+c.sl:"")}${ch("Pacote",(c.p.e?c.p.e+" ":"")+c.p.n)}</div>`}
+el=c.el&&EL[c.el]?EL[c.el]+" "+ELN[c.el]:"";
+return `<div class="sg2">${t("❤","Vida",hp,c.hp,"hp")}${t("⚔","Dano",dn,c.atk,"atk")}</div><div class="pw"><div><small>Poder</small><b>${pw}</b></div><span>#${po} de ${ALL.length} cartas</span></div><div class="cg2">${ch("Elemento",el)}${ch("Chance de sair",c.p.ex?(c.p.exl||"Exclusiva de arena"):cch(c))}${ch("Selo",c.sl?(SLS[c.sl]||"")+" "+c.sl:"")}${ch("Pacote",(c.p.e?c.p.e+" ":"")+c.p.n)}</div>${c.el&&EL[c.el]?`<p class="elv">${EL[c.el]} ${ELN[c.el]} é <b>forte contra</b> ${EL[BEAT[c.el]]} ${ELN[BEAT[c.el]]} e <b>fraco contra</b> ${EL[elFraco(c.el)]} ${ELN[elFraco(c.el)]}.</p>`:""}`}
 </script>
 <script>
 // ===== v1.3 (18/11/2026): MODO ADM COMPLETO · exemplos por rank, painel com verificação e simulador, visual do pacote (foto, formato, cor e textos) =====
@@ -2395,7 +2409,7 @@ function paint(){const t=$("z_it"),v=$("z_iv");if(!t||!v)return;S=parse(t.value)
 function build(){
  const d=$("ds_i");if(!d||$("z_it"))return;
  let last="";try{last=localStorage.getItem("cp_impk")||""}catch(e){}
- const ops=P.concat(ADM.p.filter(d=>!P.some(p=>p.id==d.id))).map(p=>`<option value="${E(p.id)}"${p.id==last?" selected":""}>${E(p.e||"")} ${E(p.n)}${p.cards?"":" · não lançado"}</option>`).join("");
+ const ops=P.concat(ADM.p.filter(d=>!P.some(p=>p.id==d.id))).map(p=>`<option value="${E(p.id)}"${p.id==last?" selected":""}>${E(p.e||"")} ${E(p.n)}${p.cards?"":" · não lançado"}</option>`).join("")+`<option value="ind"${last=="ind"?" selected":""}>🎉 Sem pacote · carta especial</option>`;
  d.insertAdjacentHTML("beforeend",`<div class="fg">
 <div class="exm">📥 <b>Como usar:</b> peça a carta para a IA (com o PDF de regras), copie a ficha que ela devolver e cole abaixo. O jogo monta a carta com nome, história, status e habilidades. Depois é só colocar a <b>foto</b> e conferir o <b>rank</b> em Cartas. A <b>chance de sair</b> não vem na ficha: fica automática até você mudar em Cartas.</div>
 <div class="afl w"><label for="z_ip">Em qual pacote a carta entra?</label><select id="z_ip">${ops}</select></div>
@@ -2467,6 +2481,37 @@ async function pushAdm(){ // só o administrador consegue (as regras do Firebase
   await setDoc(doc(db,"conteudo","adm"),{v,adm:a,f});L.removeItem("cp_pa");toast("☁️ Mudanças enviadas para todos");
  }catch(e){if(e.code==="permission-denied"){canAdm=false;L.removeItem("cp_pa");ls("cp_v","0");toast("⚠️ Mudanças só neste aparelho · entre no modo ADM com o PIN certo para enviar a todos")}else{console.warn(e);toast("⚠️ Falha ao enviar: "+esc(e.code||e.message));pa()}}}
 window.cpAdm=async pin=>{if(!U)return null;try{await setDoc(doc(db,"admins",U.uid),{c:pin});canAdm=true;pa();return true}catch(e){return e.code==="permission-denied"?false:null}};
+// ADM · excluir jogadores (usado pela tela Excluir do ADM): apaga primeiro o convite (tira o acesso), depois o save na nuvem e o perfil
+window.cpJog={ok:()=>!!U,
+ async list(){const s=await getDocs(collection(db,"perfis"));return s.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid)},
+ async del(ids){const ok=[],bad=[];let neg=0,part=0;
+  for(const id of ids){if(!id||id===U.uid){bad.push(id);continue}
+   try{await deleteDoc(doc(db,"amigos",id))}catch(e){bad.push(id);if(e.code==="permission-denied")neg=1;continue}
+   const r=await Promise.allSettled([deleteDoc(doc(db,"saves",id)),deleteDoc(doc(db,"perfis",id))]);
+   if(r.some(x=>x.status==="rejected"))part++;ok.push(id)}
+  return{ok,bad,neg,part}}};
+// ===== v2.1 · PRESENTES do ADM: o ADM grava em "presentes" (para = id da pessoa, ou "todos"); cada jogador pega uma vez só (guardado no save, em S.pg) =====
+window.cpPres={ok:()=>!!U,
+ async enviar(l){const ids=[];for(const g of l){const id="g"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);await setDoc(doc(db,"presentes",id),{...g,t:Date.now()});ids.push(id)}try{await checkPres()}catch(e){}return ids},
+ async lista(){const s=await getDocs(collection(db,"presentes"));return s.docs.map(d=>({...d.data(),gid:d.id})).sort((a,b)=>(b.t||0)-(a.t||0))}, // gid = id do documento (o campo "id" do presente é o da carta/pacote)
+ async apagar(id){await deleteDoc(doc(db,"presentes",id))}};
+let PRQ=[],prt=0,PRW=0;
+function recPres(id,g){if(!g||!U)return;S.pg=S.pg||{};if(S.pg[id])return;
+ if(g.para=="todos"&&(+g.t||0)<(S.pgs||0))return; // presente geral enviado antes desta conta existir: não vale
+ const n=Math.max(1,Math.floor(+g.n)||1),velho=Date.now()-(+g.t||0)>7*864e5;let txt;
+ if(g.tipo=="c"){const c=byId(g.id);if(c){S.inv[c.id]=(S.inv[c.id]||0)+n;txt=`🃏 <b>${esc(c.n)}</b>${n>1?" ×"+n:""}`}else{if(velho){S.pg[id]=Date.now();save()}return}} // carta ainda não chegou (conteúdo novo do ADM): tenta de novo na próxima abertura
+ else if(g.tipo=="p"){const p=P.find(q=>q.id==g.id);if(p){gift(p.id,n);txt=`📦 <b>${esc(p.n)}</b>${n>1?" ×"+n:""}`}else{if(velho){S.pg[id]=Date.now();save()}return}}
+ else if(g.tipo=="f"){S.fr+=n;txt=`💎 <b>${n}</b> fragmento${n>1?"s":""}`}
+ else return;
+ S.pg[id]=Date.now();const lim=Date.now()-90*864e5;for(const k in S.pg)if(S.pg[k]<lim)delete S.pg[k];
+ PRQ.push(txt+(g.msg?`<br><i>“${esc(g.msg)}”</i>`:""));save();clearTimeout(prt);prt=setTimeout(showPres,600)}
+function showPres(){if(!PRQ.length)return;if(bt()){prt=setTimeout(showPres,4000);return}
+ const l=PRQ.splice(0);modal(`<h3 style="margin:0 0 8px">🎁 Presente do ADM!</h3>${l.map(x=>`<p style="margin:8px 0">${x}</p>`).join("")}<button class="bt cy" data-a="px">Que legal!</button>`);render(1);window.upd&&window.upd()} // window.upd = atualiza o saldo na tela (o upd deste bloco é o que RECARREGA o jogo)
+async function checkPres(){if(!U)return;for(const w of [U.uid,"todos"]){const s=await getDocs(query(collection(db,"presentes"),where("para","==",w)));s.docs.forEach(d=>recPres(d.id,d.data()))}}
+function watchPres(){if(PRW)return;PRW=1;if(!S.pgs){S.pgs=Date.now()-36e5;save()}
+ const h=s=>s.docChanges().forEach(c=>{if(c.type!="removed"&&!(c.doc.metadata&&c.doc.metadata.hasPendingWrites))recPres(c.doc.id,c.doc.data())}),er=e=>console.warn("presentes",e);
+ onSnapshot(query(collection(db,"presentes"),where("para","==",U.uid)),h,er);
+ onSnapshot(query(collection(db,"presentes"),where("para","==","todos")),h,er)}
 function upd(){if(bt())return setTimeout(upd,3000);toast("🔄 Atualizando o jogo…");setTimeout(reload,900)}
 function put(id,d,t){IMG[id]=d;meta[id]={k:H(d),t};if(id.slice(0,3)==="pk_"){const p=P.find(x=>"pk_"+x.id===id);if(p)p.img=d}else{const c=byId(id);if(c)c.img=d}}
 let rt=0;const rf=now=>{clearTimeout(rt);rt=setTimeout(()=>{try{if(bt()){BT&&!BT.zq&&zr()}else render(1)}catch(e){console.warn(e)}},now?0:700)};
@@ -2489,7 +2534,7 @@ function stats(){const t=(S.cn&&S.cn.T)||{},w=t.win||0,o=S.on||{},h=ALL.filter(c
 async function pubPerfil(){if(!U)return;try{await setDoc(doc(db,"perfis",U.uid),stats(),{merge:true})}catch(e){warn("perfil",e)}}
 function pf(){clearTimeout(pt);pt=setTimeout(pubPerfil,6000)}
 function modal(h){let o=g("cpm");if(!o){o=document.createElement("div");o.id="cpm";o.onclick=e=>{if(e.target===o)return o.remove();const b=e.target.closest("[data-a]");b&&act(b.dataset.a,b.dataset.v)};o.onchange=e=>{e.target.id=="tm"&&fillQ()};document.body.append(o)}o.innerHTML=`<div class="pbx">${h}</div>`;return o}
-function act(a,v){if(String(a).slice(0,2)=="mz")return mzAct(a,v);if(a=="me")perfil();else if(a=="pj")jogadores();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca")}
+function act(a,v){if(String(a).slice(0,2)=="mz")return mzAct(a,v);if(a=="me")perfil();else if(a=="pj")jogadores();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca");else if(a=="px"){const o=g("cpm");o&&o.remove()}}
 function perfil(){const s=stats(),k=TIN.filter(t=>t.s=="p").length;
  modal(`<div class="cxpr"><button class="cxpav" data-a="pf">${av(ME.f,ME.n)}</button><div><b data-a="pn">${esc(ME.n)} ✎</b><small>toque na foto ou no nome para mudar</small></div></div><div class="cxpg"><div><b>🏆 ${s.tp}</b>troféus</div><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}</b>duelos ganhos</div><div><b>${s.ol}</b>duelos perdidos</div></div><button class="bt cy" data-a="pj">👥 Jogadores e trocas${k?" · 🔔 "+k:""}</button><button class="bt cy" data-a="mz">🎴 Batalha em grupo (2x2 ou todos)</button><button class="bt gh" data-a="out">Sair da conta</button>`)}
 function pickFoto(){const i=document.createElement("input");i.type="file";i.accept="image/*";i.onchange=()=>{const x=i.files[0];if(!x)return;const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=96;const q=Math.min(im.width,im.height);c.getContext("2d").drawImage(im,(im.width-q)/2,(im.height-q)/2,q,q,0,0,96,96);ME.f=c.toDataURL("image/jpeg",.72);pubPerfil().then(()=>{chip();perfil()})};im.src=URL.createObjectURL(x)};i.click()}
@@ -2522,12 +2567,21 @@ function watchTr(){const c=collection(db,"trocas"),m=s=>s.docs.filter(d=>!d.meta
 window.LV=null;let DW=null,DID=null;const INV={};
 const prng=a=>()=>{let t=a+=1831565813;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296},
  prs=t=>{const f=String(t||"").slice(5).split(",").map(x=>{const[i,l]=x.split(":"),c=byId(i);return c?{c,lv:Math.max(0,Math.min(5,+l||0))}:null});return f.length==12&&f.every(Boolean)&&new Set(f.map(x=>x.c.id)).size==12?f:null},
- eng=(n,rec)=>{const f=window[n];window[n]=function(){const L=window.LV,B=arguments[0];if(!L||!L.rr)return f.apply(this,arguments);const top=!L.d,R0=Math.random,mine=top&&!L.rm&&B&&B.t!=null&&B.t==B.v,ex=n=="endT"&&B&&B.ac>0;if(top)Math.random=L.rr;L.d++;let r;try{r=f.apply(this,arguments)}finally{L.d--;if(top)Math.random=R0}if(mine&&rec&&(n=="endT"?ex:r))lvSend(rec.apply(null,arguments));return r}};
+ eng=(n,rec)=>{const f=window[n];window[n]=function(){const L=window.LV,B=arguments[0];if(!L||!L.rr)return f.apply(this,arguments);const top=!L.d,R0=Math.random,mine=top&&!L.rm&&B&&B.t!=null&&B.t==B.v,ex=n=="endT"&&B&&B.ac>0,au=n=="endT"&&B&&B.ac<1&&!B.over;if(top)Math.random=L.rr;L.d++;let r;try{r=f.apply(this,arguments)}finally{L.d--;if(top)Math.random=R0}
+ // fim de turno manual = "en"; fim de turno automático (ações zeradas) = "ae", também enviado para o outro celular não ficar esperando uma vez que já passou
+ if(mine&&rec&&(n=="endT"?(ex||(au&&(B.t!=B.v||B.over))):r)){const c=rec.apply(null,arguments);if(n=="endT"&&!ex)c.k="ae";c.s=B.v;lvSend(c)}return r}};
 // o sorteio do motor usa uma semente comum: os dois celulares jogam as mesmas ações e chegam ao mesmo resultado
 eng("nb");eng("aDraw",()=>({k:"dr"}));eng("aPlace",(B,u)=>({k:"pl",u:u.id}));eng("aAtk",(B,u,t)=>({k:"at",u:u.id,t:t.id}));eng("aSk",(B,u,i,g)=>({k:"sk",u:u.id,i,e:g&&g.e&&g.e.id,a:g&&g.a&&g.a.id}));eng("endT",()=>({k:"en"}));
 function lvSend(c){const L=window.LV;if(!L)return;c.n=L.qn++;updateDoc(doc(db,L.g?"mesas":"duelos",L.id),{cm:arrayUnion(JSON.stringify(c))}).catch(e=>warn("duelo",e))}
+// botão "↻ Atualizar" da tela de espera: busca as jogadas do outro agora
+window.lvSync=async()=>{const L=window.LV;if(!L)return;try{const d=(await getDoc(doc(db,L.g?"mesas":"duelos",L.id))).data(),q0=L.qn;if(!d)return toast("Duelo não encontrado");lvCm(d);toast(L.qn>q0?"↻ Atualizado":"Tudo em dia · esperando o outro jogar")}catch(e){warn("duelo",e)}};
+// enquanto espera o outro jogar, confere a cada 5 s se há jogada nova (caso o aviso em tempo real se perca, ex.: app em segundo plano)
+setInterval(()=>{const L=window.LV,B=bt();if(!L||!B||!B.lv||B.over||B.t==B.v||document.hidden||L.pf)return;L.pf=1;getDoc(doc(db,L.g?"mesas":"duelos",L.id)).then(sn=>{const d=sn.data();if(d&&window.LV===L)lvCm(d)}).catch(()=>{}).finally(()=>{L.pf=0})},5000);
 window.lvq=s=>window.LV&&lvSend({k:"qt",s});
-function rply(c){const B=BT,L=window.LV;if(!B||!L||B.over)return;L.rm=1;try{const s=cur_(B),o=i=>[...s.f,...s.r].find(u=>u&&u.id==i),e=i=>(B.p.length>2?en_(B):foe_(B).f).find(u=>u&&u.id==i),k=c.k;
+function rply(c){const B=BT,L=window.LV;if(!B||!L||B.over)return;L.rm=1;try{
+ if(c.k=="en"||c.k=="ae"){if(c.s==null||B.t==c.s)endT(B);return zpost()} // se a vez já passou por aqui, ignora (não passa duas vezes)
+ if(c.k!="qt"&&c.s!=null&&B.t!=c.s)for(let z=0;z<B.p.length&&B.t!=c.s&&!B.over;z++)endT(B); // celulares fora de sincronia: devolve a vez a quem está jogando
+ const s=cur_(B),o=i=>[...s.f,...s.r].find(u=>u&&u.id==i),e=i=>(B.p.length>2?en_(B):foe_(B).f).find(u=>u&&u.id==i),k=c.k;
  if(k=="qt"){if(B.p.length>2){qtS(B,c.s);return zpost()}B.over=1;B.w=B.v;B.why="desistiu";return zend()}
  if(k=="dr")aDraw(B);else if(k=="pl")aPlace(B,o(c.u));else if(k=="at")aAtk(B,o(c.u),e(c.t));else if(k=="sk")aSk(B,o(c.u),c.i,{e:e(c.e),a:o(c.a)});else if(k=="en")endT(B);
  zpost()}catch(x){console.warn("duelo",x)}finally{L.rm=0}}
@@ -2618,7 +2672,7 @@ async function start(u){
  let n=p.exists()?p.data().n:"";
  if(!n){n=(NK||prompt("Escolha seu apelido (seus amigos vão ver):",(u.displayName||"").split(" ")[0])||"Jogador").trim().slice(0,20);setDoc(doc(db,"perfis",id),{n})}
  U=u;ME.n=n;ME.f=p.exists()?p.data().f||"":"";if(L.getItem("colprimata_save")&&(!c||L.cp_d))pushSave();
- g("cpl")&&g("cpl").remove();chip();watchTr();watchDu();try{watchMz()}catch(e){console.warn("mesa",e)}pf();
+ g("cpl")&&g("cpl").remove();chip();watchTr();watchDu();try{watchMz()}catch(e){console.warn("mesa",e)}try{watchPres()}catch(e){console.warn("presentes",e)}pf();
  onSnapshot(doc(db,"conteudo","adm"),s=>{const d=s.data();if(!d){ready=1;L.cp_pa&&pa();return}lastA=d.adm;
   if(L.cp_pa)pa();else if(d.v!==+L.cp_v){ls("cp_v",d.v);if(d.adm!==L.getItem("colprimata_adm")){ls("colprimata_adm",d.adm);upd()}}
   fotos(d.f||{})},e=>{console.warn(e);if(e.code==="permission-denied")convite(u)});
@@ -2731,7 +2785,7 @@ window.zendI=function(B){const w=B.w,n=B.o.inf,win=w===0,t0=S.tp||0,m0=mdInfo().
 if(B.why!="desistiu"){const d=day();if(!S.pj||S.pj.d!==d)S.pj={d,n:0};S.pj.n++}
 try{SND[win?"win":"lose"]();win&&cpxConfetti()}catch(e){}
 if(S.im==null)S.im=m0;
-if(win){bump("win");const f=fr(n,m0),pk=n%10==0?2+(m0/5|0):n%5==0?1:0;S.fr+=f;rw.push(`${gem}+${fmt(f)}`);if(pk)gift(dpk().id,pk);S.il=n+1;S.tp=t0+TW}
+if(win){bump("win");const f=fr(n,m0),pk=n%10==0?2+(m0/5|0):n%5==0?1:0;S.fr+=f;rw.push(`${gem}+${fmt(f)}`);if(pk)gift(dpk().id,pk);S.il=n+1;S.tp=t0+TW;window.rcDar&&rcDar("i",n).forEach(x=>rw.push(x))}
 else if(w==1){if(B.why!="desistiu")S.fr+=CONFIG.derrota;S.tp=Math.min(t0,Math.max(CONFIG.chefeFinal||0,t0-TL))}
 const m1=mdInfo();for(let q=S.im+1;q<=m1.t;q++){const f=500*(q+1),pk=1+(q/5|0);S.fr+=f;gift(dpk().id,pk);rw.push(`🏅 ${mo(q).n}: ${gem}+${fmt(f)} · 🎁 +${pk}`)}S.im=Math.max(S.im,m1.t);
 const dt=S.tp-t0,np=gifts()-g0;if(np>0)rw.unshift(`🎁 +${np} pacote${np>1?"s":""}`);save();upd();
@@ -2832,7 +2886,7 @@ try{nav();rules();extra()}catch(x){}
 (function(){
 const css=document.createElement("style");css.textContent=`.aq{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.aq button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 4px;border-radius:14px;background:#6c5cff22;border:1px solid #6c5cff66;font-size:1.25rem;color:inherit}.aq b{font-size:.68rem;font-weight:900}.aq em{position:absolute;top:-6px;right:-4px;font-style:normal;background:#ff4d6d;color:#fff;border-radius:99px;padding:1px 7px;font-size:.66rem;font-weight:900}.aq em:empty{display:none}.at.hot{border-color:#6c5cff;box-shadow:0 0 0 1px #6c5cff66}#dr_box{display:grid;gap:12px}.drg{display:grid;gap:8px;padding:12px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff12}.drg>small{color:var(--mut);font-size:.68rem;font-weight:700;line-height:1.35}.drc{display:grid;grid-template-columns:22px 52px 1fr;gap:8px;align-items:start;padding:8px;border-radius:12px;background:#0003}#cfg .drc>input{width:22px;height:22px;padding:0;margin-top:2px}.drt{width:52px;height:69px;border-radius:8px;background:#222 center/cover;display:grid;place-items:center;font-size:1.1rem}.drb{display:grid;gap:4px;min-width:0}.drb small{color:var(--mut);font-size:.66rem;font-weight:700}.dr4{grid-column:1/-1;display:grid;grid-template-columns:.8fr 1fr 1fr 1fr;gap:6px}.drx{grid-column:1/-1;display:flex;gap:6px}#cfg .drb input,#cfg .dr4 input,#cfg .dr4 select{padding:8px;font-size:.78rem;min-width:0}#cfg .drx .bt{margin:0;flex:1;padding:8px;font-size:.74rem;text-align:center}.dra{position:sticky;bottom:0;display:grid;gap:8px;padding:12px 0 2px;background:linear-gradient(#0000,var(--bg,#161618) 35%)}`;document.head.append(css);
 const E=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
-L=()=>ADM.c.filter(x=>x.dr),live=k=>P.some(p=>p.id==k),pl=(n,a,b)=>n>1?b:a,
+L=()=>ADM.c.filter(x=>x.dr),live=k=>k=="ind"||P.some(p=>p.id==k),pl=(n,a,b)=>n>1?b:a,
 sel=()=>[...cfg.querySelectorAll('#ds_l [data-dr="sel"]:checked')],
 cnt=()=>{const b=cfg.querySelector('#ds_l [data-dr="go"]');if(b)b.textContent=`🚀 Lançar selecionadas (${sel().length})`},
 row=(x,on)=>{const n=(ADM.ca[x.id]||[]).length,im=IMG[x.id];
@@ -2840,8 +2894,8 @@ row=(x,on)=>{const n=(ADM.ca[x.id]||[]).length,im=IMG[x.id];
 function paint(){let b=$("dr_box");
  if(!b){const d=$("ds_l");if(!d)return;d.insertAdjacentHTML("beforeend",'<div class="fg"><div class="exm">📦 Cartas guardadas ficam escondidas dos jogadores. Marque as que quer lançar e toque em <b>Lançar</b>: tudo entra no jogo de uma vez. O que você editar aqui salva sozinho.</div><div id="dr_box"></div></div>');b=$("dr_box")}
  const keep=sel().map(c=>c.dataset.i),l=L(),g={};l.forEach(x=>(g[x.pk]=g[x.pk]||[]).push(x));
- b.innerHTML=l.length?Object.keys(g).map(k=>{const p=P.find(q=>q.id==k),d=p||ADM.p.find(q=>q.id==k)||{e:"🎴",n:"Pacote"},n=g[k].length;
-  return `<div class="drg"><label class="yck"><input type="checkbox" data-dr="all" data-p="${k}"> <b>${E(d.e)} ${E(d.n)}</b></label><small>${p?"Pacote já lançado · as cartas entram nele":"🆕 Pacote novo · só aparece no jogo quando você lançar"} · ${n} carta${pl(n,"","s")}</small>${g[k].map(x=>row(x,keep.includes(x.id))).join("")}<button class="bt gh" data-dr="add" data-p="${k}">➕ Mais uma carta neste pacote</button></div>`}).join("")+'<div class="dra"><label class="yck"><input type="checkbox" data-dr="all"> Marcar todas</label><button class="bt" data-dr="go">🚀 Lançar selecionadas (0)</button></div>'
+ b.innerHTML=l.length?Object.keys(g).map(k=>{const p=k=="ind"?IND:P.find(q=>q.id==k),d=p||ADM.p.find(q=>q.id==k)||{e:"🎴",n:"Pacote"},n=g[k].length;
+  return `<div class="drg"><label class="yck"><input type="checkbox" data-dr="all" data-p="${k}"> <b>${E(d.e)} ${E(d.n)}</b></label><small>${k=="ind"?"Cartas especiais · não saem em pacotes":p?"Pacote já lançado · as cartas entram nele":"🆕 Pacote novo · só aparece no jogo quando você lançar"} · ${n} carta${pl(n,"","s")}</small>${g[k].map(x=>row(x,keep.includes(x.id))).join("")}<button class="bt gh" data-dr="add" data-p="${k}">➕ Mais uma carta neste pacote</button></div>`}).join("")+'<div class="dra"><label class="yck"><input type="checkbox" data-dr="all"> Marcar todas</label><button class="bt" data-dr="go">🚀 Lançar selecionadas (0)</button></div>'
  :'<div class="exm">Nenhuma carta guardada agora. Crie em <b>Cartas</b> ou <b>Importar ficha</b> com “Guardar sem lançar” marcado.</div><button class="bt cy" data-adm="fds_n">➕ Nova carta</button><button class="bt gh" data-adm="pds_i">📥 Importar ficha</button>';
  cnt()}
 function badges(){const n=L().length,ag=cfg.querySelector(".ag");if(!ag)return;
@@ -2870,6 +2924,312 @@ cfg.addEventListener("click",e=>{const t=e.target.closest("#ds_l [data-dr]");if(
 const c3=cfgView;cfgView=function(v){const r=c3.apply(this,arguments);try{if(v=="a")badges()}catch(e){console.warn("dr",e)}return r};
 const o1=window.adxOpen;window.adxOpen=function(id){try{if(id=="ds_l")paint()}catch(e){console.warn("dr",e)}return o1&&o1.apply(this,arguments)};
 try{if(!cfg.hidden&&$("ds_c")){badges();const a=cfg.querySelector("details.adp[open]");if(a&&a.id=="ds_l")paint()}}catch(e){console.warn("dr",e)}
+})();
+</script>
+<script>
+// ===== v2.0 (21/11/2026): ADM · EXCLUIR · marque várias cartas, vários pacotes ou jogadores (ou todos) e exclua de uma vez =====
+(function(){
+try{
+const css=document.createElement("style");
+css.textContent=`#cfg .exc-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}#cfg .exc-seg button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:10px 4px;border-radius:12px;background:#ffffff0d;border:1px solid #ffffff14;color:inherit;font-size:.76rem;font-weight:900;opacity:.62}#cfg .exc-seg button small{min-height:.9em;font-size:.62rem;font-weight:700;color:var(--mut)}#cfg .exc-seg button.on{opacity:1;background:#f4566a22;border-color:#f4566a88}
+#cfg .exc-tools{display:grid;grid-template-columns:1fr auto;gap:8px;margin:10px 0}#cfg .exc-tools[data-n="1"]{grid-template-columns:1fr}#cfg .exc-tools input,#cfg .exc-tools select{padding:10px 12px;font-size:.84rem;min-width:0}#cfg .exc-tools select{width:auto;max-width:44vw}#cfg .exc-tools .bt{width:auto;margin:0;padding:8px 16px;font-size:1rem;letter-spacing:0}
+.exc-g{display:grid;gap:6px;padding:10px;margin-bottom:10px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff12}
+#cfg label.exc-gh{display:flex;align-items:center;gap:10px;margin:0;padding:2px 2px 6px;font-size:.84rem;color:inherit}#cfg label.exc-gh b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#cfg label.exc-gh small{font-size:.66rem;font-weight:700;color:var(--mut)}
+#cfg label.exc-r{display:grid;grid-template-columns:22px 34px 1fr;align-items:center;gap:10px;margin:0;padding:8px 10px;border-radius:12px;background:#0003;font-size:.85rem;color:inherit;cursor:pointer}#cfg label.exc-r:has(input:checked){background:#f4566a1f;box-shadow:inset 0 0 0 2px #f4566a}
+#cfg .exc-r input,#cfg .exc-gh input,#cfg .exc-all input{width:22px;height:22px;padding:0;margin:0;flex:none}
+.exc-rk,.exc-em,.exc-av{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;font-style:normal;font-weight:900;font-size:.8rem}#cfg .exc-rk{background:var(--pc,#888);color:#111;text-shadow:none}.exc-em{background:#ffffff10;font-size:1.15rem}.exc-av{overflow:hidden;border-radius:50%;background:#ffffff18}.exc-av img{display:block;width:100%;height:100%;object-fit:cover}
+.exc-t{display:grid;gap:2px;min-width:0}.exc-t b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.84rem;font-weight:800}.exc-t small{font-size:.68rem;font-weight:700;line-height:1.3;color:var(--mut)}.exc-tg{justify-self:start;padding:1px 8px;border-radius:99px;background:#f4566a26;color:#ff8a96;font-style:normal;font-size:.62rem;font-weight:900}
+#cfg #exc_bar{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}#cfg label.exc-all{display:flex;align-items:center;gap:8px;margin:0;font-size:.8rem;color:inherit;white-space:nowrap}#cfg #exc_bar .bt{margin:0;padding:13px 10px;font-size:.78rem}#cfg #exc_bar .bt:disabled{opacity:.45}html:not([data-tema="royale"]) #cfg .exc-go.on{background:#e5484d;color:#fff;border-color:#e5484d}
+.exc-help{margin:10px 0 4px;padding:0 12px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff12}.exc-help>summary{padding:11px 0;font-size:.74rem;font-weight:800;cursor:pointer}.exc-help p{margin:0 0 8px;font-size:.74rem;line-height:1.45;color:var(--mut)}.exc-help pre{margin:0 0 10px;padding:10px;border-radius:10px;background:#0006;font-size:.68rem;line-height:1.45;overflow-x:auto;white-space:pre;color:#e8e6ee}.exc-help code{font-size:.7rem}#cfg .exc-help .bt{margin:0 0 12px}`;
+document.head.append(css);
+
+const E=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),
+nz=s=>String(s==null?"":s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),
+pl=(n,a,b)=>n==1?a:b,sleep=ms=>new Promise(r=>setTimeout(r,ms)),
+TT={c:["🃏","Cartas"],p:["📦","Pacotes"],j:["👥","Jogadores"]},
+INFO={c:"As cartas somem do jogo e dos pacotes, para todos os jogadores. Não dá para desfazer. As Cartas de Arena (Guardiões) ficam de fora: o jogo depende delas.",p:"O pacote some com todas as cartas dele, para todos os jogadores. Não dá para desfazer.",j:"Apaga perfil, save na nuvem e convite: a pessoa volta para a tela “Só para amigos”. Você não aparece aqui."},
+RULES=`// ADM apaga contas de jogadores
+// Cole dentro de: match /databases/{database}/documents { ... }
+function admApaga() {
+  return request.auth != null
+    && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+}
+match /perfis/{id} { allow delete: if admApaga(); }
+match /saves/{id}  { allow delete: if admApaga(); }
+match /amigos/{id} { allow delete: if admApaga(); }`;
+let tab="c",q="",rk="",SEL=new Set(),VIS=[],JL=null,JS="idle",JR="",JB=0,busy=0;
+try{if(TT[sessionStorage.cpxt])tab=sessionStorage.cpxt}catch(e){}
+
+const names=a=>{const m=a.slice(0,6).map(n=>`<b>${E(n)}</b>`).join(", ");return a.length>6?`${m} e mais ${a.length-6}`:m},
+ago=t=>{const m=Math.max(0,Date.now()-t)/6e4;if(m<2)return"agora";if(m<60)return`há ${Math.round(m)} min`;const h=m/60;if(h<24)return`há ${Math.round(h)} h`;const d=Math.round(h/24);if(d<30)return`há ${d} dia${d>1?"s":""}`;const o=Math.round(d/30);return o<12?`há ${o} ${o>1?"meses":"mês"}`:"há mais de 1 ano"},
+sem=p=>(p.tp||p.w||p.l||p.ow||p.ol)?0:1,
+PC=()=>P.reduce((a,p)=>a+p.cards.length,0), // cartas que saem em pacotes (as de arena ficam fora de P)
+msg=m=>{try{sessionStorage.cpxm=m}catch(e){}},
+// o que sobra de uma carta/pacote apagado (habilidades só dela, fotos, inventário)
+clean=id=>{ADM.ab=ADM.ab.filter(a=>a.solo!=id);delete ADM.ca[id];if(ADM.cx)delete ADM.cx[id];delete IMG[id];delete IMG["bk_"+id];delete S.inv[id]},
+drafts=ps=>ADM.c.filter(x=>x.dr&&ps.some(p=>p.id==x.pk)).length,
+// pacote inteiro: mesma rotina do "Excluir pacote" do ADM + o que ela deixava para trás
+endPk=p=>{ADM.c.forEach(x=>{const c=byId(x.id);if(c&&c.p!==p&&x.pk==p.id)x.pk=c.p.id}); // carta criada neste pacote mas movida para outro não pode sumir junto
+ adxXp(p);delete IMG["pkb_"+p.id];if(S.gp)delete S.gp[p.id];p.cards.forEach(c=>{clean(c.id);delete ADM.o[c.id]})};
+
+// ---------- telas ----------
+function box(){const d=$("ds_z");if(!d)return null;let b=$("exc_box");if(!b){d.insertAdjacentHTML("beforeend",'<div class="fg"><div id="exc_box"></div></div>');b=$("exc_box")}return b}
+function paint(){const b=box();if(!b)return;
+ b.innerHTML=`<div class="exc-seg">${Object.keys(TT).map(k=>`<button data-xc="t" data-xt="${k}"${k==tab?' class="on"':""}>${TT[k][0]} ${TT[k][1]}<small id="exc_n${k}"></small></button>`).join("")}</div>`
+ +`<div class="exm">${INFO[tab]}</div>`
+ +`<div class="exc-tools"${tab=="p"?' data-n="1"':""}><input id="exc_q" type="search" autocomplete="off" placeholder="${tab=="j"?"Buscar jogador":tab=="p"?"Buscar pacote":"Buscar carta ou pacote"}" value="${E(q)}">${tab=="c"?`<select id="exc_r" aria-label="Filtrar por rank"><option value="">Todos os ranks</option>${R.map((r,i)=>`<option value="${i}"${String(i)===rk?" selected":""}>Rank ${r[0]}</option>`).join("")}</select>`:tab=="j"?'<button class="bt gh" data-xc="rf" aria-label="Atualizar lista">↻</button>':""}</div>`
+ +`<div id="exc_list"></div>`
+ +(tab=="j"?`<details class="exc-help" id="exc_helpd"><summary>🔧 Precisa liberar no Firebase?</summary><p>Se aparecer erro de permissão, cole este bloco nas regras do Firestore e publique. Se suas regras já têm outro teste de administrador, use o mesmo no lugar do <code>return</code>.</p><pre>${E(RULES)}</pre><button class="bt gh" data-xc="cp">📋 Copiar regras</button><p>Se a pessoa estiver com o jogo aberto, ela pode reaparecer até sair do app. Quem ainda souber o código de convite consegue voltar: para barrar de vez, troque o código nas regras.</p></details>`:"")
+ +`<div class="dra" id="exc_bar"><label class="exc-all"><input type="checkbox" data-xc="all"> Marcar todas</label><button class="bt gh dg exc-go" data-xc="go" disabled>🗑 Excluir</button></div>`;
+ list()}
+const empty=t=>`<div class="exm">${t}</div>`,
+crow=c=>`<label class="exc-r"><input type="checkbox" data-xc="s" value="${E(c.id)}"${SEL.has(c.id)?" checked":""}><i class="exc-rk" style="--pc:${E(R[c.r][1])}">${E(R[c.r][0])}</i><span class="exc-t"><b>${E(c.n)}</b><small>❤ ${+c.hp||0} · ⚔ ${+c.atk||0}</small></span></label>`,
+prow=p=>{const n=p.cards.length;return`<label class="exc-r"><input type="checkbox" data-xc="s" value="${E(p.id)}"${SEL.has(p.id)?" checked":""}><i class="exc-em">${E(p.e||"🎴")}</i><span class="exc-t"><b>${E(p.n)}</b><small>${n} carta${pl(n,"","s")}${p.ate?" · ⏳ temporário":""}${p.esp?" · ⭐ especial":""}${p.dest?" · em destaque":""}</small></span></label>`},
+jrow=p=>{const im=/^data:image\/jpeg;base64,[\w+\/=]+$/.test(p.f||"");return`<label class="exc-r"><input type="checkbox" data-xc="s" value="${E(p.id)}"${SEL.has(p.id)?" checked":""}><i class="exc-av">${im?`<img src="${p.f}" alt="">`:E((p.n||"?")[0]||"?")}</i><span class="exc-t"><b>${E(p.n||"(sem apelido)")}</b><small>🏆 ${+p.tp||0} · 🃏 ${+p.nc||0}/${+p.tot||0}${p.t?` · visto ${ago(+p.t)}`:""}</small>${sem(p)?'<em class="exc-tg">sem partidas</em>':""}</span></label>`};
+function build(){const k=nz(q);
+ if(tab=="c"){const g=[];[...P,...(IND.cards.length?[IND]:[])].forEach(p=>{const cs=p.cards.filter(c=>(rk===""||String(c.r)===rk)&&(!k||nz(c.n).includes(k)||nz(p.n).includes(k)));if(cs.length)g.push([p,cs])});
+  return{ids:g.flatMap(x=>x[1].map(c=>c.id)),html:g.map(([p,cs])=>`<div class="exc-g"><label class="exc-gh"><input type="checkbox" data-xc="grp"${cs.every(c=>SEL.has(c.id))?" checked":""}><b>${E(p.e||"🎴")} ${E(p.n)}</b><small>${cs.length} carta${pl(cs.length,"","s")}</small></label>${cs.map(crow).join("")}</div>`).join("")||empty("Nenhuma carta encontrada.")}}
+ if(tab=="p"){const ps=P.filter(p=>!k||nz(p.n).includes(k));return{ids:ps.map(p=>p.id),html:ps.length?`<div class="exc-g">${ps.map(prow).join("")}</div>`:empty("Nenhum pacote encontrado.")}}
+ if(JS!="ok")return{ids:[],html:empty({idle:"",load:"⏳ Carregando jogadores…",off:"🔌 Sem conexão com o jogo online. Confira a internet e toque em ↻.",err:"⚠️ Não consegui carregar os jogadores. Toque em ↻ para tentar de novo."}[JS]||"")};
+ const l=JL.filter(p=>!k||nz(p.n).includes(k)).sort((a,b)=>sem(b)-sem(a)||nz(a.n).localeCompare(nz(b.n)));
+ return{ids:l.map(p=>p.id),html:(JR?`<div class="exm" style="margin-bottom:10px">${JR}</div>`:"")+(l.length?`<div class="exc-g">${l.map(jrow).join("")}</div>`:empty(JL.length?"Nenhum jogador encontrado.":"Nenhum outro jogador na lista."))}}
+function list(){const L=$("exc_list");if(!L)return;const r=build();VIS=r.ids;const v=new Set(VIS);[...SEL].forEach(i=>{if(!v.has(i))SEL.delete(i)}); // só vale o que está na tela
+ L.innerHTML=r.html;counts();bar()}
+function counts(){const c={c:PC()+IND.cards.length,p:P.length,j:JL?JL.length:""};Object.keys(c).forEach(k=>{const e=$("exc_n"+k);if(e)e.textContent=c[k]})}
+function bar(){const n=SEL.size,b=document.querySelector("#exc_bar .exc-go"),a=document.querySelector('#exc_bar [data-xc="all"]');
+ if(b){b.disabled=!!busy||!n;b.classList.toggle("on",!!n&&!busy);b.textContent=busy?"Excluindo…":"🗑 Excluir"+(n?` (${n})`:"")}
+ if(a){a.checked=VIS.length>0&&VIS.every(i=>SEL.has(i));a.disabled=!VIS.length}}
+function open(){const b=$("exc_box");if(b&&b.children.length)list();else paint();
+ try{const m=sessionStorage.cpxm;if(m){sessionStorage.removeItem("cpxm");setTimeout(()=>toast(m),400)}}catch(e){}
+ if(tab=="j")loadJ()}
+
+// ---------- jogadores (usa o Firebase do bloco online) ----------
+async function loadJ(){if(JB)return;JB=1;if(!JL){JS="load";if($("exc_list"))list()}
+ try{for(let i=0;i<14&&!(window.cpJog&&window.cpJog.ok());i++){await sleep(700);if(tab!="j"||!$("exc_list")){JB=0;if(!JL)JS="idle";return}}
+  if(window.cpJog&&window.cpJog.ok()){JL=await window.cpJog.list();JS="ok"}else{JL=null;JS="off"}
+ }catch(e){console.warn("exc",e);JL=null;JS="err"}
+ JB=0;if(tab=="j"&&$("exc_list"))list()}
+function delJog(ids){const ps=ids.map(i=>(JL||[]).find(p=>p.id==i)).filter(Boolean);if(!ps.length)return;
+ ask(`Excluir ${ps.length} jogador${pl(ps.length,"","es")}?`,`${names(ps.map(p=>p.n||"(sem apelido)"))}<br>Apaga o perfil, o save na nuvem e o convite. ${ps.length>1?"Essas pessoas voltam":"A pessoa volta"} para a tela “Só para amigos” e perde${ps.length>1?"m":""} o progresso guardado na nuvem.<br>Não dá para desfazer.`,"Excluir",async()=>{
+  busy=1;bar();let r;try{r=await window.cpJog.del(ps.map(p=>p.id))}catch(e){console.warn("exc",e);r={ok:[],bad:ps.map(p=>p.id),neg:0,part:0}}
+  busy=0;const ok=r.ok.length,bad=r.bad.length;r.ok.forEach(i=>SEL.delete(i));JL=(JL||[]).filter(p=>!r.ok.includes(p.id));
+  JR=(ok?`✅ ${ok} jogador${pl(ok,"","es")} excluído${pl(ok,"","s")}.`:"")+(bad?`${ok?"<br>":""}⚠️ ${bad} não ${pl(bad,"foi","foram")} excluído${pl(bad,"","s")}${r.neg?": o Firebase negou a permissão. Abra “Precisa liberar no Firebase?” abaixo, cole as regras e tente de novo.":". Toque em ↻ e tente de novo."}`:"")+(r.part?`<br>⚠️ Em ${r.part} o perfil ou o save na nuvem não saiu (faltam regras).`:"");
+  if(r.neg||r.part){const h=$("exc_helpd");if(h)h.open=true}
+  toast(ok?`🗑 ${ok} jogador${pl(ok,"","es")} excluído${pl(ok,"","s")}`:"⚠️ Nada foi excluído");list()},1)}
+
+// ---------- cartas e pacotes ----------
+function delCartas(ids){const cs=ids.map(byId).filter(Boolean);if(!cs.length)return;
+ const n={};cs.forEach(c=>n[c.p.id]=(n[c.p.id]||0)+1);const gone=P.filter(p=>n[p.id]>=p.cards.length),dr=drafts(gone);
+ if(PC()-cs.filter(c=>c.p!==IND).length<1||P.length-gone.length<1)return toast("O jogo precisa ficar com ao menos 1 pacote com 1 carta. Desmarque alguma.");
+ ask(`Excluir ${cs.length} carta${pl(cs.length,"","s")}?`,`${names(cs.map(c=>c.n))}<br>Somem do jogo e dos pacotes, para todos os jogadores.${gone.length?`<br>📦 ${gone.length>1?"Os pacotes":"O pacote"} ${names(gone.map(p=>p.n))} ficar${gone.length>1?"ão":"á"} sem cartas e ${gone.length>1?"serão excluídos":"será excluído"} também.`:""}${dr?`<br>📥 ${dr} carta${pl(dr,"","s")} guardada${pl(dr,"","s")} em Lançamentos também ${pl(dr,"some","somem")}.`:""}<br>Não dá para desfazer.`,"Excluir",()=>{
+  cs.forEach(c=>{ADM.c=ADM.c.filter(x=>x.id!=c.id);ADM.o[c.id]={del:1};clean(c.id)});gone.forEach(endPk);
+  msg(`🗑 ${cs.length} carta${pl(cs.length,"","s")} excluída${pl(cs.length,"","s")}`);save();adxGo()},1)}
+function delPacotes(ids){const ps=ids.map(i=>P.find(p=>p.id==i)).filter(Boolean);if(!ps.length)return;
+ if(P.length-ps.length<1)return toast("O jogo precisa ficar com ao menos 1 pacote. Desmarque algum.");
+ const nc=ps.reduce((a,p)=>a+p.cards.length,0),dr=drafts(ps);
+ ask(`Excluir ${ps.length} pacote${pl(ps.length,"","s")}?`,`${names(ps.map(p=>p.n))}<br>${nc==1?"A única carta":`As ${nc} cartas`} ${ps.length>1?"deles":"dele"} também ${pl(nc,"some","somem")} do jogo, para todos os jogadores.${dr?`<br>📥 ${dr} carta${pl(dr,"","s")} guardada${pl(dr,"","s")} em Lançamentos também ${pl(dr,"some","somem")}.`:""}<br>Não dá para desfazer.`,"Excluir",()=>{
+  ps.forEach(endPk);msg(`🗑 ${ps.length} pacote${pl(ps.length,"","s")} excluído${pl(ps.length,"","s")} · ${nc} carta${pl(nc,"","s")}`);save();adxGo()},1)}
+function go(){const ids=[...SEL];if(!ids.length||busy)return;if(tab=="c")delCartas(ids);else if(tab=="p")delPacotes(ids);else delJog(ids)}
+async function copy(t){try{await navigator.clipboard.writeText(t);toast("📋 Regras copiadas")}catch(e){const a=document.createElement("textarea");a.value=t;document.body.append(a);a.select();let ok=0;try{ok=document.execCommand("copy")}catch(x){}a.remove();toast(ok?"📋 Regras copiadas":"Não consegui copiar · selecione o texto e copie")}}
+
+// ---------- ligação com o menu ADM ----------
+// digitar/marcar aqui não conta como "alteração pendente" do resto do ADM (a busca é tratada neste mesmo ouvinte)
+cfg.addEventListener("input",e=>{const t=e.target;if(!t.closest||!t.closest("#ds_z"))return;if(t.id=="exc_q"){q=t.value;list()}e.stopPropagation()},true);
+cfg.addEventListener("change",e=>{const t=e.target;if(!t.closest||!t.closest("#ds_z"))return;const k=t.dataset&&t.dataset.xc;
+ if(t.id=="exc_r"){rk=t.value;list();return}
+ if(k=="s"){t.checked?SEL.add(t.value):SEL.delete(t.value);const g=t.closest(".exc-g"),h=g&&g.querySelector('[data-xc="grp"]');if(h)h.checked=[...g.querySelectorAll('[data-xc="s"]')].every(x=>x.checked);bar();return}
+ if(k=="grp"){const g=t.closest(".exc-g");g.querySelectorAll('[data-xc="s"]').forEach(x=>{x.checked=t.checked;t.checked?SEL.add(x.value):SEL.delete(x.value)});bar();return}
+ if(k=="all"){VIS.forEach(i=>t.checked?SEL.add(i):SEL.delete(i));list()}});
+cfg.addEventListener("click",e=>{const t=e.target.closest("#ds_z [data-xc]");if(!t||/^(INPUT|SELECT)$/.test(t.tagName))return;const k=t.dataset.xc;
+ if(k=="t"){tab=t.dataset.xt;try{sessionStorage.cpxt=tab}catch(x){}SEL.clear();q="";rk="";JR="";paint();if(tab=="j")loadJ()}
+ else if(k=="go")go();
+ else if(k=="rf"){JL=null;JS="idle";JR="";loadJ()}
+ else if(k=="cp")copy(RULES)});
+const o3=window.adxOpen;window.adxOpen=function(id){try{if(id=="ds_z")open()}catch(e){console.warn("exc",e)}return o3&&o3.apply(this,arguments)};
+try{const a=cfg.querySelector("details.adp[open]");if(!cfg.hidden&&$("ds_c")&&a&&a.id=="ds_z")open()}catch(e){console.warn("exc",e)}
+}catch(x){console.warn("v2.0",x)}
+})();
+</script>
+<script>
+// ===== v2.1 (22/11/2026): ADM · ELEMENTOS (de várias cartas de uma vez) · PRÊMIOS DE CARTA (missão, chefe de arena, vitória em arena, batalha infinita) =====
+(function(){
+try{
+const css=document.createElement("style");
+css.textContent=`#cfg .el-gh{display:flex;align-items:center;gap:10px;margin:2px 0 6px;font-size:.84rem}#cfg .el-gh b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#cfg .el-gh select{width:auto;max-width:54%;padding:8px 10px;font-size:.74rem}
+#cfg .el-r{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:10px;margin:0;padding:8px 10px;border-radius:12px;background:#0003}#cfg .el-r.ch{box-shadow:inset 0 0 0 2px #f0b429}#cfg .el-r select{width:auto;max-width:44vw;padding:8px 10px;font-size:.8rem}
+#cfg #el_bar{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}#cfg #el_bar .bt{margin:0;padding:13px 14px;font-size:.78rem;width:auto}#cfg #el_bar .bt:disabled{opacity:.45}#cfg .el-cnt{font-size:.78rem;font-weight:800}
+#cfg .rc-r label{margin-top:10px}#cfg .rc-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}#cfg label.rc-ck{display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:.78rem;color:inherit}#cfg .rc-ck input{width:20px;height:20px;padding:0;margin:0;flex:none}#cfg .rc-r .bt{margin:12px 0 0}
+#cfg #rc_bar{display:grid;gap:8px}#cfg #rc_bar .bt{margin:0}`;
+document.head.append(css);
+
+const E=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),
+nz=s=>String(s==null?"":s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),
+pl=(n,a,b)=>n==1?a:b,
+msg=m=>{try{sessionStorage.cpxm=m}catch(e){}},
+showMsg=()=>{try{const m=sessionStorage.cpxm;if(m){sessionStorage.removeItem("cpxm");setTimeout(()=>toast(m),400)}}catch(e){}},
+ELS=[["","— Nenhum"]].concat(Object.keys(EL).map(k=>[k,EL[k]+" "+ELN[k]])),
+elOpts=sel=>ELS.map(([v,t])=>`<option value="${v}"${v===sel?" selected":""}>${t}</option>`).join("");
+
+// ---------- ELEMENTOS ----------
+let eq="",es="all";const EC=new Map(); // EC: alterações ainda não salvas (id → elemento)
+function elBox(){const d=$("ds_e");if(!d)return null;let b=$("el_box");if(!b){d.insertAdjacentHTML("beforeend",'<div class="fg"><div id="el_box"></div></div>');b=$("el_box")}return b}
+const elLegend=()=>{const a=Math.round((elm("fogo","planta")-1)*100),b=Math.round((1-elm("planta","fogo"))*100);return`<div class="exm"><b>Como funciona:</b> quem tem vantagem causa <b>+${a}%</b> de dano; quem tem desvantagem causa <b>−${b}%</b>. Carta sem elemento não tem vantagem nem desvantagem.<br>${Object.keys(EL).map(e=>`${EL[e]} ${ELN[e]} vence ${EL[BEAT[e]]} ${ELN[BEAT[e]]}`).join(" · ")}</div>`};
+function elPaint(){const b=elBox();if(!b)return;
+ b.innerHTML=elLegend()+`<div class="exc-tools"><input id="el_q" type="search" autocomplete="off" placeholder="Buscar carta ou pacote" value="${E(eq)}"><select id="el_f" aria-label="Mostrar"><option value="all">Todas</option><option value="no">Sem elemento</option><option value="yes">Com elemento</option></select></div><div id="el_list"></div><div class="dra" id="el_bar"><span class="el-cnt" id="el_cnt"></span><button class="bt gh dg exc-go" id="el_go" data-ela="save" disabled>💾 Salvar elementos</button></div>`;
+ $("el_f").value=es;elRows()}
+function elRows(){const L=$("el_list");if(!L)return;const k=nz(eq),g=P.map(p=>[(p.e||"")+" "+p.n,p.cards]);if(IND.cards.length)g.push(["🎉 Cartas especiais",IND.cards]);g.push(["🏆 Cartas de arena (Guardiões)",EX.cards]);
+ const cur=c=>EC.has(c.id)?EC.get(c.id):(c.el||"");
+ const html=g.map(([t,cs])=>{const l=cs.filter(c=>(!k||nz(c.n).includes(k)||nz(t).includes(k))&&(es=="all"||(es=="no")==!cur(c)));if(!l.length)return"";
+  return`<div class="exc-g"><div class="el-gh"><b>${E(t)}</b><select data-elf="g" aria-label="Definir o pacote todo"><option value="__">Definir todas…</option>${ELS.map(([v,x])=>`<option value="${v||"none"}">${x}</option>`).join("")}</select></div>`+l.map(c=>`<div class="el-r${EC.has(c.id)?" ch":""}"><i class="exc-rk" style="--pc:${E(R[c.r][1])}">${E(R[c.r][0])}</i><span class="exc-t"><b>${E(c.n)}</b><small>❤ ${+c.hp||0} · ⚔ ${+c.atk||0}</small></span><select data-elf="s" data-elid="${E(c.id)}" aria-label="Elemento de ${E(c.n)}">${elOpts(cur(c))}</select></div>`).join("")+`</div>`}).join("");
+ L.innerHTML=html||'<div class="exm">Nenhuma carta encontrada.</div>';elBar()}
+function elBar(){const n=EC.size,c=$("el_cnt"),b=$("el_go");if(c)c.textContent=n?`${n} carta${pl(n,"","s")} alterada${pl(n,"","s")}`:"Nenhuma alteração";if(b)b.disabled=!n}
+function elSet(id,v){const c=byId(id);if(!c)return;(v===(c.el||""))?EC.delete(id):EC.set(id,v)}
+function elSave(){const n=EC.size;if(!n)return;
+ EC.forEach((el,id)=>{const c=byId(id);if(!c)return;const x=ADM.c.find(q=>q.id==id);
+  if(x){if(el)x.el=el;else delete x.el} // carta criada no ADM: o elemento vai na própria carta
+  if(ADM.o[id])ADM.o[id].el=el;else if(!x)ADM.o[id]={el,ch:c.ch||0,tipo:c.tipo||""}}); // carta do jogo base: cria o ajuste mantendo chance e tipo
+ EC.clear();msg(`✅ Elemento salvo em ${n} carta${pl(n,"","s")}`);adxGo()}
+
+// ---------- PRÊMIOS DE CARTA ----------
+let RC=null;
+function rcBox(){const d=$("ds_q");if(!d)return null;let b=$("rc_box");if(!b){d.insertAdjacentHTML("beforeend",'<div class="fg"><div id="rc_box"></div></div>');b=$("rc_box")}return b}
+const RCT=[["m","Missão cumprida"],["b","Chefe da arena derrotado"],["v","Vitória em arena"],["i","Fase da batalha infinita"]],
+arn=k=>k==9?"Campeão · chefe final":`Arena ${k} · ${(AR[k-1]||["?"])[0]}`,
+cardOpts=sel=>{const og=(t,l)=>l.length?`<optgroup label="${E(t)}">${l.map(c=>`<option value="${E(c.id)}"${c.id==sel?" selected":""}>${E(R[c.r][0])} · ${E(c.n)}</option>`).join("")}</optgroup>`:"";return`<option value="">— escolha a carta —</option>`+og("🎉 Cartas especiais",IND.cards)+P.map(p=>og((p.e||"")+" "+p.n,p.cards)).join("")+og("🏆 Cartas de arena",EX.cards)},
+missOpts=sel=>[["Diária",DP.map(m=>m[0])],["Semanal",WP.map(m=>m[0])],["Coleção",CL.map(m=>m[1])],["Secreta",SC.map(m=>m[1])]].map(([t,l])=>`<optgroup label="${t}">${[...new Set(l)].map(x=>`<option value="${E(x)}"${x==sel?" selected":""}>${E(x)}</option>`).join("")}</optgroup>`).join(""),
+rcQual=(r)=>r.t=="m"?`<label>Qual missão</label><select data-rcf="k">${missOpts(r.k)}</select>`
+ :r.t=="b"?`<label>Qual chefe</label><select data-rcf="k">${[1,2,3,4,5,6,7,8,9].map(k=>`<option value="${k}"${+r.k==k?" selected":""}>${E(arn(k))}</option>`).join("")}</select>`
+ :r.t=="v"?`<label>Em qual arena</label><select data-rcf="k"><option value="0">Qualquer arena</option>${[1,2,3,4,5,6,7,8,9].map(k=>`<option value="${k}"${+r.k==k?" selected":""}>Arena ${k} · ${E((AR[k-1]||["?"])[0])}</option>`).join("")}</select>`
+ :`<label>Fase</label><input type="number" min="1" data-rcf="k" value="${+r.k||10}"><label class="rc-ck"><input type="checkbox" data-rcf="e"${r.e?" checked":""}> A cada N fases (ex.: 10 = fases 10, 20, 30…)</label>`,
+rcRow=(r,i)=>`<div class="exc-g rc-r" data-rci="${i}"><label>Quando</label><select data-rcf="t">${RCT.map(([v,t])=>`<option value="${v}"${r.t==v?" selected":""}>${t}</option>`).join("")}</select>${rcQual(r)}<label>Carta de prêmio</label><select data-rcf="c">${cardOpts(r.c)}</select><div class="rc-two"><div><label>Quantidade</label><input type="number" min="1" data-rcf="n" value="${+r.n||1}"></div><div><label>Chance %</label><input type="number" min="1" max="100" data-rcf="p" value="${+r.p||100}"></div></div><button class="bt gh dg" data-rca="del">🗑 Excluir esta regra</button></div>`;
+function rcPaint(){const b=rcBox();if(!b)return;if(!RC)RC=JSON.parse(JSON.stringify(ADM.rc||[]));
+ b.innerHTML=`<div class="exm">Escolha a <b>carta</b> (pode ser uma carta especial, sem pacote) e <b>quando</b> o jogador ganha: ao cumprir uma missão, ao derrotar um chefe de arena, a cada vitória em arena ou ao vencer uma fase da batalha infinita. Chance abaixo de 100% sorteia a cada vez.</div>${RC.length?RC.map(rcRow).join(""):'<div class="exm">Nenhuma regra ainda. Toque em “Nova regra”.</div>'}<div class="dra" id="rc_bar"><button class="bt gh" data-rca="add">＋ Nova regra</button><button class="bt" data-rca="save">💾 Salvar prêmios</button></div>`}
+function rcSave(){const out=[];for(const [i,r] of RC.entries()){const c=byId(r.c);if(!c)return toast(`Regra ${i+1}: escolha a carta de prêmio.`);
+  if(r.t=="m"&&!r.k)return toast(`Regra ${i+1}: escolha a missão.`);if(r.t=="i"&&!(+r.k>0))return toast(`Regra ${i+1}: informe a fase (1 ou mais).`);
+  const o={t:r.t,k:r.t=="m"?r.k:Math.max(0,Math.floor(+r.k)||0),c:r.c,n:Math.max(1,Math.floor(+r.n)||1),p:Math.min(100,Math.max(1,Math.floor(+r.p)||100))};if(r.t=="i"&&r.e)o.e=1;out.push(o)}
+ ADM.rc=out;RC=null;sADM();rcPaint();toast(`✅ ${out.length} regra${pl(out.length,"","s")} de prêmio salva${pl(out.length,"","s")}`)}
+window.cpxCards=cardOpts; // usada também pela tela Presentes
+// entrega o prêmio de carta: t = m (missão, k = título) · b (chefe, k = nº da arena) · v (vitória em arena, k = nº) · i (fase infinita, k = nº da fase)
+window.rcDar=function(t,k){const out=[];try{(ADM.rc||[]).forEach(r=>{if(r.t!=t)return;
+  const ok=t=="m"?r.k==k:t=="b"?+r.k==+k:t=="v"?(!+r.k||+r.k==+k):(r.e?(+r.k>0&&+k%(+r.k)==0):+r.k==+k);if(!ok)return;
+  const p=+r.p>0?+r.p:100;if(p<100&&Math.random()*100>=p)return;
+  const c=byId(r.c);if(!c)return;const n=Math.max(1,Math.floor(+r.n)||1);S.inv[c.id]=(S.inv[c.id]||0)+n;out.push(`🃏 <b>${E(c.n)}</b>${n>1?" ×"+n:""}`)})}catch(e){console.warn("rcDar",e)}return out};
+
+// ---------- ligação com o menu ADM ----------
+const IDS="#ds_e,#ds_q";
+cfg.addEventListener("input",e=>{const t=e.target;if(!t.closest||!t.closest(IDS))return;
+ if(t.id=="el_q"){eq=t.value;elRows()}
+ else if(t.dataset&&t.dataset.rcf&&RC){const r=RC[+t.closest("[data-rci]").dataset.rci],f=t.dataset.rcf;if(f=="e")r.e=t.checked?1:0;else if(f=="k"&&r.t!="m")r.k=t.value;else if(f=="n"||f=="p")r[f]=t.value}
+ e.stopPropagation()},true);
+cfg.addEventListener("change",e=>{const t=e.target;if(!t.closest||!t.closest(IDS))return;const f=t.dataset&&(t.dataset.elf||t.dataset.rcf);
+ if(t.id=="el_f"){es=t.value;elRows();return}
+ if(t.dataset.elf=="s"){elSet(t.dataset.elid,t.value);const r=t.closest(".el-r");if(r)r.classList.toggle("ch",EC.has(t.dataset.elid));elBar();return}
+ if(t.dataset.elf=="g"){const v=t.value;if(v=="__")return;const val=v=="none"?"":v;t.closest(".exc-g").querySelectorAll('[data-elf="s"]').forEach(s=>{s.value=val;elSet(s.dataset.elid,val);s.closest(".el-r").classList.toggle("ch",EC.has(s.dataset.elid))});t.value="__";elBar();return}
+ if(f&&RC&&t.dataset.rcf){const box=t.closest("[data-rci]"),i=+box.dataset.rci,r=RC[i],k=t.dataset.rcf;
+  if(k=="t"){r.t=t.value;r.k=t.value=="m"?"":t.value=="b"?1:t.value=="v"?0:10;r.e=0;rcPaint()}
+  else if(k=="k"){r.k=t.value}else if(k=="c"){r.c=t.value}else if(k=="e"){r.e=t.checked?1:0}else if(k=="n"||k=="p"){r[k]=t.value}}});
+cfg.addEventListener("click",e=>{const t=e.target.closest("#ds_e [data-ela],#ds_q [data-rca]");if(!t)return;
+ if(t.dataset.ela=="save")return elSave();
+ const a=t.dataset.rca;if(!RC)RC=JSON.parse(JSON.stringify(ADM.rc||[]));
+ if(a=="add"){RC.push({t:"m",k:"",c:"",n:1,p:100});rcPaint()}
+ else if(a=="del"){const i=+t.closest("[data-rci]").dataset.rci;RC.splice(i,1);rcPaint()}
+ else if(a=="save")rcSave()});
+const o4=window.adxOpen;window.adxOpen=function(id){try{if(id=="ds_e"){elPaint();showMsg()}else if(id=="ds_q"){RC=null;rcPaint()}}catch(e){console.warn("v2.1",e)}return o4&&o4.apply(this,arguments)};
+try{const a=cfg.querySelector("details.adp[open]");if(!cfg.hidden&&$("ds_c")&&a){if(a.id=="ds_e"){elPaint();showMsg()}else if(a.id=="ds_q"){RC=null;rcPaint()}}}catch(e){console.warn("v2.1",e)}
+}catch(x){console.warn("v2.1",x)}
+})();
+</script>
+<script>
+// ===== v2.2 (22/11/2026): ADM · PRESENTES · envie cartas, pacotes ou fragmentos para todos os jogadores ou só para alguns =====
+(function(){
+try{
+const css=document.createElement("style");
+css.textContent=`#cfg .pr-seg2{grid-template-columns:repeat(2,1fr)}#cfg .pr-box label{margin-top:12px}#cfg .pr-box .exc-seg{margin-top:4px}#cfg .pr-send{margin-top:16px}
+#cfg .pr-h{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;background:#0003;margin-bottom:6px}#cfg .pr-h b{font-size:.82rem;font-weight:800}#cfg .pr-h small{display:block;font-size:.68rem;font-weight:700;color:var(--mut);margin-top:2px}#cfg .pr-h .bt{width:auto;margin:0;padding:8px 12px;font-size:.7rem}
+#cfg .pr-t{margin:18px 0 8px;font-size:.74rem;font-weight:900;letter-spacing:.04em;color:var(--mut)}`;
+document.head.append(css);
+const E=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),
+nz=s=>String(s==null?"":s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),
+pl=(n,a,b)=>n==1?a:b,sleep=ms=>new Promise(r=>setTimeout(r,ms)),
+ago=t=>{const m=Math.max(0,Date.now()-t)/6e4;if(m<2)return"agora";if(m<60)return`há ${Math.round(m)} min`;const h=m/60;if(h<24)return`há ${Math.round(h)} h`;const d=Math.round(h/24);return d<30?`há ${d} dia${d>1?"s":""}`:"há mais de 1 mês"},
+RULES=`// Presentes do ADM
+// Cole dentro de: match /databases/{database}/documents { ... }
+function admPres() {
+  return request.auth != null
+    && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+}
+match /presentes/{id} {
+  allow read: if admPres() || (request.auth != null
+    && exists(/databases/$(database)/documents/amigos/$(request.auth.uid))
+    && (resource.data.para == request.auth.uid || resource.data.para == "todos"));
+  allow create, delete: if admPres();
+}`;
+let pt={para:"todos",tipo:"c"},PS=new Set(),PJ=null,PJS="idle",PQ="",HIST=null,HR="",busy=0,JB=0;
+
+function box(){const d=$("ds_t");if(!d)return null;let b=$("pr_box");if(!b){d.insertAdjacentHTML("beforeend",'<div class="fg pr-box"><div id="pr_box"></div></div>');b=$("pr_box")}return b}
+const itemName=g=>g.tipo=="c"?((byId(g.id)||{}).n||"carta que não existe mais"):g.tipo=="p"?(((P.find(p=>p.id==g.id))||PX.find(p=>p.id==g.id)||{}).n||"pacote que não existe mais"):"fragmentos",
+itemIco=t=>t=="c"?"🃏":t=="p"?"📦":"💎",
+who=g=>g.para=="todos"?"Todos":((PJ||[]).find(p=>p.id==g.para)||{}).n||"1 jogador";
+function paint(){const b=box();if(!b)return;
+ const sel=pt.para=="sel";
+ b.innerHTML=`<div class="exm">O presente chega sozinho quando o jogador abrir o jogo, e ele só pega uma vez. Dá para dar uma carta (até as especiais, sem pacote), pacotes fechados ou fragmentos.</div>`
+ +`<label>Para quem</label><div class="exc-seg pr-seg2"><button data-prs="para" data-pv="todos"${!sel?' class="on"':""}>👥 Todos os jogadores</button><button data-prs="para" data-pv="sel"${sel?' class="on"':""}>🎯 Escolher jogadores</button></div>`
+ +(sel?`<div class="exc-tools" data-n="1"><input id="pr_q" type="search" autocomplete="off" placeholder="Buscar jogador" value="${E(PQ)}"></div><div id="pr_pl"></div>`:"")
+ +`<label>O que dar</label><div class="exc-seg"><button data-prs="tipo" data-pv="c"${pt.tipo=="c"?' class="on"':""}>🃏 Carta</button><button data-prs="tipo" data-pv="p"${pt.tipo=="p"?' class="on"':""}>📦 Pacote</button><button data-prs="tipo" data-pv="f"${pt.tipo=="f"?' class="on"':""}>💎 Fragmentos</button></div>`
+ +(pt.tipo=="c"?`<label for="pr_c">Qual carta</label><select id="pr_c">${window.cpxCards?cpxCards(""):""}</select>`:pt.tipo=="p"?`<label for="pr_p">Qual pacote</label><select id="pr_p"><option value="">— escolha o pacote —</option>${P.map(p=>`<option value="${E(p.id)}">${E(p.e||"")} ${E(p.n)}${typeof pkExp=="function"&&pkExp(p)?" (encerrado)":""}</option>`).join("")}</select>`:"")
+ +`<label for="pr_n">${pt.tipo=="f"?"Quantos fragmentos":"Quantidade"}</label><input id="pr_n" type="number" min="1" value="${pt.tipo=="f"?500:1}">`
+ +`<label for="pr_m">Mensagem (opcional)</label><input id="pr_m" maxlength="80" autocomplete="off" placeholder="Ex.: Presente de boas-vindas!">`
+ +(HR?`<div class="exm" style="margin-top:12px">${HR}</div>`:"")
+ +`<button class="bt pr-send" data-pra="send">🎁 Enviar presente</button>`
+ +`<div class="pr-t">PRESENTES ENVIADOS</div><div id="pr_hist"></div>`
+ +`<details class="exc-help" id="pr_help"><summary>🔧 Precisa liberar no Firebase?</summary><p>Se aparecer erro de permissão, cole este bloco nas regras do Firestore e publique. Se suas regras já têm outro teste de administrador, use o mesmo no lugar do <code>return</code>.</p><pre>${E(RULES)}</pre><button class="bt gh" data-pra="copy">📋 Copiar regras</button></details>`;
+ plist();hist()}
+function plist(){const L=$("pr_pl");if(!L)return;
+ if(PJS!="ok"){L.innerHTML=`<div class="exm">${PJS=="load"?"⏳ Carregando jogadores…":PJS=="off"?"🔌 Sem conexão com o jogo online. Toque em ↻ para tentar de novo.":PJS=="err"?"⚠️ Não consegui carregar os jogadores.":""}</div>`+(PJS=="off"||PJS=="err"?'<button class="bt gh" data-pra="rf">↻ Tentar de novo</button>':"");return}
+ const k=nz(PQ),l=PJ.filter(p=>!k||nz(p.n).includes(k)).sort((a,b)=>nz(a.n).localeCompare(nz(b.n)));
+ L.innerHTML=l.length?`<div class="exc-g">${l.map(p=>{const im=/^data:image\/jpeg;base64,[\w+\/=]+$/.test(p.f||"");return`<label class="exc-r"><input type="checkbox" data-prp="${E(p.id)}"${PS.has(p.id)?" checked":""}><i class="exc-av">${im?`<img src="${p.f}" alt="">`:E((p.n||"?")[0]||"?")}</i><span class="exc-t"><b>${E(p.n||"(sem apelido)")}</b><small>🏆 ${+p.tp||0} · 🃏 ${+p.nc||0}/${+p.tot||0}</small></span></label>`}).join("")}</div><div class="exm">${PS.size} jogador${pl(PS.size,"","es")} marcado${pl(PS.size,"","s")}</div>`:'<div class="exm">Nenhum jogador encontrado.</div>'}
+function hist(){const H=$("pr_hist");if(!H)return;
+ if(HIST==null){H.innerHTML='<div class="exm">⏳ Carregando…</div>';return}
+ H.innerHTML=HIST.length?HIST.slice(0,12).map(g=>`<div class="pr-h"><div><b>${itemIco(g.tipo)} ${E(itemName(g))}${g.tipo!="c"||(+g.n||1)>1?" ×"+(+g.n||1):""}</b><small>Para ${E(who(g))} · ${ago(+g.t||0)}${g.msg?" · “"+E(g.msg)+"”":""}</small></div><button class="bt gh dg" data-pra="del" data-prid="${E(g.gid)}">Apagar</button></div>`).join(""):'<div class="exm">Nenhum presente enviado ainda.</div>'}
+async function loadP(){if(JB)return;JB=1;if(!PJ){PJS="load";plist()}
+ try{for(let i=0;i<14&&!(window.cpJog&&cpJog.ok());i++){await sleep(700);if(!$("pr_box")){JB=0;return}}
+  if(window.cpJog&&cpJog.ok()){PJ=await cpJog.list();PJS="ok"}else{PJ=null;PJS="off"}}catch(e){console.warn("pres",e);PJ=null;PJS="err"}
+ JB=0;plist()}
+async function loadH(){try{for(let i=0;i<14&&!(window.cpPres&&cpPres.ok());i++){await sleep(700);if(!$("pr_box"))return}
+  if(!(window.cpPres&&cpPres.ok())){HIST=[];hist();return}
+  HIST=await cpPres.lista();if(!PJ&&window.cpJog&&cpJog.ok()){try{PJ=await cpJog.list();PJS="ok"}catch(e){}}}catch(e){console.warn("pres",e);HIST=[];if(e&&e.code=="permission-denied")HR="⚠️ O Firebase negou a leitura. Abra “Precisa liberar no Firebase?” abaixo, cole as regras e publique.";}
+ if($("pr_box")){HR&&paint();hist()}}
+function send(){if(busy)return;
+ if(!(window.cpPres&&cpPres.ok()))return toast("Sem conexão com o jogo online.");
+ const tipo=pt.tipo,n=Math.floor(+$("pr_n").value)||0,msg=($("pr_m").value||"").trim().slice(0,80);
+ let id="";
+ if(tipo=="c"){id=$("pr_c").value;if(!byId(id))return toast("Escolha a carta.")}
+ else if(tipo=="p"){id=$("pr_p").value;if(!P.some(p=>p.id==id))return toast("Escolha o pacote.")}
+ if(!(n>=1)||n>(tipo=="f"?1e6:1000))return toast(tipo=="f"?"Informe de 1 a 1.000.000 fragmentos.":"Informe a quantidade (1 a 1000).");
+ const sel=pt.para=="sel",ps=sel?[...PS]:[];
+ if(sel&&!ps.length)return toast("Marque pelo menos um jogador.");
+ const item={tipo,id,n},nome=tipo=="f"?`${n} fragmentos`:`${itemName(item)}${n>1?" ×"+n:""}`,qt=sel?`${ps.length} jogador${pl(ps.length,"","es")}`:"todos os jogadores";
+ ask(`Enviar presente?`,`${itemIco(tipo)} <b>${E(nome)}</b><br>Para ${E(qt)}${msg?`<br>“${E(msg)}”`:""}<br>Não dá para pegar de volta depois que o jogador abrir o jogo.`,"Enviar",async()=>{
+  busy=1;HR="";try{const base={tipo,id,n};if(msg)base.msg=msg;
+   await cpPres.enviar(sel?ps.map(u=>({...base,para:u})):[{...base,para:"todos"}]);
+   toast(`🎁 Presente enviado para ${qt}`);PS.clear();HIST=null;busy=0;paint();loadH()}
+  catch(e){busy=0;console.warn("pres",e);HR=e&&e.code=="permission-denied"?"⚠️ O Firebase negou o envio. Abra “Precisa liberar no Firebase?” abaixo, cole as regras e publique. Depois toque em Enviar de novo.":"⚠️ Não consegui enviar. Confira a internet e tente de novo.";paint();if(e&&e.code=="permission-denied"){const h=$("pr_help");if(h)h.open=true}}})}
+async function copy(t){try{await navigator.clipboard.writeText(t);toast("📋 Regras copiadas")}catch(e){const a=document.createElement("textarea");a.value=t;document.body.append(a);a.select();let ok=0;try{ok=document.execCommand("copy")}catch(x){}a.remove();toast(ok?"📋 Regras copiadas":"Não consegui copiar · selecione o texto e copie")}}
+
+const IDS="#ds_t";
+cfg.addEventListener("input",e=>{const t=e.target;if(!t.closest||!t.closest(IDS))return;if(t.id=="pr_q"){PQ=t.value;plist()}e.stopPropagation()},true);
+cfg.addEventListener("change",e=>{const t=e.target;if(!t.closest||!t.closest(IDS))return;if(t.dataset&&t.dataset.prp){t.checked?PS.add(t.dataset.prp):PS.delete(t.dataset.prp);plist()}});
+cfg.addEventListener("click",e=>{const t=e.target.closest("#ds_t [data-prs],#ds_t [data-pra]");if(!t)return;
+ if(t.dataset.prs){const k=t.dataset.prs,v=t.dataset.pv;if(k=="para"){pt.para=v;PS.clear();paint();if(v=="sel")loadP()}else{pt.tipo=v;paint()}return}
+ const a=t.dataset.pra;
+ if(a=="send")send();
+ else if(a=="copy")copy(RULES);
+ else if(a=="rf"){PJ=null;PJS="idle";loadP()}
+ else if(a=="del"){const id=t.dataset.prid;ask("Apagar este presente?","Quem ainda não abriu o jogo deixa de receber. Quem já pegou continua com o presente.","Apagar",async()=>{try{await cpPres.apagar(id);HIST=(HIST||[]).filter(g=>g.gid!=id);hist();toast("🗑 Presente apagado")}catch(e){console.warn("pres",e);toast("⚠️ Não consegui apagar (regras do Firebase?)")}},1)}});
+function open(){paint();loadH();if(pt.para=="sel")loadP()}
+const o5=window.adxOpen;window.adxOpen=function(id){try{if(id=="ds_t")open()}catch(e){console.warn("v2.2",e)}return o5&&o5.apply(this,arguments)};
+try{const a=cfg.querySelector("details.adp[open]");if(!cfg.hidden&&$("ds_c")&&a&&a.id=="ds_t")open()}catch(e){console.warn("v2.2",e)}
+}catch(x){console.warn("v2.2",x)}
 })();
 </script>
 <style id="tema-css">
@@ -3108,5 +3468,27 @@ html[data-tema="v2"] .aq button{border:0;border-radius:0;background:var(--ik);co
 html[data-tema="v2"] .aq b{font:400 .95rem/1 var(--fh);letter-spacing:.05em;text-transform:uppercase}
 html[data-tema="v2"] .aq em{border-radius:0;background:var(--pk);color:var(--ik)}
 html[data-tema="v2"] .at.hot{border-color:var(--pk);box-shadow:5px 5px 0 var(--pk)}
+
+/* v2.0 · Excluir (cartas, pacotes e jogadores) nos temas */
+html[data-tema="v2"] .exc-g,html[data-tema="v2"] .exc-help,html[data-tema="v2"] #cfg label.exc-r,html[data-tema="v2"] #cfg .exc-seg button{background:#fff;border:2px solid var(--ik);border-radius:0;color:var(--ik)}
+html[data-tema="v2"] #cfg label.exc-r{box-shadow:3px 3px 0 var(--ik)}
+html[data-tema="v2"] #cfg label.exc-r:has(input:checked){background:#ffe3ec;border-color:var(--pk);box-shadow:3px 3px 0 var(--pk)}
+html[data-tema="v2"] #cfg .exc-seg button{opacity:1}
+html[data-tema="v2"] #cfg .exc-seg button.on{background:var(--ik);color:#fff;box-shadow:3px 3px 0 var(--pk)}
+html[data-tema="v2"] #cfg .exc-seg button small{color:inherit;opacity:.7}
+html[data-tema="v2"] .exc-rk,html[data-tema="v2"] .exc-em,html[data-tema="v2"] .exc-av{border-radius:0}
+html[data-tema="v2"] .exc-av{border:2px solid var(--ik)}
+html[data-tema="v2"] .exc-help pre{background:var(--ik);color:#fff;border-radius:0}
+html[data-tema="v2"] #cfg .exc-go.on{background:var(--pk);color:#fff;border-color:var(--ik)}
+html[data-tema="royale"] .exc-go.on{--ol:#4a0a12;--hl:#ffd0d4;--sh:#a31826;--c1:#ff8a96;--c2:#f0505f;--c3:#d9303f}
+html[data-tema="royale"] #cfg .exc-seg button.on{background:#0d2447;border-color:#07142d}
+
+/* v2.1 · Elementos e Prêmios de carta nos temas */
+html[data-tema="v2"] #cfg .el-r{background:#fff;border:2px solid var(--ik);border-radius:0;color:var(--ik);box-shadow:3px 3px 0 var(--ik)}
+html[data-tema="v2"] #cfg .el-r.ch{border-color:var(--pk);box-shadow:3px 3px 0 var(--pk)}
+html[data-tema="v2"] #cfg #el_go:not(:disabled){background:var(--pk);color:#fff;border-color:var(--ik)}
+
+/* v2.2 · Presentes nos temas */
+html[data-tema="v2"] #cfg .pr-h{background:#fff;border:2px solid var(--ik);border-radius:0;color:var(--ik);box-shadow:3px 3px 0 var(--ik)}
 </style></body>
 </html>
