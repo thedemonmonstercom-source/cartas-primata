@@ -1314,7 +1314,7 @@ const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
  /* SSS usa um aro prismático recortado; nenhuma peça fica sobre a ilustração. */
- const rarityFx=lk?"":`${r===5?'<u class="a-spectrum" aria-hidden="true"></u>':""}${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
+ const rarityFx=lk?"":`${r===5?'<u class="a-spectrum" aria-hidden="true"></u>':""}${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="sss-spectrum" aria-hidden="true"></u><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
  return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${art}${rarityFx}${frame}${xt}</div>`
 };
 // se a foto de uma carta não carregar, mostra a ilustração gerada
@@ -7200,51 +7200,78 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
 
 
 
-<style id="cp-sss-subtle-rainbow-film">
-/* SSS — película holográfica muito suave, aplicada somente sobre a ilustração.
-   O aro original da carta permanece intacto; nenhuma moldura adicional é criada. */
-.cd.cd.cd.cd.cp-art-only.k8.sss:not(.lock)>.sss-spectrum{
-  display:none!important;
-}
-.cd.cd.cd.cd.cp-art-only.k8.sss:not(.lock)>.art::after{
-  content:""!important;
+<style id="cp-sss-led-film-final">
+/* RANK SSS — película LED difusa sobre a ilustração inteira.
+   Não cria moldura: o aro original continua sendo a única borda. */
+.cd.cp-art-only.k8:not(.lock)>.sss-spectrum{
   display:block!important;
   position:absolute!important;
   inset:0!important;
-  z-index:7!important;
+  z-index:5!important;
+  overflow:hidden!important;
   border-radius:inherit!important;
   pointer-events:none!important;
-  background:
-    linear-gradient(112deg,
-      transparent 0%,
-      rgba(255,83,202,.23) 13%,
-      rgba(255,225,128,.22) 27%,
-      rgba(105,255,205,.21) 41%,
-      rgba(93,218,255,.22) 55%,
-      rgba(177,132,255,.22) 69%,
-      rgba(255,91,205,.21) 83%,
-      transparent 100%),
-    linear-gradient(118deg,
-      transparent 34%,
-      rgba(255,255,255,.13) 49%,
-      transparent 63%);
-  background-size:260% 180%,230% 190%!important;
-  background-position:0% 50%,100% 50%!important;
+  text-decoration:none!important;
+}
+/* Remove o reflexo colorido linear antigo: a película agora é feita de luzes difusas. */
+.cd.cp-art-only.k8>.art::after{
+  content:none!important;
+  display:none!important;
+}
+.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::before{
+  content:""!important;
+  position:absolute!important;
+  inset:-10%!important;
+  background-image:
+    radial-gradient(ellipse 58% 48% at 16% 18%,rgba(255,75,190,.46) 0%,transparent 73%),
+    radial-gradient(ellipse 58% 50% at 84% 18%,rgba(72,211,255,.43) 0%,transparent 74%),
+    radial-gradient(ellipse 56% 50% at 82% 84%,rgba(166,100,255,.46) 0%,transparent 74%),
+    radial-gradient(ellipse 58% 52% at 16% 82%,rgba(255,218,91,.39) 0%,transparent 74%),
+    radial-gradient(ellipse 48% 44% at 50% 48%,rgba(85,255,190,.29) 0%,transparent 76%)!important;
+  background-size:155% 155%,155% 155%,155% 155%,155% 155%,145% 145%!important;
+  background-position:0% 0%,100% 0%,100% 100%,0% 100%,50% 50%!important;
+  background-repeat:no-repeat!important;
+  opacity:.72!important;
   mix-blend-mode:soft-light!important;
-  opacity:.64!important;
-  filter:saturate(1.12)!important;
-  animation:cpSSSFilmFlow 11s ease-in-out infinite alternate!important;
+  filter:saturate(1.08)!important;
+  animation:cpSSSLedDrift 29s ease-in-out infinite alternate,cpSSSLedHue 48s linear infinite!important;
   will-change:background-position,filter;
 }
-@keyframes cpSSSFilmFlow{
-  from{
-    background-position:0% 50%,100% 50%;
-    filter:hue-rotate(-7deg) saturate(1.05);
-  }
-  to{
-    background-position:100% 50%,0% 50%;
-    filter:hue-rotate(19deg) saturate(1.16);
-  }
+@keyframes cpSSSLedDrift{
+  0%{background-position:0% 0%,100% 0%,100% 100%,0% 100%,50% 50%;}
+  34%{background-position:24% 70%,74% 12%,88% 48%,12% 92%,64% 28%;}
+  68%{background-position:90% 24%,12% 76%,28% 16%,82% 70%,34% 78%;}
+  100%{background-position:100% 100%,0% 100%,0% 0%,100% 0%,50% 50%;}
+}
+@keyframes cpSSSLedHue{
+  from{filter:hue-rotate(-8deg) saturate(1.06);}
+  to{filter:hue-rotate(352deg) saturate(1.12);}
+}
+/* O aro prismático faz uma volta bem mais lenta. */
+.cd.cp-art-only.k8>.rbw>i,
+.sum.big .cd.cp-art-only.k8>.rbw>i{
+  animation:spin 19s linear infinite!important;
+}
+/* Reflexo branco opcional: uma passagem mais lenta, seguida de uma pausa longa. */
+.cd.cp-art-only.k8.img.sw::after{
+  z-index:6!important;
+  opacity:.48!important;
+  animation:cpSSSReflectionPause 15s ease-in-out infinite!important;
+}
+@keyframes cpSSSReflectionPause{
+  0%,16%{transform:translateX(-125%);}
+  34%{transform:translateX(125%);}
+  100%{transform:translateX(125%);}
+}
+/* A respiração externa também fica mais calma, sem pulsos rápidos. */
+.cd.cp-art-only.k8:not(.lock){
+  animation:cpSSSCardAura 6.4s ease-in-out infinite alternate!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .cd.cp-art-only.k8:not(.lock)>.sss-spectrum::before,
+  .cd.cp-art-only.k8>.rbw>i,
+  .cd.cp-art-only.k8.img.sw::after,
+  .cd.cp-art-only.k8:not(.lock){animation:none!important;}
 }
 </style>
 
