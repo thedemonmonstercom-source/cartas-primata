@@ -1314,7 +1314,7 @@ const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
  /* SSS usa um aro prismático recortado; nenhuma peça fica sobre a ilustração. */
- const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
+ const rarityFx=lk?"":`${r===5?'<u class="a-spectrum" aria-hidden="true"></u>':""}${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="sss-spectrum" aria-hidden="true"></u><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
  return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${art}${rarityFx}${frame}${xt}</div>`
 };
 // se a foto de uma carta não carregar, mostra a ilustração gerada
@@ -7068,5 +7068,146 @@ const mv=e=>{const[c,b]=find(e.target);if(cur&&cur!==c){off(cur);cur=0}if(!c||c.
 ['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,e=>{if(cur&&e.pointerType!=='mouse'){off(cur);cur=0}}));
 document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget)&&!(box.contains&&box.contains(e.relatedTarget))){off(cur);cur=0}});
 })();</script>
+
+
+<style id="cp-card-always-on-rarity-fx">
+/* COLEÇÃO PRIMATA · acabamento final das cartas
+   Reativa a moldura (uma regra de limpeza anterior a escondia) e mantém os
+   efeitos de raridade visíveis sem depender de toque, clique ou movimento. */
+.cd.cd.cd.cd.cp-art-only:not(.lock)>.cp-card-frame{
+  display:block!important;
+  position:absolute!important;
+  z-index:10!important;
+  pointer-events:none!important;
+}
+.cd.cd.cd.cd.cp-art-only:not(.lock)>.cp-card-frame::before{
+  display:block!important;
+  content:""!important;
+  pointer-events:none!important;
+}
+.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-card-frame::after{
+  display:block!important;
+  content:""!important;
+  pointer-events:none!important;
+}
+
+/* Luz ambiente contínua e discreta: aparece mesmo sem interação. */
+.cd.cp-art-only.k4:not(.lock)>.art::before,
+.cd.cp-art-only.k5:not(.lock)>.art::before,
+.cd.cp-art-only.k6:not(.lock)>.art::before,
+.cd.cp-art-only.k7:not(.lock)>.art::before,
+.cd.cp-art-only.k8:not(.lock)>.art::before{
+  opacity:.12!important;
+  animation:cpCardIdleGlow 7.5s ease-in-out infinite alternate!important;
+}
+@keyframes cpCardIdleGlow{
+  from{opacity:.07;transform:scale(.98)}
+  to{opacity:.17;transform:scale(1.03)}
+}
+
+/* RANK A · ametista: acabamento especial, abaixo do impacto dourado de S. */
+.cd.cp-art-only.k5:not(.lock){
+  border-color:#c7aaff!important;
+  box-shadow:0 5px 17px #000a,0 0 8px #9c75e866,0 0 17px #7650c455!important;
+}
+.cd.cp-art-only.k5:not(.lock)>.cp-card-frame{
+  --cp-edge-width:2.7px!important;
+  --cp-edge-gradient:linear-gradient(125deg,#fff0ff 0%,#cba9ff 22%,#7955c9 48%,#e8d7ff 68%,#9a78e8 84%,#f8edff 100%)!important;
+}
+.cd.cp-art-only.k5:not(.lock)>.cp-card-frame::before{
+  filter:drop-shadow(0 0 3px #b28aff99)!important;
+}
+.cd.cp-art-only.k5:not(.lock)>.a-spectrum{
+  position:absolute;inset:0;z-index:5;display:block;overflow:hidden;
+  border-radius:inherit;pointer-events:none;text-decoration:none;
+}
+.cd.cp-art-only.k5:not(.lock)>.a-spectrum::before{
+  content:"";position:absolute;inset:-38%;
+  background:conic-gradient(from 0deg,transparent 0 26deg,#a979ff22 55deg,transparent 92deg,#80d9ff24 138deg,transparent 180deg,#d7a0ff26 235deg,transparent 300deg);
+  -webkit-mask-image:radial-gradient(ellipse closest-side,transparent 48%,#000 91%);
+  mask-image:radial-gradient(ellipse closest-side,transparent 48%,#000 91%);
+  opacity:.8;animation:cpARankOrbit 19s linear infinite;
+}
+.cd.cp-art-only.k5:not(.lock)>.a-spectrum::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(112deg,transparent 18%,#a77cff0d 34%,#f4eaff55 49%,#8ed8ff25 60%,transparent 78%);
+  background-size:230% 100%;background-position:100% 50%;
+  mix-blend-mode:screen;opacity:.62;
+  animation:cpARankSheen 8s ease-in-out infinite alternate;
+}
+@keyframes cpARankOrbit{to{transform:rotate(360deg)}}
+@keyframes cpARankSheen{to{background-position:0% 50%}}
+.cd.cp-art-only.k5:not(.lock).fo::before{opacity:.44!important}
+
+/* RANK SSS · arco-íris vivo que atravessa a carta inteira, não só a borda.
+   A transparência preserva a leitura e a ilustração original. */
+.cd.cp-art-only.k8:not(.lock)>.sss-spectrum{
+  position:absolute;inset:0;z-index:5;display:block;overflow:hidden;
+  border-radius:inherit;pointer-events:none;text-decoration:none;
+}
+.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::before{
+  content:"";position:absolute;inset:-42%;
+  background:conic-gradient(from 0deg at 50% 50%,
+    #ff4fd822 0deg,#ffe27a22 62deg,#5effc722 125deg,
+    #55dfff26 190deg,#9d72ff26 250deg,#ff4fd822 360deg);
+  opacity:.9;filter:blur(17px);mix-blend-mode:screen;
+  animation:cpSSSColorOrbit 13s linear infinite;
+}
+.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::after{
+  content:"";position:absolute;top:0;bottom:0;left:-92%;width:284%;
+  background:linear-gradient(108deg,
+    transparent 0%,#ff4fd82e 12%,#ffe27a35 25%,#5effc735 39%,
+    #55dfff3b 53%,#9d72ff3a 67%,#ff4fd832 82%,transparent 100%);
+  mix-blend-mode:screen;opacity:.7;
+  transform:translateX(-5%);
+  animation:cpSSSRainbowFlow 6.2s ease-in-out infinite alternate;
+}
+@keyframes cpSSSColorOrbit{to{transform:rotate(360deg)}}
+@keyframes cpSSSRainbowFlow{
+  from{transform:translateX(-7%)}
+  to{transform:translateX(7%)}
+}
+.cd.cp-art-only.k8:not(.lock).fo::before{opacity:.29!important}
+.cd.cp-art-only.k8:not(.lock){
+  box-shadow:0 5px 18px #000b,0 0 15px #ff63c5aa,
+    0 0 29px #a079ff88,0 0 39px #42dfe866!important;
+  animation:cpSSSCardAura 3.2s ease-in-out infinite alternate!important;
+}
+@keyframes cpSSSCardAura{
+  from{filter:brightness(1);}
+  to{filter:brightness(1.09);}
+}
+
+/* Na grade de resultados, os brilhos especiais continuam ativos. */
+.sum.big .cd.cp-art-only.k5>.a-spectrum::before{
+  animation:cpARankOrbit 19s linear infinite!important;
+}
+.sum.big .cd.cp-art-only.k5>.a-spectrum::after{
+  animation:cpARankSheen 8s ease-in-out infinite alternate!important;
+}
+.sum.big .cd.cp-art-only.k8>.sss-spectrum::before{
+  animation:cpSSSColorOrbit 13s linear infinite!important;
+}
+.sum.big .cd.cp-art-only.k8>.sss-spectrum::after{
+  animation:cpSSSRainbowFlow 6.2s ease-in-out infinite alternate!important;
+}
+.sum.big .cd.cp-art-only.k8>.rbw>i{
+  animation:spin 3.5s linear infinite!important;
+}
+
+/* Respeita a preferência do aparelho por movimento reduzido, sem apagar as cores. */
+@media(prefers-reduced-motion:reduce){
+  .cd.cp-art-only.k5>.a-spectrum::before,
+  .cd.cp-art-only.k5>.a-spectrum::after,
+  .cd.cp-art-only.k8>.sss-spectrum::before,
+  .cd.cp-art-only.k8>.sss-spectrum::after{
+    animation:none!important;
+  }
+  .cd.cp-art-only.k5>.a-spectrum::after{background-position:50% 50%}
+  .cd.cp-art-only.k8>.sss-spectrum::after{transform:none}
+  .cd.cp-art-only.k8:not(.lock){animation:none!important;filter:none!important}
+}
+</style>
+
 </body>
 </html>
