@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.1.3">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.1.3 -->
+<meta name="application-version" content="1.1.7">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.1.7 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -16,7 +16,7 @@
   não criar novas coleções Firebase sem necessidade. Preserve IDs DOM, saves, combate, 3 temas e mobile.
   Depois de cada atualização: validar sintaxe JS/CSS, IDs duplicados, renderização e fluxos de combate.
 -->
-<title>Coleção Primata</title><script>window.CP_VERSION="1.1.3";</script><script>
+<title>Coleção Primata</title><script>window.CP_VERSION="1.1.7";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -1523,7 +1523,7 @@ function view(c,keep){
   tx=rc?String(a[2]||"").replace(/\s*Recarga:\s*\d+\s*turnos?\.?\s*$/i,""):a[2]||""; // tira a recarga que já veio escrita no texto, para não repetir
   return `<h3>${ar.length>1?"Habilidade "+(ix+1)+" · ":""}${a[0]||"Sem habilidade ainda"}</h3>${elSkillTagHTML(a[3]||{},c)}<em>${a[1]||""}</em><p>${tx}${rc?` <b>Recarga: ${rc} turno${rc>1?"s":""}.</b>`:""}</p>`}).join("");
  f.style.setProperty("--rc",R[c.r][1]);
- f.innerHTML=`<div class="fch"><div class="hd"><button class="bk" data-a="2">‹ Voltar</button>${wlt()}</div>${card(c)}<h2>${c.n}</h2><p class="rar"><span class="rtg" style="--pc:${R[c.r][1]}">Rank ${R[c.r][0]}</span>${c.tb?`<span class="rtg">🐾 ${esc(c.tb)}</span>`:""}${n?`<span class="rtg">${NIVEIS[lvl(c)]}</span>`:""}${n>1?`<span class="rtg">${lvl(c)?`1 melhorada + ${n-1} repetida${n>2?"s":""}`:`×${n} cópias`}</span>`:""}</p><div class="sg">${[["s","Status"],["h","História"],["k","Habilidade"],...(n?[["r","Repetidas"]]:[])].map(x=>`<button data-f="${x[0]}" class="${ft==x[0]?"on":""}">${x[1]}${x[0]=="r"&&n>1?`<b>${n-1}</b>`:""}</button>`).join("")}</div><div class="pnl">${body}</div></div>`;
+ f.innerHTML=`<div class="fch"><div class="hd"><button class="bk" data-a="2">‹ Voltar</button>${wlt()}</div>${card(c)}<h2>${c.n}</h2><p class="rar"><span class="rtg" style="--pc:${R[c.r][1]}">Rank ${R[c.r][0]}</span>${c.tb?`<span class="rtg">🐾 ${esc(c.tb)}</span>`:""}${n?`<span class="rtg">${NIVEIS[lvl(c)]}</span>`:""}</p><div class="sg">${[["s","Status"],["h","História"],["k","Habilidade"],...(n?[["r","Repetidas"]]:[])].map(x=>`<button data-f="${x[0]}" class="${ft==x[0]?"on":""}">${x[1]}${x[0]=="r"&&n>1?`<b>${n-1}</b>`:""}</button>`).join("")}</div><div class="pnl">${body}</div></div>`;
  f.hidden=false;if(!keep)f.scrollTop=0;
 }
 function preview(i){const p=P[as]||P[0],r=(p&&p.cards.find(c=>c.r==i))||ALL.find(c=>c.r==i),x=r||ALL.find(c=>!c.img)||ALL[0];PV=r?{...r,id:"pv"}:{...x,img:0,r:i,id:"pv",hp:ST[i][0],atk:ST[i][1]};play(x.p,[{c:PV,n:false}],null)}
@@ -2067,10 +2067,11 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
   else if(u)pn+=`<button class="bt${emp&&B.ac?"":" off"}" data-z="place">Colocar em campo · 1 ação</button><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else pn+=`<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta para agir · toque de novo (ou no inimigo) para ver status e habilidades</p>`;
   pn+=`<div class="two"><button class="bt gh${s.r.length>=3||!s.dk.length?" off":""}" data-z="draw">${s.r.length>=3?"Banco cheio":!s.dk.length?"Baralho vazio":"Comprar grátis"}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
- if(B.lv&&!B.over)pn+=`<div class="cp-live-react"><small>Reações</small><button type="button" data-z="rx:😂" aria-label="Enviar risada">😂</button><button type="button" data-z="rx:👏" aria-label="Enviar aplausos">👏</button><button type="button" data-z="rx:🔥" aria-label="Enviar fogo">🔥</button></div>`;fxSnap();ME=me;zb.innerHTML=(B.p.length>2||(B.o&&B.o.soloBoss))?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();if(!zb.querySelector("[data-cp-el-guide-battle]"))zb.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
+ // Reações por emoji removidas: não devem enviar eventos nem interferir na sincronização.
+ fxSnap();ME=me;zb.innerHTML=(B.p.length>2||(B.o&&B.o.soloBoss))?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();if(!zb.querySelector("[data-cp-el-guide-battle]"))zb.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
 function zpost(){const B=BT;if(!B)return;SEL=null;if(!B.over)chk(B);if(!B.over&&B.ac<1)endT(B);if(B.over)return zend();if(!B.ai&&!B.lv&&B.t!=B.v)PASS=1;zr();aiRun()}
 function usk(){const B=BT,u=SEL&&SEL.u,i=SEL&&SEL.i,g=SEL&&SEL.g,before=!!(u&&u.chg&&u.chg[i]),humanSeat=B&&B.lv?B.v:0,ok=aSk(B,u,i,g);if(ok&&B.t===humanSeat){const after=!!(u.chg&&u.chg[i]);if(!before&&after)bump("charge");else if(!after){bump("abil");const ab=u.ab&&u.ab[i];if(ab&&elSkillEls(ab,u).some(k=>k!=="normal"))bump("eluse")}}zpost()}
-function zc(a){const B=BT;if(!B)return;if(a.startsWith("rx:")){const emoji=a.slice(3);cpShowDuelReaction(B.v,emoji);if(B.lv&&window.lvSend)window.lvSend({k:"rx",s:B.v,e:emoji});return}
+function zc(a){const B=BT;if(!B)return;if(String(a).startsWith("rx:"))return;
  if(a=="go"){PASS=0;B.v=B.t;return zr()}
  if(a=="quit")return ask("Desistir da luta?","Conta como derrota.","Desistir",()=>{if(B.p.length>2){if(B.over||B.p[B.v].life<1)return;if(B.t!=B.v)return toast("Em grupo, só dá para desistir na sua vez.");window.lvq&&window.lvq(B.v);qtL(B,B.v);return zpost()}B.over=1;B.w=B.ai?1:1-B.v;B.why="desistiu";window.lvq&&window.lvq();zend()},1);
   if(a=="sync")return window.lvSync&&window.lvSync();
@@ -2241,7 +2242,7 @@ function cfgView(v){cfg.hidden=false;PEND=null;
   starterEsc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   if(starterSet.size!==12){starterSet.clear();starterPool.filter(c=>c.r<4).slice(0,12).forEach(c=>starterSet.add(String(c.id)));if(starterSet.size<12)starterPool.filter(c=>c.r>=4).forEach(c=>{if(starterSet.size<12)starterSet.add(String(c.id))});}
   const starterRows=starterPool.map(c=>`<label class="yck" data-starter-row="${starterEsc((c.n||"")+" "+R[c.r][0]).toLowerCase()}"><input type="checkbox" data-starter-pick="1" value="${starterEsc(c.id)}"${starterSet.has(String(c.id))?" checked":""}><span>${R[c.r][0]} · ${starterEsc(c.n)}</span></label>`).join("");
-  cfg.innerHTML=T+adxEd()+adxHb()+adxPk()+cpxEvForm()+adxRl()+adxGv()+`<details class="fd" id="ds_n"><summary>➕ Nova carta ou pacote</summary><p class="mut" style="margin:0;text-transform:none;letter-spacing:0">As cartas criadas ficam salvas neste aparelho. Para levar aos amigos, use Exportar conteúdo.</p>`
+  cfg.innerHTML=T+adxEd()+adxHb()+adxPk()+adxRl()+adxGv()+`<details class="fd" id="ds_n"><summary>➕ Nova carta ou pacote</summary><p class="mut" style="margin:0;text-transform:none;letter-spacing:0">As cartas criadas ficam salvas neste aparelho. Para levar aos amigos, use Exportar conteúdo.</p>`
   +cpFl("Pacote",`<select id="ap">${op}</select>`)+`<div id="np" hidden>`+cpFl("Nome do pacote",'<input id="pn">')+cpFl("Emoji",'<input id="pe" value="🎴">')+cpFl("Cor (0 a 360)",'<input id="ph" type="number" value="200">')+cpFl("Preço em fragmentos",`<input id="pc" type="number" value="${CUSTO}">`)+`</div>`
   +cpFl("Nome da carta",'<input id="an">')+adxS("an_el","Elemento 1",ELOPT)+adxS("an_el2","Elemento 2 (opcional)",ELOPT2)+`<div id="cp-new-card-el-preview"></div>`+cpFl("Tribo / família (opcional)",'<input id="atb" maxlength="24" placeholder="Dragões, Bestas, Espíritos…">')+cpFl("Rank",`<select id="ar2">${rk}</select>`)
   +cpFl("Chance % (vazio = automática)",'<input id="ac" type="number" step="any">')+cpFl("História",'<textarea id="ah" rows="3"></textarea>')+cpFl("Habilidades da carta (marque várias)",`<select id="ahb" multiple size="5">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="${a.id}">${a.el&&a.el!=="carta"?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / ")+" · ":"🃏 "}${a.n}</option>`).join("")}</select>`)+cpFl("Habilidade só desta carta (não entra na lista geral)",`<select id="aqs"><option value="">Nenhuma</option>${hxEx.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join("")}</select>`)+cpFl("Imagem (vira WebP leve, até "+CONFIG.imgKB+" KB)",'<input id="fi" type="file" accept="image/*">')+`<label class="yck"><input type="checkbox" id="adr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt" data-k="nc">Salvar carta</button></details>`
@@ -2549,15 +2550,48 @@ const v=h.querySelector(".a3v");v.className="a3v"+(c>S.ar?" on":"");v.textConten
 function a3sz(){const h=$("a3");if(!A3||!A3.r||!h)return;const w=h.clientWidth||340,k=Math.round(w*.75),mobile=matchMedia("(max-width:700px)").matches;A3.r.setPixelRatio(Math.min(devicePixelRatio||1,mobile?1.25:1.75));A3.r.setSize(w,k,false);A3.cam.aspect=w/k;A3.cam.updateProjectionMatrix()}
 function a3lp(t){const h=$("a3");if(!A3.cv||!A3.cv.isConnected||document.hidden||!h){A3.raf=0;return}const box=h.getBoundingClientRect();if(!box.width||!box.height||box.bottom<-100||box.top>innerHeight+100){A3.raf=0;return}A3.raf=requestAnimationFrame(a3lp);if(t-(A3.lastFrame||0)<33)return;A3.lastFrame=t;
 A3.x+=(A3.tg-A3.x)*.14;if(Math.abs(A3.tg-A3.x)<.0004)A3.x=A3.tg;const x=A3.x*SP,sw=matchMedia("(prefers-reduced-motion:reduce)").matches?0:.16;
-A3.cam.position.set(x,9.2,19.5);A3.cam.lookAt(x,1.6,0);A3.g.forEach((g,i)=>{g.rotation.y=Math.sin(t/2300+i)*sw-(A3.x-i)*.35});A3.r.render(A3.sc,A3.cam);a3ui()}
+A3.cam.position.set(x,9.2,19.5);A3.cam.lookAt(x,1.6,0);A3.g.forEach((g,i)=>{g.rotation.y=Math.sin(t/2300+i)*sw-(A3.x-i)*.35});try{A3.r.render(A3.sc,A3.cam);a3ui()}catch(e){console.warn("Arena 3D perdeu o contexto; usando visual alternativo",e);A3.r=null;window.cpRenderArenaFallback(h)}}
 function a3Watch(h){if(!("IntersectionObserver" in window))return;if(!A3.io)A3.io=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.target!==A3.observed)continue;if(!entry.isIntersecting&&A3.raf){cancelAnimationFrame(A3.raf);A3.raf=0}else if(entry.isIntersecting&&!document.hidden&&A3.cv&&A3.cv.isConnected&&!A3.raf){A3.lastFrame=0;A3.raf=requestAnimationFrame(a3lp)}}},{rootMargin:"100px 0px"});if(A3.observed!==h){if(A3.observed)A3.io.unobserve(A3.observed);A3.observed=h;A3.io.observe(h)}}
-function a3go(){const h=$("a3");if(!h||typeof THREE=="undefined")return;
-try{if(!A3.r){const T=THREE;A3.cv=document.createElement("canvas");A3.r=new T.WebGLRenderer({canvas:A3.cv,antialias:true,alpha:true});A3.sc=new T.Scene();A3.cam=new T.PerspectiveCamera(40,4/3,.1,200);
-const hl=new T.HemisphereLight(0xe4ecff,0x5a5048,1),dl=new T.DirectionalLight(0xfff0d8,.7);dl.position.set(-8,14,10);A3.sc.add(hl,dl);
-a3build(T).forEach((g,i)=>{g.position.x=i*SP;A3.sc.add(g);A3.g.push(g)});a3ev(A3.cv)}}catch(e){A3.r=null;return}
-if(A3.off){A3.tg=A3.x=S.ar;A3.off=0}
-h.className="a3 on";h.innerHTML=`<div class="a3v"></div><div class="a3h"><button data-a3="-1" aria-label="Arena anterior">‹</button><div><b></b><small></small></div><button data-a3="1" aria-label="Próxima arena">›</button></div><div class="dots a3d">${AR.map(()=>"<i></i>").join("")}</div>`;
-h.prepend(A3.cv);a3sz();A3.f=1;A3.lastFrame=0;a3Watch(h);if(!A3.raf)A3.raf=requestAnimationFrame(a3lp)}
+window.cpRenderArenaFallback=function(h){
+ if(!h)return;
+ if(A3.raf){cancelAnimationFrame(A3.raf);A3.raf=0}
+ if(A3.off){A3.tg=A3.x=S.ar;A3.off=0}
+ const clamp=n=>Math.max(0,Math.min(AR.length-1,n));
+ const safeText=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ const accents=["#d39a5b","#e17855","#65b6a1","#6fa5d9","#83b96b","#b58bd4","#d9788b","#de9b62","#8ca4b9"];
+ const draw=()=>{
+  const c=clamp(Math.round(A3.x)),entry=AR[c]||["Arena", "🏟️"],ready=c===S.ar+1&&bossOK(),name=safeText(entry[0]||"Arena"),emoji=safeText(entry[1]||"🏟️");
+  const status=c===S.ar?"Arena atual · toque para lutar":c<S.ar?"Arena concluída":ready?"Chefe liberado · vá à aba Batalha":"Bloqueada · alcance a meta de troféus";
+  const action=c===S.ar?"LUTAR NESTA ARENA":ready?"CHEFE LIBERADO · IR À BATALHA":"ARENA BLOQUEADA";
+  h.className="a3 on cp-a3-fallback";
+  h.innerHTML=`<div class="cp-a3-scene" style="--cp-a3-accent:${accents[c%accents.length]};--cp-a3-hue:${(c*37+190)%360}">
+   <div class="cp-a3-sky"></div><div class="cp-a3-sun"></div><div class="cp-a3-mountain cp-a3-mountain-one"></div><div class="cp-a3-mountain cp-a3-mountain-two"></div>
+   <div class="cp-a3-landmark"><span>${emoji}</span><b>${name}</b></div><div class="cp-a3-ground"></div>
+   <div class="cp-a3-number">ARENA ${c+1} / ${AR.length}</div>
+   <div class="cp-a3-controls"><button type="button" data-cp-a3-nav="-1" aria-label="Arena anterior" ${c===0?"disabled":""}>‹</button><div><b>${name}</b><small>${status}</small></div><button type="button" data-cp-a3-nav="1" aria-label="Próxima arena" ${c===AR.length-1?"disabled":""}>›</button></div>
+   <button type="button" class="cp-a3-enter" data-cp-a3-enter ${c===S.ar||ready?"":"disabled"}>${action}</button>
+   <div class="cp-a3-dots">${AR.map((_,i)=>`<i class="${i===c?"on":""}"></i>`).join("")}</div>
+  </div>`;
+ };
+ draw();
+ if(!h.dataset.cpFallbackBound){
+  h.dataset.cpFallbackBound="1";
+  h.addEventListener("click",e=>{
+   const nav=e.target.closest("[data-cp-a3-nav]");
+   if(nav){A3.x=clamp(Math.round(A3.x)+Number(nav.dataset.cpA3Nav||nav.getAttribute("data-cp-a3-nav")));A3.tg=A3.x;draw();return}
+   const enter=e.target.closest("[data-cp-a3-enter]");
+   if(enter&&!enter.disabled){A3.x=A3.tg=clamp(Math.round(A3.x));a3tap()}
+  });
+ }
+};
+function a3go(){const h=$("a3");if(!h)return;
+ if(window.cpLite||typeof THREE==="undefined"){window.cpRenderArenaFallback(h);return}
+ try{if(!A3.r){const T=THREE;A3.cv=document.createElement("canvas");A3.r=new T.WebGLRenderer({canvas:A3.cv,antialias:true,alpha:true});A3.sc=new T.Scene();A3.cam=new T.PerspectiveCamera(40,4/3,.1,200);
+ const hl=new T.HemisphereLight(0xe4ecff,0x5a5048,1),dl=new T.DirectionalLight(0xfff0d8,.7);dl.position.set(-8,14,10);A3.sc.add(hl,dl);
+ a3build(T).forEach((g,i)=>{g.position.x=i*SP;A3.sc.add(g);A3.g.push(g)});a3ev(A3.cv)}}catch(e){console.warn("Arena 3D indisponível; usando visual alternativo",e);A3.r=null;window.cpRenderArenaFallback(h);return}
+ if(A3.off){A3.tg=A3.x=S.ar;A3.off=0}
+ h.className="a3 on";h.innerHTML=`<div class="a3v"></div><div class="a3h"><button data-a3="-1" aria-label="Arena anterior">‹</button><div><b></b><small></small></div><button data-a3="1" aria-label="Próxima arena">›</button></div><div class="dots a3d">${AR.map(()=>"<i></i>").join("")}</div>`;
+ h.prepend(A3.cv);a3sz();A3.f=1;A3.lastFrame=0;a3Watch(h);if(!A3.raf)A3.raf=requestAnimationFrame(a3lp)}
 addEventListener("resize",a3sz);
 document.addEventListener("visibilitychange",()=>{if(!A3)return;if(document.hidden&&A3.raf){cancelAnimationFrame(A3.raf);A3.raf=0}else if(!document.hidden&&A3.cv&&A3.cv.isConnected&&!A3.raf){A3.lastFrame=0;A3.raf=requestAnimationFrame(a3lp)}});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-a3]");if(b&&A3)A3.tg=Math.max(0,Math.min(AR.length-1,Math.round(A3.tg)+ +b.dataset.a3))});
@@ -2680,14 +2714,14 @@ if(!document.querySelector('meta[name="theme-color"]')){const t=document.createE
 
 // ===== v1.0 (17/11/2026): MODO ADM organizado · categorias, busca, botão de salvar fixo, campos em grupos e zona de risco =====
 (()=>{try{
-const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_ev:["🎉","Eventos","Bônus, presentes e aviso na tela inicial"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina até dois elementos por carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"],ds_st:["🎴","Cartas iniciais","Escolha as 12 cartas entregues a jogadores novos"]},
-FT={ds_ev:["@sev","Salvar evento"],ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"],ds_st:["@st","Salvar 12 cartas iniciais"]},
+const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina até dois elementos por carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"],ds_st:["🎴","Cartas iniciais","Escolha as 12 cartas entregues a jogadores novos"]},
+FT={ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"],ds_st:["@st","Salvar 12 cartas iniciais"]},
 GR={ds_r:[["Login e pacotes",["cf_diaria","cf_pacVit","cf_gratisLivre","cf_gratisJogar"]],["Pacotes aleatórios nas recompensas",["cf_rewardRandomChance"]],["Fragmentos e preços",["rfr","rcu","rini","rrc","cf_fusMult"]],["Liberações por arena",["cf_fusArena","cf_sArena"]],["Faixa de status por rank",["cf_faixa"]],["Bots de batalha",["cf_botErro","cf_botForca","cf_botNivel"]]],
 ds_b:[["Troféus",["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax"]],["Prêmios das lutas",["cf_limiteDia","cf_derrota","cf_arf0","cf_arfK","cf_amigoFrag","cf_amigoDia"]],["Duelo ao vivo",["cf_turnoSeg","cf_sumiuSeg"]],["Chefes e campeão",["cf_chefe","cf_chefeFinal","cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag"]],["Arenas e força das cartas",["rtr","ran","rst"]]],
 ds_m:[["Missões",["cf_nDia","cf_mDia","cf_mSem","cf_mSemPac","cf_mDiaBonus"]],["Listas de missões",["rdp","rwp","rmc"]]],
 ds_s:[["Sistema",["cf_admPin","cf_imgKB","cf_som","cf_musica"]],["Conteúdo do jogo",["cc","fcc"]]],
 ds_k:[["Pacote em destaque",["ad"]]]},
-GRP=[["Criar e lançar",["ds_l","ds_i","ds_c","ds_h","ds_e"]],["Novos jogadores",["ds_st"]],["Presentes e prêmios",["ds_t","ds_q"]],["Limpeza",["ds_z"]],["Pacotes",["ds_k","ds_v"]],["Regras do jogo",["ds_r","ds_b","ds_m","ds_ev"]],["Painel e sistema",["ds_p","ds_x","ds_g","ds_s"]]],
+GRP=[["Criar e lançar",["ds_l","ds_i","ds_c","ds_h","ds_e"]],["Novos jogadores",["ds_st"]],["Presentes e prêmios",["ds_t","ds_q"]],["Limpeza",["ds_z"]],["Pacotes",["ds_k","ds_v"]],["Regras do jogo",["ds_r","ds_b","ds_m"]],["Painel e sistema",["ds_p","ds_x","ds_g","ds_s"]]],
 HALF=/^(er|et|ar2|at2|ke|pe|kh|ph|pc|kc|cf_admPin)$/,N=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),
 PG=()=>[...cfg.querySelectorAll("details.adp")],act=()=>cfg.querySelector("details.adp[open]"),
 el=(t,c,h)=>{const e=document.createElement(t);e.className=c;if(h!=null)e.innerHTML=h;return e};
@@ -2704,9 +2738,9 @@ function tidy(){const w=cfg.querySelector(".in2");if(!w||!$("ds_c"))return;dirty
 w.querySelectorAll("input[id],select[id],textarea[id]").forEach(c=>{const l=c.previousElementSibling;if(!l||l.tagName!="LABEL")return;const f=el("div","afl"+(HALF.test(c.id)||(c.type=="number"&&l.textContent.length<35)?"":" w"));c.before(f);f.append(l,c)});
 const F=i=>{const e=$(i);return e&&e.closest(".afl")},B=k=>w.querySelector(`[data-k="${k}"]`);
 Object.keys(T).forEach(id=>{let d=$(id);if(!d){d=el("details","fd","<summary></summary>");d.id=id;w.append(d)}d.classList.add("adp");d.querySelector("summary").textContent=T[id][0]+" "+T[id][1]});try{adxNew(w)}catch(e){console.warn("adm13",e)}
-["ds_c","ds_k","ds_r","ds_g","ds_n","ds_ev"].forEach(i=>{const d=$(i),g=el("div","fg");[...d.children].forEach(c=>c.tagName!="SUMMARY"&&g.append(c));d.append(g)});
+["ds_c","ds_k","ds_r","ds_g","ds_n"].forEach(i=>{const d=$(i),g=el("div","fg");[...d.children].forEach(c=>c.tagName!="SUMMARY"&&g.append(c));d.append(g)});
 // o botão de salvar fica só na barra fixa de baixo: esconde do formulário os que repetiam a mesma ação ("nc" = criar carta, "@hs" = salvar habilidade)
-["@sc","@sk","@sr","@hs","@sev","nc"].forEach(k=>{const b=B(k);b&&b.classList.add("ph")});["@dc","@dk","@rr"].forEach(k=>B(k).classList.add("dg"));
+["@sc","@sk","@sr","@hs","nc"].forEach(k=>{const b=B(k);b&&b.classList.add("ph")});["@dc","@dk","@rr"].forEach(k=>B(k).classList.add("dg"));
 $("ds_c").append($("ds_n"));
 // as regras, que eram uma lista única, são divididas por assunto
 Object.entries(GR).forEach(([p,gs])=>gs.forEach(([t,ids])=>{const fs=ids.map(F).filter(Boolean);if(!fs.length)return;const g=el("div","fg");fs.forEach(f=>g.append(f));$(p).append(el("h3","ash",t),g)}));
@@ -2800,13 +2834,13 @@ function cpPowerScore(c,mode){
  return status;
 }
 function stp(c,n){
- const m=mult(c),hp=Math.round(c.hp*m),dn=Math.round(c.atk*m),
- maxHp=Math.max(1,...ALL.map(x=>x.hp*(1+gain(x)*5))),maxAtk=Math.max(1,...ALL.map(x=>x.atk*(1+gain(x)*5))),
- stat=(icon,label,value,base,max)=>`<div class="cp-sheet-stat"><div class="cp-sheet-stat-top"><span>${icon} ${label}</span><b>${value}</b></div><div class="cp-sheet-stat-track"><i style="width:${Math.max(5,Math.min(100,value/max*100)).toFixed(1)}%"></i></div><small>Base ${base}${value>base?` · <strong>+${value-base}</strong> do nível`:""}</small></div>`,
+ const m=mult(c),hp=Math.round(c.hp*m),dn=Math.round(c.atk*m),top=ST[ST.length-1]||ST[0],maxLevel=1+gain(c)*mxLv(c),hpMax=Math.max(1,top[0]*maxLevel),dnMax=Math.max(1,top[1]*maxLevel),
+ barPct=(value,maximum)=>Math.max(value>0?1.2:0,Math.min(100,value/maximum*100)),
+ stat=(icon,label,value,base,maximum)=>`<div class="cp-sheet-stat"><div class="cp-sheet-stat-top"><span>${icon} ${label}</span><b>${value}</b></div><div class="cp-sheet-stat-track" role="img" aria-label="${label}: ${value}; escala comum entre todos os ranks até ${Math.round(maximum)}"><i style="width:${barPct(value,maximum).toFixed(1)}%"></i></div><small>Base ${base}${value>base?` · <strong>+${value-base}</strong> do nível`:""} · escala global até SSS ${Math.round(maximum)}</small></div>`,
  els=elEls(c),elementNames=els.map(k=>(EL[k]||EL.normal)+" "+(ELN[k]||"Normal")).join(" / "),
  elementPanel=`<details class="cp-sheet-elements"><summary><span>Elementos e relações</span><b>${elementNames}</b></summary><div class="cp-sheet-el-body"><button type="button" class="cp-guide-link small" data-cp-el-guide="1">Abrir guia de elementos</button>${elRelationsHTML(c)}</div></details>`,
  packName=(c.p&&c.p.e?c.p.e+" ":"")+(c.p&&c.p.n||"Carta especial");
- return `<div class="cp-sheet-stats">${stat("❤","Vida",hp,c.hp,maxHp)}${stat("⚔","Dano",dn,c.atk,maxAtk)}</div><div class="cp-sheet-origin"><span>Pacote</span><b>${packName}</b></div>${elementPanel}`;
+ return `<div class="cp-sheet-stats">${stat("❤","Vida",hp,c.hp,hpMax)}${stat("⚔","Dano",dn,c.atk,dnMax)}</div><p class="cp-stat-scale-note">Barras comparáveis entre todos os ranks · referência: SSS no nível máximo</p><div class="cp-sheet-origin"><span>Pacote</span><b>${packName}</b></div>${elementPanel}`;
 }
 
 
@@ -2986,12 +3020,24 @@ const TA={si:"s",si_mesma:"s",propria_carta:"s",a_propria_carta:"s",inimigo:"e",
  inimigo_mais_vida:"x",inimigo_mais_forte:"x",aliado_aleatorio:"q",aliado_menos_vida:"m",aliado_mais_fraco:"m",outros_aliados:"o",todas_cartas:"T",todas_as_cartas:"T"};
 const CAN={s:"si",e:"inimigo",E:"todos_inimigos",a:"aliado",A:"todos_aliados",r:"inimigo_aleatorio",w:"inimigo_menos_vida",x:"inimigo_mais_vida",q:"aliado_aleatorio",m:"aliado_menos_vida",o:"outros_aliados",T:"todas_cartas"};
 const CDM={alvo_vida_ate:"tl",alvo_vida_baixa:"tl",alvo_vida_acima:"th",eu_vida_ate:"ul",eu_vida_baixa:"ul",eu_vida_acima:"uh",alvo_envenenado:"pz",alvo_com_debuff:"bd",alvo_com_buff:"bg",vantagem_elemento:"el",menos_vidas:"pe",mais_vidas:"ga"};
-const PA={m:"m",mult:"m",multiplicador:"m",p:"p",pct:"p",porcentagem:"p",percentual:"p","%":"p",n:"n",turnos:"n",turno:"n",golpes:"n",duracao:"n",v:"v",valor:"v",vidas:"v",cartas:"v",acoes:"v",quantidade:"v",o:"o",poupar:"o",x:"x",elemento:"x"};
+const PA={m:"m",mult:"m",multiplicador:"m",p:"p",pct:"p",porcentagem:"p",percentual:"p","%":"p",n:"n",turnos:"n",turno:"n",golpes:"n",duracao:"n",v:"v",valor:"v",vidas:"v",cartas:"v",acoes:"v",quantidade:"v",o:"o",poupar:"o",x:"x",elemento:"x",y:"y",elemento_2:"y",segundo_elemento:"y"};
 const LB={nome:"n",rank:"r",raridade:"r",elemento:"el",elemento2:"el2",elemento_2:"el2",segundo_elemento:"el2",selo:"sl",tribo:"tb",familia:"tb",grupo:"tb",vida:"hp",hp:"hp",dano:"atk",ataque:"atk",atk:"atk",historia:"d",frase:"q",quando:"tr",gatilho:"tr",recarga:"rc",chance:"ch",pacote:"pk",tipo:"tp"};
 const HURT=new Set(["d","dp","dv","dh","mh","ex","po","bl","st","cu","dz","ci","di","rd"]),HELP=new Set(["h","hv","rg","sh","ev","cr","im","tn","pu","ls","rf","rv"]),
  ENM=new Set(["e","E","r","w","x"]),ALY=new Set(["s","a","A","q","m","o"]),SIGN=new Set(["at","df","mx"]),BIGP=new Set(["rv","lf","ac","pl","ex","lx","im","dc","mm","rd"]);
 const LIM={m:[.1,6],p:[-100,300],n:[1,10],v:[0,5000]},VL={dr:[1,3],lx:[1,2],lf:[1,2],ac:[1,2],pl:[1,3],dc:[1,3],mm:[1,5],cd:[0,6],ci:[1,5],dv:[1,2000],hv:[1,2000]};
-const pn=(k,t)=>k=="m"?"mult":k=="p"?"pct":k=="n"?(t=="mh"?"golpes":"turnos"):k=="v"?"valor":k=="o"?"poupar":"elemento";
+// Ficha IA v2: faixas oficiais para cartas novas. Saves e fichas antigas mantêm seus valores.
+const CP_CARD_V2_FORMAT="COLECAO_PRIMATA_CARD",CP_CARD_V2_RANGES=[
+ {hp:[100,180],atk:[10,30]},  // F
+ {hp:[130,220],atk:[20,40]},  // E
+ {hp:[170,270],atk:[30,55]},  // D
+ {hp:[220,340],atk:[40,75]},  // C
+ {hp:[280,430],atk:[55,100]}, // B
+ {hp:[360,540],atk:[75,135]}, // A
+ {hp:[460,690],atk:[100,175]},// S
+ {hp:[590,880],atk:[130,230]},// SS
+ {hp:[760,1150],atk:[170,300]}// SSS
+];
+const pn=(k,t)=>k=="m"?"mult":k=="p"?"pct":k=="n"?(t=="mh"?"golpes":"turnos"):k=="v"?"valor":k=="o"?"poupar":k=="y"?"elemento_2":"elemento";
 const dflt=(t,g)=>HURT.has(t)?"e":SIGN.has(t)?(num(g.p)<0?"e":"s"):"s";
 const rk=v=>{const m=String(v).toUpperCase().replace(/[^A-Z]+/g," ").match(/(?:^|\s)(SSS|SS|S|A|B|C|D|E|F)(?=\s|$)/);return m?R.findIndex(x=>x[0]==m[1]):-1};
 const trg=s=>{const n=SL(s);if(!n)return"u";if(has(TRG,n))return n;
@@ -3033,7 +3079,14 @@ function pEf(s,ln,er,wa){
   e.a=a}
  F.f.forEach(q=>{const k=q[0],nm=pn(k,t),v=g[k];
   if(v===undefined){e[k]=q[2];return}
-  if(k=="x"){const z=elKey(v);if((q[3]||[]).includes(z))e[k]=z;else{er.push(`${L}elemento "${v}" não existe (use: ${EL_KEYS.join(", ")}).`);e[k]=q[2]}return}
+  if(k=="x"||k=="y"){
+   const raw=String(v).trim();
+   if(k=="y"&&!raw){e[k]="";return}
+   const z=elKey(v);
+   if(z&&(q[3]||[]).includes(z))e[k]=z;
+   else{er.push(`${L}elemento "${v}" não existe (use: ${EL_KEYS.join(", ")}).`);e[k]=q[2]}
+   return
+  }
   if(k=="o"){e[k]=/^(1|sim|s|true|yes|verdadeiro)$/.test(SL(v))?1:0;return}
   const x=num(v);if(isNaN(x)){er.push(`${L}"${v}" não é um número em ${nm}.`);e[k]=q[2];return}
   e[k]=cl(x,k,t,L,wa,nm)});
@@ -3050,7 +3103,7 @@ function pEf(s,ln,er,wa){
  return e}
 
 // ---- uma ficha (linhas já separadas) → carta pronta + erros + avisos
-function parseSheet(sh){
+function parseSheet(sh,opt={}){
  const er=[],wa=[],card={},abs=[];let ab=null,st=null;
  const E_=(ln,m)=>er.push((ln?`Linha ${ln}: `:"")+m),W_=(ln,m)=>wa.push((ln?`Linha ${ln}: `:"")+m);
  const LBL=s=>{const k=SL(s);return has(LB,k)?LB[k]:/^efeitos?(_\d+)?$/.test(k)?"ef":null};
@@ -3084,18 +3137,28 @@ function parseSheet(sh){
  c.sl="";if(card.sl!==undefined){const n=SL(card.sl);if(n&&!/^(nenhum|nenhuma|sem|nao_tem|vazio|nada|nulo)$/.test(n)){if(has(SLS,n))c.sl=n;else W_(card.$sl,`Selo "${card.sl}" não existe: deixei sem selo.`)}}
  const base=ST[ri],bd=(+CONFIG.faixa>=0?+CONFIG.faixa:15)/100;
  [["hp","Vida",0],["atk","Dano",1]].forEach(([k,nm,i])=>{
-  const lo=Math.round(base[i]*(1-bd)),hi=Math.round(base[i]*(1+bd));
-  if(card[k]===undefined||card[k]===""){c[k]=base[i];W_(0,`sem ${nm}: usei o padrão do rank (${base[i]}).`);return}
+  const band=opt.v2?CP_CARD_V2_RANGES[ri][k]:null;
+  const lo=band?band[0]:Math.round(base[i]*(1-bd)),hi=band?band[1]:Math.round(base[i]*(1+bd));
+  if(card[k]===undefined||card[k]===""){
+   c[k]=base[i];
+   if(opt.v2)E_(0,`ficha v2 sem ${nm}: este campo é obrigatório.`);
+   else W_(0,`sem ${nm}: usei o padrão do rank (${base[i]}).`);
+   return
+  }
   let x=num(card[k]);
-  if(isNaN(x)){W_(card["$"+k],`${nm} "${card[k]}" não é número: usei ${base[i]}.`);c[k]=base[i];return}
+  if(isNaN(x)){if(opt.v2)E_(card["$"+k],`${nm} "${card[k]}" não é número.`);else W_(card["$"+k],`${nm} "${card[k]}" não é número: usei ${base[i]}.`);c[k]=base[i];return}
   x=Math.round(x);
-  if(x<lo||x>hi){const y=Math.min(hi,Math.max(lo,x));W_(card["$"+k],`${nm} ${x} fora da faixa do rank ${R[ri][0]} (${lo} a ${hi}): usei ${y}.`);x=y}
+  if(x<lo||x>hi){const y=Math.min(hi,Math.max(lo,x));
+   const msg=`${nm} ${x} fora da faixa do rank ${R[ri][0]} (${lo} a ${hi}).`;
+   if(opt.v2)E_(card["$"+k],msg+` Use um valor entre ${lo} e ${hi}.`);else W_(card["$"+k],msg+` Usei ${y}.`);
+   x=y
+  }
   c[k]=x});
  c.d=txt(card.d,700,m=>W_(card.$d,m),"História");
- if(!c.d)W_(0,"sem História.");
+ if(!c.d){if(opt.v2)E_(0,"ficha v2 sem História: este campo é obrigatório.");else W_(0,"sem História.")}
  // ---- habilidades
- if(!abs.length)W_(0,"a ficha não tem nenhuma habilidade.");
- if(abs.length>4)W_(0,`a ficha tem ${abs.length} habilidades: usei só as 4 primeiras.`);
+ if(!abs.length){if(opt.v2)E_(0,"ficha v2 sem habilidades: inclua pelo menos 1.");else W_(0,"a ficha não tem nenhuma habilidade.")}
+ if(abs.length>4){if(opt.v2)E_(0,`a ficha tem ${abs.length} habilidades; o limite é 4.`);else W_(0,`a ficha tem ${abs.length} habilidades: usei só as 4 primeiras.`)}
  abs.slice(0,4).forEach(a=>{
   const lb=`Habilidade ${a.i}`,o={};
   o.n=txt(a.n,28,m=>W_(a.ln,m),lb+" · nome");
@@ -3110,24 +3173,110 @@ function parseSheet(sh){
    o.rc=x}else o.rc=3;
   o.ef=[];
   if(!a.ef.length)E_(a.ln,`${lb}: falta ao menos 1 Efeito.`);
-  if(a.ef.length>6)W_(a.ln,`${lb}: tem ${a.ef.length} efeitos (muitos): usei os 6 primeiros.`);
-  a.ef.slice(0,6).forEach(([ln,s])=>{const e=pEf(s,ln,er,wa);if(e)o.ef.push(e)});
+  if(a.ef.length>6){if(opt.v2)E_(a.ln,`${lb}: tem ${a.ef.length} efeitos; o limite é 6.`);else W_(a.ln,`${lb}: tem ${a.ef.length} efeitos (muitos): usei os 6 primeiros.`)}
+  a.ef.slice(0,6).forEach(([ln,s])=>{const w0=wa.length,e=pEf(s,ln,er,wa);if(opt.v2&&wa.length>w0){const fresh=wa.slice(w0),hard=fresh.filter(x=>/fora do limite|prob .*inválida|sem "limite"/i.test(x));if(hard.length){for(let j=wa.length-1;j>=w0;j--)if(hard.includes(wa[j]))wa.splice(j,1);hard.forEach(x=>er.push(x))}}if(e)o.ef.push(e)});
   if(a.el!==undefined&&String(a.el).trim()){const rawEl=SL(a.el);if(["carta","da_carta","vazio"].includes(rawEl)){/* herda o elemento da carta */}else{const se=elKey(a.el);if(!se)E_(a.$el,`${lb}: elemento de habilidade "${a.el}" desconhecido. Use Normal, carta ou um dos 20 elementos.`);else if(se!=="carta")o.el=se}}
   if(a.el2!==undefined&&String(a.el2).trim()){const se=elKey(a.el2);if(!o.el||o.el==="normal"||!se||se==="normal"||se===o.el)W_(a.$el2,`${lb}: segundo elemento inválido ou incompatível; ignorei.`);else o.el2=se}
   if(o.tr)o.ef.forEach(e=>{if(BIGP.has(e.t))W_(a.ln,`${lb}: ${FX[e.t].n} em habilidade passiva (sem recarga) costuma desequilibrar o jogo.`)});
   c.abs.push(o)});
  return{card:c,er,wa}}
 
-// ---- texto colado → uma ou várias fichas (cada uma começa em "FICHA DE CARTA")
+// ---- Ficha IA v2 (JSON estruturado) + compatibilidade com fichas antigas em texto
+function cpV2Error(message){return{sheets:[{card:{n:"Ficha inválida",r:0,hp:ST[0][0],atk:ST[0][1],abs:[]},er:[message],wa:[]}],ok:false}}
+function cpV2Text(v){return String(v==null?"":v).replace(/[\r\n]+/g," ").replace(/[\u0000-\u001f]/g," ").trim()}
+function cpV2MakeSheet(obj){
+ const lines=[],extra=[];let ln=1;const add=(k,v)=>{if(v!==undefined&&v!==null&&String(v)!=="")lines.push([ln++,k+": "+cpV2Text(v)])};
+ const rank=cpV2Text(obj.rank||obj.r);if(!rank)extra.push("Rank é obrigatório.");else if(rk(rank)<0)extra.push(`Rank "${rank}" não existe. Use F, E, D, C, B, A, S, SS ou SSS.`);
+ const cardName=cpV2Text(obj.name??obj.nome);if(cardName.length>32)extra.push("Nome da carta excede 32 caracteres.");
+ const storyText=cpV2Text(obj.story??obj.historia);if(!storyText)extra.push("História é obrigatória.");else if(storyText.length>700)extra.push("História excede 700 caracteres.");
+ const tribeText=cpV2Text(obj.tribe??obj.tribo);if(tribeText.length>24)extra.push("Tribo excede 24 caracteres.");
+ const sealText=cpV2Text(obj.seal??obj.selo);if(sealText&&!has(SLS,SL(sealText)))extra.push(`Selo "${sealText}" não existe. Use amigo, especial, secreta, evento ou vazio.`);
+ const stats=obj.stats&&typeof obj.stats==="object"?obj.stats:{};
+ const hp=stats.hp??stats.life??obj.hp,atk=stats.attack??stats.atk??stats.damage??obj.atk;
+ if(hp===undefined||hp===null||hp==="")extra.push("Vida é obrigatória em stats.hp.");
+ if(atk===undefined||atk===null||atk==="")extra.push("Dano é obrigatório em stats.attack.");
+ const rawEls=Array.isArray(obj.elements)?obj.elements:(Array.isArray(obj.elementos)?obj.elementos:(obj.element?[obj.element]:[]));
+ const els=rawEls.map(x=>elKey(x)).filter(Boolean);
+ if(rawEls.length<1)extra.push('Informe elements com "normal" ou um elemento do catálogo.');
+ if(rawEls.length>2)extra.push("A carta aceita no máximo dois elementos.");
+ if(rawEls.some(x=>!elKey(x)||elKey(x)==="carta"))extra.push("Um dos elementos da carta não existe no catálogo.");
+ if(els.length===2&&(els[0]==="normal"||els[1]==="normal"||els[0]===els[1]))extra.push("Normal só pode existir sozinho e os dois elementos não podem ser iguais.");
+ lines.push([ln++,"FICHA DE CARTA"]);add("Nome",obj.name??obj.nome);add("Rank",rank);
+ if(els[0])add("Elemento",els[0]);if(els[1])add("Elemento 2",els[1]);
+ add("Vida",hp);add("Dano",atk);add("Tribo",obj.tribe??obj.tribo);add("Selo",obj.seal??obj.selo);add("História",obj.story??obj.historia);
+ const skills=Array.isArray(obj.skills)?obj.skills:(Array.isArray(obj.abilities)?obj.abilities:[]);
+ if(skills.length<1)extra.push("Inclua pelo menos uma habilidade em skills.");
+ if(skills.length>4)extra.push("O jogo aceita no máximo quatro habilidades por carta.");
+ skills.forEach((sk,i)=>{
+  if(!sk||typeof sk!=="object"){extra.push(`Habilidade ${i+1} precisa ser um objeto.`);return}
+  const skillName=cpV2Text(sk.name??sk.nome),skillQuote=cpV2Text(sk.quote??sk.phrase??sk.frase);
+  add(`Habilidade ${i+1}`,skillName);
+  if(!skillName)extra.push(`Habilidade ${i+1} está sem nome.`);else if(skillName.length>28)extra.push(`Habilidade ${i+1}: o nome excede 28 caracteres.`);
+  add("Frase",skillQuote);
+  if(!skillQuote)extra.push(`Habilidade ${i+1}: a frase/descrição é obrigatória.`);else if(skillQuote.length>120)extra.push(`Habilidade ${i+1}: a frase excede 120 caracteres.`);
+  const trigger=sk.trigger??sk.when??sk.quando;
+  if(!cpV2Text(trigger))extra.push(`Habilidade ${i+1} está sem trigger.`);else add("Quando",trigger);
+  const tr=trg(trigger||"");
+  const cooldown=sk.cooldown??sk.recarga;
+  if(tr==="u"&&(cooldown===undefined||cooldown===null||cooldown===""))extra.push(`Habilidade ${i+1}: informe cooldown de 1 a 8 para habilidade ativa.`);
+  if(tr==="u"&&cooldown!==undefined&&cooldown!==null&&cooldown!==""&&(!Number.isInteger(+cooldown)||+cooldown<1||+cooldown>8))extra.push(`Habilidade ${i+1}: cooldown precisa ser inteiro de 1 a 8.`);
+  if(cooldown!==undefined&&cooldown!==null&&cooldown!=="")add("Recarga",cooldown);
+  const se=Array.isArray(sk.elements)?sk.elements:(Array.isArray(sk.elementos)?sk.elementos:(sk.element?[sk.element]:[]));
+  if(se.length>2)extra.push(`Habilidade ${i+1}: no máximo dois elementos próprios.`);
+  const norm=se.map(x=>String(x).toLowerCase()==="card"?"carta":elKey(x)||x);
+  if(norm.length===1&&norm[0]!=="carta"&&!elKey(norm[0]))extra.push(`Habilidade ${i+1}: elemento próprio não existe no catálogo.`);
+  if(norm.length===1&&norm[0]!=="carta")add("Elemento",norm[0]);
+  if(norm.length===2){
+   if(norm.some(x=>!elKey(x)||elKey(x)==="carta")||norm[0]==="normal"||norm[1]==="normal"||norm[0]===norm[1])extra.push(`Habilidade ${i+1}: elementos próprios inválidos.`);
+   else{add("Elemento",norm[0]);add("Elemento 2",norm[1])}
+  }
+  const effects=Array.isArray(sk.effects)?sk.effects:(Array.isArray(sk.efeitos)?sk.efeitos:[]);
+  if(effects.length<1)extra.push(`Habilidade ${i+1}: inclua pelo menos um efeito.`);
+  if(effects.length>6)extra.push(`Habilidade ${i+1}: o limite é seis efeitos.`);
+  effects.forEach((ef,j)=>{
+   if(!ef||typeof ef!=="object"){extra.push(`Habilidade ${i+1}, efeito ${j+1}: formato inválido.`);return}
+   const type=cpV2Text(ef.type??ef.tipo??ef.effect);if(!type){extra.push(`Habilidade ${i+1}, efeito ${j+1}: informe type.`);return}
+   let row=type;
+   const target=cpV2Text(ef.target),typeKey=SL(type),typeCode=has(FX,typeKey)?typeKey:(has(TY,typeKey)?TY[typeKey]:"");
+   const targetless=new Set(["dr","lx","rv","lf","ac","pl","dc","mm","elself"]);
+   if(!target&&typeCode&&!targetless.has(typeCode))extra.push(`Habilidade ${i+1}, efeito ${j+1}: informe target usando um código válido.`);
+   if(target)row+=` | alvo=${target}`;
+   const params=ef.params&&typeof ef.params==="object"?ef.params:(ef.parameters&&typeof ef.parameters==="object"?ef.parameters:{});
+   Object.entries(params).forEach(([k,v])=>{if(v!==undefined&&v!==null&&v!=="")row+=` | ${cpV2Text(k)}=${cpV2Text(v)}`});
+   const cond=ef.condition??ef.condicao;if(cond)row+=` | se=${cpV2Text(cond)}`;
+   const limit=ef.limit??ef.limite;if(limit!==undefined&&limit!==null&&limit!=="")row+=` | limite=${cpV2Text(limit)}`;
+   if(["tl","th","ul","uh"].includes(SL(cond||""))&&(limit===undefined||limit===null||limit===""))extra.push(`Habilidade ${i+1}, efeito ${j+1}: condition ${cond} exige limit de 1 a 99.`);
+   const chance=ef.chance??ef.probability;if(chance!==undefined&&chance!==null&&chance!=="")row+=` | prob=${cpV2Text(chance)}`;
+   lines.push([ln++,"Efeito: "+row]);
+   const t=SL(type),code=has(FX,t)?t:(has(TY,t)?TY[t]:"");
+   if(!code)extra.push(`Habilidade ${i+1}, efeito ${j+1}: type "${type}" não existe no motor atual.`);
+   if(ef.chance!==undefined&&ef.chance!==null&&ef.chance!==""&&(!Number.isFinite(+ef.chance)||+ef.chance<=0||+ef.chance>=100))extra.push(`Habilidade ${i+1}, efeito ${j+1}: chance deve ser de 1 a 99; omita o campo para 100%.`);
+   if(code==="ex"&&!cond)extra.push(`Habilidade ${i+1}, efeito ${j+1}: hitkill exige condition para limitar a execução.`);
+  });
+ });
+ const parsed=parseSheet({lines},{v2:true});
+ parsed.er.unshift(...extra);
+ return parsed;
+}
 function parse(text){
- const L=String(text||"").replace(/[\u200b-\u200d\u2060\ufeff]/g,"").replace(/[\u00a0\u2007\u202f]/g," ").replace(/\r\n?/g,"\n").split("\n"),S=[],pre=[];let cur=null,any=false;
- L.forEach((raw,i)=>{const t=raw.replace(/\*\*|__|`/g,""),n=N(t);
+ const raw=String(text||"").replace(/[\u200b-\u200d\u2060\ufeff]/g,"").replace(/[\u00a0\u2007\u202f]/g," ").replace(/\r\n?/g,"\n");
+ const candidate=raw.trim().replace(/^```(?:json)?\s*/i,"").replace(/\s*```$/i,"").trim();
+ if(candidate[0]==="{"||candidate[0]==="["){
+  let data;try{data=JSON.parse(candidate)}catch(e){return cpV2Error("JSON inválido. Cole a ficha completa exatamente como a IA gerou, sem editar aspas ou vírgulas.")}
+  if(!data||typeof data!=="object"||Array.isArray(data)||data.format!==CP_CARD_V2_FORMAT||+data.version!==2)return cpV2Error(`JSON reconhecido, mas o formato não é ${CP_CARD_V2_FORMAT} versão 2. Use o PDF atualizado.`);
+  const cards=Array.isArray(data.cards)?data.cards:[(data.card&&typeof data.card==="object")?data.card:data];
+  if(!cards.length)return cpV2Error("O JSON não contém cartas.");
+  const sheets=cards.map(cpV2MakeSheet);
+  return{sheets,ok:sheets.every(x=>!x.er.length)}
+ }
+ const L=raw.split("\n"),S=[],pre=[];let cur=null,any=false;
+ L.forEach((rawLine,i)=>{const t=rawLine.replace(/\*\*|__|`/g,""),n=N(t);
   if(/^[\s\-=#*•_>]*ficha\s+de\s+carta\b/.test(n)){cur={lines:[]};S.push(cur);any=true;return}
   if(/^[\s\-=#*•_>]*fim\s+da\s+ficha\b/.test(n)){cur=null;return}
   if(cur)cur.lines.push([i+1,t]);else if(!any)pre.push([i+1,t])});
  if(!any&&pre.some(x=>x[1].trim()))S.push({lines:pre});
- const sheets=S.map(parseSheet);
- return{sheets,ok:sheets.length>0&&sheets.every(s=>!s.er.length)}}
+ const sheets=S.map(x=>parseSheet(x));
+ return{sheets,ok:sheets.length>0&&sheets.every(x=>!x.er.length)}}
 
 // ---- cria as cartas no ADM (carta + habilidades "só desta carta", igual ao editor de cartas)
 function apply(cards,pk){
@@ -3176,9 +3325,9 @@ function build(){
  let last="";try{last=localStorage.getItem("cp_impk")||""}catch(e){}
  const ops=P.concat(ADM.p.filter(d=>!P.some(p=>p.id==d.id))).map(p=>`<option value="${E(p.id)}"${p.id==last?" selected":""}>${E(p.e||"")} ${E(p.n)}${p.cards?"":" · não lançado"}</option>`).join("")+`<option value="ind"${last=="ind"?" selected":""}>🎉 Sem pacote · carta especial</option>`;
  d.insertAdjacentHTML("beforeend",`<div class="fg">
-<div class="exm">📥 <b>Como usar:</b> peça a carta para a IA (com o PDF de regras), copie a ficha que ela devolver e cole abaixo. O jogo monta a carta com nome, história, status e habilidades. Depois é só colocar a <b>foto</b> e conferir o <b>rank</b> em Cartas. A <b>chance de sair</b> não vem na ficha: fica automática até você mudar em Cartas.<br><br><b>Elementos:</b> cada carta pode ter no máximo dois elementos usando <code>Elemento:</code> e <code>Elemento 2:</code>. Normal só existe sozinho. Em cada habilidade, elemento ausente, vazio, <code>carta</code> ou <code>da_carta</code> significa <b>usar o elemento da carta</b>; <code>normal</code> significa elemento próprio neutro; outro elemento define a origem própria da habilidade e aceita <code>Elemento 2:</code> opcional (máximo de dois, sem repetir e sem combinar Normal com outro). Chaves aceitas: normal, fogo, agua, terra, ar, gelo, raio, natureza, veneno, fera, luta, metal, tech, arte, luz, trevas, espirito, arcano, mente, caos e cosmico. Aliases aceitos: planta→natureza, sombra→trevas, vento→ar, psiquico→mente, tecnologico/tecnologia→tech, espiritual→espirito, comum/nenhum/sem/neutro→normal.</div>
+<div class="exm">📥 <b>Como usar:</b> peça uma carta para a IA usando o PDF de criação de fichas v2, copie o JSON completo que ela devolver e cole abaixo. O jogo reconhece automaticamente o formato novo (e continua aceitando fichas antigas em texto). Vida e dano são validados pela faixa do rank. Depois de criar, abra Cartas para colocar a <b>foto</b> original e conferir a ficha. A <b>chance de sair</b> continua sendo configurada em Cartas.<br><br><b>Elementos:</b> cada carta pode ter no máximo dois elementos usando <code>Elemento:</code> e <code>Elemento 2:</code>. Normal só existe sozinho. Em cada habilidade, elemento ausente, vazio, <code>carta</code> ou <code>da_carta</code> significa <b>usar o elemento da carta</b>; <code>normal</code> significa elemento próprio neutro; outro elemento define a origem própria da habilidade e aceita <code>Elemento 2:</code> opcional (máximo de dois, sem repetir e sem combinar Normal com outro). Chaves aceitas: normal, fogo, agua, terra, ar, gelo, raio, natureza, veneno, fera, luta, metal, tech, arte, luz, trevas, espirito, arcano, mente, caos e cosmico. Aliases aceitos: planta→natureza, sombra→trevas, vento→ar, psiquico→mente, tecnologico/tecnologia→tech, espiritual→espirito, comum/nenhum/sem/neutro→normal.</div>
 <div class="afl w"><label for="z_ip">Em qual pacote a carta entra?</label><select id="z_ip">${ops}</select></div>
-<div class="afl w"><label for="z_it">Ficha da carta (texto)</label><textarea id="z_it" rows="9" placeholder="FICHA DE CARTA&#10;Nome: …" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
+<div class="afl w"><label for="z_it">Ficha da carta (texto)</label><textarea id="z_it" rows="9" placeholder="{&#10;  &quot;format&quot;: &quot;COLECAO_PRIMATA_CARD&quot;,&#10;  &quot;version&quot;: 2,&#10;  ...&#10;}" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
 <div class="ivb"><button class="bt gh" data-k="@ixp">📋 Colar</button><button class="bt gh" data-k="@ixl">🧹 Limpar</button></div>
 <div id="z_iv"></div>
 <label class="yck"><input type="checkbox" id="z_dr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt off" id="z_ix" data-k="@ix">Criar carta</button></div>`)}
@@ -3258,16 +3407,18 @@ function pushSave(){
 addEventListener("visibilitychange",()=>{if(document.hidden&&L.cp_d)pushSave()});
 function pa(){clearTimeout(t2);t2=setTimeout(pushAdm,1500)}
 async function pushAdmNow(){ // só o administrador consegue (as regras do Firebase barram os outros)
- if(!U||!canAdm)return;if(!ready)return pa();
+ if(!U||!canAdm)return false;
+ if(!ready){pa();return false}
  try{const f={...CF};let ch=0;
   for(const id in IMG){const d=IMG[id],k=H(d),m=meta[id];if(m&&m.k===k&&m.t>0){f[id]=m.t;continue}
    if(d.length>9e5){toast("Foto grande demais: "+id);continue}
    const t=Date.now();await setDoc(doc(db,"fotos",id),{d});is(id,{t,d});meta[id]={k,t};f[id]=t;ch=1}
   for(const id in meta)if(!(id in IMG)){delete f[id];delete meta[id];deleteDoc(doc(db,"fotos",id));ch=1}
-  const a=admStr||L.getItem("colprimata_adm")||"{}";if(!ch&&a===lastA){L.removeItem("cp_pa");return}
-  const v=Date.now();ls("cp_v",v);CF=f;lastA=a;
-  await setDoc(doc(db,"conteudo","adm"),{v,adm:a,f});L.removeItem("cp_pa");toast("☁️ Mudanças enviadas para todos");
- }catch(e){if(e.code==="permission-denied"){canAdm=false;L.removeItem("cp_pa");ls("cp_v","0");toast("⚠️ Mudanças só neste aparelho · entre no modo ADM com o PIN certo para enviar a todos")}else{console.warn(e);toast("⚠️ Falha ao enviar: "+esc(e.code||e.message));pa()}}}
+  const a=admStr||L.getItem("colprimata_adm")||"{}";if(!ch&&a===lastA){L.removeItem("cp_pa");return true}
+  const v=Date.now();
+  await setDoc(doc(db,"conteudo","adm"),{v,adm:a,f});
+  ls("cp_v",v);CF=f;lastA=a;L.removeItem("cp_pa");toast("☁️ Mudanças enviadas para todos");return true;
+ }catch(e){if(e.code==="permission-denied"){canAdm=false;L.removeItem("cp_pa");ls("cp_v","0");toast("⚠️ Mudanças só neste aparelho · entre no modo ADM com o PIN certo para enviar a todos")}else{console.warn(e);toast("⚠️ Falha ao enviar: "+esc(e.code||e.message));pa()}return false}}
 window.cpAdm=async pin=>{if(!U)return null;try{await setDoc(doc(db,"admins",U.uid),{c:pin});canAdm=true;pa();return true}catch(e){return e.code==="permission-denied"?false:null}};
 // ADM · excluir jogadores (usado pela tela Excluir do ADM): apaga primeiro o convite (tira o acesso), depois o save na nuvem e o perfil
 window.cpJog={ok:()=>!!U,
@@ -4216,13 +4367,26 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
       if(!(typeof AD!=="undefined"&&AD))return toast("Apenas o ADM pode salvar esta configuração.");
       const cardId=g("cpRaidCard")&&g("cpRaidCard").value;
       if(!byId(cardId))return toast("Escolha uma carta válida para o Boss.");
-      ADM.raidBoss={cardId,power:Math.max(2,Math.min(40,+g("cpRaidPower").value||12)),maxPlayers:Math.max(2,Math.min(4,Math.floor(+g("cpRaidPlayers").value||4))),fragments:Math.max(0,Math.floor(+g("cpRaidFrag").value||0)),packs:Math.max(0,Math.min(20,Math.floor(+g("cpRaidPacks").value||0))),dropMode:g("cpRaidDrop").value,dropChance:Math.max(0,Math.min(100,+g("cpRaidChance").value||0))};
+      const power=Number(g("cpRaidPower")&&g("cpRaidPower").value),players=Number(g("cpRaidPlayers")&&g("cpRaidPlayers").value),fragments=Number(g("cpRaidFrag")&&g("cpRaidFrag").value),packs=Number(g("cpRaidPacks")&&g("cpRaidPacks").value),dropMode=g("cpRaidDrop")&&g("cpRaidDrop").value,dropChance=Number(g("cpRaidChance")&&g("cpRaidChance").value);
+      if(!Number.isFinite(power)||power<2||power>40)return toast("A força do Boss precisa ficar entre 2 e 40.");
+      if(!Number.isInteger(players)||players<2||players>4)return toast("A Raid precisa permitir de 2 a 4 jogadores.");
+      if(!Number.isFinite(fragments)||fragments<0)return toast("A recompensa em fragmentos não pode ser negativa.");
+      if(!Number.isInteger(packs)||packs<0||packs>20)return toast("A quantidade de pacotes precisa ficar entre 0 e 20.");
+      if(!["chance","all","none","damage"].includes(dropMode))return toast("Escolha uma regra válida para entregar a carta Boss.");
+      if(!Number.isFinite(dropChance)||dropChance<0||dropChance>100)return toast("A chance da carta precisa ficar entre 0 e 100%.");
+      ADM.raidBoss={cardId,power:Math.floor(power),maxPlayers:players,fragments:Math.floor(fragments),packs,dropMode,dropChance};
       sADM();
+      let cloudSaved=false;
       if(U&&canAdm){
-        if(!ready)return toast("O conteúdo ainda está sincronizando. Tente salvar novamente em alguns segundos.");
-        await pushAdm();
-      }else toast("Configuração salva neste aparelho; entre no ADM online para compartilhar com os outros jogadores.");
-      g("cpm")&&g("cpm").remove();return typeof adxGo==="function"?adxGo():location.reload();
+        if(!ready)return toast("A configuração foi guardada neste aparelho, mas o conteúdo ainda está sincronizando. Tente salvar novamente em alguns segundos.");
+        cloudSaved=await pushAdm();
+        if(!cloudSaved)return toast("A configuração ficou salva neste aparelho, mas o Firebase não confirmou o envio. Verifique a conexão/permissão ADM e tente salvar novamente.");
+      }
+      g("cpm")&&g("cpm").remove();
+      const hub=g("cpExtra");
+      if(hub){const status=hub.querySelector("[data-cp-raid-config] .cp-ops-copy small");if(status)status.textContent="Configurado · "+safeName(byId(cardId).n);hub.hidden=false;}
+      toast(cloudSaved?"✅ Boss Raid configurado e sincronizado para todos!":"✅ Boss Raid salvo neste aparelho. Entre no ADM online para compartilhar com os jogadores.");
+      return;
     }
     if(a==="create")return raidCreate();
     if(a==="accept")return raidJoin(id);
@@ -4314,10 +4478,10 @@ function cpxConfetti(){const f=document.createDocumentFragment(),cs=["#ffd24a","
 function on(){var b=q('sndb');return !(b&&b.textContent.indexOf('🔇')>-1)}
 function cl(){var o=q('yrm');o&&o.remove()}
 function op(){if(q('yrm'))return cl();var o=document.createElement('div');o.id='yrm';
-o.innerHTML='<div class="yb"><h3>Menu</h3><button data-y="s">'+(on()?'🔊 Som: ligado':'🔇 Som: desligado')+'</button><button data-y="p">👤 Perfil, jogadores e batalha em grupo</button><button data-y="ev">⚔️ Eventos: torneio e chefe semanal</button><button data-y="r">🏆 Ranking semanal</button><button data-y="c">🏅 Conquistas, títulos e vitrine</button><button data-y="l">🛒 Loja diária</button><button data-y="lite">⚡ Modo leve / reduzir animações: '+(window.cpLite?'ligado':'desligado')+'</button><button data-y="a">🛠 Ajustes e Modo ADM</button><small>Tema</small><div class="yt">'+window.tmHtml()+'</div><button data-y="x" class="g">Fechar</button><small>Criado por Yrogerg</small></div>';
+o.innerHTML='<div class="yb"><h3>Menu</h3><button data-y="s">'+(on()?'🔊 Som: ligado':'🔇 Som: desligado')+'</button><button data-y="p">👤 Perfil, jogadores e batalha em grupo</button><button data-y="r">🏆 Ranking semanal</button><button data-y="c">🏅 Conquistas, títulos e vitrine</button><button data-y="l">🛒 Loja diária</button><button data-y="lite">⚡ Modo leve / reduzir animações: '+(window.cpLite?'ligado':'desligado')+'</button><button data-y="a">🛠 Ajustes e Modo ADM</button><small>Tema</small><div class="yt">'+window.tmHtml()+'</div><button data-y="x" class="g">Fechar</button><small>Criado por Yrogerg</small></div>';
 o.onclick=function(e){var b=e.target.closest('[data-y]');if(!b){if(e.target===o)cl();return}var k=b.dataset.y;
 if(k=='s'){var s=q('sndb');s&&s.click();b.textContent=on()?'🔊 Som: ligado':'🔇 Som: desligado'}
-else if(k=='x')cl();else if(k=='ev'){cl();window.cpOpenEvents&&window.cpOpenEvents()}else if(k=='r'){cl();window.cpRanking&&window.cpRanking()}else if(k=='c'){cl();window.cpOpenAchievements&&window.cpOpenAchievements()}else if(k=='l'){cl();window.cpOpenShop&&window.cpOpenShop()}else if(k=='lite'){window.cpToggleLite&&window.cpToggleLite();cl();op()}else if(k.charAt(0)=='t'){window.setTema(k.slice(1));o.querySelector('.yt').innerHTML=window.tmHtml()}else{cl();var t=q(k=='p'?'cpchip':'gear');if(t)t.click();else if(k=='p')alert('Entre na conta para abrir o perfil.')}};
+else if(k=='x')cl();else if(k=='r'){cl();window.cpRanking&&window.cpRanking()}else if(k=='c'){cl();window.cpOpenAchievements&&window.cpOpenAchievements()}else if(k=='l'){cl();window.cpOpenShop&&window.cpOpenShop()}else if(k=='lite'){window.cpToggleLite&&window.cpToggleLite();cl();op()}else if(k.charAt(0)=='t'){window.setTema(k.slice(1));o.querySelector('.yt').innerHTML=window.tmHtml()}else{cl();var t=q(k=='p'?'cpchip':'gear');if(t)t.click();else if(k=='p')alert('Entre na conta para abrir o perfil.')}};
 document.body.appendChild(o)}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-yu]');if(b){e.stopPropagation();e.preventDefault();op()}},true);
 })();
@@ -5689,12 +5853,13 @@ html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-dura
     if(window.cpLite&&typeof A3!=="undefined"&&A3&&A3.raf){cancelAnimationFrame(A3.raf);A3.raf=0;A3.off=1}
   };
   applyPrefs();
-  window.cpToggleLite=()=>{const enabled=!(window.cpLite||window.cpReduce);window.cpLite=enabled;window.cpReduce=enabled;applyPrefs();if(enabled&&typeof a3go==="function"){const h=$("a3");if(h)h.innerHTML='<div class="a3v">Arena 3D desativada pelo Modo leve</div>'}return enabled};
+  window.cpToggleLite=()=>{const enabled=!(window.cpLite||window.cpReduce);window.cpLite=enabled;window.cpReduce=enabled;applyPrefs();if(enabled&&typeof a3go==="function"){const h=$("a3");if(h&&window.cpRenderArenaFallback)window.cpRenderArenaFallback(h)}return enabled};
   window.cpToggleMotion=window.cpToggleLite;
   if(typeof a3go==="function"){
     const cpA3Original=a3go;
-    a3go=function(){if(window.cpLite){const h=$("a3");if(h){h.className="a3 on";h.innerHTML='<div class="a3v">Arena 3D desativada pelo Modo leve</div>'}return}return cpA3Original.apply(this,arguments)};
+    a3go=function(){if(window.cpLite){const h=$("a3");if(h&&window.cpRenderArenaFallback)window.cpRenderArenaFallback(h);return}return cpA3Original.apply(this,arguments)};
   }
+  if(window.cpLite&&window.cpRenderArenaFallback){const arena=$("a3");if(arena)window.cpRenderArenaFallback(arena)}
 
   // Favoritos ficam somente na ficha da carta; a coleção permanece limpa.
   const isFav=id=>Array.isArray(S.fav)&&S.fav.includes(id);
@@ -5840,6 +6005,12 @@ html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-dura
 
   // Entrada única no início do Modo ADM: os controles não ficam mais espalhados/flutuando.
   window.cpRegisterCfgViewHook(function(v){if(v!=="a")return;
+    const battlePage=cfg&&cfg.querySelector("#ds_b");
+    if(battlePage&&!battlePage.querySelector(".cp-raid-admin-inline")){
+      const shortcut=document.createElement("section");shortcut.className="cp-raid-admin-inline";
+      shortcut.innerHTML='<h3>Boss Raid cooperativa</h3><p>Escolha a carta do Boss, força, vagas e recompensas da Raid.</p><button type="button" class="bt cy" data-cp-raid-config>Configurar Boss Raid</button>';
+      const summary=battlePage.querySelector("summary");if(summary)summary.insertAdjacentElement("afterend",shortcut);else battlePage.prepend(shortcut);
+    }
     const home=cfg&&cfg.querySelector(".ag");if(!home||home.querySelector("[data-cp-admin-hub]"))return;
     const group=document.createElement("div");group.className="cp-ops-home-group";
     group.innerHTML='<h3 class="ags">CENTRAL DE OPERAÇÕES</h3><div class="agg"><button type="button" class="at cp-ops-home-tile" data-cp-admin-hub><i>⚙️</i><b>Central de Operações</b><small>Pendências de cartas, loja diária e Boss Raid cooperativa em um só lugar</small></button></div>';
@@ -6157,7 +6328,6 @@ html[data-tema="royale"] #cfg .adm-editor-section{background:#1b4a87;border-colo
     ds_v:["🎨","Visual dos pacotes","Arte, formato, cores e textos dos pacotes"],
     ds_x:["⚖️","Equilíbrio e balanceamento","Ajustar cartas individualmente ou em lote por rank"],
     ds_b:["⚔️","Batalhas e arenas","Troféus, turnos, regras e chefes de arena"],
-    ds_ev:["👑","Boss e eventos","Boss cooperativo, torneios e eventos especiais"],
     ds_q:["🏆","Prêmios de batalha","Cartas especiais e recompensas por atividade"],
     ds_r:["💎","Economia do jogo","Fragmentos, preços, pacotes e recompensas"],
     ds_m:["📋","Missões e progresso","Missões diárias, semanais e coleção"],
@@ -6169,7 +6339,7 @@ html[data-tema="royale"] #cfg .adm-editor-section{background:#1b4a87;border-colo
   };
   const groups=[
     {title:"Conteúdo e cartas",desc:"Crie cartas, importe fichas, gerencie pacotes e publique atualizações.",ids:["ds_c","ds_k","ds_l","ds_i","ds_x"]},
-    {title:"Batalhas e eventos",desc:"Tudo relacionado a combate, arenas, Boss e competições.",ids:["ds_b","ds_ev","ds_q"]},
+    {title:"Batalhas e recompensas",desc:"Combate, arenas, Boss e prêmios das partidas.",ids:["ds_b","ds_q"]},
     {title:"Progressão e recompensas",desc:"Economia, missões, presentes e evolução dos jogadores.",ids:["ds_r","ds_m","ds_t"]},
     {title:"Sistema e manutenção",desc:"Acompanhamento, testes, backups e operações administrativas.",ids:["ds_p","ds_g","ds_s","ds_z"]}
   ];
@@ -6188,6 +6358,8 @@ html[data-tema="royale"] #cfg .adm-editor-section{background:#1b4a87;border-colo
       const key=btn.dataset.adm.replace(/^p/,"");
       old.set(key,btn);
     });
+    // A Central de Operações é inserida por um hook anterior; preserve-a ao reconstruir a home.
+    const operations=root.querySelector(":scope > .cp-ops-home-group");
     const frag=document.createDocumentFragment();
     const intro=document.createElement("div");
     intro.className="adm-home-intro";
@@ -6213,6 +6385,7 @@ html[data-tema="royale"] #cfg .adm-editor-section{background:#1b4a87;border-colo
       section.append(grid);frag.append(section);
     });
     root.replaceChildren(frag);
+    if(operations)root.prepend(operations);
     root.dataset.cpUiHome="1";
     const search=$("#asq");if(search)search.placeholder="Buscar qualquer opção ou regra do ADM…";
   }
@@ -6297,7 +6470,7 @@ html[data-tema="royale"] #cfg .adm-editor-section{background:#1b4a87;border-colo
     const credit=$$('small',panel).find(x=>x.textContent.includes("Criado por"));
     const close=actionMap.get("x");
     const data=[
-      {id:"battles",title:"Batalhas e partidas",keys:["ev","p"],labels:{ev:"⚔️ Boss, torneios e eventos",p:"👥 Jogadores e batalha em grupo"}},
+      {id:"battles",title:"Batalhas e partidas",keys:["p"],labels:{p:"👥 Jogadores e batalha em grupo"}},
       {id:"community",title:"Comunidade",keys:["r"],labels:{r:"🏆 Ranking semanal"}},
       {id:"profile",title:"Perfil e personalização",keys:["c"],labels:{c:"🏅 Títulos e vitrine do perfil"}},
       {id:"economy",title:"Loja",keys:["l"],labels:{l:"🛒 Loja diária"}},
@@ -6766,6 +6939,10 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!q("cp-el-guide")?.
 #cfg.adm .cp-ops-home-tile>i{display:grid;grid-row:1/3;place-items:center;width:38px;height:38px;border-radius:12px;background:#b89aff24;font-size:1.3rem}
 #cfg.adm .cp-ops-home-tile>b{align-self:end;font-size:.86rem}
 #cfg.adm .cp-ops-home-tile>small{align-self:start;color:#c2b7d3;font-size:.64rem;line-height:1.4}
+#cfg .cp-raid-admin-inline{margin:10px 0 14px;padding:14px;border:1px solid #c78bff44;border-radius:14px;background:linear-gradient(145deg,#9c78ff14,#ffffff04);display:grid;gap:8px}
+#cfg .cp-raid-admin-inline h3{margin:0;font-size:.82rem}
+#cfg .cp-raid-admin-inline p{margin:0;color:var(--mut);font-size:.7rem;line-height:1.45}
+#cfg .cp-raid-admin-inline .bt{width:100%}
 #cpExtra .cp-ops-grid{display:grid;gap:9px;margin:4px 0}
 #cpExtra .cp-ops-card{display:grid;grid-template-columns:42px minmax(0,1fr) 18px;align-items:center;gap:10px;width:100%;padding:13px 12px;border:1px solid #ffffff16;border-radius:14px;background:linear-gradient(145deg,#ffffff0c,#ffffff05);text-align:left}
 #cpExtra .cp-ops-card:active{transform:scale(.99);background:#ffffff12}
@@ -7847,6 +8024,26 @@ body:has(#fc:not([hidden])) #ov{visibility:hidden!important}
  .cd.cp-art-only.k8:not(.lock)>.art::after{animation:none!important;opacity:.12!important}
  #zb .cp-solo-boss-feature::before{animation:none!important}
 }
+
+/* Fallback funcional da seleção de arenas quando WebGL/Three.js ou Modo leve desativam o 3D. */
+#a3.cp-a3-fallback{min-height:250px;border-radius:16px;background:#11131b;border:1px solid #ffffff1c;overflow:hidden}
+.cp-a3-scene{position:relative;isolation:isolate;min-height:250px;aspect-ratio:1.48/1;overflow:hidden;background:linear-gradient(180deg,hsl(var(--cp-a3-hue) 42% 28%),hsl(var(--cp-a3-hue) 38% 49%) 57%,#23252b 58%,#17191e);}
+.cp-a3-sky{position:absolute;inset:0;background:radial-gradient(ellipse at 75% 25%,#fff9 0 2%,#fff2 7%,transparent 24%),linear-gradient(180deg,#ffffff10,transparent 48%)}
+.cp-a3-sun{position:absolute;right:15%;top:14%;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#fff8 30%,var(--cp-a3-accent) 72%);box-shadow:0 0 36px color-mix(in srgb,var(--cp-a3-accent) 70%,transparent);opacity:.8}
+.cp-a3-mountain{position:absolute;bottom:27%;width:70%;height:52%;background:linear-gradient(135deg,#ffffff23,#05070b66);clip-path:polygon(0 100%,45% 15%,61% 48%,76% 0,100% 100%);opacity:.7}
+.cp-a3-mountain-one{left:-12%}.cp-a3-mountain-two{right:-19%;bottom:22%;transform:scale(.78);opacity:.5}
+.cp-a3-landmark{position:absolute;z-index:2;left:50%;top:42%;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:2px;width:78%;text-align:center;text-shadow:0 3px 12px #000b}
+.cp-a3-landmark span{font-size:clamp(2.8rem,13vw,5.4rem);line-height:1.05;filter:drop-shadow(0 5px 9px #0008)}
+.cp-a3-landmark b{font-size:clamp(.75rem,3.2vw,1.05rem);font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#fff}
+.cp-a3-ground{position:absolute;z-index:1;left:-10%;right:-10%;bottom:0;height:31%;background:linear-gradient(180deg,#272b2d,#111318);clip-path:polygon(0 28%,18% 8%,36% 26%,54% 4%,77% 20%,100% 0,100% 100%,0 100%)}
+.cp-a3-number{position:absolute;z-index:3;top:10px;left:12px;padding:5px 9px;border-radius:99px;background:#090b10a8;border:1px solid #ffffff32;color:#fff;font-size:.58rem;font-weight:900;letter-spacing:.16em}
+.cp-a3-controls{position:absolute;z-index:4;left:8px;right:8px;bottom:50px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 8px;border-radius:13px;background:#090a0dbd;backdrop-filter:blur(8px)}
+.cp-a3-controls>div{flex:1;min-width:0;text-align:center}.cp-a3-controls b{display:block;color:#fff;font-size:.78rem;font-weight:900}.cp-a3-controls small{display:block;margin-top:3px;color:#d2cfdb;font-size:.57rem;line-height:1.35}
+.cp-a3-controls button{flex:none;width:38px;height:38px;border-radius:10px;background:#ffffff16;color:#fff;font-size:1.65rem}.cp-a3-controls button:disabled{opacity:.25}
+.cp-a3-enter{position:absolute;z-index:5;left:50%;bottom:10px;transform:translateX(-50%);min-width:58%;max-width:86%;padding:10px 14px;border-radius:999px;background:var(--cp-a3-accent);color:#101114;font-size:.62rem;font-weight:1000;letter-spacing:.12em;white-space:nowrap}
+.cp-a3-enter:disabled{background:#ffffff24;color:#ffffff79}
+.cp-a3-dots{position:absolute;z-index:5;right:12px;top:12px;display:flex;gap:4px}.cp-a3-dots i{width:5px;height:5px;border-radius:99px;background:#ffffff55}.cp-a3-dots i.on{width:17px;background:#fff}
+@media(max-width:390px){#a3.cp-a3-fallback,.cp-a3-scene{min-height:230px}.cp-a3-landmark span{font-size:3.1rem}.cp-a3-controls small{font-size:.53rem}}
 </style>
 <script id="cp-solo-boss-centered-renderer">
 (()=>{
@@ -7972,6 +8169,115 @@ html,body{
 .cp-online-fx{position:fixed;z-index:99998;pointer-events:none;transform:translate(-50%,-50%);padding:3px 7px;border-radius:8px;background:#101014d9;font-size:clamp(13px,3.4vw,18px);font-weight:900;text-shadow:0 1px 2px #000;animation:cpOnlineFloat .58s ease-out forwards}.cp-online-fx.damage{color:#ff7b89}.cp-online-fx.heal{color:#81f0a7}@keyframes cpOnlineFloat{0%{opacity:0;translate:0 8px;scale:.82}18%{opacity:1;scale:1.08}100%{opacity:0;translate:0 -34px;scale:.96}}
 @media(max-width:380px){#dkal .grid{gap:6px}.cp-album-guide{padding:11px}.cp-album-guide .cp-guide-link{max-width:40%;font-size:.61rem}.cp-sheet-stat{padding:11px 9px}.cp-sheet-stat-top b{font-size:1.28rem}}
 @media(prefers-reduced-motion:reduce){#dkal .cd,#dkal .cd *,.cp-online-fx{animation:none!important;transition:none!important}}
+</style>
+
+
+
+<script id="cp-final-sync-no-reactions-and-card-sheet-fit">
+(()=>{
+ "use strict";
+ try{
+  // Perfil: preservar presença online, mas retirar totalmente a área de reações por emoji.
+  if(typeof ver==="function"&&!ver.__cpNoProfileReactions){
+   const baseVer=ver;
+   const cleanVer=function(i){
+    const result=baseVer.apply(this,arguments);
+    try{
+     if(typeof cpRxStop==="function")cpRxStop();
+     const social=document.getElementById("cp-profile-social"),p=Array.isArray(PL)?PL[+i]:null;
+     if(social){social.classList.add("cp-social-presence-only");social.innerHTML=`<div id="cp-profile-pres">${typeof cpPresenceLabel==="function"?cpPresenceLabel(p):""}</div>`}
+    }catch(e){console.warn("perfil sem reações",e)}
+    return result;
+   };
+   cleanVer.__cpNoProfileReactions=true;ver=cleanVer;
+  }
+  // Nenhuma reação visual ou escrita de emoji permanece ativa em partidas antigas/novas.
+  window.cpShowDuelReaction=()=>{};
+  if(typeof cpReact==="function")cpReact=()=>{};
+
+  // Sincronização manual serializada. Não falha só porque o poll de 5 s ou o pump
+  // já está trabalhando: espera a etapa atual e busca o histórico uma única vez.
+  const waitFor=(test,ms=18000)=>new Promise(resolve=>{
+   const start=Date.now();
+   const tick=()=>{if(test())return resolve(true);if(Date.now()-start>=ms)return resolve(false);setTimeout(tick,60)};
+   tick();
+  });
+  window.lvSync=async function(){
+   const L=window.LV;if(!L)return;
+   if(L.syncPromise){toast("Sincronização já em andamento · aguarde um instante.");return L.syncPromise}
+   if(L.repairing){toast("A batalha está sendo reconstruída pelo histórico.");return}
+   L.syncing=1;
+   const paintButton=busy=>{
+    const b=document.querySelector('#zb [data-z="sync"]');
+    if(!b)return;
+    b.disabled=!!busy;
+    b.textContent=busy?"Sincronizando…":"↻ Atualizar";
+   };
+   paintButton(true);
+   const run=(async()=>{
+    try{
+     if(L.desync){await lvRepair(L);return}
+     if(L.writeChain)await L.writeChain.catch(()=>{});
+     if(window.LV!==L)return;
+     // Se a consulta automática já começou, deixa-a terminar em vez de abrir outra em paralelo.
+     const pollDone=await waitFor(()=>!L.pf,12000);
+     if(!pollDone)throw Error("A consulta automática ainda não terminou.");
+     if(window.LV!==L)return;
+     const snap=await getDoc(doc(db,L.g?"mesas":"duelos",L.id));
+     if(window.LV!==L)return;
+     const data=snap&&snap.data();
+     if(!data||!Array.isArray(data.cm))throw Error("O histórico da batalha não está disponível.");
+     const before=L.qn;
+     lvCm(data);
+     const queueDone=await waitFor(()=>window.LV!==L||(!L.pb&&(!L.q||L.q.length===0)),22000);
+     if(window.LV!==L)return;
+     if(!queueDone){toast("O histórico chegou, mas ainda há jogadas sendo aplicadas. A sincronização continuará automaticamente.");return}
+     if(L.desync||L.gapMissing){await lvRepair(L);return}
+     toast(L.qn>before?"Batalha atualizada · histórico aplicado em ordem.":"Tudo em dia · aguardando a vez do outro jogador.");
+    }catch(e){
+     console.warn("sincronização manual",e);
+     if(window.LV===L)toast("Não foi possível sincronizar agora. A batalha foi mantida e você pode tentar novamente.");
+    }
+   })();
+   L.syncPromise=run;
+   try{return await run}
+   finally{
+    if(window.LV===L){L.syncing=0;L.syncPromise=null}
+    paintButton(false);
+   }
+  };
+ }catch(e){console.warn("ajustes finais da interface",e)}
+})();
+</script>
+
+<style id="cp-final-card-sheet-mobile-fit">
+/* Ficha da coleção: todo o conteúdo continua rolável mesmo com muitas repetidas. */
+#fc{height:100dvh;max-height:100dvh;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y!important}
+#fc .fch{min-width:0;min-height:min-content;box-sizing:border-box;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))!important}
+#fc .fch>*{min-width:0;max-width:100%}
+#fc .fch>.pnl{display:block;min-width:0;overflow:visible;overflow-wrap:anywhere}
+#fc .pnl .cvb{min-width:0;max-width:100%;overflow:hidden;overflow-wrap:anywhere;padding:11px 10px 12px}
+#fc .pnl .cvb p{font-size:.66rem;line-height:1.5;letter-spacing:.055em;overflow-wrap:anywhere}
+#fc .pnl .rpv{display:flex;align-items:center;gap:8px;min-width:0;padding:8px;margin:0 0 9px}
+#fc .pnl .rpv span{flex:1;min-width:0;font-size:.66rem;line-height:1.4;overflow-wrap:anywhere}
+#fc .pnl .rpv .rpm{flex:0 0 42px;width:42px;min-width:42px}
+#fc .pnl .rpv .rpm .cd{width:42px!important;margin:0!important}
+#fc .pnl .cvb .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;min-width:0}
+#fc .pnl .cvb .bt{min-width:0;max-width:100%;min-height:42px;padding:9px 5px;font-size:.62rem;letter-spacing:.04em;white-space:normal;overflow-wrap:anywhere}
+#fc .pnl .cvb .pr{max-width:100%;font-size:.59rem;white-space:normal;overflow-wrap:anywhere}
+#fc .cp-stat-scale-note{margin:0 0 9px!important;color:var(--mut);font-size:.58rem;line-height:1.4;text-align:left;letter-spacing:.02em}
+.cp-sheet-stat-track{height:8px!important}
+.cp-sheet-stat-track i{min-width:0!important}
+.cp-social-presence-only{margin:10px 0 4px;padding:9px 11px;border:1px solid #ffffff12;border-radius:11px;background:#ffffff05}
+.cp-live-react{display:none!important}
+@media(max-width:380px){
+ #fc .fch{padding-left:9px!important;padding-right:9px!important}
+ #fc .pnl .cvb .two{grid-template-columns:minmax(0,1fr)}
+ #fc .pnl .cvb .bt{min-height:38px}
+ .cp-sheet-stats{gap:6px!important}
+ .cp-sheet-stat{padding:10px 8px!important}
+ .cp-sheet-stat-top b{font-size:1.16rem!important}
+}
 </style>
 
 </body>
