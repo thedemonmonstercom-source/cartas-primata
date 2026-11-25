@@ -1401,7 +1401,7 @@ function play(p,d,pi,np=1,g=0){LN=np;
  SUMR=null;$("ow").hidden=pi==null;
  const visiblePacks=Math.min(np,10);
  stage.innerHTML=np>1?`<div class="pg">${Array.from({length:visiblePacks},(_,i)=>packEl(p,1,i)).join("")}</div>${np>visiblePacks?`<div class="pack-batch-count">×${np} PACOTES</div>`:""}`:packEl(p,1);
- hint.textContent=np>1?`Toque para rasgar os ${fmt(np)} pacotes`:"Toque no pacote para rasgar";if(np>10){skb.hidden=false;skb.textContent="Ver resultados"}
+ hint.textContent=np>1?`Toque para rasgar os ${fmt(np)} pacotes`:"Toque no pacote para rasgar";if(np>10)skb.textContent="Ver resultado"
  const stk=()=>stage.querySelector(".stk");
  // tela final com todas as cartas (também é o destino do botão "Pular")
  const summary=()=>{
@@ -1452,14 +1452,14 @@ function play(p,d,pi,np=1,g=0){LN=np;
   stage.innerHTML=`<div class="fl" style="--h:${p.h}"><div class="aura" hidden></div><div class="stk"></div></div><div class="tag"></div>`;
   place();rev()
  };
- skb.onclick=e=>{if(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation()}if(ph<4){summary()}};
+ skb.onclick=e=>{if(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation()}if(ph!==4){summary()}};
  // arrastar a pilha para o lado: alterna entre "arrumada" (versos, sem spoiler) e "espalhada" (dá para ver as cartas de trás)
  const restyle=()=>{const s=stk();if(!s)return;s.classList.add("tg");s.classList.toggle("tdy",!spr);s.querySelectorAll(".sc").forEach(e=>{if(e.dataset.sn-k>0&&!e.classList.contains("out"))e.classList.toggle("hid",!spr)});setTimeout(()=>s.classList.remove("tg"),320)};
  stage.onpointerdown=e=>{if(ph==2&&e.target.closest(".stk")){dn=1;dx=e.clientX}};
  stage.onpointermove=e=>{if(dn&&Math.abs(e.clientX-dx)>30){dn=0;dg=1;spr=!spr;restyle();try{navigator.vibrate(12)}catch(x){}}};
  stage.onpointerup=stage.onpointercancel=()=>{dn=0;setTimeout(()=>{dg=0},80)};
  stage.onclick=()=>{if(dg)return;
-  if(ph==0){ph=1;const pk=[...stage.querySelectorAll(".pack")];pk.forEach((e,i)=>{const f=()=>{e.classList.add("tear");flakes(e)};i?setTimeout(f,i*35):f()});hint.textContent="";try{navigator.vibrate(np>1?[14,30,22,30,22,30,40,30,60]:[14,40,22,30,40])}catch(e){}setTimeout(()=>{if(sk)return;if(np>10)summary();else show()},1000+(pk.length-1)*35)}
+  if(ph==0){ph=1;const pk=[...stage.querySelectorAll(".pack")];pk.forEach((e,i)=>{const f=()=>{e.classList.add("tear");flakes(e)};i?setTimeout(f,i*35):f()});hint.textContent="";try{navigator.vibrate(np>1?[14,30,22,30,22,30,40,30,60]:[14,40,22,30,40])}catch(e){}setTimeout(()=>{if(sk)return;if(np>10){ph=5;skb.textContent="Ver resultado";skb.hidden=false;hint.textContent="Pacotes rasgados · toque em Ver resultado para conferir suas cartas"}else show()},1000+(pk.length-1)*35)}
   else if(ph==2){
    ph=3;
    const top=stk().querySelector(`[data-sn="${k}"]`),s=k%2?1:-1;
@@ -7377,24 +7377,6 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
   transform:rotateY(180deg) !important;
   border-radius:var(--card-rx,14%) / var(--card-ry,10.5%) !important;
 }
-#fc .cp-card-turn-btn{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  width:max-content;
-  min-width:150px;
-  margin:8px auto 0;
-  padding:9px 15px;
-  border:1px solid #ffffff24;
-  border-radius:999px;
-  background:#ffffff0d;
-  color:var(--fg);
-  font-size:.7rem;
-  font-weight:800;
-  letter-spacing:.04em;
-}
-#fc .cp-card-turn-btn:active{transform:scale(.97)}
 #fc .f3h{margin:6px 0 0;text-align:center;font-size:.68rem;opacity:.62}
 @media(prefers-reduced-motion:reduce){
   .cd.cp-art-only.k8:not(.lock)>.art::after{animation:none!important}
@@ -7429,9 +7411,9 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
     if(!inner.querySelector(":scope > .cb"))inner.insertAdjacentHTML("beforeend",makeBack());
     let note=sheet.querySelector(":scope > .f3h");
     if(!note){note=document.createElement("p");note.className="f3h";wrapper.insertAdjacentElement("afterend",note)}
-    note.textContent="Arraste para girar · toque na carta ou use o botão para ver o verso";
-    let button=sheet.querySelector(":scope > .cp-card-turn-btn");
-    if(!button){button=document.createElement("button");button.type="button";button.className="cp-card-turn-btn";button.innerHTML="↻ <span>Virar carta</span>";note.insertAdjacentElement("afterend",button)}
+    note.textContent="Arraste a carta ou toque nela para ver o verso"; 
+    const oldButton=sheet.querySelector(":scope > .cp-card-turn-btn");
+    if(oldButton)oldButton.remove();
 
     // Substitui event handlers antigos da rotação para evitar dois controles movendo a carta ao mesmo tempo.
     wrapper.onpointerdown=null;wrapper.onpointermove=null;wrapper.onpointerup=null;wrapper.onpointercancel=null;
@@ -7441,8 +7423,6 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
     const set=(animate=true)=>{
       inner.style.transition=animate?"transform .48s cubic-bezier(.2,.8,.2,1)":"none";
       inner.style.transform=`rotateX(${angleX}deg) rotateY(${angleY}deg)`;
-      button.querySelector("span").textContent=(Math.abs(Math.round(angleY/180))%2)?"Ver frente":"Virar carta";
-      button.setAttribute("aria-pressed",String((Math.abs(Math.round(angleY/180))%2)===1));
     };
     const flip=()=>{angleX=0;angleY=(Math.round(angleY/180)+1)*180;set(true)};
     wrapper.addEventListener("pointerdown",e=>{
@@ -7463,7 +7443,6 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
     };
     wrapper.addEventListener("pointerup",end);
     wrapper.addEventListener("pointercancel",()=>{dragging=false;pointerId=null;set(true)});
-    button.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();flip()});
     set(false);
   }
   // O hook acompanha cada abertura/troca de ficha; o RAF espera o HTML ser colocado no DOM.
@@ -7473,6 +7452,100 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
     const mo=new MutationObserver(()=>{if(!fc.hidden)requestAnimationFrame(installFichaTurn)});
     mo.observe(fc,{childList:true,subtree:true,attributes:true,attributeFilter:["hidden"]});
   }
+})();
+</script>
+
+
+<style id="cp-sss-premium-and-performance-2026">
+/* SSS: iridescência discreta sobre a ilustração inteira, sem faixa branca e sem nova borda. */
+.cd.cp-art-only.k8:not(.lock)>.art{
+  position:absolute!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+}
+.cd.cp-art-only.k8:not(.lock)>.art::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:2!important;
+  pointer-events:none!important;
+  border-radius:inherit!important;
+  opacity:.16!important;
+  mix-blend-mode:color!important;
+  background:
+    radial-gradient(ellipse at 17% 22%,rgba(255,70,190,.58) 0%,transparent 43%),
+    radial-gradient(ellipse at 82% 19%,rgba(55,205,255,.54) 0%,transparent 46%),
+    radial-gradient(ellipse at 76% 78%,rgba(170,85,255,.56) 0%,transparent 45%),
+    radial-gradient(ellipse at 20% 82%,rgba(255,205,75,.48) 0%,transparent 42%),
+    radial-gradient(ellipse at 50% 48%,rgba(80,255,190,.28) 0%,transparent 50%)!important;
+  background-size:160% 160%,155% 155%,165% 165%,150% 150%,170% 170%!important;
+  background-position:0% 0%,100% 0%,100% 100%,0% 100%,50% 50%!important;
+  animation:cpSssLivingPrism 8s ease-in-out infinite alternate!important;
+}
+@keyframes cpSssLivingPrism{
+  0%{background-position:0% 0%,100% 0%,100% 100%,0% 100%,50% 50%;filter:hue-rotate(0deg)}
+  35%{background-position:30% 45%,65% 22%,72% 60%,18% 75%,58% 38%;filter:hue-rotate(35deg)}
+  70%{background-position:72% 18%,22% 65%,18% 28%,82% 48%,35% 78%;filter:hue-rotate(78deg)}
+  100%{background-position:100% 100%,0% 100%,0% 0%,100% 0%,50% 50%;filter:hue-rotate(125deg)}
+}
+/* Aro prismático um pouco mais vivo, sem aceleração brusca. */
+.cd.cp-art-only.k8>.rbw>i,
+.sum.big .cd.cp-art-only.k8>.rbw>i{animation:spin 4.8s linear infinite!important}
+/* Otimização segura: pausa efeitos de cartas fora da tela e quando a aba está oculta. */
+html.cp-tab-hidden .cd.cp-art-only,
+html.cp-tab-hidden .cd.cp-art-only *,
+.cd.cp-offscreen,
+.cd.cp-offscreen::before,
+.cd.cp-offscreen::after{animation-play-state:paused!important}
+#dkal .dkc{contain:layout style}
+#fc .fch>.f3d{touch-action:pan-y!important}
+@media(prefers-reduced-motion:reduce){
+ .cd.cp-art-only.k8:not(.lock)>.art::after{animation:none!important;opacity:.09!important}
+ .cd.cp-art-only.k8>.rbw>i{animation:none!important}
+}
+</style>
+<script id="cp-performance-card-effects-2026">
+(()=>{
+ "use strict";
+ const root=document.documentElement;
+ const syncVisibility=()=>root.classList.toggle("cp-tab-hidden",document.hidden);
+ document.addEventListener("visibilitychange",syncVisibility,{passive:true});
+ syncVisibility();
+ if(!("IntersectionObserver" in window))return;
+ const seen=new WeakSet();
+ const io=new IntersectionObserver(entries=>{
+   for(const entry of entries){
+     const card=entry.target;
+     card.classList.toggle("cp-offscreen",!entry.isIntersecting);
+   }
+ },{rootMargin:"180px 0px"});
+ const scan=()=>{
+   document.querySelectorAll(".cd.cp-art-only").forEach(card=>{
+     if(seen.has(card))return;
+     seen.add(card);io.observe(card);
+   });
+ };
+ scan();
+ const mo=new MutationObserver(records=>{
+   let added=false;
+   for(const rec of records)for(const node of rec.addedNodes){
+     if(node.nodeType!==1)continue;
+     if(node.matches?.(".cd.cp-art-only")||node.querySelector?.(".cd.cp-art-only")){added=true;break}
+   }
+   if(added)scan();
+ });
+ mo.observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
+
+<script id="cp-remove-card-turn-button-guard">
+(()=>{
+ const clean=()=>document.querySelectorAll("#fc .cp-card-turn-btn").forEach(b=>b.remove());
+ clean();
+ const fc=document.getElementById("fc");
+ if(fc&&"MutationObserver"in window)new MutationObserver(clean).observe(fc,{childList:true,subtree:true});
 })();
 </script>
 
