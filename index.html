@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<!-- Coleção Primata v3.0.0 · versão web sem instalação de aplicativo -->
-<!-- 24/11/2026 · v3.0.0: correções de batalha/banco, carga de habilidades, bots por arena/medalhão, Boss solo, Draft, regras malucas, reações, economia e retrospectiva. -->
-<title>Coleção Primata</title><script>
+<meta name="application-version" content="1.0">
+<!-- COLEÇÃO PRIMATA · VERSÃO OFICIAL 1.0 -->
+<!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
+<title>Coleção Primata</title><script>window.CP_VERSION="1.0";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -1083,12 +1084,21 @@ const NEED=[[3,4,6,8,10],[2,3,4,6,8],[2,3,5,8,12]],FM=[4,9,18,32,57],RANK_ECONOM
 const wk=()=>Math.floor((day()+3)/7);
 function bump(k,n=1){const c=S.cn;if(c.d!==day()){c.d=day();c.D={}}if(c.w!==wk()){c.w=wk();c.W={}}c.T=c.T||{};[c.D,c.W,c.T].forEach(o=>o[k]=(o[k]||0)+n);const ev=cpxEvOn();if(ev&&ev.tipo=="natal"){const x=xmasState(ev);x.c[k]=(x.c[k]||0)+n}save()}
 const cv=(s,k)=>{const c=S.cn;return((s=="D"?c.d===day()&&c.D:s=="W"?c.w===wk()&&c.W:c.T)||{})[k]||0};
-const DP=[["Abrir 3 pacotes","open",3],["Abrir 5 pacotes","open",5],["Vencer 2 batalhas na arena","win",2],["Vencer 3 batalhas na arena","win",3],["Jogar 3 batalhas","play",3],["Usar 3 habilidades em batalha","abil",3],["Derrotar 8 cartas inimigas","kill",8],["Converter 3 repetidas","conv",3],["Fundir 1 carta","fuse",1],["Vencer 1 batalha na arena","win",1],["Jogar 5 batalhas","play",5],["Converter 6 repetidas","conv",6]];
-const WP=[["Vencer 10 batalhas na arena","win",10],["Abrir 30 pacotes","open",30],["Fundir 3 vezes","fuse",3],["Usar 15 habilidades em batalha","abil",15],["Derrotar 40 cartas inimigas","kill",40],["Converter 20 repetidas","conv",20]];
+const DP=[["Abrir 3 pacotes","open",3],["Abrir 5 pacotes","open",5],["Vencer 2 batalhas na arena","win",2],["Vencer 3 batalhas na arena","win",3],["Jogar 3 batalhas","play",3],["Usar 3 habilidades em batalha","abil",3],["Derrotar 8 cartas inimigas","kill",8],["Converter 3 repetidas","conv",3],["Fundir 1 carta","fuse",1],["Vencer 1 batalha na arena","win",1],["Jogar 5 batalhas","play",5],["Converter 6 repetidas","conv",6],
+ ["Usar 1 habilidade elemental","eluse",1],["Iniciar 1 carga de habilidade","charge",1],["Comprar 3 cartas durante batalhas","draw",3],["Vencer 1 duelo contra amigo","frd",1],["Participar de 1 desafio Boss","boss",1],["Derrotar 4 cartas inimigas","kill",4],["Fundir 2 cartas","fuse",2],["Usar 5 habilidades em batalha","abil",5]];
+const WP=[["Vencer 10 batalhas na arena","win",10],["Abrir 30 pacotes","open",30],["Fundir 3 vezes","fuse",3],["Usar 15 habilidades em batalha","abil",15],["Derrotar 40 cartas inimigas","kill",40],["Converter 20 repetidas","conv",20],
+ ["Usar 10 habilidades elementais","eluse",10],["Iniciar 5 cargas de habilidade","charge",5],["Comprar 20 cartas durante batalhas","draw",20],["Vencer 5 duelos contra amigos","frd",5],["Participar de 3 desafios Boss","boss",3],["Derrotar 1 Boss","bosswin",1],["Jogar 12 batalhas","play",12],["Fundir 6 vezes","fuse",6]];
 // coleção e secretas: [id, título, progresso, meta, pacotes]
 const CL=[["c1","Abrir 3 pacotes",()=>S.opened||0,3,3],["c2","Abrir 20 pacotes",()=>S.opened||0,20,5],["c3","Ter 5 cartas diferentes",()=>ALL.filter(c=>S.inv[c.id]).length,5,3],["c4","Ter 10 cartas diferentes",()=>ALL.filter(c=>S.inv[c.id]).length,10,5],["c5","Fundir uma carta",()=>ALL.reduce((a,c)=>a+lvl(c),0),1,3],["c6","Fundir 5 vezes",()=>ALL.reduce((a,c)=>a+lvl(c),0),5,8],["c7","Ter uma carta A ou melhor",()=>ALL.some(c=>S.inv[c.id]&&c.r>4)?1:0,1,5],["c8","Fazer uma troca com um amigo",()=>S.nt||0,1,5],["c9","Completar um pacote inteiro",()=>P.filter(p=>own(p)==p.cards.length).length,1,15],["c10","Chegar na arena 3",()=>S.ar+1,3,8],["c11","Vencer 10 batalhas na arena",()=>S.wn||0,10,5]];
 const SC=[["s1","Ter uma carta SSS",()=>ALL.some(c=>S.inv[c.id]&&c.r==8)?1:0,1,20],["s2","Levar uma carta ao Mítico",()=>ALL.some(c=>lvl(c)>4)?1:0,1,20],["s3","Chegar na arena 9",()=>S.ar+1,9,30]];
-if((ADM0.dp||[]).length)DP.splice(0,DP.length,...ADM0.dp);if((ADM0.wp||[]).length)WP.splice(0,WP.length,...ADM0.wp);CL.concat(SC).forEach(m=>{const q=(ADM0.mc||{})[m[0]];if(q){m[3]=q[0];m[4]=q[1]}});
+if((ADM0.dp||[]).length){const custom=ADM0.dp.filter(x=>Array.isArray(x)&&x.length>=3);const extra=DP.filter(x=>!custom.some(y=>y[0]===x[0]&&y[1]===x[1]));DP.splice(0,DP.length,...custom,...extra)}
+if((ADM0.wp||[]).length){const custom=ADM0.wp.filter(x=>Array.isArray(x)&&x.length>=3);const extra=WP.filter(x=>!custom.some(y=>y[0]===x[0]&&y[1]===x[1]));WP.splice(0,WP.length,...custom,...extra)}
+CL.push(["c12","Ter uma carta com dois elementos",()=>ALL.some(c=>S.inv[c.id]&&elEls(c).length===2)?1:0,1,5]);
+CL.push(["c13","Ter 3 cartas fundidas",()=>ALL.filter(c=>S.inv[c.id]&&lvl(c)>0).length,3,8]);
+CL.push(["c14","Ter 5 cartas de Rank S ou superior",()=>ALL.filter(c=>S.inv[c.id]&&c.r>=6).length,5,12]);
+SC.push(["s4","Derrotar um Boss",()=>cv("T","bosswin"),1,20]);
+SC.push(["s5","Usar 25 habilidades elementais",()=>cv("T","eluse"),25,12]);
+CL.concat(SC).forEach(m=>{const q=(ADM0.mc||{})[m[0]];if(q){m[3]=q[0];m[4]=q[1]}});
 const pk3=(l,n,s)=>{const r=sr((s+1)*48271%2147483647);r();r();return l.map((x,i)=>[i,r()]).sort((a,b)=>a[1]-b[1]).slice(0,n).map(x=>x[0]).sort((a,b)=>a-b)};
 const XMAS_MISSIONS=[
  {id:"open",t:"Abrir 5 pacotes",g:5,f:200},
@@ -1294,7 +1304,13 @@ const ill=r=>{
  // cada parte animada vira uma camada própria (só transform/opacity => roda na GPU, sem repintar)
  return `<div class="art"><i class="bg"></i>${r>7?'<i class="nb lyr"></i>':""}${r>3?'<i class="ry lyr"></i>':""}${r>5?'<i class="au lyr"></i>':""}${V("",o,0,140,0,"slice")}${r>3?V("wgs lyr",w,28,108):""}${r>6?V("fk lyr",Z("M28 58C24 44 36 38 34 22 44 28 46 36 50 12 54 36 56 28 66 22 64 38 76 44 72 58Z",L(58,.95)),20,76):""}${r>7?V("rg lyr",`<ellipse cx="50" cy="54" rx="43" ry="13" fill="none" stroke="${L(82)}" stroke-width="1.2" stroke-dasharray="4 3"/>`,52,84)+V("rg r2 lyr",`<ellipse cx="50" cy="54" rx="38" ry="11" fill="none" stroke="${L(70,.7)}" stroke-width=".8"/>`,52,84):""}${V("gm lyr",`<g transform="translate(50 54) scale(${(.78+r*.07).toFixed(2)}) translate(-50 -54)">${g}</g>`,34,104)}${st[0]?V("t1 lyr",st[0],10,84):""}${st[1]?V("t2 lyr",st[1],10,84):""}${pt}</div>`};
 const LK=`<div class="art"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1.5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zm2 0h6V7a3 3 0 0 0-6 0z" fill="currentColor"/></svg></div>`;
-const card=(c,cl="",n=0,lk=0,xt="",lv)=>{const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),im=!lk&&(c.img||IMG[c.id]),fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`,els=lk?[]:elEls(c),emark=els.length?`<span class="cp-card-el-mark" aria-label="Elementos: ${els.map(k=>ELN[k]).join(" e ")}">${els.map(k=>`<i style="--elc:${ZEC[k]||"#d7dbe2"}" title="${ELN[k]}">${EL[k]}</i>`).join("")}</span>`:"";return `<div class="cd k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r};--f:${F[r]};--sd:${(4.2-r*.3).toFixed(1)}s">${lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r)}${lk?"":`${r>5?'<ins class="aur"></ins><ins class="emb"></ins>':""}<b class="rk">${R[r][0]}</b>${n>1?`<i class="x">×${n}</i>`:""}${emark}<u class="in"></u>${!lk&&S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}${L?`<s class="fz">${"<i></i>".repeat(L)}</s>`:""}${r==8?'<u class="rbw"><i class="lyr"></i></u>':""}<div class="nm">${c.n}</div>`}${xt}</div>`};
+const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
+ const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),im=!lk&&(c.img||IMG[c.id]),
+ fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;
+ const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
+ const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
+ return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${art}${frame}${xt}</div>`
+};
 // se a foto de uma carta não carregar, mostra a ilustração gerada
 document.addEventListener("error",e=>{const t=e.target,d=t.tagName=="IMG"&&t.closest(".cd");if(d){d.classList.remove("img");t.parentNode.outerHTML=ill(+d.dataset.r)}},true);
 function updCs(){const c=$("cs");if(!c)return;const mid=c.scrollLeft+c.clientWidth/2;let b=9;[...c.children].forEach((s,i)=>{const d=Math.min(1,Math.abs(s.offsetLeft+s.offsetWidth/2-mid)/s.offsetWidth);s.style.transform=`scale(${(1-d*.22).toFixed(3)})`;s.style.opacity=(1-d*.6).toFixed(2);if(d<b){b=d;cur=i}});$("cap").textContent=P[cur].n;updOpen();document.querySelectorAll(".dots i").forEach((e,i)=>e.classList.toggle("on",i==cur));document.querySelectorAll(".ar button").forEach((e,i)=>e.style.opacity=(i?cur<P.length-1:cur>0)?1:.25)}
@@ -1317,9 +1333,9 @@ const flBar=()=>{const n=FLT.r.length+FLT.e.length+FLT.x.length+(FLT.st?1:0)+(FL
  +(P.length>1?`<div class="chips"><button class="${FLT.all?"on":""}" data-fl="all">Todos</button>${P.map((x,i)=>`<button data-s="${i}" class="${i==as&&!FLT.all?"on":""}">${x.n}</button>`).join("")}</div>`:"")
  +`<div class="flp"${FLT.open?"":" hidden"}>`+row("Rank",R.map((r,i)=>ch("r",i,r[0],FLT.r)).join(""))+row("Elemento",EL_KEYS.map(k=>ch("e",k,`${EL[k]} ${ELN[k]}`,FLT.e)).join(""))+row("Mostrar",[["own","Tenho"],["miss","Faltam"],["dup","Repetidas"],["in","No deck"],["out","Fora do deck"]].map(x=>ch("st",x[0],x[1],FLT.st)).join(""))+row("Habilidade",[["com","Com"],["sem","Sem"],["pas","Passiva"]].map(x=>ch("ab",x[0],x[1],FLT.ab)).join(""))+row("Efeito",FXG.map(g=>ch("x",g[0],g[0],FLT.x)).join(""))+row("Ordenar",[["r","Rank ↑"],["R","Rank ↓"],["n","Nome"],["l","Nível"],["d","Dano"],["v","Vida"],["q","Cópias"]].map(x=>ch("o",x[0],x[1],FLT.o)).join(""))+`<button class="flc" data-fl="clr">Limpar tudo</button></div>`};
 // ladrilho do álbum: a carta ORIGINAL aparece com o nível dela; as cópias repetidas viram só o contador "+N" (sem melhoria, para trocar ou converter)
-const dkTile=c=>{const n=S.inv[c.id]||0,r=n-1;return n?`<div class="dkc" data-dc="${c.id}" data-cid="${c.id}" style="--l:${lvl(c)}">${card(c,"",1)}${r>0?`<b class="dkr" title="${r} repetida${r>1?"s":""} · sem melhoria" aria-label="${r} repetida${r>1?"s":""}, sem melhoria">+${r}</b>`:""}</div>`:`<div class="cp-dkitem" data-cid="${c.id}">${card(c,"",0,1)}</div>`};
+const dkTile=c=>{const n=S.inv[c.id]||0;return n?`<div class="dkc" data-dc="${c.id}" data-cid="${c.id}" style="--l:${lvl(c)}">${card(c,"",1)}</div>`:`<div class="cp-dkitem" data-cid="${c.id}">${card(c,"",0,1)}</div>`};
 const flGrid=()=>{const q=P[as],a=flOn()||FLT.all,l=a?flList():[...q.cards].sort((x,y)=>x.r-y.r);
- return `<div class="sr"><p class="mut">${a?`${l.length} ${l.length==1?"carta":"cartas"} · ${FLT.all||FLT.q?"todos os pacotes":q.n}`:`${own(q)}/${q.cards.length} cartas`}</p>${a?"":cvBtn(q.cards,"p","qc")}</div>`+(ALL.some(c=>(S.inv[c.id]||0)>1)?`<p class="dkn"><b>+N</b> = repetidas (sem melhoria). Só a original tem nível; as repetidas servem para trocar, converter ou fundir.</p>`:"")+(l.length?`<div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:`<div class="fle">Nenhuma carta encontrada<br><button class="flc" data-fl="clr">Limpar filtros</button></div>`)+(a?"":exAl()+indAl())};
+ return `<div class="cp-collection-gridhead"><div><b>${a?"Resultados":"Álbum do pacote"}</b><small>${a?`${l.length} ${l.length==1?"carta":"cartas"} · ${FLT.all||FLT.q?"todos os pacotes":q.n}`:`${own(q)} de ${q.cards.length} cartas coletadas`}</small></div>${a?"":cvBtn(q.cards,"p","qc")}</div>`+(l.length?`<div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:`<div class="fle">Nenhuma carta encontrada<br><button class="flc" data-fl="clr">Limpar filtros</button></div>`)+(a?"":exAl()+indAl())};
 const flPaint=bar=>{if(!$("dkal"))return;if(bar)$("flt").innerHTML=flBar();$("dkal").innerHTML=flGrid();dkPaint()};
 document.addEventListener("click",e=>{if(e.target.closest(".flt [data-s]")){FLT.all=0;return}const b=e.target.closest("[data-fl]");if(!b)return;const k=b.dataset.fl,v=b.dataset.fv;if(k=="tg")FLT.open=!FLT.open;else if(k=="all")FLT.all=FLT.all?0:1;else if(k=="clr")Object.assign(FLT,{q:"",r:[],e:[],x:[],st:"",ab:"",o:"r",all:0});else if(k=="r"||k=="e"||k=="x"){const a=FLT[k],x=k=="r"?+v:v,i=a.indexOf(x);i<0?a.push(x):a.splice(i,1)}else FLT[k]=FLT[k]==v?(k=="o"?"r":""):v;flPaint(1)},true);
 document.addEventListener("input",e=>{if(e.target.id!="flq")return;FLT.q=e.target.value;clearTimeout(flT);flT=setTimeout(()=>flPaint(0),140)});
@@ -1328,7 +1344,7 @@ const adxQ=()=>["ec","hc","gc"].forEach(id=>{const sl=$(id);if(!sl||sl.dataset.q
 function render(keep){
  const m=$("m"),p=P[cur],q=P[as];
  if(tab=="h"){const dd=S.dl===day()?"":`<button class="qc" data-d="1">Recompensa diária<span class="pr">${gem}+${fmt(dr())}</span></button>`;m.innerHTML=`<div class="hd top"><div><h1>Coleção Primata</h1><p class="mut">${ALL.filter(c=>S.inv[c.id]).length}/${ALL.length} cartas</p></div>${wlt()}</div><div class="pn"><div class="cs" id="cs">${P.map((x,i)=>`<button class="pk${pkExp(x)||pkFuture(x)?" pkx":""}" data-k="${i}" aria-label="${x.n}">${packEl(x,0,i)}${x.esp>0?`<em class="pke">🎁 Especial</em>`:pkFuture(x)?`<em class="pke">🔒 Começa em ${pkRest(x.ini)}</em>`:x.ate>0?`<em class="pke">⏳ ${pkExp(x)?"Encerrado":"some em "+pkRest(x.ate)}</em>`:""}</button>`).join("")}</div>${P.length>1?`<div class="ar"><button data-p="-1" aria-label="Anterior">‹</button><button data-p="1" aria-label="Próximo">›</button></div>`:""}<small id="cap">${p.n}</small>${P.length>1?`<div class="dots">${P.map(()=>"<i></i>").join("")}</div>`:""}</div><div class="pack-open"><label class="pack-qty" for="packQty"><span>Quantidade</span><select id="packQty" aria-label="Quantidade de pacotes para abrir">${[1,10,25,50,100,250,500,1000].map(n=>`<option value="${n}"${n==PQ?" selected":""}>×${n.toLocaleString("pt-BR")}</option>`).join("")}</select></label><button class="bt pack-open-action" data-open-selected="1"><span data-open-label>Abrir ×${PQ}</span><span class="pr"></span></button></div><div class="qa">${fpb()}<button class="qc" data-gf="1" id="gf" hidden></button>${dd}</div>`}
- else if(tab=="a")m.innerHTML=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="cp-album-guide"><span class="tab">Deck</span><button class="bt gh" data-cp-el-guide="1">📖 Guia de elementos</button></div><div class="dkb" id="dkp"></div><div id="flt" class="flt">${flBar()}</div><div id="dkal">${flGrid()}</div><div class="dksp"></div><div class="dka" id="dka" hidden></div>`;
+ else if(tab=="a")m.innerHTML=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><section class="cp-album-guide"><div class="cp-album-title"><small>COLEÇÃO PRIMATA</small><h2>Seu álbum</h2><p>Toque em uma ilustração para abrir a ficha completa.</p></div><button type="button" class="cp-guide-link" data-cp-el-guide="1">Guia de elementos <span>21 elementos</span></button></section><div class="dkb" id="dkp"></div><div id="flt" class="flt">${flBar()}</div><div id="dkal">${flGrid()}</div><div class="dksp"></div><div class="dka" id="dka" hidden></div>`;
  else if(tab=="m")m.innerHTML=msn();else if(tab=="t")m.innerHTML=trk();else if(tab=="b")m.innerHTML=btl();
  m.insertAdjacentHTML("beforeend",nav());
  initCs();tab=="a"?dkPaint():(DSEL=null);tab=="b"?a3go():A3&&(A3.off=1);keep||scrollTo(0,0)
@@ -1480,7 +1496,7 @@ function view(c,keep){
   tx=rc?String(a[2]||"").replace(/\s*Recarga:\s*\d+\s*turnos?\.?\s*$/i,""):a[2]||""; // tira a recarga que já veio escrita no texto, para não repetir
   return `<h3>${ar.length>1?"Habilidade "+(ix+1)+" · ":""}${a[0]||"Sem habilidade ainda"}</h3>${elSkillTagHTML(a[3]||{},c)}<em>${a[1]||""}</em><p>${tx}${rc?` <b>Recarga: ${rc} turno${rc>1?"s":""}.</b>`:""}</p>`}).join("");
  f.style.setProperty("--rc",R[c.r][1]);
- f.innerHTML=`<div class="fch"><div class="hd"><button class="bk" data-a="2">‹ Voltar</button>${wlt()}</div>${card(c)}<h2>${c.n}</h2><p class="rar"><span class="rtg" style="--pc:${R[c.r][1]}">Rank ${R[c.r][0]}</span>${c.tb?`<span class="rtg">🐾 ${esc(c.tb)}</span>`:""}${n?`<span class="rtg">${NIVEIS[lvl(c)]}</span>`:""}${n>1?`<span class="rtg">${lvl(c)?`1 melhorada + ${n-1} repetida${n>2?"s":""}`:`×${n} cópias`}</span>`:""}</p><div class="cp-card-el-head">${elEls(c).map(k=>elChipButton(k)).join("")}${elEls(c)[0]==="normal"?'<small>· sem vantagens nem fraquezas</small>':""}<button class="bt gh" data-cp-el-guide="1">📖 Guia de elementos</button></div>${elRelationsHTML(c)}<div class="sg">${[["s","Status"],["h","História"],["k","Habilidade"],...(n?[["r","Repetidas"]]:[])].map(x=>`<button data-f="${x[0]}" class="${ft==x[0]?"on":""}">${x[1]}${x[0]=="r"&&n>1?`<b>${n-1}</b>`:""}</button>`).join("")}</div><div class="pnl">${body}</div></div>`;
+ f.innerHTML=`<div class="fch"><div class="hd"><button class="bk" data-a="2">‹ Voltar</button>${wlt()}</div>${card(c)}<h2>${c.n}</h2><p class="rar"><span class="rtg" style="--pc:${R[c.r][1]}">Rank ${R[c.r][0]}</span>${c.tb?`<span class="rtg">🐾 ${esc(c.tb)}</span>`:""}${n?`<span class="rtg">${NIVEIS[lvl(c)]}</span>`:""}${n>1?`<span class="rtg">${lvl(c)?`1 melhorada + ${n-1} repetida${n>2?"s":""}`:`×${n} cópias`}</span>`:""}</p><div class="sg">${[["s","Status"],["h","História"],["k","Habilidade"],...(n?[["r","Repetidas"]]:[])].map(x=>`<button data-f="${x[0]}" class="${ft==x[0]?"on":""}">${x[1]}${x[0]=="r"&&n>1?`<b>${n-1}</b>`:""}</button>`).join("")}</div><div class="pnl">${body}</div></div>`;
  f.hidden=false;if(!keep)f.scrollTop=0;
 }
 function preview(i){const p=P[as]||P[0],r=(p&&p.cards.find(c=>c.r==i))||ALL.find(c=>c.r==i),x=r||ALL.find(c=>!c.img)||ALL[0];PV=r?{...r,id:"pv"}:{...x,img:0,r:i,id:"pv",hp:ST[i][0],atk:ST[i][1]};play(x.p,[{c:PV,n:false}],null)}
@@ -1580,14 +1596,13 @@ const elChipButton=k=>`<button type="button" class="cp-el-chip cp-el-chip-btn" s
 const elListText=keys=>keys.map(k=>`${EL[k]} ${ELN[k]}`).join(", ")||"—";
 const elSkillTagHTML=(skill,owner)=>{const raw=String(skill&&skill.el!=null?skill.el:"").trim(),own=!!raw&&elKey(raw)!=="carta",els=own?elSkillEls(skill,owner):elEls(owner);return `<div class="cp-el-skill-tag">${own?`<small>Elemento próprio</small>`:`<small>🃏 Da carta</small>`}${els.map(elChipButton).join("")}</div>`};
 const elSkillListTagHTML=(skill,owner)=>{const raw=String(skill&&skill.el!=null?skill.el:"").trim(),own=!!raw&&elKey(raw)!=="carta",els=own?elSkillEls(skill,owner):elEls(owner);return `${own?"":"<span class=\"cp-el-origin\">🃏 Da carta</span>"}${els.map(k=>`<span class="cp-el-origin cp-el-origin-color" style="--elc:${ZEC[k]||"#aaa"}" data-cp-el-key="${k}">${EL[k]} ${ELN[k]}</span>`).join("")}`};
-const elRelationsHTML=card=>{const own=elEls(card);if(own[0]==="normal")return `<section class="cp-el-relations"><h3>⚔️ Vantagens e fraquezas</h3><p class="cp-el-neutral">⚪ Normal · sem vantagens nem fraquezas no ataque ou na defesa.</p></section>`;const ids=EL_KEYS.filter(k=>k!=="normal"),groups=[
- ["Ataca ▲ ×1,5 contra",ids.filter(k=>elCalc(own,[k]).estado==="super")],
- ["Ataca ▼ ×0,67 contra",ids.filter(k=>elCalc(own,[k]).estado==="fraco")],
- ...(own.length===2?[["Recebe ▲▲ ×2 de",ids.filter(k=>elCalc([k],own).estado==="super_duplo")]]:[]),
- ["Recebe ▲ ×1,5 de",ids.filter(k=>elCalc([k],own).estado==="super")],
- ["Resiste ▼ ×0,67 de",ids.filter(k=>elCalc([k],own).estado==="fraco")],
- ...(own.length===2?[["Resiste ▼▼ ×0,5 de",ids.filter(k=>elCalc([k],own).estado==="muito_fraco")]]:[])
- ];const rows=groups.filter(([,keys])=>keys.length).map(([title,keys])=>`<div class="cp-el-rel-row"><b>${title}</b><div>${keys.map(elChipButton).join("")}</div></div>`).join("");return `<section class="cp-el-relations"><h3>⚔️ Vantagens e fraquezas</h3>${rows||'<p class="cp-el-neutral">Sem vantagens ou fraquezas contra elementos puros.</p>'}</section>`};
+const elRelationsHTML=card=>{const own=elEls(card);if(own[0]==="normal")return `<p class="cp-el-neutral">Normal não tem vantagens nem fraquezas.</p>`;const ids=EL_KEYS.filter(k=>k!=="normal"),groups=[
+ ["Causa mais dano",ids.filter(k=>elCalc(own,[k]).estado==="super")],
+ ["Causa menos dano",ids.filter(k=>elCalc(own,[k]).estado==="fraco")],
+ ["Recebe dano extra",ids.filter(k=>elCalc([k],own).estado==="super")],
+ ["Resiste melhor",ids.filter(k=>elCalc([k],own).estado==="fraco")],
+ ...(own.length===2?[["Resistência dupla",ids.filter(k=>elCalc([k],own).estado==="muito_fraco")]]:[])
+ ];const rows=groups.filter(([,keys])=>keys.length).map(([title,keys])=>`<div class="cp-el-rel-row"><b>${title}</b><span>${elListText(keys)}</span></div>`).join("");return `<div class="cp-el-relations"><h4>Relações elementais</h4>${rows||'<p class="cp-el-neutral">Sem relações especiais contra elementos puros.</p>'}</div>`};
 const elCardPreview=(one,two)=>{const els=elEls([one,two]),atk=EL_KEYS.filter(k=>k!=="normal"&&elCalc(els,[k]).multiplicador>1.05),weak=EL_KEYS.filter(k=>k!=="normal"&&elCalc(els,[k]).multiplicador<.95),recv=EL_KEYS.filter(k=>k!=="normal"&&elCalc([k],els).multiplicador<.95),res=EL_KEYS.filter(k=>k!=="normal"&&elCalc([k],els).multiplicador>1.05);return `<div class="cp-el-preview"><div>${els.map(elChip).join(" ")}</div>${els[0]==="normal"?`<small>⚪ Normal · sem vantagens nem fraquezas</small>`:`<small><b>Ataca ▲:</b> ${elListText(atk)}${weak.length?`<br><b>Ataca ▼:</b> ${elListText(weak)}`:""}<br><b>Recebe mais dano:</b> ${elListText(res)}${recv.length?`<br><b>Resiste:</b> ${elListText(recv)}`:""}</small>`}</div>`};
 const cpSyncCardElements=()=>{const a=$("eel"),b=$("eel2"),v=$("cp-card-el-preview");if(!a||!b)return;if(!a.value){b.value="";b.disabled=true}else{b.disabled=false;if(b.value===a.value)b.value=""}if(v)v.innerHTML=elCardPreview(a.value,b.value)};
 const cpSyncNewCardElements=()=>{const a=$("an_el"),b=$("an_el2"),v=$("cp-new-card-el-preview");if(!a||!b)return;if(!a.value){b.value="";b.disabled=true}else{b.disabled=false;if(b.value===a.value)b.value=""}if(v)v.innerHTML=elCardPreview(a.value,b.value)};
@@ -1624,7 +1639,7 @@ at:{n:"Buff/debuff de ataque",v:"at",f:[["p","±%",30],["n","turnos",2]],ds:e=>`
 df:{n:"Buff/debuff de defesa",v:"at",f:[["p","±% (positivo = recebe menos dano)",30],["n","turnos",2]],ds:e=>`Dano recebido ${e.p>0?"−":"+"}${Math.abs(e.p)}% por ${e.n||2} turnos em ${TG[e.a]}`,run:(B,u,t,e)=>{t.bf.push({k:"df",p:e.p,n:e.n||2})}},
 po:{n:"Veneno",v:"at",vp:-1,f:[["p","% da vida máx. por turno",10],["n","turnos",3]],ds:e=>`Veneno de ${e.p}% da vida máxima por turno, ${e.n||3} turnos, em ${TG[e.a]}`,run:(B,u,t,e)=>{t.bf.push({k:"po",p:e.p,n:e.n||3})}},
 cd:{n:"Recarga de habilidades",v:"h",f:[["v","turnos a reduzir (0 = zera tudo)",0],["o","poupar a habilidade usada (1 = sim)",1]],ds:e=>`Recarga das habilidades ${e.v>0?"−"+e.v+" turno(s)":"zerada"} em ${TG[e.a]}${e.o?" (menos a usada)":""}`,run:(B,u,t,e,i)=>{t.cd=t.cd.map((x,j)=>e.o&&t==u&&j==i?x:e.v>0?Math.max(0,x-e.v):0)}},
-dr:{n:"Comprar carta",v:"h",own:1,f:[["v","cartas",1]],ds:e=>`Compra ${e.v} carta(s) para o banco (se couber)`,run:(B,u,t,e)=>{const s=cur_(B);for(let k=0;k<e.v;k++){if(s.r.length>=3||!s.dk.length)break;const x=s.dk.shift();s.r.push(x);lg(B,`${s.n} comprou ${x.c.n}`);B.ev.push({k:"draw",s:B.t,id:x.id,r:x.c.r,el:elEls(x)[0]})}}},
+dr:{n:"Comprar carta",v:"h",own:1,f:[["v","cartas",1]],ds:e=>`Compra ${e.v} carta(s) para o banco (se couber)`,run:(B,u,t,e)=>{const s=cur_(B);for(let k=0;k<e.v;k++){if(s.r.length>=3||!s.dk.length)break;const x=s.dk.shift();s.r.push(x);bump("draw");lg(B,`${s.n} comprou ${x.c.n}`);B.ev.push({k:"draw",s:B.t,id:x.id,r:x.c.r,el:elEls(x)[0]})}}},
 bk:{n:"Recuar (vai para a reserva)",v:"h",f:[],ds:e=>`${TG[e.a]} recua para a reserva`,ai:(e,t,u)=>e.a=="e"||e.a=="E"?20:-25,run:(B,u,t)=>{const s=B.p[sdx(B,t)];if(!s||s.r.length>2)return;s.f[s.f.indexOf(t)]=null;s.r.push(t);lg(B,`↩ ${t.c.n} recuou`)}}
 };
 // ===== v1.6: MAIS BLOCOS · condições ("só se...") · gatilhos (ativa ou passiva) =====
@@ -1670,7 +1685,7 @@ mm:{n:"Queimar baralho inimigo",v:"d",own:1,f:[["v","cartas",2]],ds:e=>`O inimig
 });
 const FXG=[["⚔ Dano",["d","dp","dv","dh","mh","ex","lx"]],["💚 Vida",["h","hv","mx","rg","ls","rv","lf","sp"]],["🔼 Buff e proteção",["at","df","sh","rf","mk","ev","cr","im","tn","pu","ca","el"]],["🔽 Debuff e controle",["po","bl","st","cu","dz","ci","di"]],["⏱ Recarga e ações",["cd","ac"]],["🃏 Cartas",["dr","bk","pl","rd","dc","mm"]]];
 const runEf=(B,u,ef,i,g,skill=null)=>{const attacker=elSkillEls(skill,u),blocks=Array.isArray(ef)?ef:[];for(const e of blocks){if(!e||typeof e!=="object")continue;const X=FX[e.t];if(!X||typeof X.run!=="function"){console.warn("Bloco de habilidade desconhecido",skill&&skill.n,e&&e.t);continue}try{for(const f of X.f||[]){const key=f[0];if(e[key]===undefined||e[key]===null||e[key]==="")e[key]=f[2];else if(Array.isArray(f[3])&&!f[3].includes(e[key]))e[key]=f[2];else if(!f[3]&&typeof f[2]==="number"&&!Number.isFinite(+e[key]))e[key]=f[2]}if(!X.own&&(!e.a||!Object.prototype.hasOwnProperty.call(TG,e.a)))e.a=(["d","dp","dh","dv","mh","ex","po","bl","st","cu","dz","di","sp","ca"].includes(e.t)?"e":"s");const chance=e.ch==null?100:Math.max(0,Math.min(100,+e.ch||0));if(chance<100&&Math.random()*100>=chance)continue;let ts=X.own?[u]:tgt(B,u,e.a,g||{});if(!Array.isArray(ts))ts=[];const ev={k:"ef",a:u.id,s:B.t,ty:X.v||e.t,p:X.vp||e.p,ts:[],r:u.c.r,el:attacker[0]||"normal",el2:attacker[1]||"",n:skill&&skill.n||""};for(const t of ts){if(!t||!(X.own||t.hp>0))continue;let condT=t;if(e.co==="el"&&X.own){const foe= B.p.length>2?null:foe_(B),E=B.p.length>2?en_(B):(foe&&foe.f?foe.f.filter(Boolean):[]);condT=(g&&g.e&&g.e.hp>0?g.e:E[0])||t}const cond=e.co?CO[e.co]&&CO[e.co][1]:null;if(e.co&&typeof cond!=="function"){console.warn("Condição de habilidade desconhecida",skill&&skill.n,e.co);continue}if(cond&&!cond(B,u,condT,e.cv??50,{atacante:attacker}))continue;const rEl=elCalc(attacker,elEls(t)),hitCtx={atacante:attacker,elemento:rEl.elemento,habilidade:skill&&skill.n||""};if(e.t==="d"||e.t==="mh")Object.assign(hitCtx,{multiplicador:rEl.multiplicador,estado:rEl.estado});X.run(B,u,t,e,i,hitCtx);ev.ts.push(t.id)}if(ev.ts.length)B.ev.push(ev)}catch(err){console.warn("Habilidade/bloco ignorado",skill&&skill.n,e&&e.t,err);lg(B,`⚠ ${skill&&skill.n||"Habilidade"}: efeito ${e.t||"inválido"} ignorado`)}}};
-const trg=(B,u,si,k)=>{if(!u.ps||(B.dp||0)>2)return;const L=u.ps.filter(p=>p.tr==k);if(!L.length)return;B.dp=(B.dp||0)+1;const t0=B.t;B.t=si;try{L.forEach(p=>{lg(B,`✦ ${u.c.n}: ${p.n}`);runEf(B,u,p.ef,-1,{},p)})}finally{B.t=t0;B.dp--}};
+const trg=(B,u,si,k)=>{if(!u.ps||(B.dp||0)>=5)return;const L=u.ps.filter(p=>p.tr==k);if(!L.length)return;B.dp=(B.dp||0)+1;const t0=B.t;B.t=si;try{L.forEach(p=>{lg(B,`✦ ${u.c.n}: ${p.n}`);runEf(B,u,p.ef,-1,{},p)})}finally{B.t=t0;B.dp--}};
 const trgTeam=(B,si,k,skip)=>{const team=B.tm[si];B.p.forEach((s,j)=>{if(j!==si&&B.tm[j]!==team)return;s.f.forEach(x=>{if(x&&x!==skip&&x.hp>0)trg(B,x,j,k)})})};
 const dsc=sp=>(sp.tr&&sp.tr!="u"?TRG[sp.tr]+": ":"")+sp.ef.map(e=>(FX[e.t]?FX[e.t].ds(e):"?")+(e.co&&CO[e.co]?` · se ${CO[e.co][0].replace("X",e.cv||50)}`:"")+(e.ch&&e.ch<100?` (${e.ch}% de chance)`:"")).join(". ")+(sp.tr&&sp.tr!="u"?".":`. Recarga: ${sp.rc||3} turnos.`)+(sp.el&&sp.el!=="carta"?` Elemento próprio: ${EL[elKey(sp.el)]||"⚪"} ${ELN[elKey(sp.el)]||"Normal"}${sp.el2?` + ${EL[elKey(sp.el2)]} ${ELN[elKey(sp.el2)]}`:""}.`:` Usa o elemento da carta.`)+(sp.chargeMode==="same"?` Precisa carregar e depois usar no mesmo turno, gastando 2 ações.`:sp.chargeMode==="turns"?` Precisa carregar e aguardar ${Math.max(1,+sp.chargeTurns||1)} turno(s) antes de usar.`:``);
 // ----- ARENAS (9) · troféus · recompensas -----
@@ -1745,9 +1760,24 @@ function nb(a,b,o){const sd=x=>({n:x.n,life:CONFIG.vidas||5,dk:shf(x.u).map(y=>m
 function stT(B,first){const s=cur_(B);B.ac=first?(CONFIG.acaoIni||1):(CONFIG.acoes||2);s.drew=0;B.hit=[];s.f.forEach(u=>{if(!u)return;const p=bs(u,"po"),b=u.bf.filter(x=>x.k=="bl").reduce((a,x)=>a+x.v,0),r=bs(u,"rg");if(p>0)hurt(B,u,Math.max(1,Math.round(u.mx*p/100)),null);if(b>0)hurt(B,u,b,null);if(r>0&&u.hp>0){const h=Math.min(u.mx-u.hp,Math.round(u.mx*r/100));u.hp+=h;if(h>0)trg(B,u,B.t,"he")}if(u.hp>0)trg(B,u,B.t,"ti")});chk(B);[...s.f,...s.r].forEach(u=>{if(!u)return;const z=bs(u,"st")>0,m=z||bs(u,"cu")>0;u.u=z||bs(u,"dz")>0?1:0;u.cd=u.cd.map(x=>Math.max(m?1:0,x-(z?0:1)));u.bf=u.bf.map(b=>({...b,n:b.n-1})).filter(b=>b.n>0)})}
 function fin(B,why){B.over=1;if(B.p.length>2)return finG(B,why);const[a,b]=B.p;let w=a.life>b.life?0:a.life<b.life?1:-1;if(w<0){const h=s=>[...s.f,...s.r].filter(Boolean).reduce((x,u)=>x+u.hp,0);w=h(a)>h(b)?0:h(a)<h(b)?1:-1}B.w=w;B.why=why;return 1}
 const chk=B=>{if(!B||B.over)return B&&B.over?1:0;if(B.p.length>2){const vivos=B.p.map((s,i)=>({s,i})).filter(x=>x.s&&x.s.life>0),times=new Set(vivos.map(x=>B.tm&&B.tm[x.i]!=null?B.tm[x.i]:x.i));return vivos.length<2||times.size<2?fin(B,"vidas"):0}return B.p[0].life<1||B.p[1].life<1?fin(B,"vidas"):0};
-function hurt(B,t,d,src,elementCtx=null){if(d>0){SND.hit();if(elementCtx&&(elementCtx.estado==="super"||elementCtx.estado==="super_duplo"))try{cpxShake(d,t)}catch(e){}}const i=B.p.findIndex(x=>x.f.includes(t));if(i<0||t.hp<1)return;if(bs(t,"im")>0)d=0;if(src&&d>0){if(bs(t,"ev")>0&&Math.random()*100<bs(t,"ev")){d=0;trg(B,t,i,"ev")}else if(bs(src,"cr")>0&&Math.random()*100<bs(src,"cr"))d*=2}const sh=t.bf.find(b=>b.k=="sh"&&b.p>0);if(sh&&d>0){const a=Math.min(sh.p,d);sh.p-=a;d-=a}d=Math.min(d,t.hp);t.hp-=d;const dead=!t.hp,visualEls=elementCtx&&elementCtx.atacante?elementCtx.atacante:src?elEls(src):["normal"];B.ev.push({k:"dmg",id:t.id,s:i,d,mx:t.mx,dead,r:src?src.c.r:t.c.r,el:elementCtx&&elementCtx.elemento||visualEls[0]||"normal",el2:visualEls[1]||"",mult:elementCtx&&elementCtx.multiplicador,state:elementCtx&&elementCtx.estado,elemental:!!(elementCtx&&Array.isArray(elementCtx.atacante)),tr:t.c.r});if(d>0&&src){const l=bs(src,"ls"),rf=bs(t,"rf");if(l>0&&src.hp>0)src.hp=Math.min(src.mx,src.hp+Math.round(d*l/100));if(rf>0&&src!=t&&src.hp>0&&sdx(B,src)>=0)hurt(B,src,Math.max(1,Math.round(d*rf/100)),null)}if(!dead){d>0&&trg(B,t,i,"da");return}const s=B.p[i];s.f[s.f.indexOf(t)]=null;gy(s,t);s.life--;B.ev.push({k:"life",s:i,n:s.life});{const kk=B.p.length>2?(src?sdx(B,src):-1):1-i;if(kk>=0)B.kl[kk]++}lg(B,`💥 ${t.c.n} caiu · ${s.n} perde 1 vida`);trg(B,t,i,"mo");trgTeam(B,i,"am",t);if(src){const j=sdx(B,src);j>=0&&trg(B,src,j,"ki")}}
+function hurt(B,t,d,src,elementCtx=null){
+ if(d>0){SND.hit();if(elementCtx&&(elementCtx.estado==="super"||elementCtx.estado==="super_duplo"))try{cpxShake(d,t)}catch(e){}}
+ const i=B.p.findIndex(x=>x.f.includes(t));if(i<0||t.hp<1)return;
+ if(bs(t,"im")>0)d=0;
+ if(src&&d>0){if(bs(t,"ev")>0&&Math.random()*100<bs(t,"ev")){d=0;trg(B,t,i,"ev")}else if(bs(src,"cr")>0&&Math.random()*100<bs(src,"cr"))d*=2}
+ const sh=t.bf.find(b=>b.k==="sh"&&b.p>0);if(sh&&d>0){const a=Math.min(sh.p,d);sh.p-=a;d-=a}
+ d=Math.min(d,t.hp);t.hp-=d;
+ if(d>0)trg(B,t,i,"da");
+ const dead=t.hp<=0,visualEls=elementCtx&&elementCtx.atacante?elementCtx.atacante:src?elEls(src):["normal"];
+ B.ev.push({k:"dmg",id:t.id,s:i,d,mx:t.mx,dead,r:src?src.c.r:t.c.r,el:elementCtx&&elementCtx.elemento||visualEls[0]||"normal",el2:visualEls[1]||"",mult:elementCtx&&elementCtx.multiplicador,state:elementCtx&&elementCtx.estado,elemental:!!(elementCtx&&Array.isArray(elementCtx.atacante)),tr:t.c.r});
+ if(d>0&&src){const l=bs(src,"ls"),rf=bs(t,"rf");if(l>0&&src.hp>0)src.hp=Math.min(src.mx,src.hp+Math.round(d*l/100));if(rf>0&&src!==t&&src.hp>0&&sdx(B,src)>=0)hurt(B,src,Math.max(1,Math.round(d*rf/100)),null)}
+ if(t.hp>0)return;
+ const seat=B.p[i];seat.f[seat.f.indexOf(t)]=null;gy(seat,t);seat.life--;B.ev.push({k:"life",s:i,n:seat.life});
+ {const kk=B.p.length>2?(src?sdx(B,src):-1):1-i;if(kk>=0)B.kl[kk]++}
+ lg(B,`💥 ${t.c.n} caiu · ${seat.n} perde 1 vida`);trg(B,t,i,"mo");trgTeam(B,i,"am",t);if(src){const j=sdx(B,src);j>=0&&trg(B,src,j,"ki")}
+}
 // COMPRAR não gasta ação e dá para comprar quantas quiser na sua vez; a carta vai sempre para o banco (reservas) e só entra em campo quando ativada (colocar gasta 1 ação). Banco cheio (3) ou baralho vazio = não compra.
-function aDraw(B){const s=cur_(B);if(s.r.length>=3||!s.dk.length)return 0;const u=s.dk.shift();s.r.push(u);B.hit=[];lg(B,`${s.n} comprou ${u.c.n}`);B.ev.push({k:"draw",s:B.t,id:u.id,r:u.c.r,el:elEls(u)[0]});return 1}
+function aDraw(B){const s=cur_(B);if(s.r.length>=3||!s.dk.length)return 0;const u=s.dk.shift();s.r.push(u);bump("draw");B.hit=[];lg(B,`${s.n} comprou ${u.c.n}`);B.ev.push({k:"draw",s:B.t,id:u.id,r:u.c.r,el:elEls(u)[0]});return 1}
 function aPlace(B,u){const s=cur_(B),i=s.f.indexOf(null);if(B.ac<1||i<0||!s.r.includes(u))return 0;s.r.splice(s.r.indexOf(u),1);s.f[i]=u;B.ac--;B.hit=[];lg(B,`${s.n} colocou ${u.c.n} em campo`);B.ev.push({k:"place",s:B.t,id:u.id,r:u.c.r,el:elEls(u)[0]});trg(B,u,B.t,"in");trgTeam(B,B.t,"ae",u);chk(B);return 1}
 function aAtk(B,u,t){const s=cur_(B);if(B.ac<1||u.u||!s.f.includes(u)||!tg_(B).includes(t))return 0;B.ac--;u.u=1;const els=elEls(u),r=elCalc(els,elEls(t)),d=dm(u,t,1,els),hctx={atacante:els,elemento:r.elemento,multiplicador:r.multiplicador,estado:r.estado};B.hit=[t.id];lg(B,`⚔ ${u.c.n} atacou ${t.c.n}: −${d}${r.multiplicador!==1?` · ${EL[r.elemento]} ${ELN[r.elemento]} → ${elEls(t).map(k=>EL[k]+" "+ELN[k]).join(" / ")} · ×${String(r.multiplicador).replace(".",",")}`:""}`);B.ev.push({k:"atk",a:u.id,t:t.id,s:B.t,r:u.c.r,el:r.elemento,el2:els[1]||"",mult:r.multiplicador,state:r.estado});hurt(B,t,d,u,hctx);u.hp>0&&trg(B,u,B.t,"at");chk(B);return 1}
 const tgt=(B,u,a,g)=>{const E=B.p.length>2?en_(B):foe_(B).f.filter(Boolean),A=cur_(B).f.filter(Boolean),rn=l=>l.length?[l[Math.random()*l.length|0]]:[],mn=(l,f)=>l.length?[l.reduce((m,x)=>f(x)<f(m)?x:m)]:[];return a=="s"?[u]:a=="E"?E:a=="A"?A:a=="r"?rn(E):a=="w"?mn(E,x=>x.hp):a=="x"?mn(E,x=>-x.hp):a=="q"?rn(A):a=="m"?mn(A,x=>x.hp/x.mx):a=="o"?A.filter(x=>x!=u):a=="T"?[...E,...A]:a=="e"?[E.includes(g.e)?g.e:E[0]].filter(Boolean):[A.includes(g.a)?g.a:A.includes(u)?u:A[0]].filter(Boolean)};
@@ -1787,7 +1817,7 @@ function dkPaint(){
  const p=$("dkp");if(!p)return;if(DSEL&&!(S.inv[DSEL]>0))DSEL=null;
  p.innerHTML=dkPanel();p.classList.toggle("pick",!!DSEL);
  const u=dkUsed(dkIds());
- document.querySelectorAll("#m [data-dc]").forEach(e=>{const id=e.dataset.dc,n=u[id]||0;e.classList.toggle("sel",id==DSEL);e.classList.toggle("fu",n>=1);let b=e.querySelector(".dku");if(n){if(!b){b=document.createElement("i");b.className="dku";e.append(b)}b.textContent="✓ no deck"+(n>1?" ×"+n:"")}else if(b)b.remove()});
+ document.querySelectorAll("#m [data-dc]").forEach(e=>{const id=e.dataset.dc,n=u[id]||0;e.classList.toggle("sel",id==DSEL);e.classList.toggle("fu",n>=1);e.classList.toggle("cp-in-deck",n>=1)});
  dkBar()
 }
 const dkSave=()=>{save();dkPaint()};
@@ -1807,12 +1837,12 @@ document.addEventListener("click",e=>{
  else if(D.dc){DSEL=DSEL==D.dc?null:D.dc;dkPaint()}
 });
 // inimigo da arena k: 12 cartas do jogo, todas DIFERENTES, com poder médio = 1,15^k × o da F (1ª ≈ F, 9ª ≈ A)
-function enDeck(k){const medal=Math.max(0,Math.floor(window.mdInfo?window.mdInfo().t||0:0)),inf=+k>8,medalScale=inf?1:Math.pow(1.035,medal),T=Math.pow(1.15,k)*medalScale,rho=c=>ST[c.r][0]/100,by=ALL.slice().sort((a,b)=>Math.abs(rho(a)-T)-Math.abs(rho(b)-T)),nr=by.slice(0,Math.max(12,Math.min(by.length,16))),u=[];
- // Arena define a faixa de poder; medalhões elevam gradualmente a raridade e o nível dos bots.
+function enDeck(k,difficultyD){const medal=Math.max(0,Math.floor(window.mdInfo?window.mdInfo().t||0:0)),inf=+k>8,medalScale=inf?1:Math.pow(1.035,medal),D=Number.isFinite(+difficultyD)?Math.max(0,+difficultyD):medal,T=Math.pow(1.15,k)*medalScale,rho=c=>ST[c.r][0]/100,by=ALL.slice().sort((a,b)=>Math.abs(rho(a)-T)-Math.abs(rho(b)-T)),nr=by.slice(0,Math.max(12,Math.min(by.length,16))),u=[];
+ // Arena mantém sua escala original. Nas infinitas, rank e fusão avançam até SSS/nível 5; depois o multiplicador sobe com limite para preservar a possibilidade de vitória.
  for(let i=nr.length-1;i>0;i--){const j=Math.random()*(i+1)|0,x=nr[i];nr[i]=nr[j];nr[j]=x}
  nr.slice(0,12).forEach(c=>u.push(c));
  while(u.length<12)u.push(by[u.length%by.length]);
- const av=u.reduce((a,c)=>a+rho(c),0)/12,base=[0,0,1,1,2,2,3,3,4][Math.min(Math.floor(k),8)],LV=Math.max(0,Math.min(5,Math.round(base*(CONFIG.botNivel??1)+Math.floor(medal/6))));return u.map(c=>{const l=Math.min(LV+(k>1&&Math.random()<.3?1:0),c.r>5&&medal<8?Math.max(0,LV-1):5),power= Math.max(.65,Math.min(2.5,T/Math.max(.01,av)))*(1+(CONFIG.botForca??5)/100*k)*(1+Math.min(.35,medal*.012));return{c,lv:l,s:power/(1+.4*l)}})}
+ const av=u.reduce((a,c)=>a+rho(c),0)/12,base=[0,0,1,1,2,2,3,3,4][Math.min(Math.floor(k),8)],LV=Math.max(0,Math.min(5,Math.round(base*(CONFIG.botNivel??1)+Math.floor(medal/6))));return u.map(c=>{const l=Math.min(LV+(k>1&&Math.random()<.3?1:0),c.r>5&&medal<8?Math.max(0,LV-1):5),rawPower=Math.max(.65,Math.min(2.5,T/Math.max(.01,av)))*(1+(CONFIG.botForca??5)/100*k)*(1+Math.min(.35,medal*.012)),pressure=1.85+Math.min(1,Math.max(0,D-15)*.05),power=inf&&D>=15?Math.min(pressure+.25,Math.max(rawPower,pressure)):rawPower;return{c,lv:l,s:power/(1+.4*l)}})}
 // ----- TELA DE BATALHA -----
 const zb=document.createElement("div");zb.id="zb";zb.hidden=true;document.body.append(zb);
 let BT=null,SEL=null,PASS=0,BV="";
@@ -1934,18 +1964,18 @@ function fxEnd(B){if(FXOFF())return;const w=B.w,win=B.ai?w==0:w>=0,lose=B.ai&&w=
 const hrt=n=>"♥".repeat(Math.max(0,n))+"♡".repeat(Math.max(0,5-n)),ico=u=>u.bf.map(b=>(b.k=="at"||b.k=="df"?(b.p>0?"▲":"▼"):"")+(BI[b.k]||"✦")+b.n).join(" ")+" "+elEls(u).map(k=>EL[k]).join("");
 const zu=(u,en,act)=>{if(!u)return'<div class="zu ze"></div>';const B=BT,q=SEL&&SEL.q&&SEL.q[0],sk=SEL&&SEL.m==="s"&&SEL.u&&SEL.u.ab&&SEL.u.ab[SEL.i],skEnemy=sk&&sk.ef.some(e=>["e","E","r","w","x","T"].includes(e.a)),skAll=sk&&sk.ef.some(e=>["E","T"].includes(e.a)),skChosen=SEL&&SEL.g&&SEL.g.e,skillPreview=!!(SEL&&SEL.preview&&skEnemy&&(!skChosen||skAll||skChosen.id===u.id)),v=act&&SEL&&(en?SEL.m=="a"||q=="e"||skillPreview: q=="a"),kf=n=>n>999?(n/1e3).toFixed(1).replace(".",",").replace(",0","")+"k":n,pc=Math.max(0,Math.min(100,Math.round(u.hp/u.mx*100))),ic=ico(u).trim(),preview=act&&en&&v&&SEL&&SEL.u?(SEL.m=="a"?elCalc(elEls(SEL.u),elEls(u)):sk?elCalc(elSkillEls(sk,SEL.u),elEls(u)):null):null,seal=preview&&preview.estado!="neutro"?`<i class="cp-el-seal ${preview.estado}">${preview.estado=="super_duplo"?"▲▲ ×2":preview.estado=="super"?"▲ ×1,5":preview.estado=="fraco"?"▼ ×0,67":"▼▼ ×0,5"}</i>`:"";
  const xt=`${ic?`<i class="zic">${ic}</i>`:""}${u.u?'<b class="zdn">atacou</b>':""}<div class="zhud"><div class="zhp" style="--p:${pc}%;--hc:${pc>50?"#4fd36b":pc>25?"#f2b632":"#f4566a"}"><i></i><span>❤ ${kf(u.hp)}/${kf(u.mx)}</span></div><div class="zsx"><span>⚔ ${kf(Math.round(AT(u)))}</span><span>${u.ab.map((a,i)=>u.cd[i]?"✦"+u.cd[i]:"✦").join(" ")}</span></div></div>`;
- return`<button class="zu${B.hit.includes(u.id)?" ht":""}${SEL&&SEL.u==u?" on":""}${v?" vt":""}${u.u?" dn":""}" data-z="u:${u.id}" data-r="${u.c.r}" style="--rc:${R[u.c.r][1]};--l:${u.lv==null?lvl(u.c):Math.min(u.lv,5)}">${card({...u.c,el:u.el!==undefined?u.el:u.c.el,el2:u.el!==undefined?u.el2:u.c.el2},"",0,0,"",u.lv)}${seal}${yhb(u)}</button>`};
+ return`<button class="zu${B.hit.includes(u.id)?" ht":""}${SEL&&SEL.u==u?" on":""}${v?" vt":""}${u.u?" dn":""}" data-z="u:${u.id}" data-r="${u.c.r}" style="--rc:${R[u.c.r][1]};--l:${u.lv==null?lvl(u.c):Math.min(u.lv,5)}">${card({...u.c,el:u.el!==undefined?u.el:u.c.el,el2:u.el!==undefined?u.el2:u.c.el2},"",0,0,"",u.lv)}${yhb(u)}</button>`};
 const zs=(s,en)=>{const f=`<div class="zrow">${s.f.map(u=>zu(u,en,1)).join("")}</div>`,r=`<div class="zrow zrs">${[0,1,2].map(i=>{const u=s.r[i];if(!u)return `<div class="zu ze"></div>`;return en?`<div class="zu zbk" aria-label="Carta reservada oculta">${bkH(u.c,u.c.p)}</div>`:zu(u,0,0)}).join("")}</div>`;return `<div class="zs">${en?r+f:f+r}</div>`};
 
-function yhb(u){const pc=Math.max(0,Math.min(100,Math.round(u.hp/u.mx*100))),k=n=>n>999?(n/1e3).toFixed(1).replace(".",",").replace(",0","")+"k":n;return `<div class="yhp" style="--p:${pc}%;--hc:${pc>50?"#4fd36b":pc>25?"#f2b632":"#f4566a"}"><i></i><span>${u.u?"✓ ":""}❤ ${k(u.hp)}/${k(u.mx)}</span></div>`}
+function yhb(u){const pc=Math.max(0,Math.min(100,Math.round(u.hp/u.mx*100))),k=n=>n>999?(n/1e3).toFixed(1).replace(".",",").replace(",0","")+"k":n;return `<div class="yhp" style="--p:${pc}%;--hc:${pc>50?"#4fd36b":pc>25?"#f2b632":"#f4566a"}"><i></i><span>${u.u?"✓ ":""}${k(u.hp)}/${k(u.mx)}</span></div>`}
 let YU=null;const ZH='<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta para ver status e habilidades</p>',zfnd=(B,id)=>{for(const x of B.p){const u=[...x.f,...x.r].find(c=>c&&c.id==id);if(u)return u}return null};
 // painel de status e habilidades (também ativas fora da sua vez): mostra as ativas e as passivas (gatilhos); se a carta mudar enquanto o painel está aberto, ele se atualiza
 function yinf(u){YU=u;let e=document.getElementById("yinf");const nw=!e;if(nw){e=document.createElement("div");e.id="yinf";document.body.append(e)}
 const fx=x=>{const X=FX[x.t];return X&&X.ds?X.ds(x)+(x.co&&CO[x.co]?` · se ${CO[x.co][0].replace("X",x.cv||50)}`:"")+(x.ch&&x.ch<100?` (${x.ch}% de chance)`:""):""},
 bf=u.bf.map(b=>(BI[b.k]||"✦")+" "+((b.k=="at"||b.k=="df")?(b.p>0?"+":"")+b.p+"% ":"")+b.n+"t").join(" · ")||"nenhum",
-ab=u.ab.map((a,i)=>`<div class="yab"><b>✦ ${a.n}</b><small>${a.el==null||a.el===""||elKey(a.el)==="carta"?"🃏 Da carta · ":"Elemento próprio · "}${elSkillEls(a,u).map(k=>`<button type="button" class="cp-el-chip" style="--elc:${ZEC[k]||"#aaa"}" data-cp-el-key="${k}">${EL[k]} ${ELN[k]}</button>`).join(" ")}</small><small>${u.chg&&u.chg[i]&&BT&&BT.n<u.chg[i].readyAt?"carregando · "+(u.chg[i].readyAt-BT.n)+" turno(s)":u.chg&&u.chg[i]?"carga pronta":u.cd[i]?"recarrega em "+u.cd[i]+" turno"+(u.cd[i]>1?"s":""):"pronta"} · recarga ${a.rc}${a.chargeMode?" · carga":""}</small><p>${a.ef.map(fx).filter(Boolean).join(" · ")}</p></div>`).join(""),
+ab=u.ab.map((a,i)=>`<div class="yab"><b>✦ ${a.n}</b><small>${a.el==null||a.el===""||elKey(a.el)==="carta"?"🃏 Da carta · ":"Elemento próprio · "}${elSkillEls(a,u).map(k=>`${EL[k]} ${ELN[k]}`).join(" / ")}</small><small>${u.chg&&u.chg[i]&&BT&&BT.n<u.chg[i].readyAt?"carregando · "+(u.chg[i].readyAt-BT.n)+" turno(s)":u.chg&&u.chg[i]?"carga pronta":u.cd[i]?"recarrega em "+u.cd[i]+" turno"+(u.cd[i]>1?"s":""):"pronta"} · recarga ${a.rc}${a.chargeMode?" · carga":""}</small><p>${a.ef.map(fx).filter(Boolean).join(" · ")}</p></div>`).join(""),
 ps=(u.ps||[]).map(p=>`<div class="yab"><b>✦ ${p.n}</b><small>${TRG[p.tr]||"Passiva"}</small><p>${p.ef.map(fx).filter(Boolean).join(" · ")}</p></div>`).join(""),
-h=`<div class="yib"><div class="yih"><b>${u.c.n}</b><span style="color:${R[u.c.r][1]}">Rank ${R[u.c.r][0]}</span></div><div class="yis"><span>❤ ${u.hp}/${u.mx}</span><span>⚔ ${Math.round(AT(u))}</span><span class="y-elchips">${elEls(u).map(k=>`<button type="button" class="cp-el-chip" data-cp-el-key="${k}" style="--elc:${ZEC[k]||"#aaa"}">${EL[k]} ${ELN[k]}</button>`).join("")}</span></div>${elRelationsHTML(u)}<button class="bt gh" data-cp-el-guide="1">📖 Guia de elementos</button>${u.c.tb?`<p class="yif">🐾 Tribo: <b>${esc(u.c.tb)}</b>${u.synergy?` · sinergia ${u.synergy.count} cartas · +${u.synergy.atk}% ATQ${u.synergy.hp?` / +${u.synergy.hp}% VIDA`:""}`:""}</p>`:""}<p class="yif">Efeitos ativos: ${bf}</p>${ab+ps||"<p>Sem habilidades.</p>"}<button class="bt gh" data-yx="1">Fechar</button></div>`;
+h=`<div class="yib"><div class="yih"><b>${u.c.n}</b><span style="color:${R[u.c.r][1]}">Rank ${R[u.c.r][0]}</span></div><div class="yis"><span>Vida · ${u.hp}/${u.mx}</span><span>Dano · ${Math.round(AT(u))}</span></div>${u.c.tb?`<p class="yif">🐾 Tribo: <b>${esc(u.c.tb)}</b>${u.synergy?` · sinergia ${u.synergy.count} cartas · +${u.synergy.atk}% ATQ${u.synergy.hp?` / +${u.synergy.hp}% VIDA`:""}`:""}</p>`:""}<p class="yif">Efeitos ativos: ${bf}</p>${ab+ps||"<p>Sem habilidades.</p>"}<button class="bt gh" data-yx="1">Fechar</button></div>`;
 if(e._h!==h){const o=e.querySelector(".yib"),st=o?o.scrollTop:0;e.innerHTML=h;e._h=h;const n=e.querySelector(".yib");if(n){if(!nw)n.style.animation="none";n.scrollTop=st}}
 e.onclick=ev=>{if(ev.target===e||ev.target.closest("[data-yx]")){e.remove();YU=null}}}
 function yref(){const e=document.getElementById("yinf");if(!e||!YU)return;if(!BT){e.remove();YU=null;return}yinf(YU)}
@@ -1965,7 +1995,7 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
   pn+=`<div class="two"><button class="bt gh${s.r.length>=3||!s.dk.length?" off":""}" data-z="draw">${s.r.length>=3?"Banco cheio":!s.dk.length?"Baralho vazio":"Comprar grátis"}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
  if(B.lv&&!B.over)pn+=`<div class="cp-live-react"><small>Reações</small><button type="button" data-z="rx:😂" aria-label="Enviar risada">😂</button><button type="button" data-z="rx:👏" aria-label="Enviar aplausos">👏</button><button type="button" data-z="rx:🔥" aria-label="Enviar fogo">🔥</button></div>`;fxSnap();ME=me;zb.innerHTML=B.p.length>2?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();if(!zb.querySelector("[data-cp-el-guide-battle]"))zb.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
 function zpost(){const B=BT;if(!B)return;SEL=null;if(!B.over)chk(B);if(!B.over&&B.ac<1)endT(B);if(B.over)return zend();if(!B.ai&&!B.lv&&B.t!=B.v)PASS=1;zr();aiRun()}
-function usk(){const B=BT,u=SEL.u,i=SEL.i,g=SEL.g;if(aSk(B,u,i,g)&&B.t==0&&!(u.chg&&u.chg[i]))bump("abil");zpost()}
+function usk(){const B=BT,u=SEL&&SEL.u,i=SEL&&SEL.i,g=SEL&&SEL.g,before=!!(u&&u.chg&&u.chg[i]),ok=aSk(B,u,i,g);if(ok&&B.t===0){const after=!!(u.chg&&u.chg[i]);if(!before&&after)bump("charge");else if(!after){bump("abil");const ab=u.ab&&u.ab[i];if(ab&&elSkillEls(ab,u).some(k=>k!=="normal"))bump("eluse")}}zpost()}
 function zc(a){const B=BT;if(!B)return;if(a.startsWith("rx:")){const emoji=a.slice(3);cpShowDuelReaction(B.v,emoji);if(B.lv&&window.lvSend)window.lvSend({k:"rx",s:B.v,e:emoji});return}
  if(a=="go"){PASS=0;B.v=B.t;return zr()}
  if(a=="quit")return ask("Desistir da luta?","Conta como derrota.","Desistir",()=>{if(B.p.length>2){if(B.over||B.p[B.v].life<1)return;if(B.t!=B.v)return toast("Em grupo, só dá para desistir na sua vez.");window.lvq&&window.lvq(B.v);qtL(B,B.v);return zpost()}B.over=1;B.w=B.ai?1:1-B.v;B.why="desistiu";window.lvq&&window.lvq();zend()},1);
@@ -1989,10 +2019,10 @@ else if(a[0]==="k"&&SEL){const i=+a.slice(1),ab=SEL.u.ab[i];if(!ab||SEL.u.cd[i]|
 function zend(){const B=BT;if(B.zq)return;B.zq=1;const d=B.ev.length?1300:0;if(d)zr();setTimeout(()=>{if(BT===B)zend2()},d)}
 const gifts=()=>Object.values(S.gp||{}).reduce((a,b)=>a+(+b||0),0);
 // RESULTADO DA BATALHA: só o essencial · troféus ganhos ou perdidos (tr) e, quando houver, pacotes e avisos curtos (rw). Fragmentos e demais prêmios continuam sendo dados, só não aparecem aqui.
-function zendSoloBoss(B){if(B.cpSoloResult)return;B.cpSoloResult=1;const win=B.w===0,r=B.o.raidConfig||{},rw=[];fxEnd(B);bump("play");if(B.why!=="desistiu"){const d=day();if(!S.pj||S.pj.d!==d)S.pj={d,n:0};S.pj.n++}if(win){bump("win");S.fr+=Math.max(0,+r.fragments||0);if(r.fragments)rw.push(`${gem}+${fmt(+r.fragments)}`);const packs=Math.max(0,Math.floor(+r.packs||0));if(packs){gift(dpk().id,packs,true);rw.push(`🎁 +${packs} pacotes`)}const drop=r.dropMode==="all"||r.dropMode==="damage"||r.dropMode==="chance"&&Math.random()*100<Math.max(0,Math.min(100,+r.dropChance||0));if(drop&&r.cardId){S.inv[r.cardId]=(S.inv[r.cardId]||0)+1;rw.push(`🃏 Boss obtido: ${(byId(r.cardId)||{n:"Carta Boss"}).n}`)}}else if(B.why!=="desistiu"&&CONFIG.derrota){S.fr+=CONFIG.derrota;rw.push(`${gem}+${fmt(CONFIG.derrota)} · participação`)}save();upd();zb.innerHTML=`<div class="zres"><h2>${win?"Boss derrotado!":B.w<0?"Empate":"O Boss venceu"}</h2><p>${win?"Você venceu o desafio solo.":"O desafio foi difícil. Melhore seu deck e tente novamente."}</p>${rw.length?`<p class="zrw">${rw.join(" · ")}</p>`:""}<div class="two"><button class="bt gh" data-z="close">Voltar</button><button class="bt" data-z="soloBossAgain">Tentar novamente</button></div></div>`}
+function zendSoloBoss(B){if(B.cpSoloResult)return;B.cpSoloResult=1;const win=B.w===0,r=B.o.raidConfig||{},rw=[];fxEnd(B);bump("play");bump("boss");if(B.why!=="desistiu"){const d=day();if(!S.pj||S.pj.d!==d)S.pj={d,n:0};S.pj.n++}if(win){bump("win");bump("bosswin");S.fr+=Math.max(0,+r.fragments||0);if(r.fragments)rw.push(`${gem}+${fmt(+r.fragments)}`);const packs=Math.max(0,Math.floor(+r.packs||0));if(packs){gift(dpk().id,packs,true);rw.push(`🎁 +${packs} pacotes`)}const drop=r.dropMode==="all"||r.dropMode==="damage"||r.dropMode==="chance"&&Math.random()*100<Math.max(0,Math.min(100,+r.dropChance||0));if(drop&&r.cardId){S.inv[r.cardId]=(S.inv[r.cardId]||0)+1;rw.push(`🃏 Boss obtido: ${(byId(r.cardId)||{n:"Carta Boss"}).n}`)}}else if(B.why!=="desistiu"&&CONFIG.derrota){S.fr+=CONFIG.derrota;rw.push(`${gem}+${fmt(CONFIG.derrota)} · participação`)}save();upd();zb.innerHTML=`<div class="zres"><h2>${win?"Boss derrotado!":B.w<0?"Empate":"O Boss venceu"}</h2><p>${win?"Você venceu o desafio solo.":"O desafio foi difícil. Melhore seu deck e tente novamente."}</p>${rw.length?`<p class="zrw">${rw.join(" · ")}</p>`:""}<div class="two"><button class="bt gh" data-z="close">Voltar</button><button class="bt" data-z="soloBossAgain">Tentar novamente</button></div></div>`}
 function zend2(){if(BT&&BT.o&&BT.o.soloBoss)return zendSoloBoss(BT);if(BT&&BT.o&&BT.o.m=="g")return zendG(BT);if(BT&&BT.o&&BT.o.inf)return zendI(BT);const B=BT,w=B.w,k=B.o.k,t0=S.tp,_sn=(B.o.m=="a"||B.o.m=="f")&&w>=0&&SND[w===0?"win":"lose"](),_cf=(B.o.m=="a"||B.o.m=="f")&&w===0&&cpxConfetti(),a0=S.ar,g0=gifts(),rw=[];let tr="";fxEnd(B);bump("play");if(B.why!="desistiu"){const d0=day();if(!S.pj||S.pj.d!==d0)S.pj={d:d0,n:0};S.pj.n++}bump("kill",B.kl[0]);
- if(B.o.m=="a"){const d=day();if(!S.ba||S.ba.d!==d)S.ba={d,n:0};const ok=S.ba.n++<CONFIG.limiteDia,bs=B.o.b;
-  if(w==0){S.fr+=ok?arf(k):0;bump("win");if(ok){S.wn++;if(S.wn%CHX==0)gift(dpk().id,1,true);window.rcDar&&rcDar("v",k+1).forEach(x=>rw.push(x))}else rw.push("Limite diário de prêmios atingido");
+ if(B.o.m=="a"){const d=day();if(!S.ba||S.ba.d!==d)S.ba={d,n:0};const ok=S.ba.n++<CONFIG.limiteDia,bs=B.o.b;if(bs)bump("boss");
+  if(w==0){S.fr+=ok?arf(k):0;bump("win");if(bs)bump("bosswin");if(ok){S.wn++;if(S.wn%CHX==0)gift(dpk().id,1,true);window.rcDar&&rcDar("v",k+1).forEach(x=>rw.push(x))}else rw.push("Limite diário de prêmios atingido");
    if(bs){arenaUp();window.rcDar&&rcDar("b",a0+1).forEach(x=>rw.push(x));tr="👑 Chefe derrotado!";rw.push(S.ar>a0?`🏟 Arena nova: ${AR[S.ar][0]} · 🃏 carta exclusiva`:"🏆 Campeão!")}
    else{S.tp=Math.max(S.tp,Math.min(S.tp+TW,bcap()));prog();if(S.tp>=bcap()&&!S.camp)rw.push("🔒 Derrote o chefe!")}}
   else if(w==1){if(ok&&B.why!="desistiu")S.fr+=CONFIG.derrota;if(!bs)S.tp=Math.max(TR[S.ar],S.tp-TL)}}
@@ -2175,9 +2205,9 @@ adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("
 +adxT("rst","Força por raridade · vida,dano (1 linha por rank, F a SSS)",ST.map(s=>s.join(",")).join("\n"),9)
 +adxI("rtr","Troféus para entrar em cada arena (9 valores)",TR.join(","))
 +adxT("ran","Arenas · nome|emoji (1 por linha)",AR.map(a=>a.join("|")).join("\n"),9)
-+adxT("rdp","Missões diárias · título|tipo|meta · tipos: "+[...new Set(DP.concat(WP).map(m=>m[1]))].join(", "),DP.map(m=>m.slice(0,3).join("|")).join("\n"),8)
-+adxT("rwp","Missões semanais · título|tipo|meta",WP.map(m=>m.slice(0,3).join("|")).join("\n"),6)
-+adxT("rmc","Coleção e secretas · id|meta|pacotes (o texto depois de # é só o nome)",CL.concat(SC).map(m=>`${m[0]}|${m[3]}|${m[4]} # ${m[1]}`).join("\n"),10)
++adxT("rdp","Missões diárias · título|tipo|meta · tipos: "+[...new Set(DP.concat(WP).map(m=>m[1]))].join(", "),DP.map(m=>m.slice(0,3).join("|")).join("\n"),18)
++adxT("rwp","Missões semanais · título|tipo|meta",WP.map(m=>m.slice(0,3).join("|")).join("\n"),14)
++adxT("rmc","Coleção e secretas · id|meta|pacotes (o texto depois de # é só o nome)",CL.concat(SC).map(m=>`${m[0]}|${m[3]}|${m[4]} # ${m[1]}`).join("\n"),20)
 +adxB("sr","Salvar regras")+adxB("rr","Restaurar padrões","gh")),
 adxGv=()=>adxD("g","🧪 Dar itens e testes",adxI("gn","Quantidade",10,"number")+adxS("gp","Pacote de presente",adxPo())+adxS("gc","Carta",adxCo())+adxB("gf","Dar fragmentos","cy")+adxB("gg","Dar pacotes de presente","cy")+adxB("gk","Dar a carta","cy")+adxB("ga","Liberar todas as cartas","gh"));
 function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("eel").value=c.el||"";$("eel2").value=c.el2||"";cpSyncCardElements();$("etb").value=c.tb||"";$("ek2").value=c.p.id;$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||"";$("ebk").value=c.bk||"";$("ega").value=c.ga||""}
@@ -2234,6 +2264,23 @@ function adx(k){adxA[k]?adxA[k]():adxG(k)}
 // ===== v1.5: ADM · HABILIDADES · monte com blocos (FX) e dê a qualquer carta =====
 let HX=[];
 const hxEx=[["Golpe forte",3,[{t:"d",a:"e",m:2}]],["Cura",3,[{t:"h",a:"a",p:35}]],["Veneno",3,[{t:"po",a:"e",p:10,n:3}]],["Fraqueza",3,[{t:"at",a:"E",p:-30,n:2}]],["Fúria",3,[{t:"at",a:"s",p:50,n:2}]],["Escudo",3,[{t:"df",a:"A",p:40,n:2}]],["Recuar",2,[{t:"bk",a:"s"}]],["Comprar 2",4,[{t:"dr",v:2}]],["Sacrifício",4,[{t:"d",a:"E",m:3},{t:"dp",a:"s",p:40}]],["Recarga rápida",1,[{t:"d",a:"e",m:1}]],["Reciclar",4,[{t:"cd",a:"s",v:0,o:1},{t:"d",a:"e",m:1}]]];
+hxEx.push(
+ ["Impacto de entrada",3,[{t:"d",a:"e",m:1.25}],"in"],
+ ["Armadura de chegada",3,[{t:"df",a:"s",p:25,n:2}],"in"],
+ ["Aura de proteção",4,[{t:"df",a:"A",p:15,n:2}],"ae"],
+ ["Regeneração de turno",4,[{t:"rg",a:"s",p:10,n:3}],"ti"],
+ ["Contra-ataque reativo",4,[{t:"d",a:"e",m:1}],"da"],
+ ["Cura do predador",4,[{t:"h",a:"s",p:18}],"ki"],
+ ["Proteção restauradora",3,[{t:"df",a:"s",p:20,n:2}],"he"],
+ ["Fúria dos aliados",3,[{t:"at",a:"A",p:18,n:2}],"am"],
+ ["Esquiva instintiva",3,[{t:"ev",a:"s",p:28,n:1}],"in"],
+ ["Sifão de combate",4,[{t:"ls",a:"s",p:35,n:2}],"at"],
+ ["Purificação de entrada",4,[{t:"pu",a:"A"}],"in"],
+ ["Pulso de recuperação",4,[{t:"h",a:"A",p:20},{t:"df",a:"A",p:12,n:2}]],
+ ["Tempestade concentrada",4,[{t:"mh",a:"E",n:3,m:.65},{t:"at",a:"e",p:-15,n:2}]],
+ ["Marca e execução",4,[{t:"mk",a:"e",p:25,n:2},{t:"d",a:"e",m:1.2}]],
+ ["Reforço de emergência",4,[{t:"sh",a:"s",p:30,n:2},{t:"h",a:"s",p:12}]]
+);
 hxEx.push(["Marca de caça",3,[{t:"mk",a:"e",p:30,n:2}]], ["Reação evasiva",3,[{t:"h",a:"s",p:15}],"ev"], ["Apoio coordenado",3,[{t:"at",a:"A",p:15,n:2}],"sk"], ["União de batalha",3,[{t:"df",a:"A",p:15,n:2}],"ae"], ["Última guarda",4,[{t:"sh",a:"A",p:15,n:2}],"am"], ["Pele resiliente",3,[{t:"df",a:"s",p:20,n:2}],"he"], ["Atordoar",4,[{t:"d",a:"e",m:1},{t:"st",a:"e",n:1}]],["Silêncio",3,[{t:"cu",a:"E",n:2}]],["Escudo mágico",4,[{t:"sh",a:"s",p:40,n:3}]],["Espinhos",4,[{t:"rf",a:"s",p:50,n:3}]],["Vampirismo",4,[{t:"ls",a:"s",p:60,n:3},{t:"d",a:"e",m:1}]],["Regeneração",4,[{t:"rg",a:"s",p:12,n:3}]],["Esquiva",3,[{t:"ev",a:"s",p:60,n:2}]],["Olho de águia",3,[{t:"cr",a:"s",p:50,n:3}]],["Invulnerável",5,[{t:"im",a:"s",n:1}]],["Provocar",3,[{t:"tn",a:"s",n:2},{t:"df",a:"s",p:30,n:2}]],["Purificar",3,[{t:"pu",a:"A"}]],["Execução",4,[{t:"ex",a:"e",co:"tl",cv:25}]],["Reviver",6,[{t:"rv",p:50}]],["Chuva de golpes",4,[{t:"mh",a:"e",n:4,m:.6}]],["Sangramento",3,[{t:"bl",a:"e",p:40,n:3}]],["Troca de vida",5,[{t:"sp",a:"e"}]],["Ação dupla",5,[{t:"ac",v:1},{t:"at",a:"s",p:20,n:2}]],["Último suspiro",3,[{t:"d",a:"E",m:2}],"mo"],["Chegada: comprar",3,[{t:"dr",v:1}],"in"],["Aura venenosa",3,[{t:"po",a:"E",p:6,n:2}],"ti"],["Contra-ataque",3,[{t:"d",a:"r",m:.8}],"da"],["Predador",3,[{t:"h",a:"s",p:20}],"ki"], ["Lança-chamas",3,[{t:"d",a:"e",m:2}],undefined,"fogo"], ["Rajada de Gelo",3,[{t:"d",a:"e",m:2}],undefined,"gelo"], ["Descarga",3,[{t:"d",a:"e",m:2}],undefined,"raio"]);
 const hxOp=(o,s)=>Object.keys(o).map(k=>`<option value="${k}"${k==s?" selected":""}>${o[k].n||o[k]}</option>`).join("");
 const hxTy=s=>FXG.map(g=>`<optgroup label="${g[0]}">${g[1].map(k=>`<option value="${k}"${k==s?" selected":""}>${FX[k].n}</option>`).join("")}</optgroup>`).join("");
@@ -2640,14 +2687,17 @@ function cpPowerScore(c,mode){
  if(mode==="all")return status*(1+Math.min(.8,skills*.10));
  return status;
 }
-function stp(c,n){const m=mult(c),hp=Math.round(c.hp*m),dn=Math.round(c.atk*m),
-mx=k=>Math.max(...ALL.map(x=>x[k]*(1+gain(x)*5))),
-t=(i,l,v,b,k)=>`<div class="st2"><i>${i}</i><small>${l}</small><b>${v}</b><div class="tr"><u style="width:${Math.min(100,Math.max(6,v/mx(k)*100)).toFixed(1)}%"></u></div><em>${v>b?`base ${b} · <span>+${v-b}</span> de nível`:`base ${b}`}</em></div>`,
-mode=["status","skills","all"].includes(window.CP_POWER_MODE)?window.CP_POWER_MODE:"status",score=cpPowerScore(c,mode),po=ALL.filter(x=>cpPowerScore(x,mode)>score+1e-9).length+1,
-labels={status:"Apenas status",skills:"Só habilidades",all:"Status + habilidades"},pw=Math.round(score),
-ch=(k,v)=>v?`<div class="ch2"><small>${k}</small><b>${v}</b></div>`:"",
-el=elEls(c).map(k=>EL[k]+" "+ELN[k]).join(" / ");
-return `<div class="sg2">${t("❤","Vida",hp,c.hp,"hp")}${t("⚔","Dano",dn,c.atk,"atk")}</div><div class="pw"><div><small>Poder · ${labels[mode]}</small><b>${pw}</b></div><span>#${po} de ${ALL.length} cartas</span><label class="pw-mode"><small>Critério do ranking</small><select id="cpPowerMode" aria-label="Critério do ranking de poder" title="A avaliação de habilidades considera efeitos, alcance, chance e recarga. É uma estimativa estratégica."><option value="status"${mode==="status"?" selected":""}>Apenas status</option><option value="skills"${mode==="skills"?" selected":""}>Só habilidades</option><option value="all"${mode==="all"?" selected":""}>Status + habilidades</option></select></label></div>${mode!=="status"?`<p class="mut" style="margin:-3px 0 9px">Habilidades são pontuadas por efeitos, alcance, chance de ativação e recarga. A classificação é uma estimativa estratégica.</p>`:""}<div class="cg2">${ch("Elemento",el)}${ch("Chance de sair",c.p.ex?(c.p.exl||"Exclusiva de arena"):cch(c))}${ch("Selo",c.sl?(SLS[c.sl]||"")+" "+c.sl:"")}${ch("Pacote",(c.p.e?c.p.e+" ":"")+c.p.n)}</div>${elEls(c)[0]==="normal"?`<p class="elv">⚪ Normal · sem vantagens nem fraquezas</p>`:`<p class="elv">${elInfo(c.el)}.</p>`}`}
+function stp(c,n){
+ const m=mult(c),hp=Math.round(c.hp*m),dn=Math.round(c.atk*m),
+ mx=k=>Math.max(...ALL.map(x=>x[k]*(1+gain(x)*5))),
+ t=(i,l,v,b,k)=>`<div class="st2"><i>${i}</i><small>${l}</small><b>${v}</b><div class="tr"><u style="width:${Math.min(100,Math.max(6,v/mx(k)*100)).toFixed(1)}%"></u></div><em>${v>b?`base ${b} · <span>+${v-b}</span> de nível`:`base ${b}`}</em></div>`,
+ mode=["status","skills","all"].includes(window.CP_POWER_MODE)?window.CP_POWER_MODE:"status",score=cpPowerScore(c,mode),po=ALL.filter(x=>cpPowerScore(x,mode)>score+1e-9).length+1,
+ labels={status:"Apenas status",skills:"Só habilidades",all:"Status + habilidades"},pw=Math.round(score),
+ ch=(k,v)=>v?`<div class="ch2"><small>${k}</small><b>${v}</b></div>`:"",
+ els=elEls(c),elementNames=els.map(k=>EL[k]+" "+ELN[k]).join(" / "),
+ elementPanel=`<section class="cp-sheet-elements"><div class="cp-sheet-el-head"><div><small>ELEMENTOS DA CARTA</small><div class="cp-sheet-el-list">${els.map(elChipButton).join("")}</div></div><button type="button" class="cp-guide-link small" data-cp-el-guide="1">Abrir guia</button></div>${elRelationsHTML(c)}</section>`;
+ return `<div class="sg2">${t("❤","Vida",hp,c.hp,"hp")}${t("⚔","Dano",dn,c.atk,"atk")}</div><div class="pw"><div><small>Poder · ${labels[mode]}</small><b>${pw}</b></div><span>#${po} de ${ALL.length} cartas</span><label class="pw-mode"><small>Critério do ranking</small><select id="cpPowerMode" aria-label="Critério do ranking de poder" title="A avaliação de habilidades considera efeitos, alcance, chance e recarga. É uma estimativa estratégica."><option value="status"${mode==="status"?" selected":""}>Apenas status</option><option value="skills"${mode==="skills"?" selected":""}>Só habilidades</option><option value="all"${mode==="all"?" selected":""}>Status + habilidades</option></select></label></div>${mode!=="status"?`<p class="mut cp-power-note">Habilidades são pontuadas por efeitos, alcance, chance de ativação e recarga. A classificação é uma estimativa estratégica.</p>`:""}<div class="cp-card-meta">${ch("Chance de sair",c.p.ex?(c.p.exl||"Exclusiva de arena"):cch(c))}${ch("Selo",c.sl?(SLS[c.sl]||"")+" "+c.sl:"")}${ch("Pacote",(c.p.e?c.p.e+" ":"")+c.p.n)}</div>${elementPanel}`}
+
 
 </script>
 <script>
@@ -2834,7 +2884,7 @@ const pn=(k,t)=>k=="m"?"mult":k=="p"?"pct":k=="n"?(t=="mh"?"golpes":"turnos"):k=
 const dflt=(t,g)=>HURT.has(t)?"e":SIGN.has(t)?(num(g.p)<0?"e":"s"):"s";
 const rk=v=>{const m=String(v).toUpperCase().replace(/[^A-Z]+/g," ").match(/(?:^|\s)(SSS|SS|S|A|B|C|D|E|F)(?=\s|$)/);return m?R.findIndex(x=>x[0]==m[1]):-1};
 const trg=s=>{const n=SL(s);if(!n)return"u";if(has(TRG,n))return n;
- for(const[k,x]of[["u",/^ativ|manual|^usar/],["in",/entr|chega/],["mo",/morr|mort/],["ti",/inicio|comeco/],["te",/fim|final/],["da",/receb|sofr|dano/],["at",/atac/],["ki",/elimin|mata|derrot/],["sk",/habilid|skill/],["he",/curad|curar|cura/],["ev",/esquiv/],["ae",/aliado.*entr|entr.*aliado/],["am",/aliado.*morr|morr.*aliado/]])if(x.test(n))return k;return null};
+ for(const[k,x]of[["u",/^ativ|manual|^usar/],["in",/entr|chega|invoc|baixad|aparec|coloc.*campo|campo.*coloc/],["mo",/morr|mort|falec|destru|eliminad/],["ti",/inicio|comeco/],["te",/fim|final/],["da",/receb|sofr|dano|atingid/],["at",/atac/],["ki",/elimin|mata|derrot/],["sk",/habilid|skill/],["he",/curad|curar|cura/],["ev",/esquiv|desvi/],["ae",/aliado.*entr|entr.*aliado|aliado.*chega|chega.*aliado/],["am",/aliado.*morr|morr.*aliado|aliado.*morre/]])if(x.test(n))return k;return null};
 
 // ---- números dentro dos limites do jogo (com aviso)
 function cl(x,k,t,L,wa,nm){
@@ -3893,7 +3943,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
     const alreadyClaimed=!!(claimKey&&S.raidClaims[claimKey]);
     if(!alreadyClaimed){
       if(claimKey){S.raidClaims[claimKey]=Date.now();const keys=Object.keys(S.raidClaims);keys.slice(0,Math.max(0,keys.length-100)).forEach(k=>delete S.raidClaims[k])}
-      fxEnd(B);bump("play");bump("kill",B.kl[seat]||0);
+      fxEnd(B);bump("play");bump("boss");bump("kill",B.kl[seat]||0);
       if(win){
         const fragments=Math.max(0,+raid.fragments||0);S.fr=(+S.fr||0)+fragments;
         const packs=Math.max(0,+raid.packs||0);if(packs)gift(dpk().id,packs,true);
@@ -3906,7 +3956,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
           else if(raid.dropMode==="chance")gets=stableRaidRoll(uid,raid.seed)<Math.max(0,Math.min(100,+raid.dropChance||0));
           if(gets){S.inv[c.id]=(S.inv[c.id]||0)+1;rewards.push(`🎴 Boss obtido: ${c.n}`)}
         }
-        bump("win");
+        bump("win");bump("bosswin");
       }
       save();upd();
     }else rewards.push("Recompensas desta raid já foram resgatadas.");
@@ -3929,7 +3979,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
     const pick=e.target.closest&&e.target.closest("[data-raid-pick]");
     const action=e.target.closest&&e.target.closest("[data-raid-action]");
     if(open){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();return raidMenuOpen()}
-    if(admin){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();return raidAdminOpen()}
+    if(admin){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();const hub=g("cpExtra");if(hub)hub.hidden=true;return raidAdminOpen()}
     if(pick){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();const id=pick.dataset.raidPick,r=raidCfg(),max=r?r.maxPlayers-1:3;const i=RAID_SELECTED.indexOf(id);if(i>=0)RAID_SELECTED.splice(i,1);else if(RAID_SELECTED.length<max)RAID_SELECTED.push(id);return raidMenuDraw()}
     if(!action)return;
     e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
@@ -3958,17 +4008,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
     }
   },true);
 
-  // O ADM ganha um atalho na área de ferramentas que já existe; nenhuma outra aba do app é reorganizada.
-  const cfgRoot=g("cfg");
-  if(cfgRoot){
-    const inject=()=>{
-      if(!(typeof AD!=="undefined"&&AD)||cfgRoot.hidden||cfgRoot.querySelector("[data-cp-raid-config]"))return;
-      const host=cfgRoot.querySelector(".cp-admin-tools")||cfgRoot.querySelector(".in2");
-      if(host){const b=document.createElement("button");b.type="button";b.className="bt cy";b.dataset.cpRaidConfig="1";b.textContent="⚔️ Configurar Boss Raid cooperativo";host.append(b)}
-    };
-    new MutationObserver(inject).observe(cfgRoot,{childList:true,subtree:true,attributes:true,attributeFilter:["hidden"]});
-    setTimeout(inject,250);
-  }
+  // A configuração do Boss Raid agora fica centralizada na Central de Operações do ADM.
 
   window.cpWatchBossRaids=watchBossRaids;window.cpOpenSoloBoss=raidSoloPrompt;window.cpSoloBossAvailable=()=>!!raidCfg();window.cpModal=modal;
 
@@ -4236,15 +4276,17 @@ mo=t=>t<25?{n:MDN[t/5|0][0]+" "+(t%5+1),c:MDN[t/5|0][1],g:String(t%5+1)}:t==25?{
 window.mdInfo=function(){let r=Math.max(0,(S.tp||0)-(CONFIG.chefeFinal||0)),t=0;while(t<26&&r>=need(t)){r-=need(t);t++}const o=mo(t);return{t,rest:r,need:t<26?need(t):0,name:o.n,col:o.c,g:o.g}};
 const mdl=(o,z)=>`<span class="mdl" style="--mc:${o.c||o.col};${z?"width:"+z+"px;height:"+z+"px;font-size:"+z*.42+"px":""}">${o.g}</span>`,
 fr=(n,t)=>{const medal=Math.max(0,+t||0),phase=Math.max(1,+n||1),rankScale=1+.85*medal+.12*medal*medal,step=phase-1,phaseScale=1+.04*step+.00025*step*step,nextScale=1+.04*(step+1)+.00025*(step+1)*(step+1),boss=phase%10===0?1+Math.min(.03,Math.max(0,(nextScale/phaseScale-1)*.55)):1,event=Math.max(1,Math.min(1.5,+cpxEvM()||1));return Math.max(1,Math.round(250*rankScale*phaseScale*boss*event))};
-window.infHtml=function(){if(!(S.camp||(typeof AD!="undefined"&&AD)))return"";const m=mdInfo(),n=S.il||1,p=m.need?Math.min(100,Math.round(m.rest/m.need*100)):100;let ch="";
+window.infHtml=function(){if(!(S.camp||(typeof AD!="undefined"&&AD)))return"";const m=mdInfo(),n=S.il||1,depth=m.t>=26?Math.floor(m.rest/400)+1:0,prog=m.need?Math.min(100,Math.round(m.rest/m.need*100)):Math.min(100,Math.round((m.rest%400)/400*100));let ch="";
 for(let t=0;t<27;t++){const o=mo(t);ch+=`<span class="mdc${t<=m.t?"":" lk"}${t==m.t?" on":""}">${mdl(o,30)}<small>${o.n}</small></span>`}
-return`<div class="cvb inf"><div class="infh">${mdl(m)}<div><small>Batalhas infinitas${S.camp?"":" · teste ADM"}</small><b>${m.name}</b></div></div><div class="infb"><i style="width:${p}%"></i></div><p class="mut ctr" style="margin:0">${m.need?fmt(m.rest)+" / "+fmt(m.need)+" 🏆 para o próximo medalhão":"Medalhão máximo!"}</p><button class="bt cy" data-inf="go">${n%10==0?"👑 Chefe · ":""}Fase ${n}</button><p class="mut ctr" style="margin:0">Vencendo: ${gem}+${fmt(fr(n,m.t))}${n%5==0?" · 🎁 pacotes":""} · +${TW} 🏆</p><details class="fd"><summary>Todos os medalhões</summary><div class="mdg">${ch}</div></details></div>`};
-// DIFICULDADE: sobe pelos troféus (medalhão), não pelo número da fase. D = medalhão + progresso dentro dele (0 = Bronze 1 · 5 = Prata 1 · 10 = Ouro 1 · 15 = Platina 1 · 20 = Diamante 1 · 25 = Master · 26+ = Overlord)
-// KD = [D, k] · k é o nível do rival (k=8 é a Arena 9 · cada +1 de k ≈ +18% de força e as cartas vão subindo de rank) · EDITE AQUI para deixar mais fácil ou mais difícil
-const KD=[[0,8],[5,9.2],[10,10.7],[15,12.5],[20,14.8],[25,17.3],[26,18],[34,22]],
-kD=d=>{for(let i=1;i<KD.length;i++)if(d<=KD[i][0]){const a=KD[i-1],b=KD[i];return a[1]+(b[1]-a[1])*(d-a[0])/(b[0]-a[0])}return KD[KD.length-1][1]};
-window.startInf=function(){const u=mineDeck();if(!u)return;const n=S.il||1,m=mdInfo(),D=m.t+(m.need?m.rest/m.need:Math.min(8,m.rest/400)),bs=n%10==0,k=Math.round(kD(D)*100)/100,bm=Math.min(1.35,1.1+D*.01),e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*bm}:x);
-zgo({n:"Você",u},{n:(bs?"Chefe · ":"")+"Fase "+n,u:e},{m:"a",k:8,ai:2,b:0,inf:n,ie:Math.max(.01,.06-.008*D),ir:Math.max(.8,3-.2*D)})};
+const medalTitle=m.t>=26?`${m.name} · Desafio ${depth}`:m.name,progressText=m.need?`${fmt(m.rest)} / ${fmt(m.need)} 🏆 para o próximo medalhão`:`Desafio ${depth} · ${fmt(m.rest%400)} / 400 🏆 para o próximo nível`;
+return`<div class="cvb inf"><div class="infh">${mdl(m)}<div><small>Batalhas infinitas${S.camp?"":" · teste ADM"}</small><b>${medalTitle}</b></div></div><div class="infb"><i style="width:${prog}%"></i></div><p class="mut ctr" style="margin:0">${progressText}</p><button class="bt cy" data-inf="go">${n%10==0?"👑 Chefe · ":""}Fase ${n}</button><p class="mut ctr" style="margin:0">Vencendo: ${gem}+${fmt(fr(n,m.t))}${n%5==0?" · 🎁 pacotes":""} · +${TW} 🏆</p><details class="fd"><summary>Todos os medalhões</summary><div class="mdg">${ch}</div></details></div>`};
+// DIFICULDADE: sobe conforme o medalhão e o avanço dentro dele. Após Overlord, cada 400 troféus aumenta o nível de desafio.
+// D = 0 Bronze I · 5 Prata I · 10 Ouro I · 15 Platina I · 20 Diamante I · 25 Master · 26+ Overlord/Desafio.
+// KD = [D, k]. A curva acelera de Platina em diante e tem progressão suave depois de Overlord.
+const KD=[[0,8],[5,9.2],[10,10.7],[15,13],[20,15.2],[25,17.3],[26,18],[34,20.4]],
+kD=d=>{for(let i=1;i<KD.length;i++)if(d<=KD[i][0]){const a=KD[i-1],b=KD[i];return a[1]+(b[1]-a[1])*(d-a[0])/(b[0]-a[0])}return KD[KD.length-1][1]+Math.min(1.6,Math.max(0,d-34)*.08)};
+window.startInf=function(){const u=mineDeck();if(!u)return;const n=S.il||1,m=mdInfo(),D=m.t+(m.need?m.rest/m.need:m.rest/400),bs=n%10==0,k=Math.round(kD(D)*100)/100,bm=Math.min(1.3,1.12+D*.0045),e=enDeck(k,D).map(x=>bs?{...x,s:(x.s||1)*bm}:x);
+zgo({n:"Você",u},{n:(bs?"Chefe · ":"")+"Fase "+n,u:e},{m:"a",k:8,ai:2,b:0,inf:n,ie:Math.max(.012,.05-Math.min(32,D)*.0012),ir:Math.max(.45,3-.075*D)})};
 window.zendI=function(B){const w=B.w,n=B.o.inf,win=w===0,t0=S.tp||0,m0=mdInfo().t,rw=[],g0=gifts();fxEnd(B);bump("play");bump("kill",B.kl[0]);
 if(B.why!="desistiu"){const d=day();if(!S.pj||S.pj.d!==d)S.pj={d,n:0};S.pj.n++}
 try{SND[win?"win":"lose"]();win&&cpxConfetti()}catch(e){}
@@ -5518,6 +5560,23 @@ html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-dura
     const k=root.querySelector("#cpShopKind"),sel=root.querySelector("#cpShopItem");k.addEventListener("change",()=>{sel.innerHTML=k.value==="card"?cardOpts:packOpts});
   }
 
+  // Central de Operações: reúne os três controles administrativos em um único lugar.
+  function openOpsHub(){
+    const drafts=(ADM.c||[]).filter(c=>c&&c.dr).length;
+    const noPhoto=ALL.filter(c=>!(c.img||IMG[c.id])).length;
+    const noStory=ALL.filter(c=>!String(c.d||"").trim()).length;
+    const validOffers=ADM.shop.filter(validShopOffer).length;
+    const boss=ADM.raidBoss&&byId(ADM.raidBoss.cardId);
+    const raidStatus=boss?`Configurado · ${escCP(boss.n)}`:"Ainda não configurado";
+    openExtra("⚙ Central de Operações",`<p>Ferramentas de administração reunidas em uma única aba. Escolha o que deseja gerenciar.</p>
+      <div class="cp-ops-grid">
+        <button type="button" class="cp-ops-card" data-cp-admin="pending"><span class="cp-ops-icon">📋</span><span class="cp-ops-copy"><b>Pendências de cartas</b><small>${drafts} rascunhos · ${noPhoto} sem imagem · ${noStory} sem história</small></span><span class="cp-ops-arrow">›</span></button>
+        <button type="button" class="cp-ops-card" data-cp-admin="shop"><span class="cp-ops-icon">🛒</span><span class="cp-ops-copy"><b>Configurar loja diária</b><small>${validOffers} ofertas válidas na rotação</small></span><span class="cp-ops-arrow">›</span></button>
+        <button type="button" class="cp-ops-card" data-cp-raid-config><span class="cp-ops-icon">⚔️</span><span class="cp-ops-copy"><b>Boss Raid cooperativa</b><small>${raidStatus}</small></span><span class="cp-ops-arrow">›</span></button>
+      </div>
+      <div class="cp-ops-note"><b>Organização do ADM</b><small>As opções ficam nesta central, sem atalhos soltos no cabeçalho. Os botões de iniciar a loja ou entrar em uma Raid para jogar continuam nos seus lugares próprios.</small></div>`);
+  }
+
   // Compartilhamento de cartas como imagem removido a pedido do administrador.
   window.cpRegisterViewHook(function(c){try{
     const f=$("fc")&&$("fc").querySelector(".fch");if(f&&c){const old=f.querySelector(".cp-card-actions");if(old)old.remove();const actions=document.createElement("div");actions.className="cp-card-actions";actions.innerHTML=`<button class="bt gh" data-cp-viewfav="${escCP(c.id)}">${isFav(c.id)?"★ Favorita":"☆ Favoritar"}</button>`;f.append(actions);
@@ -5527,6 +5586,8 @@ html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-dura
 
   // Menu-driven achievement and shop navigation uses buttons inside the shared extra panel.
   document.addEventListener("click",e=>{
+    const hub=e.target.closest&&e.target.closest("[data-cp-admin-hub]");
+    if(hub){e.preventDefault();e.stopPropagation();openOpsHub();return}
     const claimBtn=e.target.closest&&e.target.closest("[data-cp-claim]");
     if(claimBtn){const id=claimBtn.dataset.cpClaim;claim(id);renderAchievements();return}
     const titleBtn=e.target.closest&&e.target.closest("[data-cp-title]");
@@ -5542,12 +5603,13 @@ html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-dura
     const goAdmin=e.target.closest&&e.target.closest("[data-cp-admin-go]");if(goAdmin){const key=goAdmin.dataset.cpAdminGo;$("cpExtra").hidden=true;const b=cfg&&cfg.querySelector(`[data-adm="${key}"]`);b&&b.click();return}
   },false);
 
-  // Shortcuts appear only after the player has successfully entered ADM mode.
-  window.cpRegisterCfgViewHook(function(v){if(v==="a"){
-      const box=cfg&&cfg.querySelector(".in2"),head=box&&box.querySelector(".ah");if(box&&head&&!box.querySelector(".cp-admin-tools")){
-        head.insertAdjacentHTML("afterend",'<div class="cp-admin-tools"><b>⚙ Ferramentas rápidas</b><button type="button" data-cp-admin="pending">📋 Pendências de cartas</button><button type="button" data-cp-admin="shop">🛒 Configurar loja diária</button></div>');
-      }
-    }});
+  // Entrada única no início do Modo ADM: os controles não ficam mais espalhados/flutuando.
+  window.cpRegisterCfgViewHook(function(v){if(v!=="a")return;
+    const home=cfg&&cfg.querySelector(".ag");if(!home||home.querySelector("[data-cp-admin-hub]"))return;
+    const group=document.createElement("div");group.className="cp-ops-home-group";
+    group.innerHTML='<h3 class="ags">CENTRAL DE OPERAÇÕES</h3><div class="agg"><button type="button" class="at cp-ops-home-tile" data-cp-admin-hub><i>⚙️</i><b>Central de Operações</b><small>Pendências de cartas, loja diária e Boss Raid cooperativa em um só lugar</small></button></div>';
+    home.prepend(group);
+  });
 
   // One controlled listener handles only the add-on's share/admin buttons. The original game keeps its own handlers.
   document.addEventListener("click",e=>{
@@ -6262,18 +6324,15 @@ const FX_ELEMENTO={
 };
 window.FX_ELEMENTO=FX_ELEMENTO;
 window.cpPlayElementFx=(key,rect,state="neutro",delay=0)=>{if(!rect||![rect.x,rect.y,rect.w,rect.h].every(Number.isFinite))return;const k=elKey(key)||"normal",color=col(k),run=()=>{if(FXOFF()){const f=fm("cpfx cpfx-flash",rect.x+rect.w/2,rect.y+rect.h/2,Math.max(24,rect.w*.8),Math.max(24,rect.h*.8),`--c:${color};background:${color};border-radius:50%;filter:blur(5px)`);fan(f,[{transform:"scale(.35)",opacity:.32},{transform:"scale(1.18)",opacity:0}],180);return}const scale=stateScale(state),cx=rect.x+rect.w/2,cy=rect.y+rect.h/2,scaled={x:cx-rect.w*scale/2,y:cy-rect.h*scale/2,w:rect.w*scale,h:rect.h*scale},fn=FX_ELEMENTO[k]||FX_ELEMENTO.normal,layer=q("zfx"),before=new Set([...layer.children]);fn(scaled,state);const weakAlpha=state==="muito_fraco"?.48:state==="fraco"?.72:1;if(weakAlpha<1)[...layer.children].filter(n=>!before.has(n)).forEach(n=>{const f=n.style.filter&&n.style.filter!=="none"?n.style.filter+" ":"";n.style.filter=f+`opacity(${weakAlpha})`});const extra=state==="super_duplo"?4:state==="super"?2:0;for(let i=0;i<extra;i++){const a=i*6.283/extra;particle(cx,cy,i%2?"#fff":color,6+scale*2,Math.cos(a)*rect.w*.48,Math.sin(a)*rect.h*.34,680,i*28)}if(state==="super_duplo")ring(cx,cy,Math.max(rect.w,rect.h)*1.45,"#fff",280,0)};if(delay>0)setTimeout(run,delay);else run()};
-// Guia: catálogo, pesquisa, relações e demonstração isolada, sem iniciar uma batalha.
-const makeGuide=()=>{let root=q("cp-el-guide");if(root)return root;root=document.createElement("div");root.id="cp-el-guide";root.hidden=true;root.innerHTML=`<section class="cpel-shell" role="dialog" aria-modal="true" aria-labelledby="cpel-title"><header class="cpel-head"><div><h2 id="cpel-title">📖 Guia dos 21 elementos</h2><p>Vantagens, fraquezas e efeitos visuais da Coleção Primata</p></div><button class="cpel-close" type="button" data-cpel-close aria-label="Fechar">✕</button></header><label class="cpel-search"><input id="cpel-q" type="search" placeholder="Buscar elemento ou o que ele representa…" autocomplete="off"></label><div class="cpel-demo"><div class="cpel-target" id="cpel-target">✦</div><div><b id="cpel-demo-title">Prévia de efeito</b><small id="cpel-demo-copy">Escolha qualquer elemento e toque em “Ver efeito”. A demonstração não altera cartas ou batalhas.</small></div></div><div class="cpel-list" id="cpel-list"></div></section>`;document.body.append(root);return root};
-const guideRow=k=>{const strong=FORTE[k]||[],weak=elFraco(k);return `<article class="cpel-item" data-cpel-item="${k}" style="--elc:${col(k)}"><div class="cpel-title"><span class="cpel-emoji">${EL[k]}</span><b>${ELN[k]}</b></div><p class="cpel-desc">${ELD[k]}</p><p class="cpel-line"><strong>▲ FORTE contra:</strong> <span>${k==="normal"?"nenhum":elListText(strong)}</span></p><p class="cpel-line"><strong>▼ FRACO contra:</strong> <span>${k==="normal"?"nenhum":elListText(weak)}</span></p><button type="button" data-cp-el-preview="${k}" style="--elc:${col(k)}">▶ Ver efeito</button></article>`};
+// Guia elemental: consulta compacta, sem demonstrações artificiais.
+const makeGuide=()=>{let root=q("cp-el-guide");if(root)return root;root=document.createElement("div");root.id="cp-el-guide";root.hidden=true;root.innerHTML=`<section class="cpel-shell" role="dialog" aria-modal="true" aria-labelledby="cpel-title"><header class="cpel-head"><div><h2 id="cpel-title">Guia dos elementos</h2><p>Consulte as vantagens e fraquezas dos 21 elementos.</p></div><button class="cpel-close" type="button" data-cpel-close aria-label="Fechar">✕</button></header><label class="cpel-search"><input id="cpel-q" type="search" placeholder="Buscar elemento ou característica…" autocomplete="off"></label><div class="cpel-list" id="cpel-list"></div></section>`;document.body.append(root);return root};
+const guideRow=k=>{const strong=FORTE[k]||[],weak=elFraco(k);return `<article class="cpel-item" data-cpel-item="${k}" style="--elc:${col(k)}"><div class="cpel-title"><b>${EL[k]} ${ELN[k]}</b></div><p class="cpel-line"><strong>Vantagens:</strong> <span>${k==="normal"?"nenhuma":elListText(strong)}</span></p><p class="cpel-line"><strong>Fraquezas:</strong> <span>${k==="normal"?"nenhuma":elListText(weak)}</span></p></article>`};
 const renderGuide=()=>{const list=q("cpel-list");if(!list)return;const query=(q("cpel-q")?.value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();const rows=EL_KEYS.filter(k=>!query||[k,ELN[k],ELD[k],...(FORTE[k]||[]),...elFraco(k)].join(" ").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().includes(query));list.innerHTML=rows.length?rows.map(guideRow).join(""):'<div class="cpel-empty">Nenhum elemento encontrado.</div>'};
-window.cpOpenElementGuide=(focus)=>{const root=makeGuide();root.hidden=false;if(q("zfx")){q("zfx").style.zIndex="100005";q("zfx").classList.add("cpfx-preview-on")}const input=q("cpel-q");if(input){input.value="";renderGuide()}if(focus){const k=elKey(focus);const b=root.querySelector(`[data-cp-el-preview="${k}"]`);if(b)b.click()}};
-const closeGuide=()=>{const root=q("cp-el-guide");if(root)root.hidden=true;if(q("zfx")){q("zfx").style.zIndex="13";q("zfx").classList.remove("cpfx-preview-on")}};
-document.addEventListener("click",e=>{const guide=e.target.closest&&e.target.closest("[data-cp-el-guide],[data-cp-el-guide-battle]");if(guide){window.cpOpenElementGuide();return}const chip=e.target.closest&&e.target.closest("[data-cp-el-key]");if(chip){window.cpOpenElementGuide(chip.dataset.cpElKey);return}if(e.target.closest&&e.target.closest("[data-cpel-close]")){closeGuide();return}if(e.target.id==="cp-el-guide"){closeGuide();return}const preview=e.target.closest&&e.target.closest("[data-cp-el-preview]");if(preview){const k=preview.dataset.cpElPreview,target=q("cpel-target"),cap=q("cpel-demo-copy"),title=q("cpel-demo-title");if(!target)return;const r=target.getBoundingClientRect();title.textContent=`${EL[k]} ${ELN[k]} · efeito de demonstração`;cap.textContent=`${ELD[k]}. Efeito visual próprio: ${ELN[k]}.`;window.cpPlayElementFx(k,{x:r.left,y:r.top,w:r.width,h:r.height},"neutro");return}});
+window.cpOpenElementGuide=(focus)=>{const root=makeGuide();root.hidden=false;const input=q("cpel-q");if(input){const k=focus?elKey(focus):"";input.value=k&&ELN[k]?ELN[k]:"";renderGuide();input.focus({preventScroll:true})}};
+const closeGuide=()=>{const root=q("cp-el-guide");if(root)root.hidden=true};
+document.addEventListener("click",e=>{const guide=e.target.closest&&e.target.closest("[data-cp-el-guide],[data-cp-el-guide-battle]");if(guide){window.cpOpenElementGuide();return}const chip=e.target.closest&&e.target.closest("[data-cp-el-key]");if(chip){window.cpOpenElementGuide(chip.dataset.cpElKey);return}if(e.target.closest&&e.target.closest("[data-cpel-close]")){closeGuide();return}if(e.target.id==="cp-el-guide")closeGuide()});
 document.addEventListener("input",e=>{if(e.target&&e.target.id==="cpel-q")renderGuide()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!q("cp-el-guide")?.hidden)closeGuide()});
-const mountAdmFxTest=()=>{const panel=q("ds_g"),host=panel&&(panel.querySelector(".fg")||panel);if(!host||q("cpfx-admin-test"))return;const box=document.createElement("section");box.id="cpfx-admin-test";box.className="cpfx-admin-test";box.innerHTML=`<div><b>🎨 Teste dos efeitos elementais</b><small>Veja cada efeito sem iniciar uma batalha.</small></div><div class="cpfx-admin-controls"><select id="cpfx-admin-element" aria-label="Elemento para testar">${EL_KEYS.map(k=>`<option value="${k}">${EL[k]} ${ELN[k]}</option>`).join("")}</select><button type="button" class="bt gh" data-cpfx-admin-play="1">▶ Ver efeito</button></div><div class="cpfx-admin-demo"><div class="cpfx-admin-target" id="cpfx-admin-target">✦</div><small id="cpfx-admin-caption">A prévia aparece neste alvo de demonstração.</small></div>`;host.append(box)};
-mountAdmFxTest();if(window.cpRegisterCfgViewHook)window.cpRegisterCfgViewHook(v=>{if(v==="a")requestAnimationFrame(mountAdmFxTest)});
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-cpfx-admin-play]");if(!b)return;const k=q("cpfx-admin-element")?.value||"normal",t=q("cpfx-admin-target"),cap=q("cpfx-admin-caption");if(!t)return;const r=t.getBoundingClientRect();cap.textContent=`Pré-visualizando ${EL[k]} ${ELN[k]} · ${ELD[k]}`;if(q("zfx")){q("zfx").style.zIndex="100005";q("zfx").classList.add("cpfx-preview-on")}window.cpPlayElementFx(k,{x:r.left,y:r.top,w:r.width,h:r.height},"neutro");setTimeout(()=>{if(q("zfx")&&q("cp-el-guide")?.hidden){q("zfx").style.zIndex="13";q("zfx").classList.remove("cpfx-preview-on")}},1100)});
 })();
 </script>
 
@@ -6291,9 +6350,205 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
  // Reação visual do duelo: aparece perto do lado de quem enviou e desaparece sem alterar o estado da partida.
  window.cpShowDuelReaction=function(seat,emoji){if(!BT||!zb||zb.hidden||!/[😂👏🔥]/.test(String(emoji||"")))return;const e=document.createElement("div");e.className="cp-duel-reaction"+(seat===BT.v?" mine":"");e.textContent=emoji;document.body.append(e);setTimeout(()=>e.remove(),1350)};
  // Auditoria da biblioteca: destaca blocos inválidos sem apagar nem reescrever habilidades antigas.
- window.cpAuditSkills=function(){const issues=[],check=(owner,arr)=>{if(!Array.isArray(arr))return issues.push(`${owner}: lista de efeitos inválida`);arr.forEach((x,i)=>{if(!x||!FX[x.t]||typeof FX[x.t].run!=="function")issues.push(`${owner} · bloco ${i+1}: efeito desconhecido (${x&&x.t||"vazio"})`);else if(!FX[x.t].own&&!x.a)issues.push(`${owner} · bloco ${i+1}: alvo não definido`);if(x&&x.co&&!CO[x.co])issues.push(`${owner} · bloco ${i+1}: condição desconhecida (${x.co})`);if(x&&FX[x.t]&&!FX[x.t].own&&x.a&&!Object.prototype.hasOwnProperty.call(TG,x.a))issues.push(`${owner} · bloco ${i+1}: alvo inválido (${x.a})`);if(x&&x.ch!=null&&(!Number.isFinite(+x.ch)||+x.ch<1||+x.ch>100))issues.push(`${owner} · bloco ${i+1}: chance fora de 1–100%`)})};(ADM.ab||[]).forEach(a=>check(a.n,a.ef));ALL.forEach(c=>{const raw=c.sk||[],L=Array.isArray(raw[0])?raw:raw.length?[raw]:[];L.forEach(a=>a[3]&&a[3].ef&&check(c.n+" · "+a[0],a[3].ef))});return issues};
+ window.cpAuditSkills=function(){
+  const issues=[];
+  const check=(owner,arr)=>{
+   if(!Array.isArray(arr)){issues.push(`${owner}: lista de efeitos inválida`);return}
+   arr.forEach((x,i)=>{
+    const label=`${owner} · bloco ${i+1}`;
+    if(!x||!FX[x.t]||typeof FX[x.t].run!=="function")issues.push(`${label}: efeito desconhecido (${x&&x.t||"vazio"})`);
+    else if(!FX[x.t].own&&!x.a)issues.push(`${label}: alvo não definido`);
+    if(x&&x.co&&!CO[x.co])issues.push(`${label}: condição desconhecida (${x.co})`);
+    if(x&&FX[x.t]&&!FX[x.t].own&&x.a&&!Object.prototype.hasOwnProperty.call(TG,x.a))issues.push(`${label}: alvo inválido (${x.a})`);
+    if(x&&x.ch!=null&&(!Number.isFinite(+x.ch)||+x.ch<1||+x.ch>100))issues.push(`${label}: chance fora de 1–100%`)
+   })
+  };
+  const checkMeta=(owner,meta)=>{
+   if(!meta)return;
+   if(meta.tr&&!TRG[meta.tr])issues.push(`${owner}: gatilho inválido (${meta.tr})`);
+   if(meta.chargeMode&&!['same','turns'].includes(meta.chargeMode))issues.push(`${owner}: modo de carga inválido (${meta.chargeMode})`);
+   if(meta.chargeMode==='turns'&&(!Number.isFinite(+meta.chargeTurns)||+meta.chargeTurns<1||+meta.chargeTurns>6))issues.push(`${owner}: duração de carga deve ficar entre 1 e 6 turnos`)
+  };
+  (ADM.ab||[]).forEach(a=>{check(a.n,a.ef);checkMeta(a.n,a)});
+  ALL.forEach(c=>{const raw=c.sk||[],L=Array.isArray(raw[0])?raw:raw.length?[raw]:[];L.forEach(a=>{if(a&&a[3]){check(c.n+" · "+a[0],a[3].ef);checkMeta(c.n+" · "+a[0],a[3])}})});
+  return [...new Set(issues)]
+ };
  document.addEventListener("click",e=>{const b=e.target.closest("[data-cp-skill-audit]");if(!b)return;if(typeof window.cpModal!=="function")return toast("A interface ADM ainda está inicializando.");const list=window.cpAuditSkills(),m=g("cpm");if(!list.length){toast("✓ Nenhuma inconsistência estrutural encontrada nas habilidades.");return}window.cpModal(`<h4>🔎 Revisão de habilidades</h4><p>${list.length} ponto(s) precisam de revisão. Nenhuma habilidade foi apagada automaticamente.</p><div class="cp-audit-list">${list.slice(0,80).map(x=>`<div>${cpSafe(x)}</div>`).join("")}</div><button class="bt gh" data-a="px">Fechar</button>`)});
 }catch(e){console.warn("melhorias de batalha",e)}})();
 </script>
+
+<style id="cp-v310-visual-polish">
+/* Coleção: hierarquia simples, espaços consistentes e controles fora das ilustrações. */
+.cp-album-guide{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:8px 0 18px;padding:15px;border:1px solid #ffffff13;border-radius:16px;background:linear-gradient(135deg,#ffffff0c,#ffffff04)}
+.cp-album-title{min-width:0;text-align:left}
+.cp-album-title small{display:block;color:var(--mut);font-size:.58rem;font-weight:900;letter-spacing:.2em}
+.cp-album-title h2{margin:3px 0 2px;font-size:1.18rem;font-weight:900;letter-spacing:.02em}
+.cp-album-title p{margin:0;color:var(--mut);font-size:.66rem;line-height:1.45;letter-spacing:0;text-transform:none}
+.cp-guide-link{display:inline-flex;flex:none;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;border:1px solid #b79cff55;border-radius:12px;background:#9575db18;color:#e4d8ff;font-size:.68rem;font-weight:900;line-height:1.25;text-align:left}
+.cp-guide-link span{color:#bcb0d1;font-size:.56rem;font-weight:700}
+.cp-guide-link.small{align-self:center;padding:8px 10px;font-size:.62rem}
+.dk b,.dk small{line-height:1.35}
+.cp-collection-gridhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:9px 2px 12px;padding-bottom:10px;border-bottom:1px solid #ffffff13}
+.cp-collection-gridhead>div{display:grid;gap:3px;text-align:left}
+.cp-collection-gridhead b{font-size:.76rem;font-weight:900;letter-spacing:.04em}
+.cp-collection-gridhead small{color:var(--mut);font-size:.62rem;letter-spacing:.02em}
+.cp-collection-gridhead .qc{flex:none;margin:0;padding:8px 10px;font-size:.62rem}
+#flt{margin:0 0 12px;padding:11px;border:1px solid #ffffff12;border-radius:14px;background:#ffffff06}
+#flt .fls{gap:7px}
+#flt .fls input{min-width:0;border-radius:10px;background:#0d0d11}
+#flt .flk{border-radius:10px}
+#flt .chips{gap:6px;margin:9px 0 0}
+#flt .chips button{padding:7px 10px;border-radius:9px;font-size:.62rem;letter-spacing:.03em}
+#flt .flp{margin-top:10px;padding-top:10px;border-top:1px solid #ffffff12}
+#flt .flp>p{margin:8px 0 5px;font-size:.6rem;font-weight:900;letter-spacing:.1em}
+#flt .flr{gap:5px}
+#flt .flb{padding:6px 8px;border-radius:8px;font-size:.61rem}
+#dkal .grid{gap:12px 10px;align-items:start}
+#dkal .dkc,.cp-dkitem{max-width:100%;filter:none!important}
+#dkal .cd{width:100%;box-shadow:0 5px 17px #0008,0 0 calc(var(--g)*1.8px) color-mix(in srgb,var(--rc) 45%,transparent)}
+.dkc.fu>.cd{filter:none!important}
+.dkc.cp-in-deck>.cd{box-shadow:0 0 0 2px #78dca0,0 5px 17px #0008,0 0 14px #78dca055}
+.dkc.sel{outline:2px solid var(--ac);outline-offset:3px;border-radius:12px}
+.dkr,.dku,.dkn{display:none!important}
+.dkb{margin:0 0 14px;padding:12px;border:1px solid #ffffff14;border-radius:15px;background:#ffffff07}
+.dkb .dkh{margin-bottom:9px}
+.dkb .dkh b{font-size:.76rem}
+.dkb .dkh b small{font-size:.58rem}
+
+/* Carta: apenas a ilustração no miolo; rank e fusão valorizam a moldura. */
+.cd.cp-art-only{border-width:2px;box-shadow:0 5px 16px #0008,0 0 calc(var(--g)*1.7px) color-mix(in srgb,var(--rc) 42%,transparent)}
+.cd.cp-art-only>.art{inset:0}
+.cd.cp-art-only>.art img{object-fit:cover}
+.cd.cp-art-only>.cp-card-frame{position:absolute;z-index:6;inset:3px;border:1px solid color-mix(in srgb,var(--rc) 78%,#fff);border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 0 1px #0008}
+.cd.cp-art-only.k4>.cp-card-frame{border-width:2px;box-shadow:inset 0 0 0 1px #ffffff45,0 0 8px #d9e2f055}
+.cd.cp-art-only.k5>.cp-card-frame{border-width:2px;border-color:#f5d779;box-shadow:inset 0 0 0 1px #fff7,0 0 10px #f5d77977}
+.cd.cp-art-only.k6>.cp-card-frame{inset:4px;border:2px solid transparent;background:linear-gradient(#0000,#0000) padding-box,linear-gradient(135deg,#fff5b7,#e9a83e,#fff4bd,#a66d28) border-box;box-shadow:inset 0 0 12px #f7d77b22,0 0 12px #e9b84b88}
+.cd.cp-art-only.k7>.cp-card-frame{inset:4px;border:2px solid transparent;background:linear-gradient(#0000,#0000) padding-box,linear-gradient(135deg,#f5d8ff,#9a6bdf,#f8e7ff,#5c3b9c) border-box;box-shadow:inset 0 0 16px #b98eff33,0 0 15px #a77beaaa}
+.cd.cp-art-only.k8>.cp-card-frame{inset:4px;border:3px solid transparent;background:linear-gradient(#0000,#0000) padding-box,conic-gradient(from 0deg,#ff5b9b,#ffe27a,#5ff0cd,#69a9ff,#c28cff,#ff5b9b) border-box;box-shadow:inset 0 0 20px #fff4,0 0 18px #b98cffaa}
+.cd.cp-art-only.k8>.cp-card-frame:after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:1px solid #ffffffaa;opacity:.72}
+.cd.cp-art-only[data-l="1"]>.cp-card-frame{inset:5px;border-width:2px;box-shadow:inset 0 0 0 1px #ffffff35,0 0 9px color-mix(in srgb,var(--rc) 70%,transparent)}
+.cd.cp-art-only[data-l="2"]>.cp-card-frame{inset:5px;border-width:3px;box-shadow:inset 0 0 0 1px #ffffff55,0 0 12px color-mix(in srgb,var(--rc) 78%,transparent)}
+.cd.cp-art-only[data-l="3"]>.cp-card-frame{inset:6px;border:3px double #fff;border-color:color-mix(in srgb,var(--rc) 55%,#fff);box-shadow:inset 0 0 0 2px #ffffff40,0 0 15px color-mix(in srgb,var(--rc) 85%,transparent)}
+.cd.cp-art-only[data-l="4"]>.cp-card-frame{inset:6px;border:3px solid transparent;background:linear-gradient(#0000,#0000) padding-box,linear-gradient(135deg,#fff,#f5cf7b,var(--rc),#fff) border-box;box-shadow:inset 0 0 0 2px #ffffff50,0 0 18px color-mix(in srgb,var(--rc) 90%,transparent)}
+.cd.cp-art-only[data-l="5"]>.cp-card-frame{inset:6px;border:4px solid transparent;background:linear-gradient(#0000,#0000) padding-box,conic-gradient(from 30deg,#fff,#f6d66f,var(--rc),#fff,#f6d66f) border-box;box-shadow:inset 0 0 0 2px #ffffff65,0 0 22px color-mix(in srgb,var(--rc) 95%,transparent)}
+.cd.cp-art-only[data-l="5"]{box-shadow:0 0 0 1px #fff8,0 0 20px color-mix(in srgb,var(--rc) 90%,transparent),0 8px 22px #000b}
+.cd.cp-art-only.k8[data-l="5"]>.cp-card-frame{background:linear-gradient(#0000,#0000) padding-box,conic-gradient(from 0deg,#ff5b9b,#ffe27a,#5ff0cd,#69a9ff,#c28cff,#ff5b9b) border-box}
+.cd.cp-art-only .rk,.cd.cp-art-only .x,.cd.cp-art-only .nm,.cd.cp-art-only .in,.cd.cp-art-only .fz,.cd.cp-art-only .cp-card-el-mark{display:none!important}
+
+/* Ficha da carta: imagem em destaque, metadados e blocos de leitura separados. */
+#fc .fch{max-width:460px;padding:14px 0 38px}
+#fc .fch>.cd{width:min(58vw,230px);margin:2px auto 14px}
+#fc .fch h2{margin:0;font-size:1.42rem;line-height:1.15}
+#fc .rar{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:9px 0 0;letter-spacing:.04em}
+#fc .rar .rtg{padding:5px 8px;border:1px solid #ffffff18;border-radius:8px;background:#ffffff08;font-size:.6rem;line-height:1.25}
+#fc .sg{position:sticky;top:0;z-index:3;justify-content:space-around;gap:8px;margin:18px -6px 12px;padding:9px 7px;border:1px solid #ffffff12;border-radius:12px;background:#17171bed;backdrop-filter:blur(12px)}
+#fc .sg button{padding:6px 5px;font-size:.64rem;letter-spacing:.07em}
+#fc .pnl{min-height:0;padding:0 2px}
+#fc .pw{display:grid;grid-template-columns:1fr auto;gap:8px;margin:13px 0;padding:12px;border:1px solid #ffffff14;border-radius:12px;background:#ffffff08}
+#fc .pw>div{display:grid;gap:2px}
+#fc .pw>div small,#fc .pw-mode small{font-size:.58rem;color:var(--mut)}
+#fc .pw>div b{font-size:1.15rem}
+#fc .pw>span{align-self:center;font-size:.66rem;color:var(--mut)}
+#fc .pw-mode{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:7px;border-top:1px solid #ffffff12}
+#fc .pw-mode select{max-width:170px;padding:6px 8px;border:1px solid #ffffff20;border-radius:8px;background:#111;color:#fff;font-size:.65rem}
+#fc .cp-power-note{margin:-4px 0 10px!important;font-size:.64rem;line-height:1.45}
+#fc .cp-card-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:10px 0}
+#fc .cp-card-meta .ch2{display:grid;gap:3px;padding:9px 10px;border:1px solid #ffffff12;border-radius:10px;background:#ffffff07}
+#fc .cp-card-meta .ch2 small{font-size:.57rem;color:var(--mut)}
+#fc .cp-card-meta .ch2 b{font-size:.68rem;line-height:1.35}
+#fc .cp-sheet-elements{margin:12px 0;padding:12px;border:1px solid #ffffff16;border-radius:13px;background:linear-gradient(145deg,#ffffff0b,#ffffff04)}
+#fc .cp-sheet-el-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#fc .cp-sheet-el-head small{display:block;margin-bottom:7px;color:var(--mut);font-size:.56rem;font-weight:900;letter-spacing:.15em}
+#fc .cp-sheet-el-list{display:flex;flex-wrap:wrap;gap:5px}
+#fc .cp-sheet-el-list .cp-el-chip{padding:5px 8px;font-size:.62rem}
+#fc .cp-el-relations{margin-top:11px;padding-top:9px;border-top:1px solid #ffffff13}
+#fc .cp-el-relations h4{margin:0 0 7px;color:var(--mut);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase}
+#fc .cp-el-rel-row{display:grid;grid-template-columns:minmax(100px,.72fr) 1.4fr;gap:8px;padding:6px 0;border-bottom:1px solid #ffffff0c;font-size:.62rem;line-height:1.4}
+#fc .cp-el-rel-row:last-child{border-bottom:0}
+#fc .cp-el-rel-row b{color:#eee;font-size:.59rem}
+#fc .cp-el-rel-row span{color:#c7c4d0}
+#fc .cp-el-neutral{font-size:.64rem;color:var(--mut)}
+#fc .sg2{gap:9px}
+#fc .st2{padding:11px 9px;border:1px solid #ffffff12;border-radius:11px;background:#ffffff07}
+
+/* Batalha: ilustração ocupa o cartão; status e vida ficam fora dela. */
+#zb .zu{display:flex;flex-direction:column;gap:4px;aspect-ratio:auto;min-width:0;overflow:visible;text-align:center}
+#zb .zu>.cd{display:block;flex:none;width:100%;aspect-ratio:3/4;border-width:2px;overflow:hidden}
+#zb .zu>.yhp{flex:none;width:100%;height:12px;border-radius:99px}
+#zb .zrs .zu{gap:3px}
+#zb .zrs .zu>.yhp{height:10px}
+#zb .zu .nm,#zb .zu .rk,#zb .zu .x,#zb .zu .fz,#zb .zu .cp-card-el-mark,#zb .cp-el-seal{display:none!important}
+#zb .zu:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+#zb .zhud{display:none}
+#yinf .yib{max-width:480px;border:1px solid #ffffff1a;border-radius:19px;background:linear-gradient(155deg,#211d2b,#14151b 72%)}
+#yinf .yih{padding-bottom:11px;border-bottom:1px solid #ffffff13}
+#yinf .yis{display:flex;gap:12px;justify-content:flex-start;flex-wrap:wrap;padding:10px 0;color:#e8e5ee;font-size:.75rem}
+#yinf .y-card-elements{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:3px 0 10px}
+#yinf .y-card-elements>small{width:100%;color:var(--mut);font-size:.57rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+#yinf .y-card-elements>div{display:flex;flex-wrap:wrap;gap:5px}
+#yinf .y-card-elements .cp-el-chip{padding:5px 8px;font-size:.62rem}
+#yinf .cp-el-relations{margin:7px 0 12px;padding:9px;border:1px solid #ffffff12;border-radius:11px;background:#ffffff06}
+#yinf .cp-el-relations .cp-el-rel-row{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #ffffff0c;font-size:.62rem}
+#yinf .cp-el-relations .cp-el-rel-row span{text-align:right}
+#yinf .yab{margin:8px 0;padding:10px;border:1px solid #ffffff12;border-radius:11px;background:#ffffff07}
+#yinf .yab p{font-size:.68rem;line-height:1.5}
+
+/* Guia: busca e catálogo, sem área de demonstração de efeitos. */
+#cp-el-guide{padding:12px}
+#cp-el-guide .cpel-shell{width:min(100%,720px);height:min(90dvh,860px);border-color:#ffffff20;border-radius:18px;background:linear-gradient(155deg,#24202e,#14151b 72%)}
+#cp-el-guide .cpel-head{padding:17px 16px 12px}
+#cp-el-guide .cpel-head h2{font-size:1.05rem;letter-spacing:.01em}
+#cp-el-guide .cpel-head p{font-size:.65rem;line-height:1.45}
+#cp-el-guide .cpel-search{padding:0 16px 12px}
+#cp-el-guide .cpel-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 16px 16px}
+#cp-el-guide .cpel-item{padding:11px;border-radius:11px;background:#ffffff07}
+#cp-el-guide .cpel-title b{font-size:.72rem}
+#cp-el-guide .cpel-desc{min-height:0;font-size:.63rem;line-height:1.45}
+#cp-el-guide .cpel-line{font-size:.61rem;line-height:1.5}
+#cp-el-guide .cpel-item button{display:none!important}
+#cp-el-guide .cpel-emoji{display:none}
+#cpfx-admin-test,.cpel-demo{display:none!important}
+@media(max-width:390px){
+ .cp-album-guide{align-items:flex-start;flex-direction:column}
+ .cp-guide-link{align-self:stretch;align-items:center}
+ #dkal .grid{gap:10px 8px}
+ #fc .fch>.cd{width:min(64vw,220px)}
+ #cp-el-guide .cpel-list{grid-template-columns:1fr}
+ #yinf .cp-el-relations .cp-el-rel-row{display:grid;grid-template-columns:1fr;gap:3px}
+}
+@media(prefers-reduced-motion:reduce){.cd.cp-art-only>.cp-card-frame,.cd.cp-art-only[data-l]>.cp-card-frame{animation:none!important}}
+</style>
+
+
+<style id="cp-ops-hub-v311">
+/* Central de Operações: uma única entrada no início do ADM, sem botões flutuantes. */
+#cfg.adm .cp-ops-home-group{padding:13px;border:1px solid #a98bff38;border-radius:18px;background:linear-gradient(135deg,#9b7cf51a,#ffffff05);box-shadow:0 8px 24px #0002}
+#cfg.adm .cp-ops-home-group .ags{margin:0 0 9px;color:#d8c8ff;font-size:.62rem;letter-spacing:.18em}
+#cfg.adm .cp-ops-home-tile{min-height:94px;border-color:#b39aff55;background:linear-gradient(125deg,#43336b,#272331 72%);box-shadow:inset 0 1px 0 #ffffff20,0 8px 18px #0002}
+#cfg.adm .cp-ops-home-tile>i{display:grid;grid-row:1/3;place-items:center;width:38px;height:38px;border-radius:12px;background:#b89aff24;font-size:1.3rem}
+#cfg.adm .cp-ops-home-tile>b{align-self:end;font-size:.86rem}
+#cfg.adm .cp-ops-home-tile>small{align-self:start;color:#c2b7d3;font-size:.64rem;line-height:1.4}
+#cpExtra .cp-ops-grid{display:grid;gap:9px;margin:4px 0}
+#cpExtra .cp-ops-card{display:grid;grid-template-columns:42px minmax(0,1fr) 18px;align-items:center;gap:10px;width:100%;padding:13px 12px;border:1px solid #ffffff16;border-radius:14px;background:linear-gradient(145deg,#ffffff0c,#ffffff05);text-align:left}
+#cpExtra .cp-ops-card:active{transform:scale(.99);background:#ffffff12}
+#cpExtra .cp-ops-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#aa8df522;font-size:1.2rem}
+#cpExtra .cp-ops-copy{display:grid;gap:4px;min-width:0}
+#cpExtra .cp-ops-copy b{font-size:.78rem;font-weight:900;color:var(--fg)}
+#cpExtra .cp-ops-copy small{font-size:.64rem;color:var(--mut);line-height:1.4}
+#cpExtra .cp-ops-arrow{font-size:1.3rem;color:#c7b0ff;text-align:right}
+#cpExtra .cp-ops-note{display:grid;gap:4px;margin-top:3px;padding:11px 12px;border-radius:12px;background:#ffffff06}
+#cpExtra .cp-ops-note b{font-size:.67rem}
+#cpExtra .cp-ops-note small{font-size:.62rem;color:var(--mut);line-height:1.5}
+/* A ficha rápida da batalha fica focada em status, efeitos e habilidades. */
+#yinf .y-card-elements,#yinf .cp-el-relations{display:none!important}
+/* A consulta externa do guia mostra apenas vantagens e fraquezas. */
+#cp-el-guide .cpel-item{display:grid;gap:7px;padding:12px 13px}
+#cp-el-guide .cpel-title{margin:0 0 1px}
+#cp-el-guide .cpel-line{display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px;margin:0;font-size:.68rem;line-height:1.45}
+#cp-el-guide .cpel-line strong{color:#f1edf8}
+#cp-el-guide .cpel-line span{color:#c8c2d1}
+@media(max-width:380px){#cpExtra .cp-ops-card{grid-template-columns:36px minmax(0,1fr) 14px;padding:11px 9px}#cpExtra .cp-ops-icon{width:34px;height:34px}}
+</style>
+
 </body>
 </html>
