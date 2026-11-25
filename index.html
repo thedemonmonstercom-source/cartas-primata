@@ -7,6 +7,15 @@
 <meta name="application-version" content="1.0">
 <!-- COLEÇÃO PRIMATA · VERSÃO OFICIAL 1.0 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
+<!--
+  COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
+  Arquivo único de distribuição. Antes de editar, localize a seção/função existente e altere-a;
+  evite criar sistemas duplicados. A ordem dos scripts clássicos e módulos é intencional.
+  Pontos de extensão: cpRegisterCfgViewHook, cpRegisterAdxOpenHook, FX/FXG e hooks de renderização.
+  Dados ADM são serializados em colprimata_adm e sincronizados pelo fluxo atual para conteudo/adm;
+  não criar novas coleções Firebase sem necessidade. Preserve IDs DOM, saves, combate, 3 temas e mobile.
+  Depois de cada atualização: validar sintaxe JS/CSS, IDs duplicados, renderização e fluxos de combate.
+-->
 <title>Coleção Primata</title><script>window.CP_VERSION="1.0";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
@@ -1314,7 +1323,7 @@ const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
  /* SSS usa um aro prismático recortado; nenhuma peça fica sobre a ilustração. */
- const rarityFx=lk?"":`${r===5?'<u class="a-spectrum" aria-hidden="true"></u>':""}${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="sss-spectrum" aria-hidden="true"><i class="led-spot led-a"></i><i class="led-spot led-b"></i><i class="led-spot led-c"></i><i class="led-spot led-d"></i><i class="led-spot led-e"></i><i class="led-spot led-f"></i><i class="led-spot led-g"></i></u><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
+ const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
  return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${art}${rarityFx}${frame}${xt}</div>`
 };
 // se a foto de uma carta não carregar, mostra a ilustração gerada
@@ -1339,7 +1348,7 @@ const flBar=()=>{const n=FLT.r.length+FLT.e.length+FLT.x.length+(FLT.st?1:0)+(FL
  +(P.length>1?`<div class="chips"><button class="${FLT.all?"on":""}" data-fl="all">Todos</button>${P.map((x,i)=>`<button data-s="${i}" class="${i==as&&!FLT.all?"on":""}">${x.n}</button>`).join("")}</div>`:"")
  +`<div class="flp"${FLT.open?"":" hidden"}>`+row("Rank",R.map((r,i)=>ch("r",i,r[0],FLT.r)).join(""))+row("Elemento",EL_KEYS.map(k=>ch("e",k,`${EL[k]} ${ELN[k]}`,FLT.e)).join(""))+row("Mostrar",[["own","Tenho"],["miss","Faltam"],["dup","Repetidas"],["in","No deck"],["out","Fora do deck"]].map(x=>ch("st",x[0],x[1],FLT.st)).join(""))+row("Habilidade",[["com","Com"],["sem","Sem"],["pas","Passiva"]].map(x=>ch("ab",x[0],x[1],FLT.ab)).join(""))+row("Efeito",FXG.map(g=>ch("x",g[0],g[0],FLT.x)).join(""))+row("Ordenar",[["r","Rank ↑"],["R","Rank ↓"],["n","Nome"],["l","Nível"],["d","Dano"],["v","Vida"],["q","Cópias"]].map(x=>ch("o",x[0],x[1],FLT.o)).join(""))+`<button class="flc" data-fl="clr">Limpar tudo</button></div>`};
 // ladrilho do álbum: a carta ORIGINAL aparece com o nível dela; as cópias repetidas viram só o contador "+N" (sem melhoria, para trocar ou converter)
-const dkTile=c=>{const n=S.inv[c.id]||0,L=lvl(c),rad=cardRadius(L);return n?`<div class="dkc" data-dc="${c.id}" data-cid="${c.id}" style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%">${card(c,"",1)}</div>`:`<div class="cp-dkitem" data-cid="${c.id}">${card(c,"",0,1)}</div>`};
+const dkTile=c=>{const n=S.inv[c.id]||0,L=lvl(c),rad=cardRadius(L);return n?`<div class="dkc" data-dc="${c.id}" data-cid="${c.id}" style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%">${card(c,"",1)}${n>1?`<span class="cp-duplicate-count" aria-label="${n-1} repetida(s)">+${n-1}</span>`:""}</div>`:`<div class="cp-dkitem" data-cid="${c.id}">${card(c,"",0,1)}</div>`};
 const flGrid=()=>{const q=P[as],a=flOn()||FLT.all,l=a?flList():[...q.cards].sort((x,y)=>x.r-y.r);
  return `<div class="cp-collection-gridhead"><div><b>${a?"Resultados":"Álbum do pacote"}</b><small>${a?`${l.length} ${l.length==1?"carta":"cartas"} · ${FLT.all||FLT.q?"todos os pacotes":q.n}`:`${own(q)} de ${q.cards.length} cartas coletadas`}</small></div>${a?"":cvBtn(q.cards,"p","qc")}</div>`+(l.length?`<div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:`<div class="fle">Nenhuma carta encontrada<br><button class="flc" data-fl="clr">Limpar filtros</button></div>`)+(a?"":exAl()+indAl())};
 const flPaint=bar=>{if(!$("dkal"))return;if(bar)$("flt").innerHTML=flBar();$("dkal").innerHTML=flGrid();dkPaint()};
@@ -1443,7 +1452,7 @@ function play(p,d,pi,np=1,g=0){LN=np;
   stage.innerHTML=`<div class="fl" style="--h:${p.h}"><div class="aura" hidden></div><div class="stk"></div></div><div class="tag"></div>`;
   place();rev()
  };
- skb.onclick=()=>{if(ph<4)summary()};
+ skb.onclick=e=>{if(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation()}if(ph<4){summary()}};
  // arrastar a pilha para o lado: alterna entre "arrumada" (versos, sem spoiler) e "espalhada" (dá para ver as cartas de trás)
  const restyle=()=>{const s=stk();if(!s)return;s.classList.add("tg");s.classList.toggle("tdy",!spr);s.querySelectorAll(".sc").forEach(e=>{if(e.dataset.sn-k>0&&!e.classList.contains("out"))e.classList.toggle("hid",!spr)});setTimeout(()=>s.classList.remove("tg"),320)};
  stage.onpointerdown=e=>{if(ph==2&&e.target.closest(".stk")){dn=1;dx=e.clientX}};
@@ -1532,7 +1541,7 @@ document.addEventListener("click",e=>{
 const selectedPackQty=()=>{const e=$("packQty"),n=Math.floor(+(e&&e.value||PQ)||10);return [1,10,25,50,100,250,500,1000].includes(n)?n:10};
 document.addEventListener("change",e=>{if(e.target&&e.target.id=="packQty"){PQ=selectedPackQty();updOpen()}});
 try{window.CP_POWER_MODE=localStorage.getItem("cp_power_mode")||"status"}catch(e){window.CP_POWER_MODE="status"}
-document.addEventListener("change",e=>{const el=e.target;if(!el||el.id!=="cpPowerMode")return;window.CP_POWER_MODE=["status","skills","all"].includes(el.value)?el.value:"status";try{localStorage.setItem("cp_power_mode",window.CP_POWER_MODE)}catch(x){}if(typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1)});
+document.addEventListener("change",e=>{const el=e.target;if(!el||!['cpPowerMode','cpDeckPowerMode'].includes(el.id))return;window.CP_POWER_MODE=["status","skills","all"].includes(el.value)?el.value:"status";try{localStorage.setItem("cp_power_mode",window.CP_POWER_MODE)}catch(x){}if(el.id==="cpPowerMode"&&typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1);else if(el.id==="cpDeckPowerMode"&&typeof dkPaint==="function")dkPaint()});
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#m [data-open-selected]");if(!b)return;const n=selectedPackQty();askMany(cur,n)});
 const rs=c=>["mx","my","rx","ry"].forEach(k=>c.style.removeProperty("--"+k));
 let tl=0;document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.closest(".fch .cd");if(!c||tl)return;const X=e.clientX,Y=e.clientY;tl=requestAnimationFrame(()=>{tl=0;const b=c.getBoundingClientRect(),x=(X-b.left)/b.width,y=(Y-b.top)/b.height;c.style.setProperty("--mx",x*100+"%");c.style.setProperty("--my",y*100+"%");c.style.setProperty("--rx",((.5-y)*16).toFixed(1)+"deg");c.style.setProperty("--ry",((x-.5)*16).toFixed(1)+"deg")})});
@@ -1689,8 +1698,20 @@ rd:{n:"Devolver ao baralho",v:"d",f:[],ds:e=>`${TG[e.a]} volta ao fim do baralho
 dc:{n:"Inimigo descarta da reserva",v:"d",own:1,f:[["v","cartas",1]],ds:e=>`O inimigo descarta ${e.v} carta(s) da reserva`,run:(B,u,t,e)=>{const s=foe_(B);for(let k=0;k<e.v&&s.r.length;k++)gy(s,s.r.splice(Math.random()*s.r.length|0,1)[0])}},
 mm:{n:"Queimar baralho inimigo",v:"d",own:1,f:[["v","cartas",2]],ds:e=>`O inimigo perde ${e.v} carta(s) do topo do baralho`,run:(B,u,t,e)=>{foe_(B).dk.splice(0,e.v)}}
 });
-const FXG=[["⚔ Dano",["d","dp","dv","dh","mh","ex","lx"]],["💚 Vida",["h","hv","mx","rg","ls","rv","lf","sp"]],["🔼 Buff e proteção",["at","df","sh","rf","mk","ev","cr","im","tn","pu","ca","el"]],["🔽 Debuff e controle",["po","bl","st","cu","dz","ci","di"]],["⏱ Recarga e ações",["cd","ac"]],["🃏 Cartas",["dr","bk","pl","rd","dc","mm"]]];
-const runEf=(B,u,ef,i,g,skill=null)=>{const attacker=elSkillEls(skill,u),blocks=Array.isArray(ef)?ef:[];for(const e of blocks){if(!e||typeof e!=="object")continue;const X=FX[e.t];if(!X||typeof X.run!=="function"){console.warn("Bloco de habilidade desconhecido",skill&&skill.n,e&&e.t);continue}try{for(const f of X.f||[]){const key=f[0];if(e[key]===undefined||e[key]===null||e[key]==="")e[key]=f[2];else if(Array.isArray(f[3])&&!f[3].includes(e[key]))e[key]=f[2];else if(!f[3]&&typeof f[2]==="number"&&!Number.isFinite(+e[key]))e[key]=f[2]}if(!X.own&&(!e.a||!Object.prototype.hasOwnProperty.call(TG,e.a)))e.a=(["d","dp","dh","dv","mh","ex","po","bl","st","cu","dz","di","sp","ca"].includes(e.t)?"e":"s");const chance=e.ch==null?100:Math.max(0,Math.min(100,+e.ch||0));if(chance<100&&Math.random()*100>=chance)continue;let ts=X.own?[u]:tgt(B,u,e.a,g||{});if(!Array.isArray(ts))ts=[];const ev={k:"ef",a:u.id,s:B.t,ty:X.v||e.t,p:X.vp||e.p,ts:[],r:u.c.r,el:attacker[0]||"normal",el2:attacker[1]||"",n:skill&&skill.n||""};for(const t of ts){if(!t||!(X.own||t.hp>0))continue;let condT=t;if(e.co==="el"&&X.own){const foe= B.p.length>2?null:foe_(B),E=B.p.length>2?en_(B):(foe&&foe.f?foe.f.filter(Boolean):[]);condT=(g&&g.e&&g.e.hp>0?g.e:E[0])||t}const cond=e.co?CO[e.co]&&CO[e.co][1]:null;if(e.co&&typeof cond!=="function"){console.warn("Condição de habilidade desconhecida",skill&&skill.n,e.co);continue}if(cond&&!cond(B,u,condT,e.cv??50,{atacante:attacker}))continue;const rEl=elCalc(attacker,elEls(t)),hitCtx={atacante:attacker,elemento:rEl.elemento,habilidade:skill&&skill.n||""};if(e.t==="d"||e.t==="mh")Object.assign(hitCtx,{multiplicador:rEl.multiplicador,estado:rEl.estado});X.run(B,u,t,e,i,hitCtx);ev.ts.push(t.id)}if(ev.ts.length)B.ev.push(ev)}catch(err){console.warn("Habilidade/bloco ignorado",skill&&skill.n,e&&e.t,err);lg(B,`⚠ ${skill&&skill.n||"Habilidade"}: efeito ${e.t||"inválido"} ignorado`)}}};
+// Blocos extras de customização elemental e manipulação de efeitos.
+Object.assign(FX,{
+ elself:{n:"Alterar meu elemento",v:"at",own:1,f:[["x","Novo elemento","fogo",EL_KEYS.filter(k=>k!=="normal")],["y","Segundo elemento (opcional)","",["",...EL_KEYS.filter(k=>k!=="normal")]]],ds:e=>`Muda o próprio elemento para ${EL[elKey(e.x)]||"⚪"} ${ELN[elKey(e.x)]||"Normal"}${e.y?` + ${EL[elKey(e.y)]} ${ELN[elKey(e.y)]}`:""}`,run:(B,u,t,e)=>{const a=elKey(e.x)||"normal",b=elKey(e.y);u.el=a; if(b&&b!==a)u.el2=b;else delete u.el2}},
+ elcopy:{n:"Copiar elemento do alvo",v:"at",defaultTarget:"e",f:[],ds:e=>`Copia o(s) elemento(s) de ${TG[e.a]} para mim`,run:(B,u,t)=>{const a=elEls(t);u.el=a[0]||"normal";if(a[1])u.el2=a[1];else delete u.el2}},
+ elswap:{n:"Trocar elementos com o alvo",v:"at",defaultTarget:"e",f:[],ds:e=>`Troca meus elementos com ${TG[e.a]}`,run:(B,u,t)=>{const a=elEls(u),b=elEls(t);u.el=b[0]||"normal";u.el2=b[1]||"";t.el=a[0]||"normal";t.el2=a[1]||"";if(!u.el2)delete u.el2;if(!t.el2)delete t.el2}},
+ eladd:{n:"Adicionar segundo elemento ao alvo",v:"at",defaultTarget:"e",f:[["x","Segundo elemento","raio",EL_KEYS.filter(k=>k!=="normal")]],ds:e=>`Adiciona ${EL[elKey(e.x)]||"⚪"} ${ELN[elKey(e.x)]||"Normal"} a ${TG[e.a]}`,run:(B,u,t,e)=>{const a=elEls(t),x=elKey(e.x);if(x&&x!=="normal"&&x!==a[0]){t.el=a[0]==="normal"?x:a[0];if(a[0]!=="normal")t.el2=x}}},
+ elclear:{n:"Remover elementos do alvo",v:"at",defaultTarget:"e",f:[],ds:e=>`Deixa ${TG[e.a]} com elemento Normal`,run:(B,u,t)=>{t.el="normal";delete t.el2}},
+ eltarget:{n:"Mudar elemento do alvo",v:"at",defaultTarget:"e",f:[["x","Novo elemento","fogo",EL_KEYS]],ds:e=>`Muda o elemento de ${TG[e.a]} para ${EL[elKey(e.x)||"normal"]} ${ELN[elKey(e.x)||"normal"]}`,run:(B,u,t,e)=>{t.el=elKey(e.x)||"normal";delete t.el2}},
+ dispel:{n:"Dissipar buffs do alvo",v:"at",defaultTarget:"e",f:[],ds:e=>`Remove bônus positivos de ${TG[e.a]}`,run:(B,u,t)=>{t.bf=t.bf.filter(isBad)}},
+ steal:{n:"Roubar bônus do alvo",v:"at",defaultTarget:"e",f:[["n","Quantidade de bônus",1]],ds:e=>`Rouba até ${e.n||1} bônus de ${TG[e.a]}`,run:(B,u,t,e)=>{let k=0;u.bf=u.bf||[];t.bf=(t.bf||[]).filter(b=>{if(!isBad(b)&&k<Math.max(1,+e.n||1)){u.bf.push({...b});k++;return false}return true})}},
+ transfer:{n:"Transferir debuff para alvo",v:"at",defaultTarget:"a",f:[["n","Quantidade de debuffs",1]],ds:e=>`Transfere até ${e.n||1} efeitos negativos para ${TG[e.a]}`,run:(B,u,t,e)=>{let k=0;t.bf=t.bf||[];u.bf=(u.bf||[]).filter(b=>{if(isBad(b)&&k<Math.max(1,+e.n||1)){t.bf.push({...b});k++;return false}return true})}}
+});
+const FXG=[["⚔ Dano",["d","dp","dv","dh","mh","ex","lx"]],["💚 Vida",["h","hv","mx","rg","ls","rv","lf","sp"]],["🧬 Elementos",["el","elself","elcopy","elswap","eladd","elclear","eltarget"]],["🔼 Buff e proteção",["at","df","sh","rf","mk","ev","cr","im","tn","pu","ca","dispel","steal","transfer"]],["🔽 Debuff e controle",["po","bl","st","cu","dz","ci","di"]],["⏱ Recarga e ações",["cd","ac"]],["🃏 Cartas",["dr","bk","pl","rd","dc","mm"]]];
+const runEf=(B,u,ef,i,g,skill=null)=>{const attacker=elSkillEls(skill,u),blocks=Array.isArray(ef)?ef:[];for(const e of blocks){if(!e||typeof e!=="object")continue;const X=FX[e.t];if(!X||typeof X.run!=="function"){console.warn("Bloco de habilidade desconhecido",skill&&skill.n,e&&e.t);continue}try{for(const f of X.f||[]){const key=f[0];if(e[key]===undefined||e[key]===null||e[key]==="")e[key]=f[2];else if(Array.isArray(f[3])&&!f[3].includes(e[key]))e[key]=f[2];else if(!f[3]&&typeof f[2]==="number"&&!Number.isFinite(+e[key]))e[key]=f[2]}if(!X.own&&(!e.a||!Object.prototype.hasOwnProperty.call(TG,e.a)))e.a=X.defaultTarget||(["d","dp","dh","dv","mh","ex","po","bl","st","cu","dz","di","sp","ca"].includes(e.t)?"e":"s");const chance=e.ch==null?100:Math.max(0,Math.min(100,+e.ch||0));if(chance<100&&Math.random()*100>=chance)continue;let ts=X.own?[u]:tgt(B,u,e.a,g||{});if(!Array.isArray(ts))ts=[];const ev={k:"ef",a:u.id,s:B.t,ty:X.v||e.t,p:X.vp||e.p,ts:[],r:u.c.r,el:attacker[0]||"normal",el2:attacker[1]||"",n:skill&&skill.n||""};for(const t of ts){if(!t||!(X.own||t.hp>0))continue;let condT=t;if(e.co==="el"&&X.own){const foe= B.p.length>2?null:foe_(B),E=B.p.length>2?en_(B):(foe&&foe.f?foe.f.filter(Boolean):[]);condT=(g&&g.e&&g.e.hp>0?g.e:E[0])||t}const cond=e.co?CO[e.co]&&CO[e.co][1]:null;if(e.co&&typeof cond!=="function"){console.warn("Condição de habilidade desconhecida",skill&&skill.n,e.co);continue}if(cond&&!cond(B,u,condT,e.cv??50,{atacante:attacker}))continue;const rEl=elCalc(attacker,elEls(t)),hitCtx={atacante:attacker,elemento:rEl.elemento,habilidade:skill&&skill.n||""};if(e.t==="d"||e.t==="mh")Object.assign(hitCtx,{multiplicador:rEl.multiplicador,estado:rEl.estado});X.run(B,u,t,e,i,hitCtx);ev.ts.push(t.id)}if(ev.ts.length)B.ev.push(ev)}catch(err){console.warn("Habilidade/bloco ignorado",skill&&skill.n,e&&e.t,err);lg(B,`⚠ ${skill&&skill.n||"Habilidade"}: efeito ${e.t||"inválido"} ignorado`)}}};
 const trg=(B,u,si,k)=>{if(!u.ps||(B.dp||0)>=5)return;const L=u.ps.filter(p=>p.tr==k);if(!L.length)return;B.dp=(B.dp||0)+1;const t0=B.t;B.t=si;try{L.forEach(p=>{lg(B,`✦ ${u.c.n}: ${p.n}`);runEf(B,u,p.ef,-1,{},p)})}finally{B.t=t0;B.dp--}};
 const trgTeam=(B,si,k,skip)=>{const team=B.tm[si];B.p.forEach((s,j)=>{if(j!==si&&B.tm[j]!==team)return;s.f.forEach(x=>{if(x&&x!==skip&&x.hp>0)trg(B,x,j,k)})})};
 const dsc=sp=>(sp.tr&&sp.tr!="u"?TRG[sp.tr]+": ":"")+sp.ef.map(e=>(FX[e.t]?FX[e.t].ds(e):"?")+(e.co&&CO[e.co]?` · se ${CO[e.co][0].replace("X",e.cv||50)}`:"")+(e.ch&&e.ch<100?` (${e.ch}% de chance)`:"")).join(". ")+(sp.tr&&sp.tr!="u"?".":`. Recarga: ${sp.rc||3} turnos.`)+(sp.el&&sp.el!=="carta"?` Elemento próprio: ${EL[elKey(sp.el)]||"⚪"} ${ELN[elKey(sp.el)]||"Normal"}${sp.el2?` + ${EL[elKey(sp.el2)]} ${ELN[elKey(sp.el2)]}`:""}.`:` Usa o elemento da carta.`)+(sp.chargeMode==="same"?` Precisa carregar e depois usar no mesmo turno, gastando 2 ações.`:sp.chargeMode==="turns"?` Precisa carregar e aguardar ${Math.max(1,+sp.chargeTurns||1)} turno(s) antes de usar.`:``);
@@ -1817,7 +1838,7 @@ const DKS=["A","B","C"],
 dkTabs=m=>`<div class="dkt"${m?' style="margin:10px 0 0"':""}>${DKS.map(x=>`<button data-dkt="${x}" class="${(S.dka||"A")==x?"on":""}">Deck ${x}</button>`).join("")}</div>`,
 dkTrocar=x=>{const a=S.dka||"A";if(x==a||!DKS.includes(x))return;const cur=dkIds();S.dks=S.dks||{};S.dks[a]=cur;const novo=!S.dks[x];S.dk=(novo?cur:S.dks[x]).slice();S.dka=x;DSEL=null;save();tab=="a"?dkPaint():render(1);toast(novo?`<b>Deck ${x}</b> criado a partir do ${a} · mude as cartas à vontade`:`<b>Deck ${x}</b> ativo`)};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-dkt]");b&&dkTrocar(b.dataset.dkt)});
-const dkPanel=()=>{const d=dkv(),count=d.filter(Boolean).length,pow=Math.round(d.reduce((n,c)=>n+(c?(window.cpPowerScore?cpPowerScore(c,"all"):Math.sqrt(Math.max(0,c.hp*c.atk))*mult(c)):0),0));return `${dkTabs()}<div class="dkh"><b>Deck de batalha<small>12 cartas diferentes · 1 de cada</small></b><span class="${d.length==12?"ok":""}">${d.length}/12</span></div><div class="cp-deck-power"><small>⚔ Poder do deck</small><b>${count?fmt(pow):"—"}</b></div><div class="dkg">${Array.from({length:12},(_,i)=>dkSlot(d[i],i)).join("")}</div><div class="two"><button class="bt gh" data-dk="auto">Preencher</button><button class="bt gh" data-dk="clear">Limpar</button></div>`};
+const dkPanel=()=>{const d=dkv(),count=d.filter(Boolean).length,mode=["status","skills","all"].includes(window.CP_POWER_MODE)?window.CP_POWER_MODE:"status",labels={status:"Apenas status",skills:"Só habilidades",all:"Status + habilidades"},pow=Math.round(d.reduce((n,c)=>n+(c?(window.cpPowerScore?cpPowerScore(c,mode):Math.sqrt(Math.max(0,c.hp*c.atk))*mult(c)):0),0));return `${dkTabs()}<div class="dkh"><b>Deck de batalha<small>12 cartas diferentes · 1 de cada</small></b><span class="${d.length==12?"ok":""}">${d.length}/12</span></div><div class="cp-deck-power"><div><small>⚔ Poder · ${labels[mode]}</small><b>${count?fmt(pow):"—"}</b></div><label class="cp-deck-mode"><small>Critério do poder</small><select id="cpDeckPowerMode" aria-label="Critério do poder do deck"><option value="status"${mode==="status"?" selected":""}>Apenas status</option><option value="skills"${mode==="skills"?" selected":""}>Só habilidades</option><option value="all"${mode==="all"?" selected":""}>Status + habilidades</option></select></label></div><div class="dkg">${Array.from({length:12},(_,i)=>dkSlot(d[i],i)).join("")}</div><div class="two"><button class="bt gh" data-dk="auto">Preencher</button><button class="bt gh" data-dk="clear">Limpar</button></div>`};
 function dkBar(){const el=$("dka");if(!el)return;const c=DSEL&&byId(DSEL);el.hidden=!c;if(c)el.innerHTML=`<span><b>${c.n}</b> · Rank ${R[c.r][0]}</span><button class="bt" data-dk="use">Usar</button><button class="bt gh" data-dk="info">Ficha</button>`}
 function dkPaint(){
  const p=$("dkp");if(!p)return;if(DSEL&&!(S.inv[DSEL]>0))DSEL=null;
@@ -2054,7 +2075,7 @@ zb.onclick=e=>{const b=e.target.closest("[data-z]");if(!b)return;const a=b.datas
 // ----- ABA BATALHA -----
 const btl=()=>{const h=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Batalha</span></div>`,nt=t=>`<p class="mut ctr" style="margin:0 0 14px;letter-spacing:.04em;text-transform:none">${t}</p>`;
  const k=S.ar,nx=TR[k+1],fd=S.fd.d===day()?S.fd.n:0;
- return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button><button class="bt cy" data-cp-raid-open style="margin-top:10px">⚔️ Enfrentar Boss em equipe</button>${window.cpSoloBossAvailable&&window.cpSoloBossAvailable()?`<button class="bt gh" data-cp-solo-boss style="margin-top:8px">👑 Enfrentar Boss sozinho</button>`:""}${dkTabs(1)}<button class="bt gh" data-bz="deck" style="margin-top:10px">Deck ${S.dka||"A"} · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
+ return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button><button class="bt cy" data-cp-raid-open style="margin-top:10px">👑 Enfrentar Boss</button>${dkTabs(1)}<button class="bt gh" data-bz="deck" style="margin-top:10px">Deck ${S.dka||"A"} · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
  `<details class="fd"><summary>Lutar com amigo</summary><div class="cvb"><p>No mesmo celular. Seu amigo manda o código do deck dele. Vencendo: ${gem}<b>${CONFIG.amigoFrag}</b> · hoje <b>${Math.min(fd,3)}/3</b> lutas · sem troféus.</p><input class="cdi" id="fcd" placeholder="Cole o código do deck do amigo" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="bt cy" data-bz="friend" style="margin-top:10px">Lutar com amigo</button><button class="bt gh" data-bz="mycode" style="margin-top:10px">Copiar o código do meu deck</button></div></details>`};
 document.addEventListener("click",e=>{if(e.target.closest("[data-cp-solo-boss]")){window.cpOpenSoloBoss&&window.cpOpenSoloBoss();return}const b=e.target.closest("[data-bz]");if(!b)return;const a=b.dataset.bz;
  if(a=="fight")startArena();else if(a=="boss")startArena(1);else if(a=="deck"){if(!dkv().length)dkf();DSEL=null;tab="a";render()}else if(a=="back"){BV="";render(1)}else if(a=="auto"){dkf();render(1)}
@@ -3653,9 +3674,15 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   }
 
   window.cpSoloBossAvailable=()=>!!raidCfg();
-  function raidSoloPrompt(){const r=raidCfg(),c=r&&byId(r.cardId);if(!c)return toast("O ADM ainda não configurou uma carta Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");modal(`<h4>👑 Enfrentar Boss sozinho</h4><div class="cvb"><p><b>${safeName(c.n)}</b></p><p>Este modo foi balanceado para equipe. Sozinho será <b>muito difícil</b>: o Boss terá reforços e força aumentada.</p><p>Entre com um deck melhorado e habilidades preparadas. A batalha é local e não cria sala online.</p></div><button class="bt cy" data-raid-action="solo-start">Enfrentar sozinho</button><button class="bt gh" data-raid-action="close">Voltar</button>`)}
-  function raidSoloStart(){const r=raidCfg(),c=r&&byId(r.cardId),raw=dkv()||[],u=raw.map(x=>{const cardData=x&&x.c?x.c:typeof x==="string"?byId(x):x;if(!cardData)return null;return{c:cardData,lv:lvl(cardData),s:1}}).filter(Boolean);if(!r||!c)return toast("O ADM ainda não configurou uma carta Boss.");if(u.length<12)return toast("Monte um deck com 12 cartas antes de enfrentar o Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");const scale=Math.max(2,+r.power||12)*1.35,bossDeck=Array.from({length:12},()=>({c,lv:0,s:scale}));zgo({n:ME.n||"Você",u},{n:"👑 Boss · desafio solo",u:bossDeck},{m:"a",k:0,ai:2,b:0,soloBoss:1,raidConfig:{fragments:+r.fragments||0,packs:+r.packs||0,bossName:c.n,cardId:c.id,dropMode:r.dropMode||"none",dropChance:+r.dropChance||0}})}
-  async function raidMenuOpen(){
+  function raidSoloPrompt(){const r=raidCfg(),c=r&&byId(r.cardId);if(!c)return toast("O ADM ainda não configurou uma carta Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");modal(`<h4>👑 Enfrentar Boss sozinho</h4><div class="cvb"><p><b>${safeName(c.n)}</b></p><p>O Boss entra como <b>uma única carta</b>, com força ampliada e apenas uma vida. Quando essa carta cair, a luta termina.</p><p>Entre com um deck melhorado e habilidades preparadas. A batalha é local e não cria sala online.</p></div><button class="bt cy" data-raid-action="solo-start">Enfrentar sozinho</button><button class="bt gh" data-raid-action="close">Voltar</button>`)}
+  function raidSoloStart(){const r=raidCfg(),c=r&&byId(r.cardId),raw=dkv()||[],u=raw.map(x=>{const cardData=x&&x.c?x.c:typeof x==="string"?byId(x):x;if(!cardData)return null;return{c:cardData,lv:lvl(cardData),s:1}}).filter(Boolean);if(!r||!c)return toast("O ADM ainda não configurou uma carta Boss.");if(u.length<12)return toast("Monte um deck com 12 cartas antes de enfrentar o Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");const scale=Math.max(2,+r.power||12)*1.35,bossDeck=[{c,lv:0,s:scale}];zgo({n:ME.n||"Você",u},{n:"👑 Boss · desafio solo",u:bossDeck},{m:"a",k:0,ai:2,b:0,soloBoss:1,singleBoss:1,raidConfig:{fragments:+r.fragments||0,packs:+r.packs||0,bossName:c.n,cardId:c.id,dropMode:r.dropMode||"none",dropChance:+r.dropChance||0}})}
+  function raidMenuOpen(){
+    const r=raidCfg(),c=r&&byId(r.cardId);
+    if(!c)return toast("O ADM ainda não configurou uma carta Boss.");
+    if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
+    modal(`<h4>👑 Desafio Boss</h4><div class="cvb"><p><b>${safeName(c.n)}</b></p><p>Enfrente a mesma carta Boss sozinho ou reúna uma equipe. O Boss é uma única carta; quando ela for derrotada, a luta acaba.</p></div><div class="cp-boss-choice"><button class="bt cy" data-raid-action="choose-solo">⚔️ Modo solo</button><button class="bt" data-raid-action="choose-team">👥 Em equipe</button></div><button class="bt gh" data-raid-action="close">Cancelar</button>`);
+  }
+  async function raidTeamMenuOpen(){
     if(!U||!U.uid)return toast("Entre na sua conta para iniciar um Boss Raid.");
     if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
     if(!raidCfg())return toast("O ADM ainda não configurou uma carta Boss.");
@@ -3880,7 +3907,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   };
 
   const nbBase=nb;
-  nb=function(a,b,o){const B=nbBase.apply(this,arguments);if(o&&o.m==="boss"&&B.p[0])B.p[0].life=1;return B};
+  nb=function(a,b,o){const B=nbBase.apply(this,arguments);if(o&&o.m==="boss"&&B.p[0])B.p[0].life=1;if(o&&o.singleBoss&&B.p[1])B.p[1].life=1;return B};
 
   // Layout do raid: carta Boss isolada no topo e jogadores aliados abaixo.
   const zgBase=zg;
@@ -3991,6 +4018,8 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
     e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
     const a=action.dataset.raidAction,id=action.dataset.raidId;
     if(a==="close"){g("cpm")&&g("cpm").remove();return}
+    if(a==="choose-solo"){g("cpm")&&g("cpm").remove();return raidSoloPrompt()}
+    if(a==="choose-team"){g("cpm")&&g("cpm").remove();return raidTeamMenuOpen()}
     if(a==="solo-start"){g("cpm")&&g("cpm").remove();raidSoloStart();return}
     if(a==="save-admin"){
       if(!(typeof AD!=="undefined"&&AD))return toast("Apenas o ADM pode salvar esta configuração.");
@@ -5100,7 +5129,7 @@ html[data-tema="v2"] #cfg .pr-h{background:#fff;border:2px solid var(--ik);borde
  */
 
 /* v2.3 · ADM: criar e editar no mesmo lugar */
-#cfg #ds_n,#cfg .at[data-adm="pds_h"],#cfg .at[data-adm="pds_e"],#cfg .at[data-adm="pds_v"]{display:none!important}
+#cfg #ds_n,#cfg .at[data-adm="pds_h"],#cfg .at[data-adm="pds_e"],#cfg .at[data-adm="pds_v"]{display:none!important} /* Abas unificadas dentro de Cartas e Pacotes. */
 #cfg .ytb{display:flex;gap:4px;margin:0 0 14px;padding:4px;border-radius:14px;background:#ffffff0d}
 #cfg .ytb button{flex:1;padding:10px 4px;border-radius:11px;font-size:.74rem;font-weight:800;color:var(--mut)}
 #cfg .ytb button.on{background:#ffffff2e;color:#fff}
@@ -5364,10 +5393,6 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
 
 /* Coleção Primata · pacote de melhorias 2026-11 */
 .cp-dkitem{position:relative;min-width:0}.cp-dkitem>.cd{width:100%}
-.cp-fav{position:absolute;z-index:8;right:4px;top:4px;min-width:30px;height:30px;padding:0 7px;border-radius:99px;background:#120d1bd9;border:1px solid #ffffff40;color:#fff;font-size:1rem;line-height:1}
-.cp-fav.on{color:#ffe27a;border-color:#ffe27a;background:#251b09e8}
-.fls .cp-fav-filter{flex:none;padding:9px 10px;border:1px solid #ffffff20;border-radius:10px;background:#ffffff0c;color:var(--fg);font-size:.68rem;font-weight:900}
-.fls .cp-fav-filter.on{color:#17120a;background:#ffe27a;border-color:#ffe27a}
 .cd .cpfoil{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.42;border-radius:inherit}
 .cd .cpfoil.holo{background:linear-gradient(118deg,transparent 8%,#ff53c899 24%,#51f7e899 39%,#ffe97899 53%,#8b70ff99 68%,transparent 88%);background-size:230% 230%;mix-blend-mode:screen;animation:cpFoil 4.5s ease-in-out infinite alternate}
 .cd .cpfoil.gold{opacity:.52;background:linear-gradient(120deg,transparent 10%,#fff3b0aa 24%,#d69a25aa 40%,#fff0a6bb 55%,#a66a10aa 72%,transparent 90%);background-size:220% 220%;mix-blend-mode:screen;animation:cpFoil 5s ease-in-out infinite alternate}
@@ -5408,7 +5433,7 @@ html.cp-lite .cd,html.cp-lite .cd *,html.cp-lite .pack,html.cp-lite .pack *{anim
 html.cp-lite #a3{min-height:90px;background:#ffffff08;border-radius:12px}
 html.cp-lite #a3 .a3v{display:block!important;padding:26px 12px;text-align:center;color:var(--mut);font-size:.76rem}
 html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
-@media(max-width:360px){.cp-fav{min-width:26px;height:26px;font-size:.85rem}.cp-showcase-card{width:58px;flex-basis:58px}}
+@media(max-width:360px){
 
 </style>
 <script id="cp-update-js">
@@ -5448,35 +5473,16 @@ html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-dura
     a3go=function(){if(window.cpLite){const h=$("a3");if(h){h.className="a3 on";h.innerHTML='<div class="a3v">Arena 3D desativada pelo Modo leve</div>'}return}return cpA3Original.apply(this,arguments)};
   }
 
-  // Favorites in the album, including cards not yet owned.
-  let cpFavOnly=false;
-  const isFav=id=>S.fav.includes(id);
-  const paintFavs=()=>{
-    const host=$("dkal");if(!host)return;
-    host.querySelectorAll("[data-cid]").forEach(el=>{
-      const id=el.dataset.cid;if(!id)return;
-      let b=el.querySelector(":scope > .cp-fav");
-      if(!b){b=document.createElement("button");b.type="button";b.className="cp-fav";b.dataset.cpFav=id;b.setAttribute("aria-label","Favoritar carta");el.append(b)}
-      b.textContent=isFav(id)?"★":"☆";b.classList.toggle("on",isFav(id));b.setAttribute("aria-pressed",String(isFav(id)));
-      el.hidden=!!(cpFavOnly&&!isFav(id));
-    });
-    const fl=host.querySelector(".grid");let empty=host.querySelector(".cp-fav-empty");
-    const count=host.querySelectorAll("[data-cid]:not([hidden])").length;
-    if(cpFavOnly&&count===0){if(!empty){empty=document.createElement("p");empty.className="cp-fav-empty mut";empty.textContent="Nenhuma carta favorita neste resultado.";host.append(empty)}}else if(empty)empty.remove();
-    const bar=document.querySelector(".flt .fls");if(bar&&!bar.querySelector(".cp-fav-filter")){const f=document.createElement("button");f.type="button";f.className="cp-fav-filter";f.dataset.cpFavFilter="1";bar.append(f)}
-    const f=document.querySelector(".cp-fav-filter");if(f){f.classList.toggle("on",cpFavOnly);f.textContent=cpFavOnly?"★ Favoritas":"☆ Favoritas";f.setAttribute("aria-pressed",String(cpFavOnly))}
-  };
-  if(typeof dkPaint==="function"){
-    const cpDkOriginal=dkPaint;
-    dkPaint=function(){const r=cpDkOriginal.apply(this,arguments);try{paintFavs()}catch(e){console.warn("favoritos",e)}return r};
-  }
+  // Favoritos ficam somente na ficha da carta; a coleção permanece limpa.
+  const isFav=id=>Array.isArray(S.fav)&&S.fav.includes(id);
   document.addEventListener("click",e=>{
-    const fav=e.target.closest&&e.target.closest("[data-cp-fav]");
-    if(fav){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();const id=fav.dataset.cpFav;S.fav=isFav(id)?S.fav.filter(x=>x!==id):[...S.fav,id];save();paintFavs();return}
-    const filter=e.target.closest&&e.target.closest("[data-cp-fav-filter]");
-    if(filter){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();cpFavOnly=!cpFavOnly;paintFavs();return}
     const vf=e.target.closest&&e.target.closest("[data-cp-viewfav]");
-    if(vf){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();const id=vf.dataset.cpViewfav;S.fav=isFav(id)?S.fav.filter(x=>x!==id):[...S.fav,id];save();const b=document.querySelector("[data-cp-viewfav]");if(b)b.textContent=isFav(id)?"★ Favorita":"☆ Favoritar";paintFavs();return}
+    if(!vf)return;
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+    const id=vf.dataset.cpViewfav;S.fav=Array.isArray(S.fav)?S.fav:[];
+    S.fav=isFav(id)?S.fav.filter(x=>x!==id):[...S.fav,id];
+    save();vf.textContent=isFav(id)?"★ Favorita":"☆ Favoritar";
+    vf.setAttribute("aria-pressed",String(isFav(id)));
   },true);
 
   // Profile showcase/title/wishlist helpers are also used by the online Firebase profile views.
@@ -5923,7 +5929,10 @@ html[data-tema="royale"] #cfg .adm-editor-section{background:#1b4a87;border-colo
     ds_k:["📦","Pacotes","Cartas, chances, preço e aparência dos pacotes"],
     ds_l:["🚀","Publicar cartas","Rascunhos e lançamentos para todos os jogadores"],
     ds_i:["📥","Importar ficha","Transformar uma ficha criada por IA em carta"],
-    ds_x:["⚖️","Equilíbrio das cartas","Referências de vida, dano e raridade"],
+    ds_h:["✨","Habilidades","Criar efeitos, condições e habilidades por carta"],
+    ds_e:["🧬","Elementos","Tipos, combinações e relações elementais"],
+    ds_v:["🎨","Visual dos pacotes","Arte, formato, cores e textos dos pacotes"],
+    ds_x:["⚖️","Equilíbrio e balanceamento","Ajustar cartas individualmente ou em lote por rank"],
     ds_b:["⚔️","Batalhas e arenas","Troféus, turnos, regras e chefes de arena"],
     ds_ev:["👑","Boss e eventos","Boss cooperativo, torneios e eventos especiais"],
     ds_q:["🏆","Prêmios de batalha","Cartas especiais e recompensas por atividade"],
@@ -5936,7 +5945,7 @@ html[data-tema="royale"] #cfg .adm-editor-section{background:#1b4a87;border-colo
     ds_z:["🗑️","Excluir conteúdo","Zona de risco para exclusões permanentes"]
   };
   const groups=[
-    {title:"Conteúdo do jogo",desc:"Crie, edite e publique tudo o que os jogadores podem encontrar.",ids:["ds_c","ds_k","ds_l","ds_i","ds_x"]},
+    {title:"Conteúdo e cartas",desc:"Crie cartas, importe fichas, gerencie pacotes e publique atualizações.",ids:["ds_c","ds_k","ds_l","ds_i","ds_x"]},
     {title:"Batalhas e eventos",desc:"Tudo relacionado a combate, arenas, Boss e competições.",ids:["ds_b","ds_ev","ds_q"]},
     {title:"Progressão e recompensas",desc:"Economia, missões, presentes e evolução dos jogadores.",ids:["ds_r","ds_m","ds_t"]},
     {title:"Sistema e manutenção",desc:"Acompanhamento, testes, backups e operações administrativas.",ids:["ds_p","ds_g","ds_s","ds_z"]}
@@ -6990,14 +6999,6 @@ html.cp-reduce .cd.cp-art-only.k8>.cp-card-frame::before{animation:cpRaritySpin 
 /* Sem emojis/ícones sobre a arte. O botão de favorito permanece funcional no espaço externo. */
 .cd.cp-art-only .cp-card-el-mark{display:none !important}
 #dkal .grid{row-gap:32px !important}
-#dkal .dkc > .cp-fav{
-  top:auto !important;bottom:-28px !important;right:4px !important;z-index:12 !important;
-  min-width:23px !important;width:23px !important;height:23px !important;padding:0 !important;
-  display:grid !important;place-items:center !important;font-size:.78rem !important;
-  background:#17151deF !important;border:1px solid #ffffff65 !important;
-  box-shadow:0 2px 7px #0009 !important;
-}
-#dkal .dkc > .cp-fav.on{color:#ffe27a !important;border-color:#ffe27a !important}
 @media(prefers-reduced-motion:reduce){
  .cd.cp-art-only.img.fo::before,.cd.cp-art-only.img.sw::after,
  .cd.cp-art-only.img.sp>.art::after,.cd.cp-art-only.k6.hi,.cd.cp-art-only.k7.hi,
@@ -7106,57 +7107,17 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
 .cd.cp-art-only.k5:not(.lock)>.cp-card-frame::before{
   filter:drop-shadow(0 0 3px #b28aff99)!important;
 }
-.cd.cp-art-only.k5:not(.lock)>.a-spectrum{
-  position:absolute;inset:0;z-index:5;display:block;overflow:hidden;
-  border-radius:inherit;pointer-events:none;text-decoration:none;
-}
-.cd.cp-art-only.k5:not(.lock)>.a-spectrum::before{
-  content:"";position:absolute;inset:-38%;
-  background:conic-gradient(from 0deg,transparent 0 26deg,#a979ff22 55deg,transparent 92deg,#80d9ff24 138deg,transparent 180deg,#d7a0ff26 235deg,transparent 300deg);
-  -webkit-mask-image:radial-gradient(ellipse closest-side,transparent 48%,#000 91%);
-  mask-image:radial-gradient(ellipse closest-side,transparent 48%,#000 91%);
-  opacity:.8;animation:cpARankOrbit 19s linear infinite;
-}
-.cd.cp-art-only.k5:not(.lock)>.a-spectrum::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(112deg,transparent 18%,#a77cff0d 34%,#f4eaff55 49%,#8ed8ff25 60%,transparent 78%);
-  background-size:230% 100%;background-position:100% 50%;
-  mix-blend-mode:screen;opacity:.62;
-  animation:cpARankSheen 8s ease-in-out infinite alternate;
-}
-@keyframes cpARankOrbit{to{transform:rotate(360deg)}}
-@keyframes cpARankSheen{to{background-position:0% 50%}}
 .cd.cp-art-only.k5:not(.lock).fo::before{opacity:.44!important}
 
-/* RANK SSS · arco-íris vivo que atravessa a carta inteira, não só a borda.
-   A transparência preserva a leitura e a ilustração original. */
-.cd.cp-art-only.k8:not(.lock)>.sss-spectrum{
-  position:absolute;inset:0;z-index:5;display:block;overflow:hidden;
-  border-radius:inherit;pointer-events:none;text-decoration:none;
+/* SSS: remove completamente as camadas LED/holográficas sobre a imagem.
+   A arte fica limpa; a raridade permanece no aro prismático único e na aura externa. */
+.cd.cp-art-only.k8:not(.lock)>.aur,
+.cd.cp-art-only.k8:not(.lock)>.emb,
+.cd.cp-art-only.k8:not(.lock)>.art::after,
+.cd.cp-art-only.k8:not(.lock).img.fo::before,
+.cd.cp-art-only.k8:not(.lock).img.sw::after{
+  display:none!important;content:none!important;animation:none!important;background:none!important;opacity:0!important;
 }
-.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::before{
-  content:"";position:absolute;inset:-42%;
-  background:conic-gradient(from 0deg at 50% 50%,
-    #ff4fd822 0deg,#ffe27a22 62deg,#5effc722 125deg,
-    #55dfff26 190deg,#9d72ff26 250deg,#ff4fd822 360deg);
-  opacity:.9;filter:blur(17px);mix-blend-mode:screen;
-  animation:cpSSSColorOrbit 13s linear infinite;
-}
-.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::after{
-  content:"";position:absolute;top:0;bottom:0;left:-92%;width:284%;
-  background:linear-gradient(108deg,
-    transparent 0%,#ff4fd82e 12%,#ffe27a35 25%,#5effc735 39%,
-    #55dfff3b 53%,#9d72ff3a 67%,#ff4fd832 82%,transparent 100%);
-  mix-blend-mode:screen;opacity:.7;
-  transform:translateX(-5%);
-  animation:cpSSSRainbowFlow 6.2s ease-in-out infinite alternate;
-}
-@keyframes cpSSSColorOrbit{to{transform:rotate(360deg)}}
-@keyframes cpSSSRainbowFlow{
-  from{transform:translateX(-7%)}
-  to{transform:translateX(7%)}
-}
-.cd.cp-art-only.k8:not(.lock).fo::before{opacity:.29!important}
 .cd.cp-art-only.k8:not(.lock){
   box-shadow:0 5px 18px #000b,0 0 15px #ff63c5aa,
     0 0 29px #a079ff88,0 0 39px #42dfe866!important;
@@ -7167,183 +7128,183 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
   to{filter:brightness(1.09);}
 }
 
-/* Na grade de resultados, os brilhos especiais continuam ativos. */
-.sum.big .cd.cp-art-only.k5>.a-spectrum::before{
-  animation:cpARankOrbit 19s linear infinite!important;
-}
-.sum.big .cd.cp-art-only.k5>.a-spectrum::after{
-  animation:cpARankSheen 8s ease-in-out infinite alternate!important;
-}
-.sum.big .cd.cp-art-only.k8>.sss-spectrum::before{
-  animation:cpSSSColorOrbit 13s linear infinite!important;
-}
-.sum.big .cd.cp-art-only.k8>.sss-spectrum::after{
-  animation:cpSSSRainbowFlow 6.2s ease-in-out infinite alternate!important;
-}
+/* A grade mantém o mesmo aro ametista da carta, sem uma moldura sobreposta. */
 .sum.big .cd.cp-art-only.k8>.rbw>i{
   animation:spin 3.5s linear infinite!important;
 }
 
 /* Respeita a preferência do aparelho por movimento reduzido, sem apagar as cores. */
 @media(prefers-reduced-motion:reduce){
-  .cd.cp-art-only.k5>.a-spectrum::before,
-  .cd.cp-art-only.k5>.a-spectrum::after,
-  .cd.cp-art-only.k8>.sss-spectrum::before,
-  .cd.cp-art-only.k8>.sss-spectrum::after{
-    animation:none!important;
-  }
-  .cd.cp-art-only.k5>.a-spectrum::after{background-position:50% 50%}
-  .cd.cp-art-only.k8>.sss-spectrum::after{transform:none}
   .cd.cp-art-only.k8:not(.lock){animation:none!important;filter:none!important}
 }
 </style>
 
 
 
-<style id="cp-sss-led-film-final">
-/* RANK SSS — película LED difusa sobre a ilustração inteira.
-   Não cria moldura: o aro original continua sendo a única borda. */
-.cd.cp-art-only.k8:not(.lock)>.sss-spectrum{
-  display:block!important;
-  position:absolute!important;
-  inset:0!important;
-  z-index:5!important;
-  overflow:hidden!important;
-  border-radius:inherit!important;
-  pointer-events:none!important;
-  text-decoration:none!important;
-}
-/* Remove o reflexo colorido linear antigo: a película agora é feita de luzes difusas. */
-.cd.cp-art-only.k8>.art::after{
-  content:none!important;
-  display:none!important;
-}
-.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::before{
-  content:""!important;
-  position:absolute!important;
-  inset:-10%!important;
-  background-image:
-    radial-gradient(ellipse 58% 48% at 16% 18%,rgba(255,75,190,.46) 0%,transparent 73%),
-    radial-gradient(ellipse 58% 50% at 84% 18%,rgba(72,211,255,.43) 0%,transparent 74%),
-    radial-gradient(ellipse 56% 50% at 82% 84%,rgba(166,100,255,.46) 0%,transparent 74%),
-    radial-gradient(ellipse 58% 52% at 16% 82%,rgba(255,218,91,.39) 0%,transparent 74%),
-    radial-gradient(ellipse 48% 44% at 50% 48%,rgba(85,255,190,.29) 0%,transparent 76%)!important;
-  background-size:155% 155%,155% 155%,155% 155%,155% 155%,145% 145%!important;
-  background-position:0% 0%,100% 0%,100% 100%,0% 100%,50% 50%!important;
-  background-repeat:no-repeat!important;
-  opacity:.72!important;
-  mix-blend-mode:soft-light!important;
-  filter:saturate(1.08)!important;
-  animation:cpSSSLedDrift 29s ease-in-out infinite alternate,cpSSSLedHue 48s linear infinite!important;
-  will-change:background-position,filter;
-}
-@keyframes cpSSSLedDrift{
-  0%{background-position:0% 0%,100% 0%,100% 100%,0% 100%,50% 50%;}
-  34%{background-position:24% 70%,74% 12%,88% 48%,12% 92%,64% 28%;}
-  68%{background-position:90% 24%,12% 76%,28% 16%,82% 70%,34% 78%;}
-  100%{background-position:100% 100%,0% 100%,0% 0%,100% 0%,50% 50%;}
-}
-@keyframes cpSSSLedHue{
-  from{filter:hue-rotate(-8deg) saturate(1.06);}
-  to{filter:hue-rotate(352deg) saturate(1.12);}
-}
-/* O aro prismático faz uma volta bem mais lenta. */
-.cd.cp-art-only.k8>.rbw>i,
-.sum.big .cd.cp-art-only.k8>.rbw>i{
-  animation:spin 19s linear infinite!important;
-}
-/* Reflexo branco opcional: uma passagem mais lenta, seguida de uma pausa longa. */
-.cd.cp-art-only.k8.img.sw::after{
-  z-index:6!important;
-  opacity:.48!important;
-  animation:cpSSSReflectionPause 15s ease-in-out infinite!important;
-}
-@keyframes cpSSSReflectionPause{
-  0%,16%{transform:translateX(-125%);}
-  34%{transform:translateX(125%);}
-  100%{transform:translateX(125%);}
-}
-/* A respiração externa também fica mais calma, sem pulsos rápidos. */
-.cd.cp-art-only.k8:not(.lock){
-  animation:cpSSSCardAura 6.4s ease-in-out infinite alternate!important;
-}
-@media(prefers-reduced-motion:reduce){
-  .cd.cp-art-only.k8:not(.lock)>.sss-spectrum::before,
-  .cd.cp-art-only.k8>.rbw>i,
-  .cd.cp-art-only.k8.img.sw::after,
-  .cd.cp-art-only.k8:not(.lock){animation:none!important;}
-}
+
+<style id="cp-maintenance-2026-css">
+/* Camada modular de manutenção · não cria uma segunda borda para cartas. */
+.cd.cp-art-only.k8>.rbw>i,.sum.big .cd.cp-art-only.k8>.rbw>i{animation:spin 12s linear infinite!important}
+.cd.cp-art-only.k8:not(.lock){animation:pu 3.6s ease-in-out infinite alternate!important}
+#skip{z-index:50!important;pointer-events:auto!important;touch-action:manipulation;isolation:isolate}
+.cp-duplicate-count{position:absolute;right:5px;bottom:5px;z-index:8;min-width:22px;height:22px;padding:0 6px;display:grid;place-items:center;border:1px solid #ffffff8a;border-radius:999px;background:#141018eF;color:#fff;font-size:.63rem;font-weight:900;line-height:1;box-shadow:0 2px 8px #0008;pointer-events:none}
+.cp-sheet-fav{display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:2px 0 8px;padding:7px 12px;border:1px solid #d8b45e88;border-radius:99px;background:#d8b45e16;color:var(--fg);font-size:.68rem;font-weight:900}
+.cp-sheet-fav[aria-pressed="true"]{background:#d8b45e;color:#211708;border-color:#ffe5a0}
+.cp-card-actions{grid-template-columns:1fr!important}
+#dkal .cp-fav,#dkal .cp-fav-filter{display:none!important}
+.cp-deck-power{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cp-deck-power>div{display:grid;gap:2px}.cp-deck-power>div small,.cp-deck-mode small{display:block;color:var(--mut);font-size:.65rem}.cp-deck-power>div b{font-size:1.15rem}
+.cp-deck-mode{display:grid;gap:4px;min-width:145px;flex:1;max-width:220px}.cp-deck-mode select{width:100%;min-width:0;padding:8px 10px;border:1px solid #ffffff25;border-radius:10px;background:var(--sf,#252528);color:var(--fg);font:inherit;font-size:.7rem}
+.cp-boss-choice{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+#yrm .yb{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:9px!important;max-height:calc(100dvh - 24px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;overflow:auto!important;padding:12px!important}
+#yrm .yr-head,#yrm .yr-theme,#yrm .yr-credit{grid-column:1/-1}
+#yrm .yr-head h3{font-size:.95rem}#yrm .yr-head p{font-size:.62rem}
+#yrm .yr-menu-group{min-width:0;padding:9px!important}
+#yrm .yr-menu-group h4{margin-bottom:6px!important;font-size:.6rem!important}
+#yrm .yr-menu-actions{grid-template-columns:1fr!important;gap:5px!important}
+#yrm .yr-menu-actions button{min-height:36px!important;padding:7px 9px!important;font-size:.66rem!important}
+#yrm .yr-theme{padding:9px!important}#yrm .yt{gap:5px!important}#yrm .yt button{min-height:34px!important;padding:6px!important;font-size:.62rem!important}
+#cfg .adm-home-intro{padding:12px 14px!important}#cfg .adm-home-intro h2{font-size:1.2rem!important}#cfg .adm-home-intro p{font-size:.68rem!important}
+#cfg .adm-home-group{padding:10px!important}#cfg .adm-home-group>header{margin-bottom:7px!important}
+#cfg .adm-home-grid{gap:6px!important}#cfg .at{min-height:66px!important;padding:8px!important;gap:3px 7px!important}#cfg .at b{font-size:.68rem!important}#cfg .at small{font-size:.57rem!important;line-height:1.25!important}
+#fc .fch{padding:12px 12px calc(24px + env(safe-area-inset-bottom,0px))!important;gap:8px!important}
+#fc .fch>.cd{width:min(66vw,250px)!important;margin:0 auto 2px!important}
+#fc .fch>h2{margin:3px 0 0!important;font-size:1.1rem!important;text-align:center}
+#fc .fch>.rar{display:flex;flex-wrap:wrap;justify-content:center;gap:5px!important;margin:0 0 4px!important}
+#fc .fch>.sg{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px!important;padding:6px 0;background:var(--bg,#161618);border-bottom:1px solid #ffffff18}
+#fc .fch>.sg button{min-width:0;padding:9px 4px!important;font-size:.63rem!important}
+#fc .fch>.pnl{padding:4px 0!important}
+#fc .fch .cp-card-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px!important}
+#dkal .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px!important}
+#dkal .flt .flp{padding:10px!important}#dkal .flt .flp[hidden]{display:none}
+.cp-balance-panel{margin:15px 0;padding:14px;border:1px solid var(--ui-line,#ffffff20);border-radius:16px;background:var(--ui-surface,rgba(255,255,255,.04));display:grid;gap:12px}
+.cp-balance-panel h3{margin:0;font-size:.95rem}.cp-balance-panel p{margin:0;color:var(--mut);font-size:.68rem;line-height:1.5}
+.cp-balance-panel label{display:grid;gap:4px;color:var(--mut);font-size:.68rem;font-weight:800}
+.cp-balance-panel input,.cp-balance-panel select{width:100%;min-width:0;padding:9px;border:1px solid #ffffff24;border-radius:9px;background:var(--bg,#161618);color:var(--fg);font:inherit;font-size:.72rem}
+.cp-bal-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cp-bal-toolbar .bt{padding:10px 7px;font-size:.68rem;letter-spacing:.04em}
+.cp-bal-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;max-height:270px;overflow:auto;padding:2px}
+.cp-bal-card{display:flex!important;grid-template-columns:auto 1fr!important;align-items:center;gap:7px!important;min-width:0;padding:7px;border:1px solid #ffffff12;border-radius:9px;background:#ffffff06;color:var(--fg)!important;font-size:.64rem!important}
+.cp-bal-card input{width:16px!important;height:16px!important;flex:none;padding:0}
+.cp-bal-card span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cp-bal-card small{color:var(--mut);font-weight:900}
+.cp-bal-ranks{display:grid;gap:6px}.cp-bal-rank{border:1px solid #ffffff16;border-radius:10px;padding:8px;background:#ffffff05}.cp-bal-rank summary{font-size:.7rem;font-weight:900;cursor:pointer}.cp-bal-rangegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}.cp-bal-rangegrid label{font-size:.58rem!important}.cp-bal-rangegrid input{padding:7px 5px!important;font-size:.65rem!important}
+.cp-bal-status{min-height:1.2em;color:var(--mut);font-size:.65rem}
+@media(max-width:370px){#yrm .yb{grid-template-columns:1fr!important}#yrm .yr-head,#yrm .yr-theme,#yrm .yr-credit{grid-column:1}#dkal .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cp-bal-cards{grid-template-columns:1fr}.cp-bal-rangegrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:700px){#yrm .yb{max-width:700px;grid-template-columns:repeat(3,minmax(0,1fr))!important}#yrm .yr-head,#yrm .yr-theme,#yrm .yr-credit{grid-column:1/-1}#dkal .grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.cd.cp-art-only.k8:not(.lock),.cd.cp-art-only.k8>.rbw>i{animation:none!important}}
 </style>
-
-
-<style id="cp-sss-led-spots-refined">
-/* SSS — pequenos focos LED iridescentes espalhados pela ilustração.
-   Cada ponto tem posição, movimento e ciclo de cor próprios; a imagem permanece nítida. */
-.cd.cp-art-only.k8:not(.lock)>.sss-spectrum{
-  position:absolute!important;inset:0!important;z-index:5!important;
-  display:block!important;overflow:hidden!important;border-radius:inherit!important;
-  pointer-events:none!important;text-decoration:none!important;
-}
-/* Desliga as películas antigas uniformes/faixas de reflexo da camada de espectro. */
-.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::before,
-.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::after{
-  content:none!important;display:none!important;
-}
-.cd.cp-art-only.k8:not(.lock)>.sss-spectrum .led-spot{
-  position:absolute!important;display:block!important;
-  left:var(--led-x)!important;top:var(--led-y)!important;
-  width:var(--led-w)!important;height:var(--led-h)!important;
-  margin:0!important;border:0!important;border-radius:50%!important;
-  background:radial-gradient(ellipse at 50% 50%,var(--led-color) 0%,color-mix(in srgb,var(--led-color) 56%,transparent) 36%,transparent 76%)!important;
-  opacity:.19!important;mix-blend-mode:color!important;
-  filter:blur(15px) saturate(1.2)!important;
-  transform:translate3d(0,0,0);
-  animation:cpSSSLedWander var(--led-move,15s) ease-in-out infinite alternate,
-            cpSSSLedShift var(--led-cycle,24s) linear infinite!important;
-  animation-delay:var(--led-delay,0s),var(--led-color-delay,0s)!important;
-  pointer-events:none!important;will-change:transform,filter,opacity;
-}
-/* Cores e focos em vários setores, com durações desencontradas para evitar sincronia. */
-.cd.cp-art-only.k8>.sss-spectrum .led-a{--led-x:0%;--led-y:4%;--led-w:48%;--led-h:34%;--led-color:#ff62c4;--led-move:13s;--led-cycle:19s;--led-delay:-5s;--led-color-delay:-11s}
-.cd.cp-art-only.k8>.sss-spectrum .led-b{--led-x:51%;--led-y:5%;--led-w:47%;--led-h:33%;--led-color:#58dfff;--led-move:17s;--led-cycle:27s;--led-delay:-12s;--led-color-delay:-4s}
-.cd.cp-art-only.k8>.sss-spectrum .led-c{--led-x:2%;--led-y:34%;--led-w:48%;--led-h:34%;--led-color:#a881ff;--led-move:16s;--led-cycle:23s;--led-delay:-8s;--led-color-delay:-17s}
-.cd.cp-art-only.k8>.sss-spectrum .led-d{--led-x:51%;--led-y:34%;--led-w:48%;--led-h:34%;--led-color:#69edbb;--led-move:19s;--led-cycle:31s;--led-delay:-14s;--led-color-delay:-9s}
-.cd.cp-art-only.k8>.sss-spectrum .led-e{--led-x:0%;--led-y:66%;--led-w:48%;--led-h:34%;--led-color:#ffd66d;--led-move:15s;--led-cycle:29s;--led-delay:-3s;--led-color-delay:-21s}
-.cd.cp-art-only.k8>.sss-spectrum .led-f{--led-x:52%;--led-y:66%;--led-w:47%;--led-h:34%;--led-color:#ff83a7;--led-move:18s;--led-cycle:25s;--led-delay:-10s;--led-color-delay:-13s}
-.cd.cp-art-only.k8>.sss-spectrum .led-g{--led-x:28%;--led-y:28%;--led-w:46%;--led-h:43%;--led-color:#70aaff;--led-move:21s;--led-cycle:37s;--led-delay:-16s;--led-color-delay:-7s}
-@keyframes cpSSSLedWander{
-  0%{transform:translate3d(-7%,-8%,0) scale(.88);opacity:.10}
-  48%{transform:translate3d(9%,7%,0) scale(1.08);opacity:.20}
-  100%{transform:translate3d(-5%,15%,0) scale(.94);opacity:.12}
-}
-@keyframes cpSSSLedShift{
-  from{filter:blur(15px) hue-rotate(0deg) saturate(1.2)}
-  to{filter:blur(15px) hue-rotate(360deg) saturate(1.2)}
-}
-/* A volta cromática do aro fica num meio-termo: mais viva que 19s, sem correr. */
-.cd.cp-art-only.k8>.rbw>i,
-.sum.big .cd.cp-art-only.k8>.rbw>i{
-  animation:spin 10s linear infinite!important;
-}
-/* O aro principal também muda de cor em ciclo suave e contínuo. */
-.cd.cp-art-only.k8>.cp-card-frame{
-  animation:cpSSSFrameColor 10s linear infinite!important;
-}
-@keyframes cpSSSFrameColor{
-  from{filter:hue-rotate(0deg)}
-  to{filter:hue-rotate(360deg)}
-}
-/* O pequeno brilho metálico passa com mais calma e demora mais para retornar. */
-.cd.cp-art-only.k8>.cp-card-frame::after{
-  animation:cpSssGlint 8.5s ease-in-out infinite!important;
-}
-@media(prefers-reduced-motion:reduce){
-  .cd.cp-art-only.k8:not(.lock)>.sss-spectrum .led-spot,
-  .cd.cp-art-only.k8>.rbw>i,
-  .cd.cp-art-only.k8>.cp-card-frame,
-  .cd.cp-art-only.k8>.cp-card-frame::after{animation:none!important}
-}
-</style>
-
+<script id="cp-maintenance-2026-js">
+/*
+ * Módulo de manutenção incremental da Coleção Primata.
+ * Mantém os saves e o Firebase existentes. Novas opções ficam sob ADM.cpBalance*.
+ */
+(()=>{
+  "use strict";
+  const $=id=>document.getElementById(id);
+  const clone=v=>JSON.parse(JSON.stringify(v));
+  const safe=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const between=(a,b,rand=Math.random)=>{const lo=Math.min(a,b),hi=Math.max(a,b);return(lo+hi)/2+(rand()+rand()-1)*(hi-lo)/2};
+  const seeded=seed=>{let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)|0;let t=Math.imul(a^a>>>15,1|a);t=(t+Math.imul(t^t>>>7,61|t))^t;return((t^t>>>14)>>>0)/4294967296}};
+  const balanceMode=()=>$("cpBalanceScope")?.value||"all";
+  const defaults=()=>R.map((_,i)=>({hpMin:Math.round(ST[i][0]*.85),hpMax:Math.round(ST[i][0]*1.15),atkMin:Math.round(ST[i][1]*.8),atkMax:Math.round(ST[i][1]*1.6)}));
+  function ranges(){
+    const d=defaults(),saved=ADM.cpBalanceRanges||[],vals=d.map((x,i)=>({...x,...(saved[i]||{})}));
+    document.querySelectorAll("[data-cp-range][data-field]").forEach(input=>{
+      const i=Number(input.dataset.cpRange),field=input.dataset.field,value=Number(input.value);
+      if(vals[i]&&["hpMin","hpMax","atkMin","atkMax"].includes(field)&&Number.isFinite(value)&&value>0)vals[i][field]=Math.round(value);
+    });
+    return vals;
+  }
+  function rangePanel(){
+    const vals=ranges();
+    return `<div class="cp-bal-ranks">${R.map((rank,i)=>{const v=vals[i];return `<details class="cp-bal-rank"${i===0?' open':''}><summary><span style="color:${rank[1]}">RANK ${rank[0]}</span> · Vida ${v.hpMin}–${v.hpMax} · Dano ${v.atkMin}–${v.atkMax}</summary><div class="cp-bal-rangegrid">${[["hpMin","Vida mín."],["hpMax","Vida máx."],["atkMin","Dano mín."],["atkMax","Dano máx."]].map(([k,l])=>`<label>${l}<input type="number" min="1" step="1" data-cp-range="${i}" data-field="${k}" value="${v[k]}"></label>`).join("")}</div></details>`}).join("")}</div>`;
+  }
+  function cardRows(){
+    return [...ALL].sort((a,b)=>a.r-b.r||a.n.localeCompare(b.n)).map(c=>`<label class="cp-bal-card" data-cp-bal-row data-search="${safe((c.n||"")+" "+R[c.r][0]).toLowerCase()}"><input type="checkbox" data-cp-bal-card="${safe(c.id)}"><span><small style="color:${R[c.r][1]}">${R[c.r][0]}</small> · ${safe(c.n)}</span></label>`).join("");
+  }
+  function renderBalancePanel(){
+    const anchor=$("z_xp");if(!anchor)return;
+    let panel=$("cpBalancePanel");if(!panel){panel=document.createElement("section");panel.id="cpBalancePanel";panel.className="cp-balance-panel";anchor.after(panel)}
+    if(panel.dataset.built==="1")return;
+    panel.innerHTML=`<div><h3>⚖️ Balanceamento por rank</h3><p>Selecione uma, várias ou todas as cartas. Os valores são sorteados dentro da faixa do rank e variam de carta para carta. As faixas podem ser personalizadas antes de aplicar.</p></div><label>O que equilibrar<select id="cpBalanceScope"><option value="all">Status + habilidades</option><option value="status">Somente status</option><option value="skills">Somente habilidades</option></select></label><label>Buscar carta<input id="cpBalanceSearch" type="search" placeholder="Digite o nome ou rank"></label><div class="cp-bal-toolbar"><button type="button" class="bt gh" data-cp-bal-select="visible">Marcar visíveis</button><button type="button" class="bt gh" data-cp-bal-select="all">Marcar todas</button><button type="button" class="bt gh" data-cp-bal-select="none">Desmarcar todas</button><button type="button" class="bt gh" data-cp-bal-select="invert">Inverter seleção</button></div><div class="cp-bal-cards">${cardRows()}</div><details><summary>Faixas de vida e dano por rank</summary>${rangePanel()}</details><button type="button" class="bt cy" data-cp-bal-apply>Aplicar equilíbrio às cartas selecionadas</button><div class="cp-bal-status" id="cpBalanceStatus" aria-live="polite">Nenhuma carta alterada ainda.</div>`;
+    panel.dataset.built="1";
+  }
+  function skillTier(rank){return [
+    {mult:1.45,pct:32,ch:55,turns:2,cd:[4,5],fixed:1.35},
+    {mult:1.55,pct:36,ch:58,turns:2,cd:[4,5],fixed:1.45},
+    {mult:1.7,pct:40,ch:62,turns:2,cd:[3,4],fixed:1.55},
+    {mult:1.8,pct:44,ch:65,turns:2,cd:[3,4],fixed:1.65},
+    {mult:1.95,pct:48,ch:68,turns:3,cd:[3,4],fixed:1.8},
+    {mult:2.05,pct:52,ch:70,turns:3,cd:[2,4],fixed:1.9},
+    {mult:2.2,pct:58,ch:74,turns:3,cd:[2,3],fixed:2.05},
+    {mult:2.35,pct:64,ch:78,turns:4,cd:[2,3],fixed:2.2},
+    {mult:2.5,pct:70,ch:82,turns:4,cd:[1,3],fixed:2.35}
+    ][clamp(rank|0,0,8)]}
+  function balanceSkills(card,rand=Math.random){
+    const source=Array.isArray(card.sk)?card.sk:[];if(!source.length)return null;
+    const rows=Array.isArray(source[0])?source:[source],tier=skillTier(card.r);
+    const out=rows.map(row=>{
+      const a=clone(row);if(!Array.isArray(a))return a;const spec=a[3];
+      if(!spec||typeof spec!=="object")return a;
+      if(spec.rc!=null&&(!spec.tr||spec.tr==="u")){const cd=between(tier.cd[0],tier.cd[1],rand);spec.rc=Math.round(cd)}
+      if(Array.isArray(spec.ef))spec.ef=spec.ef.map(effect=>{
+        const e=clone(effect||{});
+        if(typeof e.m==="number")e.m=+between(1.05,tier.mult,rand).toFixed(2);
+        if(typeof e.p==="number"&&e.p!==0){const sign=Math.sign(e.p);e.p=sign*Math.round(between(Math.max(8,tier.pct*.45),tier.pct,rand))}
+        if(typeof e.ch==="number")e.ch=Math.round(between(Math.max(25,tier.ch*.65),tier.ch,rand));
+        if(typeof e.n==="number"&&["rg","ls","sh","rf","mk","ev","cr","im","tn","bl","st","cu","dz"].includes(e.t))e.n=Math.round(clamp(between(Math.max(1,tier.turns-1),tier.turns,rand),1,tier.turns));
+        if(e.t==="dv"&&typeof e.v==="number")e.v=Math.max(1,Math.round(between(ST[card.r][1]*.65,ST[card.r][1]*tier.fixed,rand)));
+        if(e.t==="hv"&&typeof e.v==="number")e.v=Math.max(1,Math.round(between(ST[card.r][0]*.18,ST[card.r][0]*.55,rand)));
+        return e;
+      });
+      return a;
+    });
+    return Array.isArray(source[0])?out:out[0];
+  }
+  function applySavedSkillOverrides(){
+    const saved=ADM.cpBalanceSkills||{};
+    for(const c of ALL){
+      const value=saved[c.id];if(value==null)continue;
+      // Formato antigo (snapshot) continua legível; novas atualizações guardam só uma semente compacta.
+      if(Array.isArray(value))c.sk=clone(value);
+      else if(Number.isFinite(Number(value)))c.sk=balanceSkills(c,seeded(Number(value)));
+    }
+  }
+  function applyBalance(){
+    if(!(typeof AD!=="undefined"&&AD))return toast("Somente o ADM pode equilibrar cartas.");
+    const ids=[...document.querySelectorAll("[data-cp-bal-card]:checked")].map(x=>x.dataset.cpBalCard);
+    if(!ids.length)return toast("Selecione ao menos uma carta.");
+    const mode=balanceMode(),vals=ranges();
+    for(let i=0;i<9;i++){const v=vals[i];if(!(v.hpMin>0&&v.hpMax>=v.hpMin&&v.atkMin>0&&v.atkMax>=v.atkMin))return toast(`Confira as faixas do rank ${R[i][0]}.`)}
+    ADM.cpBalanceRanges=vals;ADM.o=ADM.o||{};ADM.cpBalanceSkills=ADM.cpBalanceSkills||{};
+    const touched=[];
+    for(const id of ids){const c=ALL.find(x=>x.id===id);if(!c)continue;const r=vals[c.r];let changed=false;
+      if(mode==="status"||mode==="all"){const hp=Math.round(between(r.hpMin,r.hpMax)),atk=Math.round(between(r.atkMin,r.atkMax));const custom=(ADM.c||[]).find(x=>x.id===id);if(custom){custom.hp=hp;custom.atk=atk}else ADM.o[id]={...(ADM.o[id]||{}),hp,atk};c.hp=hp;c.atk=atk;changed=true}
+      if(mode==="skills"||mode==="all"){const seed=(Math.random()*0xFFFFFFFF)>>>0;const balanced=balanceSkills(c,seeded(seed));if(balanced){ADM.cpBalanceSkills[id]=seed;c.sk=balanced;changed=true}}
+      if(changed)touched.push(c.n);
+    }
+    sADM();
+    const label=mode==="status"?"status":mode==="skills"?"habilidades":"status e habilidades";
+    const status=$("cpBalanceStatus");if(status)status.textContent=`✓ ${touched.length} carta(s) equilibrada(s) em ${label}.`;
+    toast(`⚖️ ${touched.length} carta(s) equilibrada(s)`);
+    if(typeof dkPaint==="function")dkPaint();if(typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1);
+  }
+  // O DOM da ficha-base já foi carregado quando este módulo é executado no fim do HTML.
+  applySavedSkillOverrides();
+  if(window.cpRegisterAdxOpenHook)window.cpRegisterAdxOpenHook(id=>{if(id==="ds_x")requestAnimationFrame(renderBalancePanel)});
+  document.addEventListener("click",e=>{
+    const sel=e.target.closest&&e.target.closest("[data-cp-bal-select]");
+    if(sel){e.preventDefault();const mode=sel.dataset.cpBalSelect,boxes=[...document.querySelectorAll("[data-cp-bal-card]")];boxes.forEach(b=>{const row=b.closest("[data-cp-bal-row]");if(mode==="all")b.checked=true;else if(mode==="none")b.checked=false;else if(mode==="visible"&&!row.hidden)b.checked=true;else if(mode==="invert")b.checked=!b.checked});return}
+    const apply=e.target.closest&&e.target.closest("[data-cp-bal-apply]");if(apply){e.preventDefault();applyBalance()}
+  });
+  document.addEventListener("input",e=>{
+    if(e.target.id==="cpBalanceSearch"){const q=e.target.value.trim().toLocaleLowerCase("pt-BR");document.querySelectorAll("[data-cp-bal-row]").forEach(row=>row.hidden=!row.dataset.search.includes(q));}
+  });
+  // Atualize a memória dos overrides depois de qualquer ação de editar uma carta/habilidade.
+  if(typeof YAB==="function"){const base=YAB;YAB=function(id){delete (ADM.cpBalanceSkills||{})[id];return base.apply(this,arguments)}}
+  if(typeof YHK==="function"){const base=YHK;YHK=function(){const id=$("hc")?.value;if(id)delete (ADM.cpBalanceSkills||{})[id];return base.apply(this,arguments)}}
+  if(typeof YQE==="function"){const base=YQE;YQE=function(){const id=$("hc")?.value;if(id)delete (ADM.cpBalanceSkills||{})[id];return base.apply(this,arguments)}}
+})();
+</script>
 </body>
 </html>
