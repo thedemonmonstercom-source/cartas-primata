@@ -1410,7 +1410,7 @@ function play(p,d,pi,np=1,g=0){LN=np;
   let resultItems=d;
   if(np>10){const grouped=new Map();for(const item of d){const id=item.c.id;let group=grouped.get(id);if(!group){group={c:item.c,count:0,fresh:false};grouped.set(id,group)}group.count++;group.fresh=group.fresh||!!item.n}resultItems=[...grouped.values()];}
   const freshCount=np>10?resultItems.filter(x=>x.fresh).length:d.filter(x=>x.n).length;
-  const resultGrid=resultItems.map(x=>{const c=x.c,count=np>10?x.count:0,fresh=np>10?x.fresh:!!x.n;return `<div data-c="${c.id}"${fresh?' class="nw"':""}>${card(c,"",count,0,"",fresh?null:0)}</div>`}).join("");
+  const resultGrid=resultItems.map(x=>{const c=x.c,count=np>10?x.count:0,fresh=np>10?x.fresh:!!x.n;return `<div class="pack-result-card${fresh?" nw":""}" data-c="${c.id}" role="button" tabindex="0" aria-label="Abrir detalhes da carta${count?` · ${fmt(count)} cópias`:""}">${card(c,"",count,0,"",fresh?null:0)}${count>0?`<span class="pack-result-count">×${fmt(count)}</span>`:""}</div>`}).join("");
   stage.innerHTML=`${np>10?`<div class="pack-batch-results"><b>${fmt(np)} pacotes abertos</b><span>${fmt(N)} cartas recebidas · ${fmt(resultItems.length)} cartas diferentes</span></div>`:""}<div class="sum${resultItems.length>20?" big":""}">${resultGrid}</div>`;
   hint.textContent=pi==null?"Toque numa carta para ver a ficha":`${freshCount} carta(s) inédita(s) · toque numa carta para ver a ficha`;
   
@@ -1458,7 +1458,8 @@ function play(p,d,pi,np=1,g=0){LN=np;
  stage.onpointerdown=e=>{if(ph==2&&e.target.closest(".stk")){dn=1;dx=e.clientX}};
  stage.onpointermove=e=>{if(dn&&Math.abs(e.clientX-dx)>30){dn=0;dg=1;spr=!spr;restyle();try{navigator.vibrate(12)}catch(x){}}};
  stage.onpointerup=stage.onpointercancel=()=>{dn=0;setTimeout(()=>{dg=0},80)};
- stage.onclick=()=>{if(dg)return;
+ stage.onclick=e=>{if(dg)return;
+  if(ph==4){const hit=e.target.closest("[data-c]");if(hit){const c=ALL.find(item=>String(item.id)===String(hit.dataset.c));if(c)view(c)}return}
   if(ph==0){ph=1;const pk=[...stage.querySelectorAll(".pack")];pk.forEach((e,i)=>{const f=()=>{e.classList.add("tear");flakes(e)};i?setTimeout(f,i*35):f()});hint.textContent="";try{navigator.vibrate(np>1?[14,30,22,30,22,30,40,30,60]:[14,40,22,30,40])}catch(e){}setTimeout(()=>{if(sk)return;if(np>10){ph=5;skb.textContent="Ver resultado";skb.hidden=false;hint.textContent="Pacotes rasgados · toque em Ver resultado para conferir suas cartas"}else show()},1000+(pk.length-1)*35)}
   else if(ph==2){
    ph=3;
@@ -2020,7 +2021,7 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
   else if(u)pn+=`<button class="bt${emp&&B.ac?"":" off"}" data-z="place">Colocar em campo · 1 ação</button><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else pn+=`<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta para agir · toque de novo (ou no inimigo) para ver status e habilidades</p>`;
   pn+=`<div class="two"><button class="bt gh${s.r.length>=3||!s.dk.length?" off":""}" data-z="draw">${s.r.length>=3?"Banco cheio":!s.dk.length?"Baralho vazio":"Comprar grátis"}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
- if(B.lv&&!B.over)pn+=`<div class="cp-live-react"><small>Reações</small><button type="button" data-z="rx:😂" aria-label="Enviar risada">😂</button><button type="button" data-z="rx:👏" aria-label="Enviar aplausos">👏</button><button type="button" data-z="rx:🔥" aria-label="Enviar fogo">🔥</button></div>`;fxSnap();ME=me;zb.innerHTML=B.p.length>2?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();if(!zb.querySelector("[data-cp-el-guide-battle]"))zb.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
+ if(B.lv&&!B.over)pn+=`<div class="cp-live-react"><small>Reações</small><button type="button" data-z="rx:😂" aria-label="Enviar risada">😂</button><button type="button" data-z="rx:👏" aria-label="Enviar aplausos">👏</button><button type="button" data-z="rx:🔥" aria-label="Enviar fogo">🔥</button></div>`;fxSnap();ME=me;zb.innerHTML=(B.p.length>2||(B.o&&B.o.soloBoss))?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();if(!zb.querySelector("[data-cp-el-guide-battle]"))zb.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
 function zpost(){const B=BT;if(!B)return;SEL=null;if(!B.over)chk(B);if(!B.over&&B.ac<1)endT(B);if(B.over)return zend();if(!B.ai&&!B.lv&&B.t!=B.v)PASS=1;zr();aiRun()}
 function usk(){const B=BT,u=SEL&&SEL.u,i=SEL&&SEL.i,g=SEL&&SEL.g,before=!!(u&&u.chg&&u.chg[i]),ok=aSk(B,u,i,g);if(ok&&B.t===0){const after=!!(u.chg&&u.chg[i]);if(!before&&after)bump("charge");else if(!after){bump("abil");const ab=u.ab&&u.ab[i];if(ab&&elSkillEls(ab,u).some(k=>k!=="normal"))bump("eluse")}}zpost()}
 function zc(a){const B=BT;if(!B)return;if(a.startsWith("rx:")){const emoji=a.slice(3);cpShowDuelReaction(B.v,emoji);if(B.lv&&window.lvSend)window.lvSend({k:"rx",s:B.v,e:emoji});return}
@@ -2069,14 +2070,22 @@ function zg(B,me,pn){const N=B.p.length,T=B.tm,two=N==4&&T[0]==T[2],oth=[...Arra
  return body+`<div class="zc">${pn}</div>`}
 function zgo(a,b,o){BT=nb(a,b,o);BT.p.forEach((s,i)=>s.f[0]&&BT.ev.push({k:"place",s:i,id:s.f[0].id,r:s.f[0].c.r,el:elEls(s.f[0])[0]}));BT.ev.push({k:"turn",s:BT.t,first:1});BT.ai=o.m=="a";BT.v=window.LV?window.LV.me:BT.ai?0:BT.t;BT.lv=window.LV?1:0;SEL=null;PASS=0;zb.hidden=false;zr();aiRun()}
 function mineDeck(){let d=dkv();if(d.length<12)d=dkf();if(d.length<12){toast("Você precisa de <b>12 cartas diferentes</b> para montar o deck. Abra mais pacotes!");return null}return d.map(c=>({c,lv:lvl(c)}))}
-function startArena(bs){const u=mineDeck();if(!u)return;const k=S.ar,e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*CONFIG.chefe}:x);zgo({n:"Você",u},{n:(bs?"Chefe · ":"Rival · ")+AR[k][0],u:e},{m:"a",k,ai:IA[k],b:bs?1:0})}
+function startArena(bs){
+ const k=Math.max(0,Math.min(8,Number.isFinite(+S.ar)?Math.floor(+S.ar):0));
+ if(bs&&S.camp)return toast("🏆 Você já concluiu a campanha e derrotou o chefe final.");
+ if(bs&&!bossOK()){const falta=Math.max(0,bcap()-S.tp);return toast(`🔒 Chefe bloqueado · alcance ${fmt(bcap())} troféus. ${falta===1?"Falta":"Faltam"} ${fmt(falta)} ${falta===1?"troféu":"troféus"}.`)}
+ const u=mineDeck();if(!u)return;
+ const e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*CONFIG.chefe}:x);
+ zgo({n:"Você",u},{n:(bs?"Chefe · ":"Rival · ")+AR[k][0],u:e},{m:"a",k,ai:IA[k],b:bs?1:0})
+}
 function startFriend(v){const t=String(v||"").trim();if(t.slice(0,5)!="DECK~")return toast("Código inválido · cole o código do deck do seu amigo.");const f=t.slice(5).split(",").map(x=>{const[i,l]=x.split(":"),c=byId(i);return c?{c,lv:Math.max(0,Math.min(5,+l||0))}:null});if(f.length!=12||f.some(x=>!x))return toast("Código inválido · o deck do amigo precisa ter 12 cartas do jogo.");if(new Set(f.map(x=>x.c.id)).size!=12)return toast("Código inválido · o deck do amigo precisa ter 12 cartas diferentes, sem repetir.");const u=mineDeck();if(!u)return;zgo({n:"Você",u},{n:window.ONLN||"Amigo",u:f},{m:"f"})}
 zb.onclick=e=>{const b=e.target.closest("[data-z]");if(!b)return;const a=b.dataset.z;if(a=="close"){BT=null;zb.hidden=true;PASS=0;upd();render(1)}else if(a=="inf"){BT=null;zb.hidden=true;startInf()}else if(a=="again"){const bb=BT&&BT.o.b;BT=null;zb.hidden=true;startArena(bb)}else if(a=="soloBossAgain"){BT=null;zb.hidden=true;window.cpOpenSoloBoss&&window.cpOpenSoloBoss()}else zc(a)};
 // ----- ABA BATALHA -----
 const btl=()=>{const h=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Batalha</span></div>`,nt=t=>`<p class="mut ctr" style="margin:0 0 14px;letter-spacing:.04em;text-transform:none">${t}</p>`;
- const k=S.ar,nx=TR[k+1],fd=S.fd.d===day()?S.fd.n:0;
- return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button><button class="bt cy" data-cp-raid-open style="margin-top:10px">👑 Enfrentar Boss</button>${dkTabs(1)}<button class="bt gh" data-bz="deck" style="margin-top:10px">Deck ${S.dka||"A"} · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
- `<details class="fd"><summary>Lutar com amigo</summary><div class="cvb"><p>No mesmo celular. Seu amigo manda o código do deck dele. Vencendo: ${gem}<b>${CONFIG.amigoFrag}</b> · hoje <b>${Math.min(fd,3)}/3</b> lutas · sem troféus.</p><input class="cdi" id="fcd" placeholder="Cole o código do deck do amigo" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="bt cy" data-bz="friend" style="margin-top:10px">Lutar com amigo</button><button class="bt gh" data-bz="mycode" style="margin-top:10px">Copiar o código do meu deck</button></div></details>`};
+ const k=Math.max(0,Math.min(8,+S.ar||0)),fd=S.fd.d===day()?S.fd.n:0,need=bcap(),missing=Math.max(0,need-S.tp),missingText=`${missing===1?"Falta":"Faltam"} ${fmt(missing)} ${missing===1?"troféu":"troféus"}`,unlocked=bossOK();
+ const arenaBoss=S.camp?`<div class="cp-arena-gate completed"><div><small>PROGRESSÃO DA ARENA</small><b>🏆 Campanha concluída</b><p>Você já derrotou o chefe final.</p></div></div>`:`<div class="cp-arena-gate ${unlocked?"ready":"locked"}"><div class="cp-arena-gate-copy"><small>PRÓXIMO OBJETIVO</small><b>👑 Chefe da Arena ${k+1}</b><p>${unlocked?`Meta atingida: ${fmt(S.tp)} / ${fmt(need)} troféus. Derrote o chefe para liberar a próxima arena.`:`${missingText} · ${fmt(S.tp)} / ${fmt(need)}. Vença batalhas para alcançar a meta.`}</p></div>${unlocked?`<button class="bt cy" data-bz="boss">⚔ Desafiar chefe da arena</button>`:`<span class="cp-arena-lock">🔒 BLOQUEADO</span>`}</div>`;
+ return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button>${arenaBoss}<button class="bt cy" data-cp-raid-open style="margin-top:10px">👑 Boss especial · solo/equipe</button>${dkTabs(1)}<button class="bt gh" data-bz="deck" style="margin-top:10px">Deck ${S.dka||"A"} · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
+ `<details class="fd"><summary>Lutar com amigo</summary><div class="cvb"><p>No mesmo celular. Seu amigo manda o código do deck dele. Vencendo: ${gem}<b>${CONFIG.amigoFrag}</b> · hoje <b>${Math.min(fd,3)}/3</b> lutas · sem troféus.</p><input class="cdi" id="fcd" placeholder="Cole o código do deck do seu amigo" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="bt cy" data-bz="friend" style="margin-top:10px">Lutar com amigo</button><button class="bt gh" data-bz="mycode" style="margin-top:10px">Copiar o código do meu deck</button></div></details>`};
 document.addEventListener("click",e=>{if(e.target.closest("[data-cp-solo-boss]")){window.cpOpenSoloBoss&&window.cpOpenSoloBoss();return}const b=e.target.closest("[data-bz]");if(!b)return;const a=b.dataset.bz;
  if(a=="fight")startArena();else if(a=="boss")startArena(1);else if(a=="deck"){if(!dkv().length)dkf();DSEL=null;tab="a";render()}else if(a=="back"){BV="";render(1)}else if(a=="auto"){dkf();render(1)}
  else if(a=="mycode"){if(dkv().length<12&&dkf().length<12)return toast("Monte um deck de 12 cartas primeiro.");const t=dkcode();try{navigator.clipboard.writeText(t).then(()=>toast("Código do deck copiado ✓"),()=>ask("Código do deck",`<input class="cdi" readonly value="${t}" onfocus="this.select()">`,"Fechar",()=>{}))}catch(x){ask("Código do deck",`<input class="cdi" readonly value="${t}" onfocus="this.select()">`,"Fechar",()=>{})}}
@@ -2454,15 +2463,15 @@ pl(p,-6,3.2,6.4);pl(p,6,3.2,6.4);wr(p,-6,3.2,6,3.2,5.8);wr(p,-6,3.2,6,1.2,5.4)}
 ].map(f=>{const g=new T.Group();f(g);return g})}
 var A3=null;const SP=15.5;
 A3={cv:null,r:null,sc:null,cam:null,g:[],x:0,tg:0,raf:0,lastFrame:0,io:null,observed:null,off:1,c:-1,f:0};
-function a3tap(){const c=Math.round(A3.x);if(c==S.ar)startArena();else toast(c>S.ar?`🔒 Arena bloqueada · 🏆 ${fmt(TR[c])}`:"Você já passou por aqui · a luta acontece na arena atual")}
+function a3tap(){const c=Math.round(A3.x);if(c==S.ar)startArena();else if(c==S.ar+1&&bossOK())toast("👑 Chefe liberado! Vá à aba Batalha e toque em Desafiar chefe da arena para avançar.");else toast(c>S.ar?`🔒 Arena bloqueada · 🏆 ${fmt(TR[c])}`:"Você já passou por aqui · a luta acontece na arena atual")}
 function a3ev(cv){let d=0,x0=0,p0=0,t0=0,mv=0,lx=0,lt=0,v=0;
 cv.addEventListener("pointerdown",e=>{d=1;x0=lx=e.clientX;p0=A3.x;t0=lt=performance.now();mv=0;v=0;try{cv.setPointerCapture(e.pointerId)}catch(x){}});
 cv.addEventListener("pointermove",e=>{if(!d)return;const w=(cv.clientWidth||300)*.62,n=performance.now(),dx=e.clientX-x0;mv=Math.max(mv,Math.abs(dx));A3.x=Math.max(-.4,Math.min(AR.length-.6,p0-dx/w));v=(lx-e.clientX)/w/Math.max(1,n-lt);lx=e.clientX;lt=n;A3.tg=A3.x});
 const up=()=>{if(!d)return;d=0;if(mv<9&&performance.now()-t0<500){A3.tg=Math.max(0,Math.min(AR.length-1,Math.round(A3.x)));a3tap();return}A3.tg=Math.max(0,Math.min(AR.length-1,Math.round(A3.x+v*160)))};
 cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up)}
-function a3ui(){const h=$("a3");if(!h)return;const c=Math.max(0,Math.min(AR.length-1,Math.round(A3.x)));if(A3.c==c&&!A3.f)return;A3.c=c;A3.f=0;
-h.querySelector("b").textContent=AR[c][1]+" "+AR[c][0];h.querySelector("small").textContent=c==S.ar?"Arena atual · toque para lutar":c<S.ar?"Arena concluída":"🔒 "+fmt(TR[c])+" troféus";
-const v=h.querySelector(".a3v");v.className="a3v"+(c>S.ar?" on":"");v.textContent=c>S.ar?"🔒 🏆 "+fmt(TR[c]):"";h.querySelectorAll(".a3d i").forEach((e,i)=>e.className=i==c?"on":"")}
+function a3ui(){const h=$("a3");if(!h)return;const c=Math.max(0,Math.min(AR.length-1,Math.round(A3.x))),ready=c===S.ar+1&&bossOK(),gateSig=`${c}:${S.ar}:${S.tp}:${ready}`;if(A3.c==c&&A3.gateSig===gateSig&&!A3.f)return;A3.c=c;A3.f=0;A3.gateSig=gateSig;
+h.querySelector("b").textContent=AR[c][1]+" "+AR[c][0];h.querySelector("small").textContent=c==S.ar?"Arena atual · toque para lutar":c<S.ar?"Arena concluída":ready?"👑 Chefe liberado · vá à aba Batalha":"🔒 "+fmt(TR[c])+" troféus";
+const v=h.querySelector(".a3v");v.className="a3v"+(c>S.ar?" on":"");v.textContent=c>S.ar?(ready?"👑 CHEFE LIBERADO":"🔒 🏆 "+fmt(TR[c])):"";h.querySelectorAll(".a3d i").forEach((e,i)=>e.className=i==c?"on":"")}
 function a3sz(){const h=$("a3");if(!A3||!A3.r||!h)return;const w=h.clientWidth||340,k=Math.round(w*.75),mobile=matchMedia("(max-width:700px)").matches;A3.r.setPixelRatio(Math.min(devicePixelRatio||1,mobile?1.25:1.75));A3.r.setSize(w,k,false);A3.cam.aspect=w/k;A3.cam.updateProjectionMatrix()}
 function a3lp(t){const h=$("a3");if(!A3.cv||!A3.cv.isConnected||document.hidden||!h){A3.raf=0;return}const box=h.getBoundingClientRect();if(!box.width||!box.height||box.bottom<-100||box.top>innerHeight+100){A3.raf=0;return}A3.raf=requestAnimationFrame(a3lp);if(t-(A3.lastFrame||0)<33)return;A3.lastFrame=t;
 A3.x+=(A3.tg-A3.x)*.14;if(Math.abs(A3.tg-A3.x)<.0004)A3.x=A3.tg;const x=A3.x*SP,sw=matchMedia("(prefers-reduced-motion:reduce)").matches?0:.16;
@@ -7546,6 +7555,104 @@ html.cp-tab-hidden .cd.cp-art-only *,
  clean();
  const fc=document.getElementById("fc");
  if(fc&&"MutationObserver"in window)new MutationObserver(clean).observe(fc,{childList:true,subtree:true});
+})();
+</script>
+
+
+
+<style id="cp-final-polish-rgb-batch-boss-arena-2026">
+/* Abertura em lote: o painel precisa permanecer visível quando é ele próprio o overlay ativo. */
+body:has(#ov:not([hidden])) #ov{visibility:visible!important}
+body:has(#fc:not([hidden])) #ov{visibility:hidden!important}
+#ov .pack-batch-count{display:inline-flex;align-items:center;justify-content:center;min-height:28px;margin:0 auto;padding:5px 13px;border:1px solid #ffffff30;border-radius:999px;background:#17131f;color:#fff;font-size:.72rem;font-weight:900;letter-spacing:.13em;box-shadow:0 5px 18px #0005}
+#ov .pack-batch-results{flex:none!important}
+#ov .sum{width:min(100%,460px);max-height:58vh;overflow-y:auto;overscroll-behavior:contain;grid-template-columns:repeat(5,minmax(0,1fr));align-content:start}
+#ov .sum>.pack-result-card{min-width:0;position:relative;cursor:pointer;touch-action:manipulation}
+#ov .pack-result-card:focus-visible{outline:2px solid #f3d18a;outline-offset:2px;border-radius:10px}
+#ov .pack-result-count{position:absolute;right:3px;bottom:3px;z-index:9;display:grid;place-items:center;min-width:22px;height:19px;padding:0 5px;border:1px solid #ffffff9a;border-radius:999px;background:#100d16ed;color:#fff;font-size:clamp(8px,2.1vw,11px);font-weight:900;line-height:1;box-shadow:0 2px 9px #000a;pointer-events:none}
+#ov .pack-batch-results b{font-size:.9rem}
+#ov .pack-batch-results span{font-size:.7rem}
+
+/* SSS: película RGB muito fina, com manchas de cor suaves passeando pela arte. Sem uma segunda moldura. */
+.cd.cp-art-only.k8:not(.lock)>.art{position:absolute!important;isolation:isolate!important;overflow:hidden!important}
+.cd.cp-art-only.k8:not(.lock)>.art::after{
+ content:""!important;display:block!important;position:absolute!important;inset:-12%!important;z-index:2!important;pointer-events:none!important;border-radius:inherit!important;
+ opacity:.24!important;mix-blend-mode:soft-light!important;filter:saturate(1.2) hue-rotate(0deg)!important;
+ background-image:
+  radial-gradient(ellipse 28% 24% at 18% 24%,rgba(255,70,190,.42) 0%,rgba(255,70,190,0) 76%),
+  radial-gradient(ellipse 32% 26% at 80% 22%,rgba(45,220,255,.40) 0%,rgba(45,220,255,0) 78%),
+  radial-gradient(ellipse 30% 34% at 72% 78%,rgba(160,80,255,.36) 0%,rgba(160,80,255,0) 78%),
+  radial-gradient(ellipse 34% 25% at 22% 78%,rgba(255,190,60,.32) 0%,rgba(255,190,60,0) 78%),
+  radial-gradient(ellipse 28% 30% at 50% 48%,rgba(75,255,170,.26) 0%,rgba(75,255,170,0) 78%)!important;
+ background-size:190% 180%,180% 190%,200% 180%,185% 190%,190% 195%!important;
+ background-position:0% 8%,100% 0%,100% 100%,0% 100%,50% 50%!important;
+ animation:cpSSSColorDrift 12.8s ease-in-out infinite alternate,cpSSSHueDrift 19s linear infinite!important;
+}
+@keyframes cpSSSColorDrift{
+ 0%{background-position:0% 8%,100% 0%,100% 100%,0% 100%,50% 50%}
+ 19%{background-position:22% 34%,78% 13%,82% 74%,12% 84%,62% 38%}
+ 43%{background-position:64% 12%,33% 48%,58% 17%,75% 66%,28% 72%}
+ 68%{background-position:86% 70%,12% 82%,19% 42%,91% 18%,76% 24%}
+ 100%{background-position:100% 100%,0% 95%,0% 0%,100% 0%,40% 85%}
+}
+@keyframes cpSSSHueDrift{from{filter:saturate(1.12) hue-rotate(0deg)}to{filter:saturate(1.32) hue-rotate(150deg)}}
+
+/* Chefe de uma carta: palco próprio e a carta realmente centralizada, sem dois espaços vazios ao lado. */
+#zb .cp-solo-boss-board{display:grid;gap:12px;width:100%;min-width:0}
+#zb .cp-solo-boss-feature{position:relative;isolation:isolate;overflow:hidden;width:min(100%,520px);margin:0 auto;padding:13px 12px 12px;border:1px solid #d9b66a88;border-radius:18px;background:radial-gradient(ellipse at 50% 25%,#67363b66,transparent 64%),linear-gradient(150deg,#211522,#120f19 72%);box-shadow:0 0 0 1px #f4d28b13 inset,0 12px 32px #0007}
+#zb .cp-solo-boss-feature::before{content:"";position:absolute;z-index:-1;inset:-45%;background:conic-gradient(from 20deg,transparent 0 28%,#e7b76414 36%,transparent 45% 70%,#ed5e6d12 78%,transparent 87%);animation:cpBossHalo 18s linear infinite}
+@keyframes cpBossHalo{to{transform:rotate(360deg)}}
+#zb .cp-solo-boss-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;position:relative;z-index:1;margin:0 0 8px}
+#zb .cp-solo-boss-heading small{display:block;color:#dcbf8a;font-size:.55rem;font-weight:900;letter-spacing:.19em}
+#zb .cp-solo-boss-heading b{display:block;margin-top:3px;color:#fff2dc;font-size:1rem;line-height:1.2}
+#zb .cp-solo-boss-life{flex:none;padding:6px 9px;border:1px solid #e1b97855;border-radius:999px;background:#100c13aa;color:#f1d6a6;font-weight:900;font-size:.76rem}
+#zb .cp-solo-boss-card{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:180px;padding:10px 0 8px}
+#zb .cp-solo-boss-card>.zu{display:block!important;flex:0 0 auto!important;width:clamp(128px,38vw,184px)!important;max-width:70%!important;--zf:9px!important;margin:0 auto!important}
+#zb .cp-solo-boss-card>.zu>.cd{width:100%!important}
+#zb .cp-solo-boss-caption{position:relative;z-index:1;margin:4px 0 0;text-align:center;color:#d2bfaa;font-size:.57rem;font-weight:800;letter-spacing:.16em}
+#zb .cp-solo-boss-player{width:min(100%,520px);margin:0 auto;padding:9px;border:1px solid #ffffff20;border-radius:14px;background:#ffffff08}
+#zb .cp-solo-boss-player .zq{width:100%;background:transparent;box-shadow:none;padding:0}
+#zb .cp-solo-boss-player .zq.me .zrow{--cw:min(96px,calc((100% - 12px)/3))}
+#zb .cp-solo-boss-board>.zlog{margin:0;text-align:center}
+#zb .raid-boss>.zrow{display:flex!important;justify-content:center!important;align-items:center!important}
+#zb .raid-boss>.zrow>.zu{flex:0 0 auto!important;width:clamp(112px,31vw,158px)!important}
+
+/* Bloco de desbloqueio do chefe da arena por troféus. */
+.cp-arena-gate{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:11px 12px;border:1px solid #ffffff1c;border-radius:13px;background:linear-gradient(135deg,#ffffff0c,#ffffff05)}
+.cp-arena-gate-copy{display:grid;gap:4px;min-width:0}
+.cp-arena-gate-copy small,.cp-arena-gate>div>small{color:var(--mut,#b8b4c2);font-size:.54rem;font-weight:900;letter-spacing:.15em}
+.cp-arena-gate-copy b,.cp-arena-gate>div>b{font-size:.8rem;font-weight:900;color:var(--fg,#fff)}
+.cp-arena-gate-copy p,.cp-arena-gate>div>p{margin:0;color:var(--mut,#c0bbc8);font-size:.64rem;line-height:1.45;letter-spacing:0;text-transform:none}
+.cp-arena-gate.ready{border-color:#d5b46d66;background:linear-gradient(120deg,#c69c3a18,#ffffff07)}
+.cp-arena-gate.ready .cp-arena-gate-copy p{color:#ead6a9}
+.cp-arena-gate .bt{flex:0 0 auto;min-height:40px;padding:8px 10px;font-size:.64rem;white-space:normal}
+.cp-arena-lock{flex:none;color:#d0c8d8;font-size:.58rem;font-weight:900;letter-spacing:.1em}
+.cp-arena-gate.completed{border-color:#8fc79b55}
+@media(max-width:390px){.cp-arena-gate{align-items:stretch;flex-direction:column}.cp-arena-gate .bt{width:100%}.cp-arena-lock{align-self:flex-start}}
+@media(prefers-reduced-motion:reduce){
+ .cd.cp-art-only.k8:not(.lock)>.art::after{animation:none!important;opacity:.12!important}
+ #zb .cp-solo-boss-feature::before{animation:none!important}
+}
+</style>
+<script id="cp-solo-boss-centered-renderer">
+(()=>{
+ "use strict";
+ try{
+  if(typeof zg!=="function"||zg.__cpSoloBossCentered)return;
+  const previous=zg;
+  const centered=function(B,me,pn){
+   if(!B||!B.o||!B.o.soloBoss)return previous.apply(this,arguments);
+   const player=B.p&&B.p[0],boss=B.p&&B.p[1];
+   if(!player||!boss)return previous.apply(this,arguments);
+   const cpEscape=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+   const card=(boss.f||[]).filter(Boolean).slice(0,1).map(u=>zu(u,true,1)).join("")||'<div class="zu ze" aria-label="Boss fora de campo"></div>';
+   const playerView=`<div class="zq me${player.life<1?" ko":""}"><div class="zqh"><b>${cpEscape(player.n)} · VOCÊ</b><span class="zl">${hrt(player.life)}</span><small>🂠 ${player.dk.length}</small></div>${tribeStatus(player)}${zs(player,false)}</div>`;
+   return `<div class="cp-solo-boss-board"><section class="cp-solo-boss-feature"><div class="cp-solo-boss-heading"><div><small>DESAFIO SOLO · CHEFE ÚNICO</small><b>${cpEscape(boss.n||"Boss")}</b></div><span class="cp-solo-boss-life">${hrt(boss.life)}</span></div><div class="cp-solo-boss-card">${card}</div><p class="cp-solo-boss-caption">UMA CARTA · UMA VIDA · DERROTE O BOSS</p></section><section class="cp-solo-boss-player">${playerView}</section><p class="zlog">Turno ${B.n}/${MAXT}<br>${B.log.slice(-2).join("<br>")||"&nbsp;"}</p></div><div class="zc">${pn}</div>`;
+  };
+  centered.__cpSoloBossCentered=true;
+  zg=centered;
+  if(typeof window!=="undefined")window.zg=centered;
+ }catch(err){console.warn("PRIMATA: layout do Boss solo não aplicado",err)}
 })();
 </script>
 
