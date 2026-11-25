@@ -1647,6 +1647,8 @@ const TG={s:"a própria carta",e:"1 inimigo à escolha",E:"todos os inimigos ati
 // ===== v1.5: BLOCOS DE EFEITO · uma habilidade = lista de blocos. Motor, descrição e editor do ADM leem desta tabela: tipo novo = 1 item aqui.
 // f = campos editáveis [chave,rótulo,padrão] · own = roda 1× no dono (sem alvo) · ai = nota da IA · v/vp = animação (d dano, h cura, at seta). Qualquer bloco aceita ch (chance %).
 const sdx=(B,t)=>B.p.findIndex(x=>x.f.includes(t));
+// Bosses únicos não podem perder a luta por efeitos que ignoram HP/vidas.
+const isProtectedBoss=(B,t)=>{if(!B||!t||!B.o||!Array.isArray(B.p))return false;const i=B.p.findIndex(seat=>seat&&Array.isArray(seat.f)&&seat.f.includes(t));return i>=0&&((!!B.o.singleBoss&&i===1)||(B.o.m==="boss"&&i===0))};
 const FX={
 d:{n:"Dano",v:"d",f:[["m","× do dano",1.5]],ds:e=>`Causa ${e.m}× o dano em ${TG[e.a]}`,run:(B,u,t,e,i,ctx)=>{B.hit.push(t.id);const els=ctx&&ctx.atacante?ctx.atacante:elEls(u),r=elCalc(els,elEls(t)),hctx={...(ctx||{}),atacante:els,elemento:r.elemento,multiplicador:r.multiplicador,estado:r.estado};hurt(B,t,dm(u,t,e.m,els),u,hctx);if(r.multiplicador!==1){const move=ctx&&ctx.habilidade?`${EL[r.elemento]} ${ctx.habilidade} (${ELN[r.elemento]})`:`${EL[r.elemento]} ${ELN[r.elemento]}`,target=elEls(t).map(k=>`${EL[k]} ${ELN[k]}`).join(" / ");lg(B,`${move} → ${target} · ×${String(r.multiplicador).replace(".",",")}`)}}},
 dp:{n:"Dano fixo (% da vida máx.)",v:"d",f:[["p","% da vida máx.",30]],ds:e=>`${TG[e.a]} perde ${e.p}% da vida máxima`,ai:(e,t,u)=>t==u||e.a=="a"||e.a=="A"?-35:30,run:(B,u,t,e,i,ctx)=>{B.hit.push(t.id);hurt(B,t,Math.max(1,Math.round(t.mx*e.p/100)),u,ctx)}},
@@ -1668,8 +1670,8 @@ Object.assign(FX,{
 dv:{n:"Dano em valor fixo",v:"d",f:[["v","dano",50]],ds:e=>`Causa ${e.v} de dano em ${TG[e.a]}`,run:(B,u,t,e,i,ctx)=>{B.hit.push(t.id);hurt(B,t,e.v,u,ctx)}},
 dh:{n:"Dano % da vida ATUAL do alvo",v:"d",f:[["p","% da vida atual",30]],ds:e=>`${TG[e.a]} perde ${e.p}% da vida atual`,run:(B,u,t,e,i,ctx)=>{B.hit.push(t.id);hurt(B,t,Math.max(1,Math.round(t.hp*e.p/100)),u,ctx)}},
 mh:{n:"Golpes múltiplos",v:"d",f:[["n","golpes",3],["m","× do dano por golpe",.6]],ds:e=>`Golpeia ${e.n}× (${e.m}× o dano cada) em ${TG[e.a]}`,run:(B,u,t,e,i,ctx)=>{const els=ctx&&ctx.atacante?ctx.atacante:elEls(u),r=elCalc(els,elEls(t)),hctx={...(ctx||{}),atacante:els,elemento:r.elemento,multiplicador:r.multiplicador,estado:r.estado};for(let k=0;k<e.n&&t.hp>0;k++){B.hit.push(t.id);hurt(B,t,dm(u,t,e.m,els),u,hctx)}if(r.multiplicador!==1){const move=ctx&&ctx.habilidade?`${EL[r.elemento]} ${ctx.habilidade} (${ELN[r.elemento]})`:`${EL[r.elemento]} ${ELN[r.elemento]}`,target=elEls(t).map(k=>`${EL[k]} ${ELN[k]}`).join(" / ");lg(B,`${move} → ${target} · ×${String(r.multiplicador).replace(".",",")}`)}}},
-ex:{n:"Eliminar na hora",v:"d",f:[],ds:e=>`Elimina ${TG[e.a]} na hora`,run:(B,u,t,e,i,ctx)=>{B.hit.push(t.id);if(bs(t,"im")>0)return;t.bf=t.bf.filter(b=>b.k!=="sh");hurt(B,t,t.hp,u,ctx)}},
-lx:{n:"Inimigo perde ♥ (vidas)",v:"d",own:1,f:[["v","vidas",1]],ds:e=>`O inimigo perde ${e.v} ♥`,run:(B,u,t,e)=>{const s=foe_(B);s.life=Math.max(0,s.life-e.v);B.ev.push({k:"life",s:B.p.indexOf(s),n:s.life});chk(B)}},
+ex:{n:"Eliminar na hora",v:"d",f:[],ds:e=>`Elimina ${TG[e.a]} na hora`,run:(B,u,t,e,i,ctx)=>{B.hit.push(t.id);if(bs(t,"im")>0)return;if(isProtectedBoss(B,t)){const d=Math.min(Math.max(0,t.hp-1),Math.max(1,Math.round(t.mx*.2)));if(d>0)hurt(B,t,d,u,ctx);lg(B,`👑 ${t.c.n} resistiu à eliminação instantânea${d?` · −${d} HP`:" · não pode ser derrotado por esse efeito"}`);return}t.bf=t.bf.filter(b=>b.k!=="sh");hurt(B,t,t.hp,u,ctx)}},
+lx:{n:"Inimigo perde ♥ (vidas)",v:"d",own:1,f:[["v","vidas",1]],ds:e=>`O inimigo perde ${e.v} ♥`,run:(B,u,t,e)=>{const s=foe_(B),si=B.p.indexOf(s);if(isProtectedBoss(B,s.f.find(Boolean))){const target=s.f.find(Boolean),d=target?Math.min(Math.max(0,target.hp-1),Math.max(1,Math.round(target.mx*.15*Math.max(1,+e.v||1)))):0;if(d>0)hurt(B,target,d,u);lg(B,`👑 O Boss resistiu à perda direta de vidas${d?` · −${d} HP`:""}`);return}s.life=Math.max(0,s.life-e.v);B.ev.push({k:"life",s:si,n:s.life});chk(B)}},
 hv:{n:"Cura em valor fixo",v:"h",f:[["v","vida",50]],ds:e=>`Cura ${e.v} em ${TG[e.a]}`,run:(B,u,t,e)=>{const h=Math.min(t.mx-t.hp,e.v);t.hp+=h;if(h>0){lg(B,`💚 ${t.c.n} +${h}`);B.ev.push({k:"heal",id:t.id,v:h,r:u.c.r});const si=B.p.findIndex(s=>s.f.includes(t)||s.r.includes(t));if(si>=0)trg(B,t,si,"he")}}},
 mx:{n:"Vida máxima ±%",v:"h",f:[["p","±%",25]],ds:e=>`Vida máxima ${e.p>0?"+":""}${e.p}% em ${TG[e.a]}`,run:(B,u,t,e)=>{const d=Math.round(t.mx*e.p/100);t.mx=Math.max(1,t.mx+d);t.hp=Math.max(1,Math.min(t.mx,t.hp+Math.max(0,d)))}},
 rg:{n:"Regeneração (cura por turno)",...SB("rg",3,"h"),f:[["p","% da vida máx. por turno",10],["n","turnos",3]],ds:e=>`Regenera ${e.p}% da vida máxima por turno, ${e.n||3} turnos, em ${TG[e.a]}`},
@@ -2119,7 +2121,7 @@ async function cpBuildBackup(download=true,silent=false){
  return payload
 }
 const saveCode=()=>"CP1:"+b64(JSON.stringify(S)),loadCode=t=>{t=String(t).trim();if(t.slice(0,4)=="CP1:")t=unb(t.slice(4));const j=JSON.parse(t);if(!j||!j.inv)throw 0;return j};
-const ADM=Object.assign({c:[],p:[],d:"",o:{},po:{},ab:[],ca:{},xp:[],shop:[]},ADM0);ADM.shop=Array.isArray(ADM.shop)?ADM.shop:[];
+const ADM=Object.assign({c:[],p:[],d:"",o:{},po:{},ab:[],ca:{},xp:[],shop:[],starterCards:[]},ADM0);ADM.starterCards=Array.isArray(ADM.starterCards)?ADM.starterCards:[];ADM.shop=Array.isArray(ADM.shop)?ADM.shop:[];
 const sADM=()=>{try{window.cpNormalizeGameElements&&window.cpNormalizeGameElements();localStorage.setItem("colprimata_adm",JSON.stringify(ADM));localStorage.setItem("colprimata_img",JSON.stringify(IMG))}catch(e){toast("Sem espaço no aparelho · exporte o conteúdo")}};
 function addCard(x){let p=x.pk=="ind"?IND:P.find(q=>q.id==x.pk);if(!p){const d=ADM.p.find(q=>q.id==x.pk);if(!d)return;p={id:d.id,n:d.n,e:d.e,h:d.h,cost:d.cost,cards:[]};P.push(p)}const c={...x};prep(p,c,0);p.cards.push(c);ALL.push(c)}
 ADM.c.filter(x=>!x.dr).forEach(addCard);P.forEach(p=>p.dest=p.id==ADM.d); // v1.9: dr=1 = rascunho (guardada, fora do jogo até lançar)
@@ -2167,7 +2169,22 @@ document.addEventListener("change",e=>{const t=e.target;if(!t||!t.id)return;
 if(t.id=="ec"){QP=[];const h=$("hc");if(h&&t.value!="__"){h.value=t.value;try{hcLoad()}catch(x){}}yMode();yPaint()}
 else if(t.id=="qad"&&t.value){const v=t.value;let p;if(v[0]=="m")p={k:"m",i:+v.slice(1),n:hxEx[+v.slice(1)][0]};else{const a=ADM.ab.find(x=>x.id==v.slice(1));if(a)p={k:"l",id:a.id,n:a.n}}if(p)QP.push(p);t.value="";yPaint()}});
 ADM.cx=ADM.cx||{};[...new Set([...Object.keys(ADM.ca),...Object.keys(ADM.cx)])].forEach(i=>{const c=byId(i);if(!c)return;const k=c.sk||[];c.sk0=k;let l=Array.isArray(k[0])?k.slice():k.length?[k]:[];l=l.filter(a=>!(ADM.cx[i]||[]).includes(a[0]));(ADM.ca[i]||[]).forEach(id=>{const a=ADM.ab.find(x=>x.id==id);if(a)l.push([a.n,a.q?"“"+a.q+"”":"",dsc(a),{rc:a.rc,ef:a.ef,tr:a.tr,el:a.el,el2:a.el2,chargeMode:a.chargeMode,chargeTurns:a.chargeTurns}])});c.sk=l});
-function starterGo(){if(S.ini)return;S.ini=1;if(!Object.keys(S.inv).length){const l=shf(ALL.filter(c=>c.p&&!c.p.ex&&c.r<4)).slice(0,20);l.forEach(c=>S.inv[c.id]=1);S.opened=(S.opened||0)+2;setTimeout(()=>toast(`🎴 Você ganhou <b>2 pacotes iniciais</b>: ${l.length} cartas diferentes!`),700)}save()}
+function starterGo(){
+ if(S.ini)return;
+ const hasCards=Object.keys(S.inv||{}).some(id=>(+S.inv[id]||0)>0);
+ if(!hasCards){
+  const eligible=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr),byId=new Map(eligible.map(c=>[String(c.id),c])),picked=[],seen=new Set();
+  (Array.isArray(ADM.starterCards)?ADM.starterCards:[]).forEach(id=>{const c=byId.get(String(id));if(c&&!seen.has(String(c.id))&&picked.length<12){picked.push(c);seen.add(String(c.id))}});
+  // Configuração ausente/incompleta: completar com uma lista determinística, sem sorteio.
+  const fallback=eligible.filter(c=>c.r<4).concat(eligible.filter(c=>c.r>=4));
+  fallback.forEach(c=>{if(picked.length<12&&!seen.has(String(c.id))){picked.push(c);seen.add(String(c.id))}});
+  picked.forEach(c=>S.inv[c.id]=Math.max(1,+S.inv[c.id]||0));
+  S.opened=(S.opened||0)+2;
+  setTimeout(()=>toast(`🎴 Você ganhou <b>${picked.length} cartas iniciais fixas</b> e <b>2 pacotes de boas-vindas</b>!`),700);
+ }
+ S.ini=1;save();return true;
+}
+window.cpStarterGo=()=>{const granted=starterGo();if(granted){try{render(1)}catch(e){console.warn("render cartas iniciais",e)}}return granted};
 const imgOK=(file,cb)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const lim=CONFIG.imgKB*1024,cv=document.createElement("canvas"),x=cv.getContext("2d");let mm="image/webp";if(cv.toDataURL(mm).slice(5,15)!="image/webp")mm="image/jpeg";for(const w of[600,520,440,360,300]){cv.width=w;cv.height=w*4/3;const k=Math.max(w/im.width,cv.height/im.height);x.fillStyle="#111";x.fillRect(0,0,w,cv.height);x.drawImage(im,(w-im.width*k)/2,(cv.height-im.height*k)/2,im.width*k,im.height*k);for(let q=.9;q>.3;q-=.1){const u=cv.toDataURL(mm,q);if(u.length*.75<=lim)return cb(u)}}cb(cv.toDataURL("image/jpeg",.3))};im.onerror=()=>cb(null);im.src=r.result};r.readAsDataURL(file)};
 const cfg=document.createElement("div");cfg.id="cfg";cfg.hidden=true;document.body.append(cfg);
 const gear=document.createElement("button");gear.id="gear";gear.textContent="⚙";gear.setAttribute("aria-label","Ajustes");document.body.append(gear);
@@ -2175,12 +2192,19 @@ let AD=0,PEND=null,PW="";
 function cfgView(v){cfg.hidden=false;PEND=null;
  const T=`<div class="in2"><h2>${v=="a"?"Modo ADM":"Ajustes"}</h2>`,E=`<button class="bt gh" data-k="x">Fechar</button></div>`;
  if(v=="a"){
-  const op=P.map(p=>`<option value="${p.id}">${p.e} ${p.n}</option>`).join("")+ADM.p.filter(d=>!P.some(p=>p.id==d.id)).map(d=>`<option value="${d.id}">${d.e} ${d.n} · não lançado</option>`).join("")+'<option value="__">➕ Novo pacote…</option>',rk=R.map(r=>`<option>${r[0]}</option>`).join(""),ca=ALL.map(c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`).join(""),pd=P.map(p=>`<option value="${p.id}"${p.dest?" selected":""}>${p.n}</option>`).join("");
+  const op=P.map(p=>`<option value="${p.id}">${p.e} ${p.n}</option>`).join("")+ADM.p.filter(d=>!P.some(p=>p.id==d.id)).map(d=>`<option value="${d.id}">${d.e} ${d.n} · não lançado</option>`).join("")+'<option value="__">➕ Novo pacote…</option>',rk=R.map(r=>`<option>${r[0]}</option>`).join(""),ca=ALL.map(c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`).join(""),pd=P.map(p=>`<option value="${p.id}"${p.dest?" selected":""}>${p.n}</option>`).join(""),
+  starterPool=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr),starterValid=new Set(starterPool.map(c=>String(c.id))),starterSet=new Set((Array.isArray(ADM.starterCards)?ADM.starterCards:[]).map(String).filter(id=>starterValid.has(id)).slice(0,12)),
+  starterEsc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  if(starterSet.size!==12){starterSet.clear();starterPool.filter(c=>c.r<4).slice(0,12).forEach(c=>starterSet.add(String(c.id)));if(starterSet.size<12)starterPool.filter(c=>c.r>=4).forEach(c=>{if(starterSet.size<12)starterSet.add(String(c.id))});}
+  const starterRows=starterPool.map(c=>`<label class="yck" data-starter-row="${starterEsc((c.n||"")+" "+R[c.r][0]).toLowerCase()}"><input type="checkbox" data-starter-pick="1" value="${starterEsc(c.id)}"${starterSet.has(String(c.id))?" checked":""}><span>${R[c.r][0]} · ${starterEsc(c.n)}</span></label>`).join("");
   cfg.innerHTML=T+adxEd()+adxHb()+adxPk()+cpxEvForm()+adxRl()+adxGv()+`<details class="fd" id="ds_n"><summary>➕ Nova carta ou pacote</summary><p class="mut" style="margin:0;text-transform:none;letter-spacing:0">As cartas criadas ficam salvas neste aparelho. Para levar aos amigos, use Exportar conteúdo.</p>`
   +cpFl("Pacote",`<select id="ap">${op}</select>`)+`<div id="np" hidden>`+cpFl("Nome do pacote",'<input id="pn">')+cpFl("Emoji",'<input id="pe" value="🎴">')+cpFl("Cor (0 a 360)",'<input id="ph" type="number" value="200">')+cpFl("Preço em fragmentos",`<input id="pc" type="number" value="${CUSTO}">`)+`</div>`
   +cpFl("Nome da carta",'<input id="an">')+adxS("an_el","Elemento 1",ELOPT)+adxS("an_el2","Elemento 2 (opcional)",ELOPT2)+`<div id="cp-new-card-el-preview"></div>`+cpFl("Tribo / família (opcional)",'<input id="atb" maxlength="24" placeholder="Dragões, Bestas, Espíritos…">')+cpFl("Rank",`<select id="ar2">${rk}</select>`)
   +cpFl("Chance % (vazio = automática)",'<input id="ac" type="number" step="any">')+cpFl("História",'<textarea id="ah" rows="3"></textarea>')+cpFl("Habilidades da carta (marque várias)",`<select id="ahb" multiple size="5">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="${a.id}">${a.el&&a.el!=="carta"?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / ")+" · ":"🃏 "}${a.n}</option>`).join("")}</select>`)+cpFl("Habilidade só desta carta (não entra na lista geral)",`<select id="aqs"><option value="">Nenhuma</option>${hxEx.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join("")}</select>`)+cpFl("Imagem (vira WebP leve, até "+CONFIG.imgKB+" KB)",'<input id="fi" type="file" accept="image/*">')+`<label class="yck"><input type="checkbox" id="adr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt" data-k="nc">Salvar carta</button></details>`
   
+  +`<details class="fd" id="ds_st"><summary>🎴 Cartas iniciais para novatos</summary><p class="mut" style="margin:4px 0 12px;text-transform:none;letter-spacing:0">Marque exatamente 12 cartas publicadas. Todo jogador novo recebe esta seleção fixa; cartas em rascunho não aparecem aqui.</p>`
+  +cpFl("Buscar carta",'<input id="starterSearch" type="search" placeholder="Digite o nome ou rank">')
+  +`<p id="starterCardsCount" class="mut" style="margin:8px 0;text-transform:none;letter-spacing:0">Selecionadas: ${starterSet.size}/12</p><div id="starterCardsList" style="max-height:340px;overflow:auto;display:grid;gap:6px;padding:8px;border:1px solid #ffffff22;border-radius:12px">${starterRows||'<p class="mut">Crie e publique cartas primeiro.</p>'}</div><p class="mut" style="margin:10px 0;text-transform:none;letter-spacing:0">Use o botão Salvar no rodapé. Se não houver 12 cartas válidas configuradas, o jogo completa a lista com uma seleção fixa de cartas publicadas.</p></details>`
   +cpFl("Pacote em destaque",`<select id="ad"><option value="">Rodízio automático</option>${pd}</select>`)+`<button class="bt cy" data-k="nd">Salvar destaque</button><button class="bt cy" data-k="nf">+1.000 fragmentos (teste)</button>`
   +cpFl("Backup completo do ADM (CPB3)",cpTa("cc"))+cpFl("Arquivo JSON para restaurar",'<input id="fcc" type="file" accept=".json,.txt,application/json">')+`<button class="bt cy" data-k="xc">💾 Gerar backup completo</button><button class="bt gh" data-k="ic">📥 Validar e restaurar backup</button><p class="mut">Inclui cartas, pacotes, habilidades, regras/configurações e fotos recuperadas do aparelho e da nuvem. Antes de restaurar, o jogo baixa automaticamente um backup de segurança do conteúdo atual. Guarde os arquivos fora do jogo.</p><button class="bt gh" data-k="m">Ajustes do save</button>`+E;
   $("ap").onchange=e=>$("np").hidden=e.target.value!="__";adxFc();adxFk();yInit();cpSyncNewCardElements();cpSkillPreview();return}
@@ -2190,7 +2214,7 @@ function nCard(){const n=$("an").value.trim(),pv=$("ap").value;if(!n)return toas
  const x={id:"a"+rid(),pk,r:$("ar2").value,n,d:$("ah").value.trim()||undefined},tb=$("atb")&&$("atb").value.trim().slice(0,24),ch=parseFloat($("ac").value),el=$("an_el").value,el2=$("an_el2").value;if(el)x.el=el;if(el&&el2&&el!==el2)x.el2=el2;if(tb)x.tb=tb;if(ch>0)x.ch=ch;
  const dr=$("adr")&&$("adr").checked;if(dr)x.dr=1;if(PEND&&PW=="fi")IMG[x.id]=PEND;ADM.c.push(x);YCA(x);sADM();if(!dr)addCard(x);toast(dr?`📦 <b>${n}</b> guardada · lance em Lançamentos`:`✅ <b>${n}</b> criada!`);try{sessionStorage.cpad2="ds_c"}catch(e){}if(window.__yca){dr?drGo():adxGo();return}cfgView("a");const dn=$("ds_n");if(dn)dn.open=true}
 gear.onclick=()=>cfgView("m");
-cfg.onchange=e=>{const t=e.target;if((t.id=="fi"||t.id=="fj"||t.id=="fbk"||t.id=="fpb")&&t.files[0])imgOK(t.files[0],u=>{PEND=u;PW=t.id;toast(u?`Imagem pronta · ${Math.round(u.length*.75/1024)} KB`:"Não consegui ler a imagem")})};
+cfg.onchange=e=>{const t=e.target;if(t.matches&&t.matches("[data-starter-pick]")){let n=cfg.querySelectorAll("[data-starter-pick]:checked").length;if(n>12){t.checked=false;n--;toast("O limite é de 12 cartas iniciais.")}const c=$("starterCardsCount");if(c)c.textContent=`Selecionadas: ${n}/12`;return}if((t.id=="fi"||t.id=="fj"||t.id=="fbk"||t.id=="fpb")&&t.files[0])imgOK(t.files[0],u=>{PEND=u;PW=t.id;toast(u?`Imagem pronta · ${Math.round(u.length*.75/1024)} KB`:"Não consegui ler a imagem")})};
 cfg.onclick=e=>{const b=e.target.closest("[data-k]");if(!b)return;const k=b.dataset.k;
  if(k=="x"){cfg.hidden=true;sync()}
  else if(k=="m")cfgView("m")
@@ -2295,7 +2319,13 @@ function adxRr(){ask("Restaurar padrões?","Regras e recompensas voltam aos valo
 function adxG(w){const n=Math.floor(+$("gn").value);if(!(n>0))return toast("Informe uma quantidade.");
 if(w=="gf")S.fr+=n;else if(w=="gg"){const v=$("gp").value;if(v=="__r")for(let k=0;k<n;k++)gift(P[Math.floor(Math.random()*P.length)].id,1);else gift(v,n)}else if(w=="gk"){const i=$("gc").value;S.inv[i]=(S.inv[i]||0)+n}else ALL.forEach(c=>S.inv[c.id]=S.inv[c.id]||1);
 save();upd();sync();toast("✓ Pronto")}
-const adxA={sc:adxSc,dc:adxDc,sk:adxSk,dk:adxDk,sr:adxSr,rr:adxRr,sev:cpxEvSave,dev:cpxEvEnd};
+function adxSt(){
+ const ids=[...cfg.querySelectorAll("[data-starter-pick]:checked")].map(x=>String(x.value)),valid=new Set(ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr).map(c=>String(c.id)));
+ if(ids.length!==12)return toast(`Selecione exatamente 12 cartas. Atualmente: ${ids.length}/12.`);
+ if(new Set(ids).size!==12||ids.some(id=>!valid.has(id)))return toast("A seleção contém cartas repetidas, removidas ou não publicadas. Atualize a lista e tente novamente.");
+ ADM.starterCards=ids;toast("✓ As 12 cartas iniciais foram salvas para os próximos jogadores.");adxGo();
+}
+const adxA={sc:adxSc,dc:adxDc,sk:adxSk,dk:adxDk,sr:adxSr,rr:adxRr,sev:cpxEvSave,dev:cpxEvEnd,st:adxSt};
 function adx(k){adxA[k]?adxA[k]():adxG(k)}
 // ===== v1.5: ADM · HABILIDADES · monte com blocos (FX) e dê a qualquer carta =====
 let HX=[];
@@ -2488,7 +2518,8 @@ addEventListener("resize",a3sz);
 document.addEventListener("visibilitychange",()=>{if(!A3)return;if(document.hidden&&A3.raf){cancelAnimationFrame(A3.raf);A3.raf=0}else if(!document.hidden&&A3.cv&&A3.cv.isConnected&&!A3.raf){A3.lastFrame=0;A3.raf=requestAnimationFrame(a3lp)}});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-a3]");if(b&&A3)A3.tg=Math.max(0,Math.min(AR.length-1,Math.round(A3.tg)+ +b.dataset.a3))});
 
-starterGo();
+// A concessão inicial é adiada até a configuração ADM da nuvem ser carregada.
+// O módulo Firebase chama cpStarterGo após a primeira leitura do conteúdo.
 arenaInit();tickFp();
 $("ow").innerHTML=wal();save();
 render();
@@ -2605,14 +2636,14 @@ if(!document.querySelector('meta[name="theme-color"]')){const t=document.createE
 
 // ===== v1.0 (17/11/2026): MODO ADM organizado · categorias, busca, botão de salvar fixo, campos em grupos e zona de risco =====
 (()=>{try{
-const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_ev:["🎉","Eventos","Bônus, presentes e aviso na tela inicial"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina até dois elementos por carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"]},
-FT={ds_ev:["@sev","Salvar evento"],ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"]},
+const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_ev:["🎉","Eventos","Bônus, presentes e aviso na tela inicial"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina até dois elementos por carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"],ds_st:["🎴","Cartas iniciais","Escolha as 12 cartas entregues a jogadores novos"]},
+FT={ds_ev:["@sev","Salvar evento"],ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"],ds_st:["@st","Salvar 12 cartas iniciais"]},
 GR={ds_r:[["Login e pacotes",["cf_diaria","cf_pacVit","cf_gratisLivre","cf_gratisJogar"]],["Pacotes aleatórios nas recompensas",["cf_rewardRandomChance"]],["Fragmentos e preços",["rfr","rcu","rini","rrc","cf_fusMult"]],["Liberações por arena",["cf_fusArena","cf_sArena"]],["Faixa de status por rank",["cf_faixa"]],["Bots de batalha",["cf_botErro","cf_botForca","cf_botNivel"]]],
 ds_b:[["Troféus",["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax"]],["Prêmios das lutas",["cf_limiteDia","cf_derrota","cf_arf0","cf_arfK","cf_amigoFrag","cf_amigoDia"]],["Duelo ao vivo",["cf_turnoSeg","cf_sumiuSeg"]],["Chefes e campeão",["cf_chefe","cf_chefeFinal","cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag"]],["Arenas e força das cartas",["rtr","ran","rst"]]],
 ds_m:[["Missões",["cf_nDia","cf_mDia","cf_mSem","cf_mSemPac","cf_mDiaBonus"]],["Listas de missões",["rdp","rwp","rmc"]]],
 ds_s:[["Sistema",["cf_admPin","cf_imgKB","cf_som","cf_musica"]],["Conteúdo do jogo",["cc","fcc"]]],
 ds_k:[["Pacote em destaque",["ad"]]]},
-GRP=[["Criar e lançar",["ds_l","ds_i","ds_c","ds_h","ds_e"]],["Presentes e prêmios",["ds_t","ds_q"]],["Limpeza",["ds_z"]],["Pacotes",["ds_k","ds_v"]],["Regras do jogo",["ds_r","ds_b","ds_m","ds_ev"]],["Painel e sistema",["ds_p","ds_x","ds_g","ds_s"]]],
+GRP=[["Criar e lançar",["ds_l","ds_i","ds_c","ds_h","ds_e"]],["Novos jogadores",["ds_st"]],["Presentes e prêmios",["ds_t","ds_q"]],["Limpeza",["ds_z"]],["Pacotes",["ds_k","ds_v"]],["Regras do jogo",["ds_r","ds_b","ds_m","ds_ev"]],["Painel e sistema",["ds_p","ds_x","ds_g","ds_s"]]],
 HALF=/^(er|et|ar2|at2|ke|pe|kh|ph|pc|kc|cf_admPin)$/,N=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),
 PG=()=>[...cfg.querySelectorAll("details.adp")],act=()=>cfg.querySelector("details.adp[open]"),
 el=(t,c,h)=>{const e=document.createElement(t);e.className=c;if(h!=null)e.innerHTML=h;return e};
@@ -2647,6 +2678,7 @@ cfg.addEventListener("click",e=>{const b=e.target.closest("[data-adm]");if(!b||!
 if(k=="home")return dirty?ask("Descartar alterações?","As mudanças desta tela ainda não foram salvas.","Descartar",()=>cfgView("a"),1):show("");
 k[0]=="p"?show(k.slice(1)):go(k.slice(1))});
 cfg.addEventListener("input",e=>{const t=e.target;if(!cfg.classList.contains("adm"))return;
+if(t.id=="starterSearch"){const q=N(t.value.trim());cfg.querySelectorAll("[data-starter-row]").forEach(row=>{row.hidden=!!q&&!N(row.textContent).includes(q)});return}
 if(t.id=="asq"){const q=N(t.value.trim());cfg.querySelector(".asl").innerHTML=q.length<2?"":idx.filter(x=>x.n.includes(q)).slice(0,10).map(x=>`<button data-adm="f${x.id}"><b>${x.t}</b><small>${x.p}</small></button>`).join("")||'<p class="mut">Nada encontrado.</p>';return}
 if(t.closest(".adp")&&!t.closest("#ds_n")&&!/^(ec|ek|z_\w*)$/.test(t.id)&&!dirty){dirty=1;ui()}});
 cfg.addEventListener("toggle",e=>{const d=e.target;if(cfg.classList.contains("adm")&&d.matches&&d.matches("details.adp")&&d.open&&act()!==d)show(d.id)},true);
@@ -3154,7 +3186,7 @@ window.__rlq=0;setInterval(()=>{if(window.__rlq&&!(typeof bt=="function"&&bt()))
 const idb=new Promise((ok,no)=>{const r=indexedDB.open("cpimg",1);r.onupgradeneeded=()=>r.result.createObjectStore("i");r.onsuccess=()=>ok(r.result);r.onerror=()=>no()});
 const ig=k=>idb.then(d=>new Promise(ok=>{const q=d.transaction("i").objectStore("i").get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ok()})).catch(()=>{});
 const is=(k,v)=>idb.then(d=>d.transaction("i","readwrite").objectStore("i").put(v,k)).catch(()=>{});
-let U=null,NK="",admStr=null,lastA=null,CF={},meta={},ready=0,canAdm=true,t1=0,t2=0;
+let U=null,NK="",admStr=null,lastA=null,CF={},meta={},ready=0,canAdm=true,t1=0,t2=0,saveChain=Promise.resolve(),admChain=Promise.resolve();
 // o jogo grava no localStorage; aqui espelhamos para a nuvem sem mexer no resto do código
 Storage.prototype.setItem=function(k,v){
  if(this!==L)return SI.call(this,k,v);
@@ -3164,10 +3196,25 @@ Storage.prototype.setItem=function(k,v){
  else if(k==="colprimata_adm"){admStr=v;ls("cp_pa","1");pa()}
 };
 function sv(){clearTimeout(t1);t1=setTimeout(pushSave,5000)}
-async function pushSave(){const s=L.getItem("colprimata_save");if(!U||!s)return;try{const t=Date.now();await setDoc(doc(db,"saves",U.uid),{t,s});ls("cp_lt",t);ls("cp_d","")}catch(e){console.warn(e)}}
+function pushSave(){
+ const uid=U&&U.uid;if(!uid)return Promise.resolve();
+ const job=async()=>{
+  // A fila evita que duas gravações simultâneas terminem fora de ordem.
+  if(!U||U.uid!==uid||L.getItem("cp_uid")!==uid)return;
+  const s=L.getItem("colprimata_save");if(!s)return;
+  const t=Date.now();
+  try{
+   await setDoc(doc(db,"saves",uid),{t,s});
+   if(!U||U.uid!==uid||L.getItem("cp_uid")!==uid)return;
+   if(L.getItem("colprimata_save")===s){ls("cp_lt",t);ls("cp_d","")}
+   else{ls("cp_d","1");sv()}
+  }catch(e){console.warn(e);if(U&&U.uid===uid&&L.getItem("cp_uid")===uid){ls("cp_d","1");sv()}}
+ };
+ saveChain=saveChain.then(job,job);return saveChain;
+}
 addEventListener("visibilitychange",()=>{if(document.hidden&&L.cp_d)pushSave()});
 function pa(){clearTimeout(t2);t2=setTimeout(pushAdm,1500)}
-async function pushAdm(){ // só o administrador consegue (as regras do Firebase barram os outros)
+async function pushAdmNow(){ // só o administrador consegue (as regras do Firebase barram os outros)
  if(!U||!canAdm)return;if(!ready)return pa();
  try{const f={...CF};let ch=0;
   for(const id in IMG){const d=IMG[id],k=H(d),m=meta[id];if(m&&m.k===k&&m.t>0){f[id]=m.t;continue}
@@ -3248,6 +3295,8 @@ function stats(){const t=(S.cn&&S.cn.T)||{},w=t.win||0,o=S.on||{},h=ALL.filter(c
  return{n:ME.n,f:ME.f||"",title:S.title||"",showcase:Array.isArray(S.showcase)?S.showcase.slice(0,3):[],wish:Array.isArray(S.wish)?S.wish.slice(0,10):[],tp:S.tp||0,sId:se.id,sPts:se.pts,pId:S.pId||"",pPts:S.pPts||0,w,l:Math.max(0,(t.play||0)-w),ow:o.w||0,ol:o.l||0,nc:h.length,tot:ALL.length,dk:d.length==12?"DECK~"+d.map(c=>c.id+":"+lvl(c)).join(","):"",ex:Object.fromEntries(ALL.filter(c=>extra(c)>0).map(c=>[c.id,extra(c)])),t:Date.now()}}
 async function pubPerfil(){if(!U)return;try{await setDoc(doc(db,"perfis",U.uid),stats(),{merge:true})}catch(e){warn("perfil",e)}}
 window.cpPublishProfile=pubPerfil;
+// Serializa também as publicações de conteúdo ADM: uma edição antiga nunca pode terminar depois da mais nova.
+function pushAdm(){const job=()=>pushAdmNow();admChain=admChain.then(job,job);return admChain}
 function pf(){clearTimeout(pt);pt=setTimeout(pubPerfil,6000)}
 function modal(h){let o=g("cpm");if(!o){o=document.createElement("div");o.id="cpm";o.onclick=e=>{e.stopPropagation();if(e.target===o)return o.remove();const b=e.target.closest("[data-a]");b&&act(b.dataset.a,b.dataset.v)};o.onchange=e=>{e.target.id=="tm"&&fillQ()};document.body.append(o)}o.innerHTML=`<div class="pbx">${h}</div>`;return o}
 function act(a,v){if(String(a).slice(0,2)=="mz")return mzAct(a,v);if(a=="me")perfil();else if(a=="pj")jogadores();else if(a=="yr")cpOpenYearRetrospective();else if(a=="rnk"||a=="rkr")ranking();else if(a=="rkc")claimSeason();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dstart")enviarDesafio();else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca");else if(a=="px"){const o=g("cpm");o&&o.remove()}}
@@ -3323,7 +3372,7 @@ function lvSend(c){
 // botão "↻ Atualizar" da tela de espera: busca as jogadas do outro agora
 window.lvSync=async()=>{const L=window.LV;if(!L)return;if(L.desync)return lvRepair(L);try{const d=(await getDoc(doc(db,L.g?"mesas":"duelos",L.id))).data(),q0=L.qn;if(!d)return toast("Duelo não encontrado");lvCm(d);toast(L.qn>q0?"↻ Atualizado":"Tudo em dia · esperando o outro jogar")}catch(e){warn("duelo",e)}};
 // enquanto espera o outro jogar, confere a cada 5 s se há jogada nova (caso o aviso em tempo real se perca, ex.: app em segundo plano)
-setInterval(()=>{const L=window.LV,B=bt();if(!L||!B||!B.lv||B.over||B.t==B.v||document.hidden||L.pf)return;L.pf=1;getDoc(doc(db,L.g?"mesas":"duelos",L.id)).then(sn=>{const d=sn.data();if(d&&window.LV===L)lvCm(d)}).catch(()=>{}).finally(()=>{L.pf=0})},5000);
+setInterval(()=>{const L=window.LV,B=bt();if(!L||!B||!B.lv||B.over||B.t==B.v||document.hidden||L.pf||L.syncing||L.repairing||L.pb)return;L.pf=1;getDoc(doc(db,L.g?"mesas":"duelos",L.id)).then(sn=>{const d=sn.data();if(d&&window.LV===L)lvCm(d)}).catch(()=>{}).finally(()=>{L.pf=0})},5000);
 window.lvq=s=>window.LV&&lvSend({k:"qt",s});window.lvSend=lvSend;
 function rply(c){const B=BT,L=window.LV;if(!B||!L||B.over)return;L.rm=1;L.lt=Date.now();lvSave();try{
  if(c.k=="en"||c.k=="ae"){if(c.s==null||B.t==c.s)endT(B);return zpost()} // se a vez já passou por aqui, ignora (não passa duas vezes)
@@ -3336,9 +3385,37 @@ function rply(c){const B=BT,L=window.LV;if(!B||!L||B.over)return;L.rm=1;L.lt=Dat
  if(k=="dr")ok=!!aDraw(B);else if(k=="pl")ok=!!aPlace(B,o(c.u));else if(k=="at")ok=!!aAtk(B,o(c.u),e(c.target||c.x||c.t));else if(k=="sk")ok=!!aSk(B,o(c.u),c.i,{e:e(c.e),a:o(c.a)});else if(k=="en")endT(B);
  if(!ok){console.warn("duelo: jogada não pôde ser reproduzida",c);L.desync=1;return false}
  zpost();return true}catch(x){console.warn("duelo",x);L.desync=1;return false}finally{L.rm=0}}
-function lvCm(d){const L=window.LV;if(!L||!d.cm||L.desync)return;d.cm.map(x=>{try{return JSON.parse(x)}catch(e){}}).filter(Boolean).sort((a,b)=>a.n-b.n).forEach(c=>{if(c.n==L.qn){L.q.push(c);L.qn++}});pump()}
-function pump(){const L=window.LV;if(!L||L.pb||L.desync)return;L.pb=1;const nx=()=>{if(window.LV!==L){L.pb=0;return}const c=L.q.shift();if(!c){L.pb=0;return}if(rply(c)===false||L.desync){L.pb=0;L.q=[];lvRepair(L);return}setTimeout(nx,c.k=="en"?400:700)};nx()}
-async function lvRepair(L){if(!L||L.repairing||window.LV!==L)return;L.repairing=1;try{if(L.gapTimer){clearTimeout(L.gapTimer);L.gapTimer=0}if(L.writeChain)await L.writeChain;const group=!!L.g,snap=await getDoc(doc(db,group?"mesas":"duelos",L.id)),d=snap.data();if(!d||!Array.isArray(d.cm))throw Error("Histórico da batalha indisponível");const me=L.me,id=L.id;restoreDuelConfig(L);L.q=[];L.pb=0;window.LV=null;if(group)mzBegin(id,d);else lvStart(id,d,me);const N=window.LV;if(!N)throw Error("Não foi possível reiniciar o motor");N.repairing=1;N.rebuilding=1;lvFast(d);N.rebuilding=0;if(N.desync)throw Error("O histórico contém uma jogada que não pôde ser reproduzida");N.repairing=0;toast("🔄 Batalha sincronizada · estado reconstruído pelo histórico")}catch(e){console.error("recuperação da batalha",e);if(window.LV)window.LV.repairing=0;toast("⚠️ A sincronização falhou. Confira a conexão e tente atualizar novamente.")}}
+function lvCm(d){const L=window.LV;if(!L||L.repairing||!d.cm||L.desync)return;d.cm.map(x=>{try{return JSON.parse(x)}catch(e){}}).filter(Boolean).sort((a,b)=>a.n-b.n).forEach(c=>{if(c.n==L.qn){L.q.push(c);L.qn++}});pump()}
+function pump(){const L=window.LV;if(!L||L.pb||L.desync||L.repairing)return;L.pb=1;const nx=()=>{if(window.LV!==L){L.pb=0;return}const c=L.q.shift();if(!c){L.pb=0;return}if(rply(c)===false||L.desync){L.pb=0;L.q=[];lvRepair(L);return}setTimeout(nx,c.k=="en"?400:700)};nx()}
+async function lvRepair(L){
+ if(!L||L.repairing||window.LV!==L)return;
+ L.repairing=1;
+ const previousBattle=BT,previousLive=window.LV,previousConfig={vidaMult:CONFIG.vidaMult,acoes:CONFIG.acoes,acaoIni:CONFIG.acaoIni,danoMult:CONFIG.danoMult},previousRestore=L.prevConfig?{...L.prevConfig}:null;
+ const previousQueue=Array.isArray(L.q)?L.q.slice():[],previousDesync=!!L.desync,previousWriteFailed=!!L.writeFailed,previousSelection=SEL&&typeof SEL==="object"?{...SEL}:SEL,previousPass=PASS;
+ let replaced=false;
+ try{
+  if(L.gapTimer){clearTimeout(L.gapTimer);L.gapTimer=0}
+  if(L.writeChain)await L.writeChain;
+  const group=!!L.g,snap=await getDoc(doc(db,group?"mesas":"duelos",L.id)),d=snap.data();
+  if(!d||!Array.isArray(d.cm))throw Error("Histórico da batalha indisponível");
+  const me=L.me,id=L.id;restoreDuelConfig(L);L.q=[];L.pb=0;window.LV=null;
+  if(group)mzBegin(id,d);else lvStart(id,d,me);
+  const N=window.LV;if(!N)throw Error("Não foi possível reiniciar o motor");replaced=true;
+  N.repairing=1;N.rebuilding=1;lvFast(d);N.rebuilding=0;
+  if(N.desync)throw Error("O histórico contém uma jogada que não pôde ser reproduzida");
+  N.repairing=0;toast("🔄 Batalha sincronizada · estado reconstruído pelo histórico");
+ }catch(e){
+  console.error("recuperação da batalha",e);
+  if(replaced||window.LV!==previousLive){
+   window.LV=previousLive;BT=previousBattle;Object.assign(CONFIG,previousConfig);SEL=null;PASS=0;
+   if(previousLive){previousLive.repairing=0;previousLive.prevConfig=previousRestore;previousLive.q=previousQueue;previousLive.pb=0;previousLive.desync=previousDesync;previousLive.writeFailed=previousWriteFailed;lvSave()}
+   SEL=previousSelection;PASS=previousPass;
+   try{if(previousBattle)zr()}catch(renderError){console.warn("restauração visual da batalha",renderError)}
+   if(previousLive&&previousQueue.length&&!previousDesync)pump()
+  }else if(window.LV)window.LV.repairing=0;
+  L.repairing=0;toast("⚠️ A reconstrução falhou. Mantive a batalha anterior para não perder seu estado; verifique a conexão e tente novamente.");
+ }
+}
 function lvStart(id,d,me){const A=prs(d.da),C=prs(d.db),m=d.mods||{};if(!A||!C)return toast("Deck inválido · duelo cancelado");if(m.capC&&[...A,...C].some(x=>x.c.r>3))return toast("Duelo inválido · a restrição de Rank C não foi respeitada.");const prev={vidaMult:CONFIG.vidaMult,acoes:CONFIG.acoes,acaoIni:CONFIG.acaoIni,danoMult:CONFIG.danoMult};if(m.hp2)CONFIG.vidaMult=Math.max(.1,+m.vidaMult||((+CONFIG.vidaMult||1)*2));if(m.act3){CONFIG.acoes=3;CONFIG.acaoIni=3}if(m.doubleDamage)CONFIG.danoMult=Math.max(.1,+CONFIG.danoMult||1)*2;window.LV={id,me,qn:0,q:[],d:0,rr:prng(+d.sd||1),lt:Date.now(),mods:m,series:d.series&&d.series.bestOf===3?d.series:null,seriesIntermission:false,aUid:d.a||"",bUid:d.b||"",prevConfig:prev};lvSave();g("cpm")&&g("cpm").remove();zgo({n:d.an,u:A},{n:d.bn,u:C},{m:"f"});if(m.noSkills&&BT)BT.p.forEach(seat=>[...seat.dk,...seat.f,...seat.r].forEach(u=>{if(u){u.ab=[];u.ps=[];u.cd=[];u.chg=[]}}));zr()}
 function duelModText(m,s){m=m||{};const a=[];if(m.hp2)a.push("❤️ Vida das cartas ×2");if(m.act3)a.push("⚡ 3 ações por turno");if(m.capC)a.push("🛡️ Rank máximo C");if(m.doubleDamage)a.push("💥 Dano ×2");if(m.noSkills)a.push("🚫 Sem habilidades");if(m.fastTurns)a.push("⏱ Turnos de 25 s");if(m.draft)a.push("🎴 Draft · 12 escolhas de 3");if(s&&s.bestOf===3)a.push("🏆 Melhor de 3");return a.length?a.join(" · "):"Sem modificadores"}
 function duelDeck(m){let d=dkv();if(d.length<12)d=dkf();if(m&&m.capC){d=d.filter(c=>c.r<=3);const seen=new Set(d.map(c=>c.id));ALL.filter(c=>c.r<=3&&(S.inv[c.id]||0)>0&&!seen.has(c.id)).sort((a,b)=>b.r-a.r||lvl(b)-lvl(a)).forEach(c=>{if(d.length<12){d.push(c);seen.add(c.id)}})}if(d.length!==12)return"";return"DECK~"+d.slice(0,12).map(c=>c.id+":"+lvl(c)).join(",")}
@@ -3541,9 +3618,17 @@ window.cpEventsApi={
 };
 if(L.getItem("colprimata_save")&&(!c||L.cp_d))pushSave();cpPresenceStart();
  g("cpl")&&g("cpl").remove();chip();watchTr();watchDu();try{lvResume()}catch(e){console.warn("duelo",e)}try{watchMz()}catch(e){console.warn("mesa",e)}try{window.cpWatchBossRaids&&window.cpWatchBossRaids()}catch(e){console.warn("boss raid",e)}try{watchPres()}catch(e){console.warn("presentes",e)}pf();
- onSnapshot(doc(db,"conteudo","adm"),s=>{const d=s.data();if(!d){ready=1;L.cp_pa&&pa();return}lastA=d.adm;
-  if(L.cp_pa)pa();else if(d.v!==+L.cp_v){ls("cp_v",d.v);if(d.adm!==L.getItem("colprimata_adm")){ls("colprimata_adm",d.adm);upd()}}
-  fotos(d.f||{})},e=>{console.warn(e);if(e.code==="permission-denied")convite(u)});
+ onSnapshot(doc(db,"conteudo","adm"),s=>{const d=s.data();if(!d){ready=1;L.cp_pa&&pa();window.cpStarterGo&&window.cpStarterGo();return}lastA=d.adm;
+  let admNeedsReload=false;
+  if(L.cp_pa)pa();else{
+   if(d.v!==+L.cp_v)ls("cp_v",d.v);
+   // Compare também o conteúdo, não só a versão: o cache pode perder a chave cp_v.
+   if(typeof d.adm==="string"&&d.adm!==L.getItem("colprimata_adm")){ls("colprimata_adm",d.adm);window.__cpAdmReloadPending=1;try{sessionStorage.removeItem("cp_rl")}catch(e){}admNeedsReload=true;upd()}
+  }
+  fotos(d.f||{});
+  // Não conceda o deck inicial enquanto houver uma ADM remota pendente de recarga.
+  if(!admNeedsReload&&!window.__cpAdmReloadPending)window.cpStarterGo&&window.cpStarterGo();
+ },e=>{console.warn(e);if(e.code==="permission-denied")convite(u)});
 }
 // ===== v2.5 · SOCIAL: PRESENÇA ONLINE + REAÇÕES NOS PERFIS =====
 const CP_PRES_TTL=150000,CP_RX_EMOJIS=["❤️","🔥","😂","👏","👑","🐒"],CP_RX_LIMIT=12;
@@ -3857,17 +3942,27 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   const lvSyncBase=window.lvSync;
   window.lvSync=async function(){
     const L=window.LV;if(!L)return;
-    if(L.desync)return lvRepair(L);
+    if(L.repairing){toast("↻ A batalha já está sendo reconstruída.");return}
+    if(L.desync){return lvRepair(L)}
+    if(L.syncing||L.pf||L.pb){toast("↻ Já existe uma sincronização ou jogada em andamento. Aguarde ela terminar.");return}
+    L.syncing=1;
+    const button=zb.querySelector('[data-z="sync"]');
+    if(button){button.disabled=true;button.textContent="↻ Sincronizando…"}
     try{
       if(L.writeChain)await L.writeChain;
+      if(window.LV!==L)return;
       const snap=await getDoc(doc(db,L.g?"mesas":"duelos",L.id));
-      const d=snap.data();if(!d)return toast("Batalha não encontrada.");
+      const d=snap.data();if(!d||!Array.isArray(d.cm))throw Error("O histórico da batalha não está disponível.");
       const before=L.qn;lvCm(d);
-      if(L.desync)return lvRepair(L);
-      if(L.gapMissing)return toast("↻ Há uma jogada chegando fora de ordem. Estou recuperando a sequência automaticamente.");
-      if(L.qn>before)toast("↻ Histórico recebido · batalha sincronizando");
-      else toast("✓ Sincronização conferida · aguardando a ação do jogador da vez.");
-    }catch(e){if(lvSyncBase)return lvSyncBase();warn("sincronização da batalha",e)}
+      if(L.desync){await lvRepair(L);return}
+      if(L.gapMissing)toast("↻ Há uma jogada chegando fora de ordem. Estou recuperando a sequência automaticamente.");
+      else if(L.qn>before)toast("↻ Histórico recebido · aplicando as jogadas em ordem.");
+      else toast("✓ Histórico conferido · aguardando a ação do jogador da vez.");
+    }catch(e){console.error("sincronização manual da batalha",e);warn("sincronização da batalha",e);toast("⚠️ Não consegui atualizar a batalha. O estado atual foi preservado; tente novamente quando a conexão estabilizar.")}
+    finally{
+      if(window.LV===L)L.syncing=0;
+      if(button&&button.isConnected){button.disabled=false;button.textContent="↻ Atualizar"}
+    }
   };
 
   // Em 3 jogadores, o botão de atualização também detecta lacunas; se alguém sumir, há remoção por abandono temporizado.
@@ -4063,7 +4158,8 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
 })();
 
 A.onAuthStateChanged(au,u=>u?start(u).catch(e=>{console.warn(e);login("Falha ao entrar: "+(e.code||e.message))}):login());
-})().catch(e=>console.warn("Online indisponível · jogando offline",e));
+})().catch(e=>{console.warn("Online indisponível · jogando offline",e);window.cpStarterGo&&window.cpStarterGo()});
+else window.cpStarterGo&&window.cpStarterGo();
 
 
 
@@ -4451,6 +4547,19 @@ extra=()=>{const g=$("ds_g")&&$("ds_g").querySelector(".fg");if(!g||$("tst2"))re
 d.innerHTML=`<h3 class="ash">Atalhos de teste</h3><div class="r2"><button class="bt cy" data-t2="fr">+10.000 ${gem}</button><button class="bt cy" data-t2="pk">🎁 +5 pacotes</button><button class="bt cy" data-t2="day">⏱ Zerar o dia</button><button class="bt cy" data-t2="camp">👑 Virar campeão</button></div><button class="bt cy" data-t2="all">🃏 Liberar todas as cartas</button><h3 class="ash">Checagem do jogo</h3><button class="bt cy" data-t2="chk">🔎 Rodar checagem</button><div id="chk_out"></div>`;g.append(d)},
 chk=()=>{const o=[],rk={},dup={},add=(t,l)=>{l.length&&o.push(`<p><b>${t}</b> · ${l.length}<br><small>${l.slice(0,8).join(", ")}${l.length>8?" …":""}</small></p>`)};
 ALL.forEach(c=>{rk[c.r]=(rk[c.r]||0)+1;dup[c.n]=(dup[c.n]||0)+1});
+const idCounts={};ALL.forEach(c=>{const id=String(c&&c.id||"");if(id)idCounts[id]=(idCounts[id]||0)+1});
+add("IDs de cartas repetidos",Object.keys(idCounts).filter(id=>idCounts[id]>1));
+add("Cartas com rank inválido",ALL.filter(c=>!Number.isInteger(+c.r)||+c.r<0||+c.r>=R.length).map(c=>c.n||c.id));
+const packageIds=new Set([...P,...(ADM.p||[])].filter(Boolean).map(p=>String(p.id)));
+add("Cartas ADM sem pacote válido",(ADM.c||[]).filter(c=>!c.pk||!packageIds.has(String(c.pk))).map(c=>c.n||c.id));
+const abilityIds=new Set((ADM.ab||[]).map(a=>String(a.id)));
+const missingAbilityRefs=Object.entries(ADM.ca||{}).flatMap(([cardId,refs])=>(Array.isArray(refs)?refs:[]).filter(id=>!abilityIds.has(String(id))).map(id=>cardId+" → "+id));
+add("Referências de habilidade ausentes",missingAbilityRefs);
+const starterIds=Array.isArray(ADM.starterCards)?ADM.starterCards.map(String):[],starterValid=new Set(ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr).map(c=>String(c.id))),starterIssues=[];
+if(starterIds.length!==12)starterIssues.push(`${starterIds.length}/12 cartas selecionadas${starterIds.length===0?" · seleção fixa automática ativa":""}`);
+if(new Set(starterIds).size!==starterIds.length)starterIssues.push("há cartas repetidas na seleção");
+if(starterIds.some(id=>!starterValid.has(id)))starterIssues.push("há cartas removidas, em rascunho ou não publicadas");
+add("Configuração de cartas iniciais",starterIssues);
 add("Cartas sem imagem",ALL.filter(c=>!(c.img||IMG[c.id])).map(c=>c.n));
 add("Vida ou dano inválido",ALL.filter(c=>!(c.hp>0&&c.atk>0)).map(c=>c.n));
 add("Nomes repetidos",Object.keys(dup).filter(n=>dup[n]>1));
