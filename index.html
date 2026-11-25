@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
 <meta name="application-version" content="1.0">
 <!-- COLEÇÃO PRIMATA · VERSÃO OFICIAL 1.0 -->
@@ -1323,7 +1323,7 @@ const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
  /* SSS usa um aro prismático recortado; nenhuma peça fica sobre a ilustração. */
- const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
+ const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<i class="cp-sss-rgb-film" aria-hidden="true"></i><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
  return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${art}${rarityFx}${frame}${xt}</div>`
 };
 // se a foto de uma carta não carregar, mostra a ilustração gerada
@@ -5443,7 +5443,7 @@ html.cp-lite #a3{min-height:90px;background:#ffffff08;border-radius:12px}
 html.cp-lite #a3 .a3v{display:block!important;padding:26px 12px;text-align:center;color:var(--mut);font-size:.76rem}
 html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 @media(max-width:360px){
-
+}
 </style>
 <script id="cp-update-js">
 /* Arquivo-fonte: assets/js/37-qol-favorites-and-shop.js */
@@ -7655,6 +7655,80 @@ body:has(#fc:not([hidden])) #ov{visibility:hidden!important}
  }catch(err){console.warn("PRIMATA: layout do Boss solo não aplicado",err)}
 })();
 </script>
+
+
+<style id="cp-sss-rgb-film-real-fix-and-no-auto-zoom">
+/* O zoom involuntário vinha do gesto de toque/double-tap do navegador.
+   Mantemos a rolagem horizontal e vertical, mas não a ampliação da página. */
+html,body{
+  touch-action:pan-x pan-y!important;
+  -webkit-text-size-adjust:100%!important;
+  text-size-adjust:100%!important;
+}
+
+/* SSS: camada REAL no HTML, acima da arte e abaixo do aro prismático.
+   Não depende de ::after (que regras antigas do tema estavam escondendo). */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film{
+  position:absolute!important;
+  display:block!important;
+  visibility:visible!important;
+  pointer-events:none!important;
+  inset:3px!important;
+  z-index:7!important;
+  border-radius:inherit!important;
+  opacity:.36!important;
+  mix-blend-mode:screen!important;
+  background-image:
+    radial-gradient(ellipse 38% 30% at 17% 22%,rgba(255,48,170,.78) 0%,rgba(255,48,170,0) 76%),
+    radial-gradient(ellipse 40% 31% at 82% 20%,rgba(42,215,255,.74) 0%,rgba(42,215,255,0) 78%),
+    radial-gradient(ellipse 38% 36% at 76% 79%,rgba(153,74,255,.72) 0%,rgba(153,74,255,0) 78%),
+    radial-gradient(ellipse 40% 30% at 20% 80%,rgba(75,255,174,.64) 0%,rgba(75,255,174,0) 78%),
+    radial-gradient(ellipse 34% 34% at 51% 48%,rgba(255,205,72,.56) 0%,rgba(255,205,72,0) 78%)!important;
+  background-size:185% 175%,180% 185%,195% 180%,180% 190%,190% 185%!important;
+  background-position:0% 0%,100% 0%,100% 100%,0% 100%,50% 50%!important;
+  animation:cpSSSFilmTravel 12.5s ease-in-out infinite alternate,
+            cpSSSFilmHue 21s linear infinite!important;
+  will-change:background-position,filter;
+}
+@keyframes cpSSSFilmTravel{
+  0%{background-position:0% 0%,100% 0%,100% 100%,0% 100%,50% 50%}
+  22%{background-position:24% 34%,72% 16%,80% 70%,15% 82%,62% 35%}
+  47%{background-position:68% 12%,28% 46%,56% 18%,78% 62%,30% 74%}
+  73%{background-position:88% 72%,12% 78%,18% 38%,90% 20%,76% 24%}
+  100%{background-position:100% 100%,0% 96%,0% 0%,100% 0%,40% 86%}
+}
+@keyframes cpSSSFilmHue{
+  0%{filter:saturate(1.14) hue-rotate(0deg)}
+  50%{filter:saturate(1.34) hue-rotate(95deg)}
+  100%{filter:saturate(1.18) hue-rotate(190deg)}
+}
+/* Um reflexo de seda, quase transparente, acompanha a mudança de cor. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  border-radius:inherit!important;
+  opacity:.18!important;
+  background:linear-gradient(118deg,transparent 18%,rgba(255,255,255,.18) 42%,rgba(120,245,255,.12) 50%,rgba(255,100,205,.16) 58%,transparent 82%)!important;
+  background-size:240% 240%!important;
+  background-position:130% 0!important;
+  animation:cpSSSFilmSilk 8s ease-in-out infinite alternate!important;
+}
+@keyframes cpSSSFilmSilk{
+  0%{background-position:130% 0%;opacity:.12}
+  100%{background-position:-130% 100%;opacity:.24}
+}
+/* A borda prismática existente continua sendo a única moldura da SSS. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{
+  animation:spin 4.8s linear infinite!important;
+}
+@media(prefers-reduced-motion:reduce){
+  /* O brilho RGB é parte visual da raridade SSS; mantém um movimento lento e suave. */
+  .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film{
+    animation:cpSSSFilmTravel 24s ease-in-out infinite alternate!important;
+  }
+}
+</style>
 
 </body>
 </html>
