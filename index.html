@@ -1314,7 +1314,7 @@ const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
  /* SSS usa um aro prismático recortado; nenhuma peça fica sobre a ilustração. */
- const rarityFx=lk?"":`${r===5?'<u class="a-spectrum" aria-hidden="true"></u>':""}${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="sss-spectrum" aria-hidden="true"></u><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
+ const rarityFx=lk?"":`${r===5?'<u class="a-spectrum" aria-hidden="true"></u>':""}${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="sss-spectrum" aria-hidden="true"><i class="led-spot led-a"></i><i class="led-spot led-b"></i><i class="led-spot led-c"></i><i class="led-spot led-d"></i><i class="led-spot led-e"></i><i class="led-spot led-f"></i><i class="led-spot led-g"></i></u><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
  return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${art}${rarityFx}${frame}${xt}</div>`
 };
 // se a foto de uma carta não carregar, mostra a ilustração gerada
@@ -7272,6 +7272,76 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
   .cd.cp-art-only.k8>.rbw>i,
   .cd.cp-art-only.k8.img.sw::after,
   .cd.cp-art-only.k8:not(.lock){animation:none!important;}
+}
+</style>
+
+
+<style id="cp-sss-led-spots-refined">
+/* SSS — pequenos focos LED iridescentes espalhados pela ilustração.
+   Cada ponto tem posição, movimento e ciclo de cor próprios; a imagem permanece nítida. */
+.cd.cp-art-only.k8:not(.lock)>.sss-spectrum{
+  position:absolute!important;inset:0!important;z-index:5!important;
+  display:block!important;overflow:hidden!important;border-radius:inherit!important;
+  pointer-events:none!important;text-decoration:none!important;
+}
+/* Desliga as películas antigas uniformes/faixas de reflexo da camada de espectro. */
+.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::before,
+.cd.cp-art-only.k8:not(.lock)>.sss-spectrum::after{
+  content:none!important;display:none!important;
+}
+.cd.cp-art-only.k8:not(.lock)>.sss-spectrum .led-spot{
+  position:absolute!important;display:block!important;
+  left:var(--led-x)!important;top:var(--led-y)!important;
+  width:var(--led-w)!important;height:var(--led-h)!important;
+  margin:0!important;border:0!important;border-radius:50%!important;
+  background:radial-gradient(ellipse at 50% 50%,var(--led-color) 0%,color-mix(in srgb,var(--led-color) 56%,transparent) 36%,transparent 76%)!important;
+  opacity:.19!important;mix-blend-mode:color!important;
+  filter:blur(15px) saturate(1.2)!important;
+  transform:translate3d(0,0,0);
+  animation:cpSSSLedWander var(--led-move,15s) ease-in-out infinite alternate,
+            cpSSSLedShift var(--led-cycle,24s) linear infinite!important;
+  animation-delay:var(--led-delay,0s),var(--led-color-delay,0s)!important;
+  pointer-events:none!important;will-change:transform,filter,opacity;
+}
+/* Cores e focos em vários setores, com durações desencontradas para evitar sincronia. */
+.cd.cp-art-only.k8>.sss-spectrum .led-a{--led-x:0%;--led-y:4%;--led-w:48%;--led-h:34%;--led-color:#ff62c4;--led-move:13s;--led-cycle:19s;--led-delay:-5s;--led-color-delay:-11s}
+.cd.cp-art-only.k8>.sss-spectrum .led-b{--led-x:51%;--led-y:5%;--led-w:47%;--led-h:33%;--led-color:#58dfff;--led-move:17s;--led-cycle:27s;--led-delay:-12s;--led-color-delay:-4s}
+.cd.cp-art-only.k8>.sss-spectrum .led-c{--led-x:2%;--led-y:34%;--led-w:48%;--led-h:34%;--led-color:#a881ff;--led-move:16s;--led-cycle:23s;--led-delay:-8s;--led-color-delay:-17s}
+.cd.cp-art-only.k8>.sss-spectrum .led-d{--led-x:51%;--led-y:34%;--led-w:48%;--led-h:34%;--led-color:#69edbb;--led-move:19s;--led-cycle:31s;--led-delay:-14s;--led-color-delay:-9s}
+.cd.cp-art-only.k8>.sss-spectrum .led-e{--led-x:0%;--led-y:66%;--led-w:48%;--led-h:34%;--led-color:#ffd66d;--led-move:15s;--led-cycle:29s;--led-delay:-3s;--led-color-delay:-21s}
+.cd.cp-art-only.k8>.sss-spectrum .led-f{--led-x:52%;--led-y:66%;--led-w:47%;--led-h:34%;--led-color:#ff83a7;--led-move:18s;--led-cycle:25s;--led-delay:-10s;--led-color-delay:-13s}
+.cd.cp-art-only.k8>.sss-spectrum .led-g{--led-x:28%;--led-y:28%;--led-w:46%;--led-h:43%;--led-color:#70aaff;--led-move:21s;--led-cycle:37s;--led-delay:-16s;--led-color-delay:-7s}
+@keyframes cpSSSLedWander{
+  0%{transform:translate3d(-7%,-8%,0) scale(.88);opacity:.10}
+  48%{transform:translate3d(9%,7%,0) scale(1.08);opacity:.20}
+  100%{transform:translate3d(-5%,15%,0) scale(.94);opacity:.12}
+}
+@keyframes cpSSSLedShift{
+  from{filter:blur(15px) hue-rotate(0deg) saturate(1.2)}
+  to{filter:blur(15px) hue-rotate(360deg) saturate(1.2)}
+}
+/* A volta cromática do aro fica num meio-termo: mais viva que 19s, sem correr. */
+.cd.cp-art-only.k8>.rbw>i,
+.sum.big .cd.cp-art-only.k8>.rbw>i{
+  animation:spin 10s linear infinite!important;
+}
+/* O aro principal também muda de cor em ciclo suave e contínuo. */
+.cd.cp-art-only.k8>.cp-card-frame{
+  animation:cpSSSFrameColor 10s linear infinite!important;
+}
+@keyframes cpSSSFrameColor{
+  from{filter:hue-rotate(0deg)}
+  to{filter:hue-rotate(360deg)}
+}
+/* O pequeno brilho metálico passa com mais calma e demora mais para retornar. */
+.cd.cp-art-only.k8>.cp-card-frame::after{
+  animation:cpSssGlint 8.5s ease-in-out infinite!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .cd.cp-art-only.k8:not(.lock)>.sss-spectrum .led-spot,
+  .cd.cp-art-only.k8>.rbw>i,
+  .cd.cp-art-only.k8>.cp-card-frame,
+  .cd.cp-art-only.k8>.cp-card-frame::after{animation:none!important}
 }
 </style>
 
