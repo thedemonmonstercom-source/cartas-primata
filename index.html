@@ -7005,5 +7005,39 @@ html.cp-reduce .cd.cp-art-only.k8>.cp-card-frame::before{animation:cpRaritySpin 
 }
 </style>
 
+
+<style id="cp-cards-fx">
+@property --cx{syntax:'<number>';inherits:true;initial-value:32}
+@property --cy{syntax:'<number>';inherits:true;initial-value:24}
+@property --pa{syntax:'<number>';inherits:true;initial-value:0}
+.cd.cd.cd.cd.cp-art-only{transition:--cx .22s cubic-bezier(.2,.8,.2,1),--cy .22s cubic-bezier(.2,.8,.2,1),--pa .45s,transform .15s}
+.cd.cd.cd.cd.cp-art-only .art>.pt,.cd.cd.cd.cd.cp-art-only.sp>.art::after{display:none!important;content:none!important;animation:none!important}
+.cd.cd.cd.cd.cp-art-only.k0,.cd.cd.cd.cd.cp-art-only.k1,.cd.cd.cd.cd.cp-art-only.k2,.cd.cd.cd.cd.cp-art-only.k3{--cg:.3}
+.cd.cd.cd.cd.cp-art-only.k4,.cd.cd.cd.cd.cp-art-only.k5{--c1:#7ee8ff;--c2:#b79cff;--c3:#ffd0f2;--c4:#9affd8;--cf:.32;--cg:.5}
+.cd.cd.cd.cd.cp-art-only.k6{--c1:#fff3b8;--c2:#f0b429;--c3:#fffbe6;--c4:#c98a12;--cf:.62;--cg:.7}
+.cd.cd.cd.cd.cp-art-only.k7{--c1:#ffd36a;--c2:#ff6a3d;--c3:#ff3d86;--c4:#ffae45;--cf:.72;--cg:.75}
+.cd.cd.cd.cd.cp-art-only.k8{--c1:#ff4fd8;--c2:#ffe27a;--c3:#5effc7;--c4:#55dfff;--cf:.9;--cg:.85}
+.cd.cd.cd.cd.cp-art-only.fo:not(.lock)::before{content:""!important;display:block!important;position:absolute!important;inset:0!important;width:auto!important;height:auto!important;z-index:3!important;border-radius:inherit!important;pointer-events:none!important;animation:none!important;transform:none!important;mix-blend-mode:color-dodge!important;opacity:calc(var(--cf,.3)*(.4 + var(--pa)*.6))!important;background:conic-gradient(from calc(var(--cx)*1.8deg) at calc(var(--cx)*1%) calc(var(--cy)*1%),var(--c1),var(--c2),var(--c3),var(--c4),var(--c1))!important;background-size:auto!important}
+.cd.cd.cd.cd.cp-art-only.k6.fo:not(.lock)::before{background:repeating-linear-gradient(calc(112deg + var(--cx)*.35deg),var(--c1) 0,var(--c2) 9%,var(--c3) 17%,var(--c4) 26%,var(--c1) 34%)!important;background-size:240% 240%!important;background-position:calc(var(--cx)*1%) calc(var(--cy)*1%)!important}
+.cd.cd.cd.cd.cp-art-only:not(.lock)::after{content:""!important;display:block!important;position:absolute!important;inset:0!important;width:auto!important;height:auto!important;z-index:7!important;border-radius:inherit!important;pointer-events:none!important;animation:none!important;transform:none!important;mix-blend-mode:overlay!important;opacity:calc(var(--pa)*var(--cg,.3))!important;background:radial-gradient(circle at calc(var(--cx)*1%) calc(var(--cy)*1%),#fff,#fff6 22%,#fff0 55%)!important}
+.cd.cd.cd.cd.cp-art-only.k8:not(.lock)::after{background:radial-gradient(circle at calc(var(--cx)*1%) calc(var(--cy)*1%),#fff,#fff6 20%,#fff0 50%),radial-gradient(circle at calc(100% - var(--cx)*1%) calc(100% - var(--cy)*1%),#ff63c5,#42dfe888 30%,#0000 58%)!important}
+.cd.cd.cd.cd.cp-art-only>.aur{display:block!important;position:absolute!important;inset:0 -70%!important;width:auto!important;height:auto!important;z-index:6!important;pointer-events:none!important;mix-blend-mode:overlay!important;opacity:1!important;filter:none!important;box-shadow:none!important;border:0!important;-webkit-mask:none!important;mask:none!important;background:linear-gradient(104deg,#fff0 42%,#fffd 50%,#fff0 58%)!important;animation:cpSw calc(var(--sd,3.6s)*1.7) ease-in-out infinite!important}
+@keyframes cpSw{0%{transform:translateX(-60%)}50%,100%{transform:translateX(60%)}}
+.cd.cd.cd.cd.cp-art-only>.emb{all:unset!important;display:block!important;position:absolute!important;inset:0!important;z-index:6!important;border-radius:inherit!important;pointer-events:none!important;box-shadow:inset calc((var(--cx) - 50)*-.12px) calc((var(--cy) - 50)*-.12px) 16px 1px var(--c2),inset 0 0 0 1px #ffffff3d!important}
+.cd.cd.cd.cd.cp-art-only:not(.lock):not([data-l="5"]){box-shadow:0 6px 16px #000a,calc((50 - var(--cx))*.12px) calc((50 - var(--cy))*.12px + 2px) calc(6px + var(--g,1)*2.4px) color-mix(in srgb,var(--rc) 70%,transparent)!important}
+.cd.cd.cd.cd.cp-art-only.k8:not(.lock):not([data-l="5"]){box-shadow:0 6px 18px #000b,calc((50 - var(--cx))*.2px) calc((50 - var(--cy))*.2px) 16px #ff63c5cc,calc((50 - var(--cx))*.35px) calc((50 - var(--cy))*.35px) 32px #a079ffaa,0 0 50px #42dfe866!important}
+.cd.cd.cd.cd.cp-art-only.k6>.art img,.cd.cd.cd.cd.cp-art-only.k7>.art img,.cd.cd.cd.cd.cp-art-only.k8>.art img{transform:translate(calc((var(--cx) - 50)*-.1px),calc((var(--cy) - 50)*-.1px)) scale(1.05)!important}
+@media(prefers-reduced-motion:reduce){.cd.cd.cd.cd.cp-art-only>.aur{animation:none!important;opacity:0!important}}
+html.cp-lite .cd.cd.cd.cd.cp-art-only>.aur{display:none!important}
+</style>
+<script id="cp-cards-fx-js">(()=>{let raf=0,cur=0,box=0,X=0,Y=0;
+const find=t=>{if(!t||!t.closest)return[];const c=t.closest('.cd');if(c)return[c,c];const w=t.closest('.f3d');return w?[w.querySelector('.cd'),w]:[]};
+const off=c=>{c.style.setProperty('--pa',0);c.style.setProperty('--cx',32);c.style.setProperty('--cy',24)};
+const put=()=>{raf=0;if(!cur)return;const b=box.getBoundingClientRect(),f=(v,a,s)=>Math.min(100,Math.max(0,(v-a)/s*100)).toFixed(1);cur.style.setProperty('--cx',f(X,b.left,b.width));cur.style.setProperty('--cy',f(Y,b.top,b.height));cur.style.setProperty('--pa',1)};
+const mv=e=>{const[c,b]=find(e.target);if(cur&&cur!==c){off(cur);cur=0}if(!c||c.classList.contains('lock'))return;cur=c;box=b;X=e.clientX;Y=e.clientY;raf||(raf=requestAnimationFrame(put))};
+['pointermove','pointerdown'].forEach(t=>document.addEventListener(t,mv,{passive:true}));
+['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,e=>{if(cur&&e.pointerType!=='mouse'){off(cur);cur=0}}));
+document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget)&&!(box.contains&&box.contains(e.relatedTarget))){off(cur);cur=0}});
+})();</script>
 </body>
 </html>
