@@ -6764,40 +6764,148 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!q("cp-el-guide")?.
 
 
 <style id="cp-card-selection-indicator">
-/* Seleção clara sem acrescentar outra moldura à carta. */
+/* Seleção sem selo sobre a arte: elevação, brilho externo e traço abaixo da carta. */
 #dkal .dkc.sel{
   position:relative;
   z-index:4;
-  transform:translateY(-3px);
+  transform:translateY(-3px) scale(1.012);
   outline:none!important;
   box-shadow:none!important;
   transition:transform .16s ease;
 }
-#dkal .dkc.sel::after{
-  content:"✓";
+#dkal .dkc.sel::before{
+  content:"";
   position:absolute;
-  z-index:20;
-  top:7px;
-  right:7px;
-  width:25px;
-  height:25px;
-  display:grid;
-  place-items:center;
-  border-radius:50%;
-  background:#f4f2ee;
-  color:#171719;
-  font:900 16px/1 system-ui,sans-serif;
-  box-shadow:0 2px 9px #000b;
+  z-index:5;
+  left:30%;
+  right:30%;
+  bottom:-7px;
+  height:3px;
+  border-radius:99px;
+  background:linear-gradient(90deg,transparent,#fff,transparent);
+  box-shadow:0 0 9px #fff9;
   pointer-events:none;
-  animation:cpSelectPop .18s ease-out both;
 }
-@keyframes cpSelectPop{
-  from{opacity:0;transform:scale(.55)}
-  to{opacity:1;transform:scale(1)}
+#dkal .dkc.sel::after{content:none!important;display:none!important}
+#dkal .dkc.sel>.cd{
+  filter:drop-shadow(0 0 8px color-mix(in srgb,var(--rc) 78%,transparent))!important;
 }
+@media(prefers-reduced-motion:reduce){#dkal .dkc.sel{transition:none}}
+</style>
+
+
+<style id="cp-rarity-effects-restored-v102">
+/* Efeitos de raridade aplicados somente ao aro. A fotografia fica limpa e totalmente visível. */
+@property --cp-rank-angle{syntax:"<angle>";inherits:true;initial-value:0deg}
+
+/* As molduras especiais voltam a aparecer nos ranks B, A, S, SS e SSS. */
+.cd.cp-art-only.k4>.cp-card-frame,
+.cd.cp-art-only.k5>.cp-card-frame,
+.cd.cp-art-only.k6>.cp-card-frame,
+.cd.cp-art-only.k7>.cp-card-frame,
+.cd.cp-art-only.k8>.cp-card-frame{
+  display:block!important;
+  position:absolute!important;
+  inset:2px!important;
+  z-index:10!important;
+  border:0!important;
+  border-radius:inherit!important;
+  background:none!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  pointer-events:none!important;
+}
+
+/* Um único contorno recortado: nenhum gradiente pode preencher o centro da carta. */
+.cd.cp-art-only.k4>.cp-card-frame::before,
+.cd.cp-art-only.k5>.cp-card-frame::before,
+.cd.cp-art-only.k6>.cp-card-frame::before,
+.cd.cp-art-only.k7>.cp-card-frame::before,
+.cd.cp-art-only.k8>.cp-card-frame::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  box-sizing:border-box!important;
+  border:0!important;
+  border-radius:inherit!important;
+  padding:var(--cp-edge-width,2px)!important;
+  background:var(--cp-edge-gradient)!important;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+  mask-composite:exclude!important;
+  filter:var(--cp-edge-filter,drop-shadow(0 0 3px #ffffff66))!important;
+  animation:var(--cp-edge-animation,none)!important;
+  pointer-events:none!important;
+}
+
+/* B — metal frio, discreto. */
+.cd.cp-art-only.k4>.cp-card-frame{
+  --cp-edge-width:1.9px;
+  --cp-edge-gradient:linear-gradient(135deg,#f6fbff,#8ea5bf 30%,#ffffff 52%,#637b99 78%,#eaf5ff);
+  --cp-edge-filter:drop-shadow(0 0 4px #8ab8e777);
+}
+.cd.cp-art-only.k4{box-shadow:0 5px 15px #0009,0 0 7px #8ab8e744!important}
+
+/* A — violeta profundo com reflexo giratório lento. */
+.cd.cp-art-only.k5>.cp-card-frame{
+  --cp-edge-width:2.2px;
+  --cp-edge-gradient:conic-gradient(from var(--cp-rank-angle),#fff0ff,#8555d6,#f4d8ff,#5f36a4,#ffffff,#a978ec,#fff0ff);
+  --cp-edge-filter:drop-shadow(0 0 5px #b98affaa);
+  --cp-edge-animation:cpRaritySpin 10s linear infinite;
+}
+.cd.cp-art-only.k5{box-shadow:0 5px 16px #0009,0 0 10px #a77bea77!important}
+
+/* S — acabamento dourado mais rico, com brilho metálico em movimento. */
+.cd.cp-art-only.k6>.cp-card-frame{
+  --cp-edge-width:3px;
+  --cp-edge-gradient:conic-gradient(from var(--cp-rank-angle),#fffbe0,#b87816,#ffe9a0,#fffdf0,#d79522,#fff3bd,#8d5710,#fffbe0);
+  --cp-edge-filter:drop-shadow(0 0 6px #f0c45cdd) drop-shadow(0 0 11px #d99b2d77);
+  --cp-edge-animation:cpRaritySpin 6.5s linear infinite;
+}
+.cd.cp-art-only.k6{box-shadow:0 5px 17px #000a,0 0 12px #e9b84b99,0 0 24px #d99b2d55!important}
+
+/* SS — aro quente, entre cobre e fogo, mais intenso que S. */
+.cd.cp-art-only.k7>.cp-card-frame{
+  --cp-edge-width:3.2px;
+  --cp-edge-gradient:conic-gradient(from var(--cp-rank-angle),#fff0d0,#ed7837,#78251d,#ffd078,#f34c27,#ffbd65,#6d251c,#fff0d0);
+  --cp-edge-filter:drop-shadow(0 0 6px #ff7a39dd) drop-shadow(0 0 13px #d34226aa);
+  --cp-edge-animation:cpRaritySpin 5.4s linear infinite;
+}
+.cd.cp-art-only.k7{box-shadow:0 5px 17px #000a,0 0 14px #f36b3299,0 0 26px #bd382b66!important}
+
+/* SSS — prisma completo, mas com uma única linha de moldura e sem peça sobre a foto. */
+.cd.cp-art-only.k8>.cp-card-frame{
+  --cp-edge-width:3.8px;
+  --cp-edge-gradient:conic-gradient(from var(--cp-rank-angle),#fff7d0,#ff58b5,#ffdb70,#56f1cb,#68aaff,#c78aff,#fff7d0);
+  --cp-edge-filter:drop-shadow(0 0 7px #ff69d2) drop-shadow(0 0 15px #8d75ff) drop-shadow(0 0 22px #48dff0aa);
+  --cp-edge-animation:cpRaritySpin 4.2s linear infinite;
+}
+.cd.cp-art-only.k8{
+  border-color:transparent!important;
+  box-shadow:0 5px 18px #000b,0 0 15px #ff63c5aa,0 0 30px #a079ff88,0 0 42px #42dfe866!important;
+}
+/* Remove as camadas antigas que criavam linhas extras no SSS. */
+.cd.cp-art-only.k8>.cp-card-frame::after{content:none!important;display:none!important}
+.cd.cp-art-only.k8>.cp-card-frame{background:none!important;border:0!important;box-shadow:none!important}
+
+/* Borda externa: sem holografia, partículas ou película cobrindo fotos 3:4. */
+.cd.cp-art-only.img>.cpfoil{display:none!important}
+.cd.cp-art-only.img>.art::after{display:none!important}
+.cd.cp-art-only.img>.art img{filter:none!important}
+
+@keyframes cpRaritySpin{to{--cp-rank-angle:360deg}}
+/* O modo leve mantém apenas os giros leves dos aros raros; os FX de cenário continuam pausados. */
+html.cp-reduce .cd.cp-art-only.k5>.cp-card-frame::before{animation:cpRaritySpin 10s linear infinite!important;animation-duration:10s!important;animation-iteration-count:infinite!important}
+html.cp-reduce .cd.cp-art-only.k6>.cp-card-frame::before{animation:cpRaritySpin 6.5s linear infinite!important;animation-duration:6.5s!important;animation-iteration-count:infinite!important}
+html.cp-reduce .cd.cp-art-only.k7>.cp-card-frame::before{animation:cpRaritySpin 5.4s linear infinite!important;animation-duration:5.4s!important;animation-iteration-count:infinite!important}
+html.cp-reduce .cd.cp-art-only.k8>.cp-card-frame::before{animation:cpRaritySpin 4.2s linear infinite!important;animation-duration:4.2s!important;animation-iteration-count:infinite!important}
 @media(prefers-reduced-motion:reduce){
-  #dkal .dkc.sel{transition:none}
-  #dkal .dkc.sel::after{animation:none}
+ .cd.cp-art-only.k4>.cp-card-frame::before,
+ .cd.cp-art-only.k5>.cp-card-frame::before,
+ .cd.cp-art-only.k6>.cp-card-frame::before,
+ .cd.cp-art-only.k7>.cp-card-frame::before,
+ .cd.cp-art-only.k8>.cp-card-frame::before{animation:none!important}
 }
 </style>
 
