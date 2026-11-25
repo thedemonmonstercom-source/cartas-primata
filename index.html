@@ -1309,10 +1309,13 @@ const LK=`<div class="art"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 1
 const cardRadius=L=>({x:Math.max(1.5,14-Math.min(5,Math.max(0,Number(L)||0))*2.5),y:Math.max(1.1,10.5-Math.min(5,Math.max(0,Number(L)||0))*1.88)});
 const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),rad=cardRadius(L),im=!lk&&(c.img||IMG[c.id]),
- fx=lk||im?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;
+ /* Os efeitos clássicos de raridade também funcionam sobre fotos 3:4. */
+ fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;
  const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
- return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${art}${frame}${xt}</div>`
+ /* SSS usa um aro prismático recortado; nenhuma peça fica sobre a ilustração. */
+ const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
+ return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${art}${rarityFx}${frame}${xt}</div>`
 };
 // se a foto de uma carta não carregar, mostra a ilustração gerada
 document.addEventListener("error",e=>{const t=e.target,d=t.tagName=="IMG"&&t.closest(".cd");if(d){d.classList.remove("img");t.parentNode.outerHTML=ill(+d.dataset.r)}},true);
@@ -6906,6 +6909,99 @@ html.cp-reduce .cd.cp-art-only.k8>.cp-card-frame::before{animation:cpRaritySpin 
  .cd.cp-art-only.k6>.cp-card-frame::before,
  .cd.cp-art-only.k7>.cp-card-frame::before,
  .cd.cp-art-only.k8>.cp-card-frame::before{animation:none!important}
+}
+</style>
+
+
+<style id="cp-legacy-card-appearance-restored">
+/* Aparência de cartas da versão antiga, aplicada sobre a base funcional atual.
+   A arte permanece inteira; efeitos e acabamento ocupam camadas transparentes ou o aro. */
+.cd.cp-art-only{
+  border-radius:var(--card-rx,14%) / var(--card-ry,10.5%) !important;
+  border:2.5px solid var(--rc) !important;
+  background:#101016 !important;
+  box-shadow:0 5px 16px #0008,0 0 calc(var(--g,1)*3px) color-mix(in srgb,var(--rc) 74%,transparent) !important;
+  overflow:hidden !important;
+  isolation:isolate !important;
+}
+/* A moldura nova multicamada é desligada: a versão antiga usava o próprio aro da carta. */
+.cd.cp-art-only > .cp-card-frame{display:none !important}
+.cd.cp-art-only > .art{position:absolute !important;z-index:1 !important;inset:0 !important;overflow:hidden !important;border-radius:inherit !important}
+.cd.cp-art-only > .art img{position:absolute !important;z-index:1 !important;inset:0 !important;width:100% !important;height:100% !important;object-fit:cover !important;object-position:center !important;display:block !important;filter:none !important}
+/* Holografia e reflexo clássicos. As animações são leves e não alteram a foto. */
+.cd.cp-art-only.img.fo::before{
+  content:"" !important;position:absolute !important;z-index:3 !important;inset:0 !important;border-radius:inherit !important;pointer-events:none !important;
+  opacity:var(--f,.6) !important;mix-blend-mode:color-dodge !important;
+  background:linear-gradient(115deg,transparent 15%,#ff2d9a99 32%,#2dffe099 44%,#ffe92d99 56%,#7a50ff99 68%,transparent 85%) !important;
+  background-size:260% 260% !important;animation:holo 4s ease-in-out infinite alternate !important;
+}
+.cd.cp-art-only.img.sw::after{
+  content:"" !important;position:absolute !important;z-index:4 !important;inset:0 !important;border-radius:inherit !important;pointer-events:none !important;
+  background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.6) 50%,transparent 58%) !important;
+  transform:translateX(-120%);animation:swp var(--sd,3.6s) ease-in-out infinite !important;
+}
+.cd.cp-art-only.img.sp > .art::after{
+  content:"" !important;display:block !important;position:absolute !important;z-index:2 !important;inset:0 !important;pointer-events:none !important;
+  background:radial-gradient(circle at 20% 30%,#fff 0 1.5px,transparent 3px),radial-gradient(circle at 78% 22%,#fff 0 2px,transparent 3.5px),radial-gradient(circle at 62% 68%,#fff 0 1.5px,transparent 3px),radial-gradient(circle at 28% 82%,#fff 0 2px,transparent 3.5px),radial-gradient(circle at 88% 58%,#fff 0 1.5px,transparent 3px) !important;
+  animation:tw 1.4s ease-in-out infinite alternate !important;
+}
+.cd.cp-art-only.img > .cpfoil{display:block !important;z-index:5 !important}
+.cd.cp-art-only.img .aur,.cd.cp-art-only.img .emb{z-index:2 !important}
+/* A progressão das fusões continua usando os raios já calculados pela versão atual. */
+.cd.cp-art-only[data-l="1"]{border-width:2.8px !important}
+.cd.cp-art-only[data-l="2"]{border-width:3px !important}
+.cd.cp-art-only[data-l="3"]{border-width:3.2px !important}
+.cd.cp-art-only[data-l="4"]{border-width:3.5px !important}
+.cd.cp-art-only[data-l="5"]{border-width:4px !important}
+.cd.cp-art-only[data-l="5"]{box-shadow:0 0 0 1px #fff8,0 0 17px color-mix(in srgb,var(--rc) 90%,transparent),0 8px 22px #000b !important}
+/* S: ouro vivo, com brilho dourado progressivo; sem selos ou ícones na imagem. */
+.cd.cp-art-only.k6{
+  border-color:#f0b429 !important;
+  box-shadow:0 5px 17px #000a,0 0 12px #e9b84b99,0 0 24px #d99b2d66 !important;
+}
+.cd.cp-art-only.k6.fo::before{opacity:.82 !important}
+.cd.cp-art-only.k6.hi{animation:pu 2s ease-in-out infinite !important}
+/* SS: cobre e fogo, mais intenso que S. */
+.cd.cp-art-only.k7{
+  border-color:#ff6a3d !important;
+  box-shadow:0 5px 17px #000a,0 0 15px #f36b32bb,0 0 29px #bd382b88 !important;
+}
+.cd.cp-art-only.k7.fo::before{opacity:.9 !important}
+.cd.cp-art-only.k7.hi{animation:pu 1.7s ease-in-out infinite !important}
+/* SSS: uma única moldura prismática. A máscara recorta o gradiente e deixa o centro livre. */
+.cd.cp-art-only.k8{
+  border:0 !important;
+  background:#170f26 !important;
+  box-shadow:0 5px 18px #000b,0 0 15px #ff63c5bb,0 0 30px #a079ff99,0 0 42px #42dfe877 !important;
+  animation:pu 2s ease-in-out infinite !important;
+}
+.cd.cp-art-only.k8 > .rbw{
+  display:block !important;position:absolute !important;inset:0 !important;z-index:8 !important;padding:4px !important;border-radius:inherit !important;overflow:hidden !important;pointer-events:none !important;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite:xor !important;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0) !important;
+  mask-composite:exclude !important;
+}
+.cd.cp-art-only.k8 > .rbw > i{
+  position:absolute !important;left:-45% !important;top:-18% !important;width:190% !important;aspect-ratio:1 !important;
+  background:conic-gradient(#ff4fd8,#ffe27a,#5effc7,#55dfff,#9d72ff,#ff4fd8) !important;
+  animation:spin 3.5s linear infinite !important;
+}
+/* Sem emojis/ícones sobre a arte. O botão de favorito permanece funcional no espaço externo. */
+.cd.cp-art-only .cp-card-el-mark{display:none !important}
+#dkal .grid{row-gap:32px !important}
+#dkal .dkc > .cp-fav{
+  top:auto !important;bottom:-28px !important;right:4px !important;z-index:12 !important;
+  min-width:23px !important;width:23px !important;height:23px !important;padding:0 !important;
+  display:grid !important;place-items:center !important;font-size:.78rem !important;
+  background:#17151deF !important;border:1px solid #ffffff65 !important;
+  box-shadow:0 2px 7px #0009 !important;
+}
+#dkal .dkc > .cp-fav.on{color:#ffe27a !important;border-color:#ffe27a !important}
+@media(prefers-reduced-motion:reduce){
+ .cd.cp-art-only.img.fo::before,.cd.cp-art-only.img.sw::after,
+ .cd.cp-art-only.img.sp>.art::after,.cd.cp-art-only.k6.hi,.cd.cp-art-only.k7.hi,
+ .cd.cp-art-only.k8,.cd.cp-art-only.k8>.rbw>i{animation:none !important}
 }
 </style>
 
