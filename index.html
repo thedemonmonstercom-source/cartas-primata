@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.0">
-<!-- COLEÇÃO PRIMATA · VERSÃO OFICIAL 1.0 -->
+<meta name="application-version" content="1.1.3">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.1.3 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -16,7 +16,7 @@
   não criar novas coleções Firebase sem necessidade. Preserve IDs DOM, saves, combate, 3 temas e mobile.
   Depois de cada atualização: validar sintaxe JS/CSS, IDs duplicados, renderização e fluxos de combate.
 -->
-<title>Coleção Primata</title><script>window.CP_VERSION="1.0";</script><script>
+<title>Coleção Primata</title><script>window.CP_VERSION="1.1.3";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -885,6 +885,7 @@ return api})();
 .cp-live-react button{min-width:42px;min-height:38px;border:1px solid #ffffff1b;border-radius:11px;background:#ffffff0d;font-size:1.25rem}
 .cp-duel-reaction{position:fixed;z-index:99999;left:50%;top:35%;transform:translate(-50%,-50%);font-size:clamp(44px,12vw,76px);filter:drop-shadow(0 5px 12px #000);pointer-events:none;animation:cpReactFloat 1.25s ease-out forwards}
 .cp-duel-reaction.mine{top:auto;bottom:20%;transform:translate(-50%,0)}
+.cp-duel-reaction.opponent{top:18%;bottom:auto;transform:translate(-50%,0)}
 @keyframes cpReactFloat{0%{opacity:0;scale:.5}18%{opacity:1;scale:1.25}55%{opacity:1;scale:1}100%{opacity:0;transform:translate(-50%,-65%) scale(.75)}}
 .cp-draft-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
 .cp-draft-pick{min-width:0;padding:7px;border:1px solid #ffffff20;border-radius:12px;background:#ffffff08;color:var(--fg);text-align:center}
@@ -1102,11 +1103,20 @@ const CL=[["c1","Abrir 3 pacotes",()=>S.opened||0,3,3],["c2","Abrir 20 pacotes",
 const SC=[["s1","Ter uma carta SSS",()=>ALL.some(c=>S.inv[c.id]&&c.r==8)?1:0,1,20],["s2","Levar uma carta ao Mítico",()=>ALL.some(c=>lvl(c)>4)?1:0,1,20],["s3","Chegar na arena 9",()=>S.ar+1,9,30]];
 if((ADM0.dp||[]).length){const custom=ADM0.dp.filter(x=>Array.isArray(x)&&x.length>=3);const extra=DP.filter(x=>!custom.some(y=>y[0]===x[0]&&y[1]===x[1]));DP.splice(0,DP.length,...custom,...extra)}
 if((ADM0.wp||[]).length){const custom=ADM0.wp.filter(x=>Array.isArray(x)&&x.length>=3);const extra=WP.filter(x=>!custom.some(y=>y[0]===x[0]&&y[1]===x[1]));WP.splice(0,WP.length,...custom,...extra)}
+// Novos objetivos conectados aos sistemas atuais: Boss, elementos e banco de cartas.
+DP.push(["Participar de 2 desafios Boss","boss",2],["Derrotar 1 Boss","bosswin",1],["Usar 2 habilidades elementais","eluse",2],["Comprar 5 cartas para o banco","draw",5],["Derrotar 6 cartas inimigas","kill",6]);
+WP.push(["Participar de 6 desafios Boss","boss",6],["Derrotar 3 Boss","bosswin",3],["Usar 30 habilidades elementais","eluse",30],["Comprar 35 cartas durante batalhas","draw",35],["Derrotar 75 cartas inimigas","kill",75]);
 CL.push(["c12","Ter uma carta com dois elementos",()=>ALL.some(c=>S.inv[c.id]&&elEls(c).length===2)?1:0,1,5]);
 CL.push(["c13","Ter 3 cartas fundidas",()=>ALL.filter(c=>S.inv[c.id]&&lvl(c)>0).length,3,8]);
 CL.push(["c14","Ter 5 cartas de Rank S ou superior",()=>ALL.filter(c=>S.inv[c.id]&&c.r>=6).length,5,12]);
 SC.push(["s4","Derrotar um Boss",()=>cv("T","bosswin"),1,20]);
 SC.push(["s5","Usar 25 habilidades elementais",()=>cv("T","eluse"),25,12]);
+CL.push(["c15","Ter 10 cartas com elemento especial",()=>ALL.filter(c=>S.inv[c.id]&&elEls(c).some(k=>k!=="normal")).length,10,8]);
+CL.push(["c16","Ter 3 cartas de elemento duplo",()=>ALL.filter(c=>S.inv[c.id]&&elEls(c).length===2).length,3,10]);
+CL.push(["c17","Descobrir 8 elementos diferentes",()=>new Set(ALL.filter(c=>S.inv[c.id]).flatMap(c=>elEls(c)).filter(k=>k!=="normal")).size,8,12]);
+CL.push(["c18","Participar de 5 desafios Boss",()=>cv("T","boss"),5,10]);
+SC.push(["s6","Vencer 3 Boss",()=>cv("T","bosswin"),3,30]);
+SC.push(["s7","Usar 100 habilidades elementais",()=>cv("T","eluse"),100,25]);
 CL.concat(SC).forEach(m=>{const q=(ADM0.mc||{})[m[0]];if(q){m[3]=q[0];m[4]=q[1]}});
 const pk3=(l,n,s)=>{const r=sr((s+1)*48271%2147483647);r();r();return l.map((x,i)=>[i,r()]).sort((a,b)=>a[1]-b[1]).slice(0,n).map(x=>x[0]).sort((a,b)=>a-b)};
 const XMAS_MISSIONS=[
@@ -1320,7 +1330,7 @@ const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),rad=cardRadius(L),im=!lk&&(c.img||IMG[c.id]),
  /* Os efeitos clássicos de raridade também funcionam sobre fotos 3:4. */
  fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;
- const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="eager" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
+ const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="lazy" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
  /* SSS usa um aro prismático recortado; nenhuma peça fica sobre a ilustração. */
  const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<i class="cp-sss-rgb-film" aria-hidden="true"></i><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
@@ -1394,7 +1404,8 @@ const openPack=pi=>openMany(pi,1);
 // virar a carta (verso → frente): o verso encolhe e a frente cresce
 const flip=t=>{SND.flip();const f=t.querySelector(".cd"),b=t.querySelector(".cb");if(!f||!b)return;b.animate([{opacity:1,transform:"scaleX(1)"},{opacity:1,transform:"scaleX(0)"}],{duration:140,easing:"ease-in"});f.animate([{transform:"scaleX(0)"},{transform:"scaleX(1)"}],{duration:200,delay:140,easing:"ease-out",fill:"backwards"})};
 function play(p,d,pi,np=1,g=0){LN=np;
- const imageSources=[...new Set(d.map(x=>x.c.img).filter(Boolean))];imageSources.forEach(src=>{const image=new Image();image.decoding="async";image.src=src});
+ // Não pré-carregar centenas de imagens num lote grande: o grid usa loading="lazy".
+ const imageSources=np>10?[]:[...new Set(d.map(x=>x.c.img).filter(Boolean))].slice(0,18);imageSources.forEach(src=>{const image=new Image();image.decoding="async";image.src=src});
  let ph=0,k=0,sk=0,pd=0,spr=0,dg=0,dn=0,dx=0;const N=d.length,skb=$("skip");
  document.body.classList.add("nofr");
  ov.hidden=false;ov.style.setProperty("--h",p.h);acts.innerHTML="";skb.hidden=true;
@@ -1460,7 +1471,7 @@ function play(p,d,pi,np=1,g=0){LN=np;
  stage.onpointerup=stage.onpointercancel=()=>{dn=0;setTimeout(()=>{dg=0},80)};
  stage.onclick=e=>{if(dg)return;
   if(ph==4){const hit=e.target.closest("[data-c]");if(hit){const c=ALL.find(item=>String(item.id)===String(hit.dataset.c));if(c)view(c)}return}
-  if(ph==0){ph=1;const pk=[...stage.querySelectorAll(".pack")];pk.forEach((e,i)=>{const f=()=>{e.classList.add("tear");flakes(e)};i?setTimeout(f,i*35):f()});hint.textContent="";try{navigator.vibrate(np>1?[14,30,22,30,22,30,40,30,60]:[14,40,22,30,40])}catch(e){}setTimeout(()=>{if(sk)return;if(np>10){ph=5;skb.textContent="Ver resultado";skb.hidden=false;hint.textContent="Pacotes rasgados · toque em Ver resultado para conferir suas cartas"}else show()},1000+(pk.length-1)*35)}
+  if(ph==0){ph=1;const pk=[...stage.querySelectorAll(".pack")];pk.forEach((e,i)=>{const f=()=>{e.classList.add("tear");flakes(e)};i?setTimeout(f,i*35):f()});hint.textContent="";try{navigator.vibrate(np>1?[14,30,22,30,22,30,40,30,60]:[14,40,22,30,40])}catch(e){}setTimeout(()=>{if(sk)return;if(np>10){summary()}else show()},1000+(pk.length-1)*35)}
   else if(ph==2){
    ph=3;
    const top=stk().querySelector(`[data-sn="${k}"]`),s=k%2?1:-1;
@@ -1518,6 +1529,9 @@ function view(c,keep){
 function preview(i){const p=P[as]||P[0],r=(p&&p.cards.find(c=>c.r==i))||ALL.find(c=>c.r==i),x=r||ALL.find(c=>!c.img)||ALL[0];PV=r?{...r,id:"pv"}:{...x,img:0,r:i,id:"pv",hp:ST[i][0],atk:ST[i][1]};play(x.p,[{c:PV,n:false}],null)}
 document.addEventListener("click",e=>{
  const t=e.target.closest("[data-t],[data-i],[data-s],[data-c],[data-a],[data-v],[data-p],[data-f],[data-m],[data-k],[data-o],[data-x],[data-d],[data-g],[data-q],[data-w],[data-u],[data-y],[data-z],[data-cp],[data-gf],[data-fp],[data-ri]");if(!t)return;
+ // Os botões da batalha têm seu próprio controlador. Não deixe o listener global
+ // das trocas interpretar data-z do combate e disparar renderizações paralelas.
+ if(t.closest("#zb"))return;
  const D=t.dataset;
  if(D.ri!=null){$("ri").hidden=D.ri!="1";D.ri=="1"&&ri()}
  else if(D.t){tab=D.t;TV=null;render()}
@@ -1648,7 +1662,15 @@ const TG={s:"a própria carta",e:"1 inimigo à escolha",E:"todos os inimigos ati
 // f = campos editáveis [chave,rótulo,padrão] · own = roda 1× no dono (sem alvo) · ai = nota da IA · v/vp = animação (d dano, h cura, at seta). Qualquer bloco aceita ch (chance %).
 const sdx=(B,t)=>B.p.findIndex(x=>x.f.includes(t));
 // Bosses únicos não podem perder a luta por efeitos que ignoram HP/vidas.
-const isProtectedBoss=(B,t)=>{if(!B||!t||!B.o||!Array.isArray(B.p))return false;const i=B.p.findIndex(seat=>seat&&Array.isArray(seat.f)&&seat.f.includes(t));return i>=0&&((!!B.o.singleBoss&&i===1)||(B.o.m==="boss"&&i===0))};
+const isProtectedBoss=(B,t)=>{
+ if(!B||!t||!B.o||!Array.isArray(B.p))return false;
+ const i=B.p.findIndex(seat=>seat&&Array.isArray(seat.f)&&seat.f.includes(t));
+ if(i<0)return false;
+ // Só há proteção nas modalidades explicitamente marcadas como Boss:
+ // solo = assento 1; Raid cooperativa = Boss no assento 0. Duelos, arenas,
+ // batalhas personalizadas e mesas entre amigos nunca entram nesta regra.
+ return (B.o.singleBoss===1&&i===1)||(B.o.m==="boss"&&i===0);
+};
 const FX={
 d:{n:"Dano",v:"d",f:[["m","× do dano",1.5]],ds:e=>`Causa ${e.m}× o dano em ${TG[e.a]}`,run:(B,u,t,e,i,ctx)=>{B.hit.push(t.id);const els=ctx&&ctx.atacante?ctx.atacante:elEls(u),r=elCalc(els,elEls(t)),hctx={...(ctx||{}),atacante:els,elemento:r.elemento,multiplicador:r.multiplicador,estado:r.estado};hurt(B,t,dm(u,t,e.m,els),u,hctx);if(r.multiplicador!==1){const move=ctx&&ctx.habilidade?`${EL[r.elemento]} ${ctx.habilidade} (${ELN[r.elemento]})`:`${EL[r.elemento]} ${ELN[r.elemento]}`,target=elEls(t).map(k=>`${EL[k]} ${ELN[k]}`).join(" / ");lg(B,`${move} → ${target} · ×${String(r.multiplicador).replace(".",",")}`)}}},
 dp:{n:"Dano fixo (% da vida máx.)",v:"d",f:[["p","% da vida máx.",30]],ds:e=>`${TG[e.a]} perde ${e.p}% da vida máxima`,ai:(e,t,u)=>t==u||e.a=="a"||e.a=="A"?-35:30,run:(B,u,t,e,i,ctx)=>{B.hit.push(t.id);hurt(B,t,Math.max(1,Math.round(t.mx*e.p/100)),u,ctx)}},
@@ -1657,7 +1679,7 @@ at:{n:"Buff/debuff de ataque",v:"at",f:[["p","±%",30],["n","turnos",2]],ds:e=>`
 df:{n:"Buff/debuff de defesa",v:"at",f:[["p","±% (positivo = recebe menos dano)",30],["n","turnos",2]],ds:e=>`Dano recebido ${e.p>0?"−":"+"}${Math.abs(e.p)}% por ${e.n||2} turnos em ${TG[e.a]}`,run:(B,u,t,e)=>{t.bf.push({k:"df",p:e.p,n:e.n||2})}},
 po:{n:"Veneno",v:"at",vp:-1,f:[["p","% da vida máx. por turno",10],["n","turnos",3]],ds:e=>`Veneno de ${e.p}% da vida máxima por turno, ${e.n||3} turnos, em ${TG[e.a]}`,run:(B,u,t,e)=>{t.bf.push({k:"po",p:e.p,n:e.n||3})}},
 cd:{n:"Recarga de habilidades",v:"h",f:[["v","turnos a reduzir (0 = zera tudo)",0],["o","poupar a habilidade usada (1 = sim)",1]],ds:e=>`Recarga das habilidades ${e.v>0?"−"+e.v+" turno(s)":"zerada"} em ${TG[e.a]}${e.o?" (menos a usada)":""}`,run:(B,u,t,e,i)=>{t.cd=t.cd.map((x,j)=>e.o&&t==u&&j==i?x:e.v>0?Math.max(0,x-e.v):0)}},
-dr:{n:"Comprar carta",v:"h",own:1,f:[["v","cartas",1]],ds:e=>`Compra ${e.v} carta(s) para o banco (se couber)`,run:(B,u,t,e)=>{const s=cur_(B);for(let k=0;k<e.v;k++){if(s.r.length>=3||!s.dk.length)break;const x=s.dk.shift();s.r.push(x);bump("draw");lg(B,`${s.n} comprou ${x.c.n}`);B.ev.push({k:"draw",s:B.t,id:x.id,r:x.c.r,el:elEls(x)[0]})}}},
+dr:{n:"Comprar carta",v:"h",own:1,f:[["v","cartas",1]],ds:e=>`Compra ${e.v} carta(s) para o banco (se couber)`,run:(B,u,t,e)=>{const s=cur_(B);for(let k=0;k<e.v;k++){if(s.r.length>=3||!s.dk.length)break;const x=s.dk.shift();s.r.push(x);bump("draw")}}},
 bk:{n:"Recuar (vai para a reserva)",v:"h",f:[],ds:e=>`${TG[e.a]} recua para a reserva`,ai:(e,t,u)=>e.a=="e"||e.a=="E"?20:-25,run:(B,u,t)=>{const s=B.p[sdx(B,t)];if(!s||s.r.length>2)return;s.f[s.f.indexOf(t)]=null;s.r.push(t);lg(B,`↩ ${t.c.n} recuou`)}}
 };
 // ===== v1.6: MAIS BLOCOS · condições ("só se...") · gatilhos (ativa ou passiva) =====
@@ -1715,7 +1737,7 @@ Object.assign(FX,{
 });
 const FXG=[["⚔ Dano",["d","dp","dv","dh","mh","ex","lx"]],["💚 Vida",["h","hv","mx","rg","ls","rv","lf","sp"]],["🧬 Elementos",["el","elself","elcopy","elswap","eladd","elclear","eltarget"]],["🔼 Buff e proteção",["at","df","sh","rf","mk","ev","cr","im","tn","pu","ca","dispel","steal","transfer"]],["🔽 Debuff e controle",["po","bl","st","cu","dz","ci","di"]],["⏱ Recarga e ações",["cd","ac"]],["🃏 Cartas",["dr","bk","pl","rd","dc","mm"]]];
 const runEf=(B,u,ef,i,g,skill=null)=>{const attacker=elSkillEls(skill,u),blocks=Array.isArray(ef)?ef:[];for(const e of blocks){if(!e||typeof e!=="object")continue;const X=FX[e.t];if(!X||typeof X.run!=="function"){console.warn("Bloco de habilidade desconhecido",skill&&skill.n,e&&e.t);continue}try{for(const f of X.f||[]){const key=f[0];if(e[key]===undefined||e[key]===null||e[key]==="")e[key]=f[2];else if(Array.isArray(f[3])&&!f[3].includes(e[key]))e[key]=f[2];else if(!f[3]&&typeof f[2]==="number"&&!Number.isFinite(+e[key]))e[key]=f[2]}if(!X.own&&(!e.a||!Object.prototype.hasOwnProperty.call(TG,e.a)))e.a=X.defaultTarget||(["d","dp","dh","dv","mh","ex","po","bl","st","cu","dz","di","sp","ca"].includes(e.t)?"e":"s");const chance=e.ch==null?100:Math.max(0,Math.min(100,+e.ch||0));if(chance<100&&Math.random()*100>=chance)continue;let ts=X.own?[u]:tgt(B,u,e.a,g||{});if(!Array.isArray(ts))ts=[];const ev={k:"ef",a:u.id,s:B.t,ty:X.v||e.t,p:X.vp||e.p,ts:[],r:u.c.r,el:attacker[0]||"normal",el2:attacker[1]||"",n:skill&&skill.n||""};for(const t of ts){if(!t||!(X.own||t.hp>0))continue;let condT=t;if(e.co==="el"&&X.own){const foe= B.p.length>2?null:foe_(B),E=B.p.length>2?en_(B):(foe&&foe.f?foe.f.filter(Boolean):[]);condT=(g&&g.e&&g.e.hp>0?g.e:E[0])||t}const cond=e.co?CO[e.co]&&CO[e.co][1]:null;if(e.co&&typeof cond!=="function"){console.warn("Condição de habilidade desconhecida",skill&&skill.n,e.co);continue}if(cond&&!cond(B,u,condT,e.cv??50,{atacante:attacker}))continue;const rEl=elCalc(attacker,elEls(t)),hitCtx={atacante:attacker,elemento:rEl.elemento,habilidade:skill&&skill.n||""};if(e.t==="d"||e.t==="mh")Object.assign(hitCtx,{multiplicador:rEl.multiplicador,estado:rEl.estado});X.run(B,u,t,e,i,hitCtx);ev.ts.push(t.id)}if(ev.ts.length)B.ev.push(ev)}catch(err){console.warn("Habilidade/bloco ignorado",skill&&skill.n,e&&e.t,err);lg(B,`⚠ ${skill&&skill.n||"Habilidade"}: efeito ${e.t||"inválido"} ignorado`)}}};
-const trg=(B,u,si,k)=>{if(!u.ps||(B.dp||0)>=5)return;const L=u.ps.filter(p=>p.tr==k);if(!L.length)return;B.dp=(B.dp||0)+1;const t0=B.t;B.t=si;try{L.forEach(p=>{lg(B,`✦ ${u.c.n}: ${p.n}`);runEf(B,u,p.ef,-1,{},p)})}finally{B.t=t0;B.dp--}};
+const trg=(B,u,si,k)=>{if(window.LV&&window.LV.mods&&window.LV.mods.noSkills)return;if(!u.ps||(B.dp||0)>=5)return;const L=u.ps.filter(p=>p.tr==k);if(!L.length)return;B.dp=(B.dp||0)+1;const t0=B.t;B.t=si;try{L.forEach(p=>{lg(B,`✦ ${u.c.n}: ${p.n}`);runEf(B,u,p.ef,-1,{},p)})}finally{B.t=t0;B.dp--}};
 const trgTeam=(B,si,k,skip)=>{const team=B.tm[si];B.p.forEach((s,j)=>{if(j!==si&&B.tm[j]!==team)return;s.f.forEach(x=>{if(x&&x!==skip&&x.hp>0)trg(B,x,j,k)})})};
 const dsc=sp=>(sp.tr&&sp.tr!="u"?TRG[sp.tr]+": ":"")+sp.ef.map(e=>(FX[e.t]?FX[e.t].ds(e):"?")+(e.co&&CO[e.co]?` · se ${CO[e.co][0].replace("X",e.cv||50)}`:"")+(e.ch&&e.ch<100?` (${e.ch}% de chance)`:"")).join(". ")+(sp.tr&&sp.tr!="u"?".":`. Recarga: ${sp.rc||3} turnos.`)+(sp.el&&sp.el!=="carta"?` Elemento próprio: ${EL[elKey(sp.el)]||"⚪"} ${ELN[elKey(sp.el)]||"Normal"}${sp.el2?` + ${EL[elKey(sp.el2)]} ${ELN[elKey(sp.el2)]}`:""}.`:` Usa o elemento da carta.`)+(sp.chargeMode==="same"?` Precisa carregar e depois usar no mesmo turno, gastando 2 ações.`:sp.chargeMode==="turns"?` Precisa carregar e aguardar ${Math.max(1,+sp.chargeTurns||1)} turno(s) antes de usar.`:``);
 // ----- ARENAS (9) · troféus · recompensas -----
@@ -1757,7 +1779,8 @@ setInterval(()=>{const b=$("fpb");if(b&&tab=="h"&&ov.hidden)b.outerHTML=fpb()},3
 // ----- MOTOR DE BATALHA (regras v0.4 + sugestões da v0.3) -----
 // 12 cartas por deck embaralhadas e viradas · 5 vidas · campo: 3 ativas + 3 reservas · 2 ações por turno (atacar 1×/carta, habilidade, colocar em campo; COMPRAR é grátis, sem limite por turno, mas só enquanto o banco de 3 reservas não estiver cheio) · quem começa faz 1 ação · sem crítico · sem trocar ativa por reserva · máx. MAXT turnos por jogador.
 // DANO = dano × múltiplo × elemento (sem defesa). Com o status por raridade, 3 golpes derrubam uma carta do mesmo rank e nível. Buff/debuff de "n turnos" dura n turnos do dono da carta.
-const abs=c=>{const s=c.sk||[],l=Array.isArray(s[0])?s:s.length?[s]:[];return l.filter(a=>a[3]&&a[3].ef&&!a[3].tr).map(a=>({n:a[0],rc:a[3].rc||3,ef:a[3].ef,el:a[3].el,el2:a[3].el2,chargeMode:a[3].chargeMode||"",chargeTurns:Math.max(1,+a[3].chargeTurns||1)}))},pas=c=>{const s=c.sk||[];return(Array.isArray(s[0])?s:s.length?[s]:[]).filter(a=>a[3]&&a[3].ef&&a[3].tr).map(a=>({n:a[0],tr:a[3].tr,ef:a[3].ef,el:a[3].el,el2:a[3].el2}))};
+const cpCombatTrigger=t=>{const raw=String(t??"").trim();if(TRG[raw])return raw;const n=raw.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");const exact={ao_entrar_em_campo:"in",entrar_em_campo:"in",entrada_em_campo:"in",ao_entrar:"in",entrada:"in",quando_entrar_em_campo:"in",ao_morrer:"mo",quando_morrer:"mo",morte:"mo",ao_ser_destruido:"mo",inicio_do_turno:"ti",no_inicio_do_turno:"ti",fim_do_turno:"te",no_fim_do_turno:"te",ao_receber_dano:"da",quando_receber_dano:"da",ao_atacar:"at",quando_atacar:"at",ao_eliminar:"ki",ao_derrotar:"ki",depois_de_usar_habilidade:"sk",apos_usar_habilidade:"sk",ao_ser_curado:"he",quando_for_curado:"he",ao_esquivar:"ev",quando_esquivar:"ev",quando_um_aliado_entrar_em_campo:"ae",quando_aliado_entrar:"ae",ao_entrar_um_aliado:"ae",quando_um_aliado_morrer:"am",quando_aliado_morrer:"am"};if(exact[n])return exact[n];if(/aliado.*(entr|cheg)|((entr|cheg).*aliado)/.test(n))return"ae";if(/aliado.*(morr|mort)|((morr|mort).*aliado)/.test(n))return"am";if(/entr|invoc|aparec|coloc.*campo|campo.*coloc/.test(n))return"in";if(/curad|curar|cura|lifesteal/.test(n))return"he";if(/morr|mort|falec|destru|eliminad/.test(n))return"mo";if(/inicio|comeco/.test(n))return"ti";if(/fim|final/.test(n))return"te";if(/receb|sofr|dano|atingid/.test(n))return"da";if(/esquiv|desvi/.test(n))return"ev";if(/elimin|mata|derrot/.test(n))return"ki";if(/habilid|skill/.test(n))return"sk";if(/atac/.test(n))return"at";return raw},
+abs=c=>{if(window.LV&&window.LV.mods&&window.LV.mods.noSkills)return[];const s=c.sk||[],l=Array.isArray(s[0])?s:s.length?[s]:[];return l.filter(a=>a[3]&&a[3].ef&&!a[3].tr).map(a=>({n:a[0],rc:a[3].rc||3,ef:a[3].ef,el:a[3].el,el2:a[3].el2,chargeMode:a[3].chargeMode||"",chargeTurns:Math.max(1,+a[3].chargeTurns||1)}))},pas=c=>{if(window.LV&&window.LV.mods&&window.LV.mods.noSkills)return[];const s=c.sk||[];return(Array.isArray(s[0])?s:s.length?[s]:[]).filter(a=>a[3]&&a[3].ef&&a[3].tr).map(a=>({n:a[0],tr:cpCombatTrigger(a[3].tr),ef:a[3].ef,el:a[3].el,el2:a[3].el2}))};
 const mk=(c,lv,k=1)=>{const m=(1+.4*lv)*k,ab=abs(c);return{c,lv,hp:Math.round(c.hp*m*(CONFIG.vidaMult||1)),mx:Math.round(c.hp*m*(CONFIG.vidaMult||1)),atk:Math.round(c.atk*m),ab,ps:pas(c),cd:ab.map(()=>0),chg:ab.map(()=>null),bf:[],u:0,id:Math.random().toString(36).slice(2,8)}};
 const tribeKey=s=>String(s||"").trim().normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("pt-BR");
 function applyTribeSynergy(B){
@@ -1791,6 +1814,8 @@ function stT(B,first){const s=cur_(B);B.ac=first?(CONFIG.acaoIni||1):(CONFIG.aco
 function fin(B,why){B.over=1;if(B.p.length>2)return finG(B,why);const[a,b]=B.p;let w=a.life>b.life?0:a.life<b.life?1:-1;if(w<0){const h=s=>[...s.f,...s.r].filter(Boolean).reduce((x,u)=>x+u.hp,0);w=h(a)>h(b)?0:h(a)<h(b)?1:-1}B.w=w;B.why=why;return 1}
 const chk=B=>{if(!B||B.over)return B&&B.over?1:0;if(B.p.length>2){const vivos=B.p.map((s,i)=>({s,i})).filter(x=>x.s&&x.s.life>0),times=new Set(vivos.map(x=>B.tm&&B.tm[x.i]!=null?B.tm[x.i]:x.i));return vivos.length<2||times.size<2?fin(B,"vidas"):0}return B.p[0].life<1||B.p[1].life<1?fin(B,"vidas"):0};
 function hurt(B,t,d,src,elementCtx=null){
+ const duelState=window.LV;
+ if(d>0&&B&&B.o&&B.o.m==="f"&&duelState&&duelState.id&&duelState.mods&&duelState.mods.doubleDamage)d=Math.round(d*2);
  if(d>0){SND.hit();if(elementCtx&&(elementCtx.estado==="super"||elementCtx.estado==="super_duplo"))try{cpxShake(d,t)}catch(e){}}
  const i=B.p.findIndex(x=>x.f.includes(t));if(i<0||t.hp<1)return;
  if(bs(t,"im")>0)d=0;
@@ -1800,14 +1825,14 @@ function hurt(B,t,d,src,elementCtx=null){
  if(d>0)trg(B,t,i,"da");
  const dead=t.hp<=0,visualEls=elementCtx&&elementCtx.atacante?elementCtx.atacante:src?elEls(src):["normal"];
  B.ev.push({k:"dmg",id:t.id,s:i,d,mx:t.mx,dead,r:src?src.c.r:t.c.r,el:elementCtx&&elementCtx.elemento||visualEls[0]||"normal",el2:visualEls[1]||"",mult:elementCtx&&elementCtx.multiplicador,state:elementCtx&&elementCtx.estado,elemental:!!(elementCtx&&Array.isArray(elementCtx.atacante)),tr:t.c.r});
- if(d>0&&src){const l=bs(src,"ls"),rf=bs(t,"rf");if(l>0&&src.hp>0)src.hp=Math.min(src.mx,src.hp+Math.round(d*l/100));if(rf>0&&src!==t&&src.hp>0&&sdx(B,src)>=0)hurt(B,src,Math.max(1,Math.round(d*rf/100)),null)}
+ if(d>0&&src){const l=bs(src,"ls"),rf=bs(t,"rf");if(l>0&&src.hp>0){const before=src.hp;src.hp=Math.min(src.mx,src.hp+Math.round(d*l/100));const healed=src.hp-before;if(healed>0){const sourceSeat=sdx(B,src);lg(B,`🧛 ${src.c.n} roubou ${healed} vida`);B.ev.push({k:"heal",id:src.id,v:healed,r:src.c.r});if(sourceSeat>=0)trg(B,src,sourceSeat,"he")}}if(rf>0&&src!==t&&src.hp>0&&sdx(B,src)>=0)hurt(B,src,Math.max(1,Math.round(d*rf/100)),null)}
  if(t.hp>0)return;
  const seat=B.p[i];seat.f[seat.f.indexOf(t)]=null;gy(seat,t);seat.life--;B.ev.push({k:"life",s:i,n:seat.life});
  {const kk=B.p.length>2?(src?sdx(B,src):-1):1-i;if(kk>=0)B.kl[kk]++}
  lg(B,`💥 ${t.c.n} caiu · ${seat.n} perde 1 vida`);trg(B,t,i,"mo");trgTeam(B,i,"am",t);if(src){const j=sdx(B,src);j>=0&&trg(B,src,j,"ki")}
 }
 // COMPRAR não gasta ação e dá para comprar quantas quiser na sua vez; a carta vai sempre para o banco (reservas) e só entra em campo quando ativada (colocar gasta 1 ação). Banco cheio (3) ou baralho vazio = não compra.
-function aDraw(B){const s=cur_(B);if(s.r.length>=3||!s.dk.length)return 0;const u=s.dk.shift();s.r.push(u);bump("draw");B.hit=[];lg(B,`${s.n} comprou ${u.c.n}`);B.ev.push({k:"draw",s:B.t,id:u.id,r:u.c.r,el:elEls(u)[0]});return 1}
+function aDraw(B){const s=cur_(B);if(s.r.length>=3||!s.dk.length)return 0;const u=s.dk.shift();s.r.push(u);bump("draw");B.hit=[];lg(B,`${s.n} comprou uma carta para a reserva`);return 1}
 function aPlace(B,u){const s=cur_(B),i=s.f.indexOf(null);if(B.ac<1||i<0||!s.r.includes(u))return 0;s.r.splice(s.r.indexOf(u),1);s.f[i]=u;B.ac--;B.hit=[];lg(B,`${s.n} colocou ${u.c.n} em campo`);B.ev.push({k:"place",s:B.t,id:u.id,r:u.c.r,el:elEls(u)[0]});trg(B,u,B.t,"in");trgTeam(B,B.t,"ae",u);chk(B);return 1}
 function aAtk(B,u,t){const s=cur_(B);if(B.ac<1||u.u||!s.f.includes(u)||!tg_(B).includes(t))return 0;B.ac--;u.u=1;const els=elEls(u),r=elCalc(els,elEls(t)),d=dm(u,t,1,els),hctx={atacante:els,elemento:r.elemento,multiplicador:r.multiplicador,estado:r.estado};B.hit=[t.id];lg(B,`⚔ ${u.c.n} atacou ${t.c.n}: −${d}${r.multiplicador!==1?` · ${EL[r.elemento]} ${ELN[r.elemento]} → ${elEls(t).map(k=>EL[k]+" "+ELN[k]).join(" / ")} · ×${String(r.multiplicador).replace(".",",")}`:""}`);B.ev.push({k:"atk",a:u.id,t:t.id,s:B.t,r:u.c.r,el:r.elemento,el2:els[1]||"",mult:r.multiplicador,state:r.estado});hurt(B,t,d,u,hctx);u.hp>0&&trg(B,u,B.t,"at");chk(B);return 1}
 const tgt=(B,u,a,g)=>{const E=B.p.length>2?en_(B):foe_(B).f.filter(Boolean),A=cur_(B).f.filter(Boolean),rn=l=>l.length?[l[Math.random()*l.length|0]]:[],mn=(l,f)=>l.length?[l.reduce((m,x)=>f(x)<f(m)?x:m)]:[];return a=="s"?[u]:a=="E"?E:a=="A"?A:a=="r"?rn(E):a=="w"?mn(E,x=>x.hp):a=="x"?mn(E,x=>-x.hp):a=="q"?rn(A):a=="m"?mn(A,x=>x.hp/x.mx):a=="o"?A.filter(x=>x!=u):a=="T"?[...E,...A]:a=="e"?[E.includes(g.e)?g.e:E[0]].filter(Boolean):[A.includes(g.a)?g.a:A.includes(u)?u:A[0]].filter(Boolean)};
@@ -1986,8 +2011,27 @@ const FXH={
    fan(b,[{transform:"translate(-80%,-50%) scale(.9)",opacity:0},{transform:"translate(-50%,-50%) scale(1)",opacity:1,offset:.25},{transform:"translate(-50%,-50%) scale(1)",opacity:1,offset:.7},{transform:"translate(-20%,-50%) scale(.9)",opacity:0}],1000)})}
 };
 function fxSnap(){const P={};zb.querySelectorAll("[data-z^='u:']").forEach(e=>{const r=e.getBoundingClientRect();P[e.dataset.z.slice(2)]={x:r.left,y:r.top,w:r.width,h:r.height,el:e}});PR=P}
-function fxFlush(){const B=BT;if(!B||!B.ev||!B.ev.length)return;const ev=B.ev;B.ev=[];const P=PR;if(FXOFF()){ev.forEach((e,i)=>{if(e.k==="dmg"){const r=zrc(e.id,P);if(e.elemental&&r&&window.cpPlayElementFx)window.cpPlayElementFx(e.el||"normal",r,e.state||"neutro",i*80)}});return}const st={t:0,imp:0,cpElDelay:0},P0=P;try{ev.forEach(e=>{const h=FXH[e.k]||(e.k==="charge"?FXH.sk:null);h&&h(e,st,P0)})}catch(x){}}
+function fxFlush(){
+ const B=BT;if(!B||!B.ev||!B.ev.length)return;const ev=B.ev.splice(0),P=PR||{};
+ const rebuilding=!!(window.LV&&(window.LV.rebuilding||window.LV.repairing||window.LV.rm));
+ const small=!!(B.lv||window.innerWidth<=720||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4));
+ if(rebuilding)return;
+ if(small){
+  const seen=window.__CP_BATTLE_FX_SEEN||(window.__CP_BATTLE_FX_SEEN=new Map()),now=Date.now();
+  for(let i=0,shown=0;i<ev.length&&shown<3;i++){
+   const e=ev[i];if(!e||!(e.k==="dmg"||e.k==="heal"))continue;
+   const sig=[window.LV&&window.LV.id||B.o&&B.o.id||"battle",B.n,B.t,e.k,e.id,e.d||e.v||0,i].join("|");if(seen.has(sig))continue;seen.set(sig,now);shown++;
+   const snap=P[e.id],node=snap&&snap.el||Array.from(zb.querySelectorAll("[data-z^='u:']")).find(x=>x.dataset.z.slice(2)===String(e.id));if(!node)continue;
+   const r=node.getBoundingClientRect(),tag=document.createElement("span");tag.className="cp-online-fx "+(e.k==="heal"?"heal":"damage");tag.textContent=e.k==="heal"?"+"+(e.v||0):"−"+(e.d||0);tag.style.left=(r.left+r.width/2)+"px";tag.style.top=(r.top+r.height*.18)+"px";document.body.append(tag);setTimeout(()=>tag.remove(),620);
+  }
+  if(seen.size>900){for(const [k,t]of seen){if(now-t>120000)seen.delete(k);if(seen.size<=650)break}}
+  return;
+ }
+ if(FXOFF())return;
+ const st={t:0,imp:0,cpElDelay:0},P0=P;try{ev.slice(-10).forEach(e=>{const h=FXH[e.k]||(e.k==="charge"?FXH.sk:null);h&&h(e,st,P0)})}catch(x){console.warn("efeito de batalha",x)}
+}
 function fxEnd(B){if(FXOFF())return;const w=B.w,win=B.ai?w==0:w>=0,lose=B.ai&&w==1;
+ if(B.lv||window.innerWidth<=720){if(win)toast("🏆 Vitória!");else if(lose)toast("⚔️ Fim da batalha");return}
  if(win){for(let i=0;i<46;i++){const p=fm("fxp",fr()*innerWidth,-20,8,12,`--c:hsl(${fr()*360|0} 90% 62%);border-radius:2px`);fan(p,[{transform:"translate(0,0) rotate(0)",opacity:1},{transform:`translate(${(fr()-.5)*160}px,${innerHeight+40}px) rotate(${fr()*720}deg)`,opacity:1}],1600+fr()*1200,{delay:fr()*500,easing:"ease-in"})}ffl("#fff",.25,500)}
  else if(lose){ffl("#ff2a3d",.3,800);fsh(zb,8,500)}}
 
@@ -2025,7 +2069,7 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
   pn+=`<div class="two"><button class="bt gh${s.r.length>=3||!s.dk.length?" off":""}" data-z="draw">${s.r.length>=3?"Banco cheio":!s.dk.length?"Baralho vazio":"Comprar grátis"}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
  if(B.lv&&!B.over)pn+=`<div class="cp-live-react"><small>Reações</small><button type="button" data-z="rx:😂" aria-label="Enviar risada">😂</button><button type="button" data-z="rx:👏" aria-label="Enviar aplausos">👏</button><button type="button" data-z="rx:🔥" aria-label="Enviar fogo">🔥</button></div>`;fxSnap();ME=me;zb.innerHTML=(B.p.length>2||(B.o&&B.o.soloBoss))?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();if(!zb.querySelector("[data-cp-el-guide-battle]"))zb.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
 function zpost(){const B=BT;if(!B)return;SEL=null;if(!B.over)chk(B);if(!B.over&&B.ac<1)endT(B);if(B.over)return zend();if(!B.ai&&!B.lv&&B.t!=B.v)PASS=1;zr();aiRun()}
-function usk(){const B=BT,u=SEL&&SEL.u,i=SEL&&SEL.i,g=SEL&&SEL.g,before=!!(u&&u.chg&&u.chg[i]),ok=aSk(B,u,i,g);if(ok&&B.t===0){const after=!!(u.chg&&u.chg[i]);if(!before&&after)bump("charge");else if(!after){bump("abil");const ab=u.ab&&u.ab[i];if(ab&&elSkillEls(ab,u).some(k=>k!=="normal"))bump("eluse")}}zpost()}
+function usk(){const B=BT,u=SEL&&SEL.u,i=SEL&&SEL.i,g=SEL&&SEL.g,before=!!(u&&u.chg&&u.chg[i]),humanSeat=B&&B.lv?B.v:0,ok=aSk(B,u,i,g);if(ok&&B.t===humanSeat){const after=!!(u.chg&&u.chg[i]);if(!before&&after)bump("charge");else if(!after){bump("abil");const ab=u.ab&&u.ab[i];if(ab&&elSkillEls(ab,u).some(k=>k!=="normal"))bump("eluse")}}zpost()}
 function zc(a){const B=BT;if(!B)return;if(a.startsWith("rx:")){const emoji=a.slice(3);cpShowDuelReaction(B.v,emoji);if(B.lv&&window.lvSend)window.lvSend({k:"rx",s:B.v,e:emoji});return}
  if(a=="go"){PASS=0;B.v=B.t;return zr()}
  if(a=="quit")return ask("Desistir da luta?","Conta como derrota.","Desistir",()=>{if(B.p.length>2){if(B.over||B.p[B.v].life<1)return;if(B.t!=B.v)return toast("Em grupo, só dá para desistir na sua vez.");window.lvq&&window.lvq(B.v);qtL(B,B.v);return zpost()}B.over=1;B.w=B.ai?1:1-B.v;B.why="desistiu";window.lvq&&window.lvq();zend()},1);
@@ -2757,14 +2801,13 @@ function cpPowerScore(c,mode){
 }
 function stp(c,n){
  const m=mult(c),hp=Math.round(c.hp*m),dn=Math.round(c.atk*m),
- mx=k=>Math.max(...ALL.map(x=>x[k]*(1+gain(x)*5))),
- t=(i,l,v,b,k)=>`<div class="st2"><i>${i}</i><small>${l}</small><b>${v}</b><div class="tr"><u style="width:${Math.min(100,Math.max(6,v/mx(k)*100)).toFixed(1)}%"></u></div><em>${v>b?`base ${b} · <span>+${v-b}</span> de nível`:`base ${b}`}</em></div>`,
- mode=["status","skills","all"].includes(window.CP_POWER_MODE)?window.CP_POWER_MODE:"status",score=cpPowerScore(c,mode),po=ALL.filter(x=>cpPowerScore(x,mode)>score+1e-9).length+1,
- labels={status:"Apenas status",skills:"Só habilidades",all:"Status + habilidades"},pw=Math.round(score),
- ch=(k,v)=>v?`<div class="ch2"><small>${k}</small><b>${v}</b></div>`:"",
- els=elEls(c),elementNames=els.map(k=>EL[k]+" "+ELN[k]).join(" / "),
- elementPanel=`<section class="cp-sheet-elements"><div class="cp-sheet-el-head"><div><small>ELEMENTOS DA CARTA</small><div class="cp-sheet-el-list">${els.map(elChipButton).join("")}</div></div><button type="button" class="cp-guide-link small" data-cp-el-guide="1">Abrir guia</button></div>${elRelationsHTML(c)}</section>`;
- return `<div class="sg2">${t("❤","Vida",hp,c.hp,"hp")}${t("⚔","Dano",dn,c.atk,"atk")}</div><div class="pw"><div><small>Poder · ${labels[mode]}</small><b>${pw}</b></div><span>#${po} de ${ALL.length} cartas</span><label class="pw-mode"><small>Critério do ranking</small><select id="cpPowerMode" aria-label="Critério do ranking de poder" title="A avaliação de habilidades considera efeitos, alcance, chance e recarga. É uma estimativa estratégica."><option value="status"${mode==="status"?" selected":""}>Apenas status</option><option value="skills"${mode==="skills"?" selected":""}>Só habilidades</option><option value="all"${mode==="all"?" selected":""}>Status + habilidades</option></select></label></div>${mode!=="status"?`<p class="mut cp-power-note">Habilidades são pontuadas por efeitos, alcance, chance de ativação e recarga. A classificação é uma estimativa estratégica.</p>`:""}<div class="cp-card-meta">${ch("Chance de sair",c.p.ex?(c.p.exl||"Exclusiva de arena"):cch(c))}${ch("Selo",c.sl?(SLS[c.sl]||"")+" "+c.sl:"")}${ch("Pacote",(c.p.e?c.p.e+" ":"")+c.p.n)}</div>${elementPanel}`}
+ maxHp=Math.max(1,...ALL.map(x=>x.hp*(1+gain(x)*5))),maxAtk=Math.max(1,...ALL.map(x=>x.atk*(1+gain(x)*5))),
+ stat=(icon,label,value,base,max)=>`<div class="cp-sheet-stat"><div class="cp-sheet-stat-top"><span>${icon} ${label}</span><b>${value}</b></div><div class="cp-sheet-stat-track"><i style="width:${Math.max(5,Math.min(100,value/max*100)).toFixed(1)}%"></i></div><small>Base ${base}${value>base?` · <strong>+${value-base}</strong> do nível`:""}</small></div>`,
+ els=elEls(c),elementNames=els.map(k=>(EL[k]||EL.normal)+" "+(ELN[k]||"Normal")).join(" / "),
+ elementPanel=`<details class="cp-sheet-elements"><summary><span>Elementos e relações</span><b>${elementNames}</b></summary><div class="cp-sheet-el-body"><button type="button" class="cp-guide-link small" data-cp-el-guide="1">Abrir guia de elementos</button>${elRelationsHTML(c)}</div></details>`,
+ packName=(c.p&&c.p.e?c.p.e+" ":"")+(c.p&&c.p.n||"Carta especial");
+ return `<div class="cp-sheet-stats">${stat("❤","Vida",hp,c.hp,maxHp)}${stat("⚔","Dano",dn,c.atk,maxAtk)}</div><div class="cp-sheet-origin"><span>Pacote</span><b>${packName}</b></div>${elementPanel}`;
+}
 
 
 </script>
@@ -3228,8 +3271,13 @@ async function pushAdmNow(){ // só o administrador consegue (as regras do Fireb
 window.cpAdm=async pin=>{if(!U)return null;try{await setDoc(doc(db,"admins",U.uid),{c:pin});canAdm=true;pa();return true}catch(e){return e.code==="permission-denied"?false:null}};
 // ADM · excluir jogadores (usado pela tela Excluir do ADM): apaga primeiro o convite (tira o acesso), depois o save na nuvem e o perfil
 window.cpJog={ok:()=>!!U,
- async list(){const s=await getDocs(collection(db,"perfis"));return s.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid)},
- async del(ids){const ok=[],bad=[];let neg=0,part=0;
+ async list(){if(!U)throw Error("Entre na conta ADM.");const s=await getDocs(collection(db,"perfis"));return s.docs.map(d=>({id:d.id,...d.data()}))},
+ async reset(ids){if(!U||!canAdm)throw Error("Somente ADM autenticado pode reiniciar jogadores.");const ok=[],bad=[],part=[];let neg=0;
+  for(const id of [...new Set(ids||[])]){if(!id){bad.push(id);continue}
+   try{const resetAt=Date.now();await updateDoc(doc(db,"perfis",id),{resetAt,tp:0,nc:0,tot:0,w:0,l:0,ow:0,ol:0});ok.push(id);try{await deleteDoc(doc(db,"saves",id))}catch(e){part.push(id);if(e.code==="permission-denied")neg=1}}
+   catch(e){bad.push(id);if(e.code==="permission-denied")neg=1;console.warn("reinício de jogador",id,e)}}
+  return{ok,bad,part,neg}},
+ async del(ids){if(!U||!canAdm)throw Error("Somente ADM autenticado pode excluir jogadores.");const ok=[],bad=[];let neg=0,part=0;
   for(const id of ids){if(!id||id===U.uid){bad.push(id);continue}
    try{await deleteDoc(doc(db,"amigos",id))}catch(e){bad.push(id);if(e.code==="permission-denied")neg=1;continue}
    const r=await Promise.allSettled([deleteDoc(doc(db,"saves",id)),deleteDoc(doc(db,"perfis",id))]);
@@ -3416,7 +3464,7 @@ async function lvRepair(L){
   L.repairing=0;toast("⚠️ A reconstrução falhou. Mantive a batalha anterior para não perder seu estado; verifique a conexão e tente novamente.");
  }
 }
-function lvStart(id,d,me){const A=prs(d.da),C=prs(d.db),m=d.mods||{};if(!A||!C)return toast("Deck inválido · duelo cancelado");if(m.capC&&[...A,...C].some(x=>x.c.r>3))return toast("Duelo inválido · a restrição de Rank C não foi respeitada.");const prev={vidaMult:CONFIG.vidaMult,acoes:CONFIG.acoes,acaoIni:CONFIG.acaoIni,danoMult:CONFIG.danoMult};if(m.hp2)CONFIG.vidaMult=Math.max(.1,+m.vidaMult||((+CONFIG.vidaMult||1)*2));if(m.act3){CONFIG.acoes=3;CONFIG.acaoIni=3}if(m.doubleDamage)CONFIG.danoMult=Math.max(.1,+CONFIG.danoMult||1)*2;window.LV={id,me,qn:0,q:[],d:0,rr:prng(+d.sd||1),lt:Date.now(),mods:m,series:d.series&&d.series.bestOf===3?d.series:null,seriesIntermission:false,aUid:d.a||"",bUid:d.b||"",prevConfig:prev};lvSave();g("cpm")&&g("cpm").remove();zgo({n:d.an,u:A},{n:d.bn,u:C},{m:"f"});if(m.noSkills&&BT)BT.p.forEach(seat=>[...seat.dk,...seat.f,...seat.r].forEach(u=>{if(u){u.ab=[];u.ps=[];u.cd=[];u.chg=[]}}));zr()}
+function lvStart(id,d,me){const A=prs(d.da),C=prs(d.db),m=d.mods||{};if(!A||!C)return toast("Deck inválido · duelo cancelado");if(m.capC&&[...A,...C].some(x=>x.c.r>3))return toast("Duelo inválido · a restrição de Rank C não foi respeitada.");const prev={vidaMult:CONFIG.vidaMult,acoes:CONFIG.acoes,acaoIni:CONFIG.acaoIni,danoMult:CONFIG.danoMult};if(m.hp2)CONFIG.vidaMult=Math.max(.1,+m.vidaMult||((+CONFIG.vidaMult||1)*2));if(m.act3){CONFIG.acoes=3;CONFIG.acaoIni=3}window.LV={id,me,qn:0,q:[],d:0,rr:prng(+d.sd||1),lt:Date.now(),mods:m,series:d.series&&d.series.bestOf===3?d.series:null,seriesIntermission:false,aUid:d.a||"",bUid:d.b||"",prevConfig:prev};lvSave();g("cpm")&&g("cpm").remove();zgo({n:d.an,u:A},{n:d.bn,u:C},{m:"f"});if(m.noSkills&&BT)BT.p.forEach(seat=>[...seat.dk,...seat.f,...seat.r].forEach(u=>{if(u){u.ab=[];u.ps=[];u.cd=[];u.chg=[]}}));zr()}
 function duelModText(m,s){m=m||{};const a=[];if(m.hp2)a.push("❤️ Vida das cartas ×2");if(m.act3)a.push("⚡ 3 ações por turno");if(m.capC)a.push("🛡️ Rank máximo C");if(m.doubleDamage)a.push("💥 Dano ×2");if(m.noSkills)a.push("🚫 Sem habilidades");if(m.fastTurns)a.push("⏱ Turnos de 25 s");if(m.draft)a.push("🎴 Draft · 12 escolhas de 3");if(s&&s.bestOf===3)a.push("🏆 Melhor de 3");return a.length?a.join(" · "):"Sem modificadores"}
 function duelDeck(m){let d=dkv();if(d.length<12)d=dkf();if(m&&m.capC){d=d.filter(c=>c.r<=3);const seen=new Set(d.map(c=>c.id));ALL.filter(c=>c.r<=3&&(S.inv[c.id]||0)>0&&!seen.has(c.id)).sort((a,b)=>b.r-a.r||lvl(b)-lvl(a)).forEach(c=>{if(d.length<12){d.push(c);seen.add(c.id)}})}if(d.length!==12)return"";return"DECK~"+d.slice(0,12).map(c=>c.id+":"+lvl(c)).join(",")}
 function restoreDuelConfig(L){if(!L||!L.prevConfig)return;CONFIG.vidaMult=L.prevConfig.vidaMult;CONFIG.acoes=L.prevConfig.acoes;CONFIG.acaoIni=L.prevConfig.acaoIni;CONFIG.danoMult=L.prevConfig.danoMult;L.prevConfig=null}
@@ -3427,19 +3475,19 @@ function lvWatch(id){DW&&DW();DW=onSnapshot(doc(db,"duelos",id),sn=>{const d=sn.
  if(!window.LV){if(d.s=="p"&&d.a==U.uid&&d.db){DID=null;lvStart(id,d,0)}else if(d.s=="e"&&d.series&&d.series.finished){DW&&DW();DW=null;lvDrop()}}
  else if(window.LV.id==id)lvCm(d)
 },e=>warn("duelo",e))}
-function cpDraftBuild(seed,lowRank=false,salt=0){return new Promise(resolve=>{const picked=[],used=new Set();let finished=false;const close=code=>{if(finished)return;finished=true;document.removeEventListener("click",onPick);const m=g("cpm");m&&m.remove();resolve(code)};const options=()=>{const list=ALL.filter(c=>!used.has(c.id)&&(!lowRank||c.r<=3));let x=(Math.abs((+seed||1)+salt+picked.length*0x45d9f3b)>>>0)||1;const rnd=()=>{x=(x*16807)%2147483647;return x/2147483647};for(let i=list.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[list[i],list[j]]=[list[j],list[i]]}return list.slice(0,3)};const draw=()=>{if(picked.length>=12)return close("DECK~"+picked.map(c=>c.id+":0").join(","));const list=options();if(list.length<3)return close("");modal(`<h4>🎴 Draft Primata · ${picked.length+1}/12</h4><p>Escolha <b>1 de 3 cartas</b>. Elas ficam disponíveis para esta partida, mesmo que não estejam na sua coleção.</p><div class="cp-draft-progress"><i style="width:${picked.length/12*100}%"></i></div><div class="cp-draft-grid">${list.map(c=>`<button class="cp-draft-pick" data-cp-draft-pick="${safeName(c.id)}">${card(c)}<b>${R[c.r][0]} · ${safeName(c.n)}</b></button>`).join("")}</div><small class="mut">Cartas escolhidas: ${picked.length}/12 · nenhuma carta será consumida.</small><button type="button" class="bt gh" data-cp-draft-cancel="1">Cancelar Draft</button>`)};const onPick=e=>{if(e.target.closest("[data-cp-draft-cancel]"))return close("");const b=e.target.closest("[data-cp-draft-pick]");if(!b||finished)return;const c=byId(b.dataset.cpDraftPick);if(!c||used.has(c.id))return;used.add(c.id);picked.push(c);draw()};document.addEventListener("click",onPick);draw()})}
+function cpDraftBuild(seed,lowRank=false,salt=0){return new Promise(resolve=>{const picked=[],used=new Set();let finished=false;const close=code=>{if(finished)return;finished=true;document.removeEventListener("click",onPick,true);const m=g("cpm");m&&m.remove();resolve(code)};const options=()=>{const list=ALL.filter(c=>!used.has(c.id)&&(!lowRank||c.r<=3));let x=(Math.abs((+seed||1)+salt+picked.length*0x45d9f3b)>>>0)||1;const rnd=()=>{x=(x*16807)%2147483647;return x/2147483647};for(let i=list.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[list[i],list[j]]=[list[j],list[i]]}return list.slice(0,3)};const draw=()=>{if(picked.length>=12)return close("DECK~"+picked.map(c=>c.id+":0").join(","));const list=options();if(!list.length)return close("");modal(`<h4>🎴 Draft Primata · ${picked.length+1}/12</h4><p>Escolha <b>1 de ${list.length} carta(s)</b>. Elas ficam disponíveis para esta partida, mesmo que não estejam na sua coleção.</p><div class="cp-draft-progress"><i style="width:${picked.length/12*100}%"></i></div><div class="cp-draft-grid">${list.map(c=>`<button class="cp-draft-pick" data-cp-draft-pick="${safeName(c.id)}">${card(c)}<b>${R[c.r][0]} · ${safeName(c.n)}</b></button>`).join("")}</div><small class="mut">Cartas escolhidas: ${picked.length}/12 · nenhuma carta será consumida.</small><button type="button" class="bt gh" data-cp-draft-cancel="1">Cancelar Draft</button>`)};const onPick=e=>{if(e.target.closest("[data-cp-draft-cancel]"))return close("");const b=e.target.closest("[data-cp-draft-pick]");if(!b||finished)return;const c=byId(b.dataset.cpDraftPick);if(!c||used.has(c.id))return;used.add(c.id);picked.push(c);draw()};document.addEventListener("click",onPick,true);draw()})}
 async function desafiar(i){const p=PL[i];if(!p)return;if(window.LV||bt())return toast("Termine a batalha atual primeiro.");DPT=p;
  modal(`<h4>⚔️ Desafiar ${esc(p.n)}</h4><p>Escolha as regras especiais desta partida. Os modificadores serão aplicados igualmente aos dois jogadores.</p><label class="yck"><input type="checkbox" id="dmhp"> ❤️ Vida das cartas ×2</label><label class="yck"><input type="checkbox" id="dmact"> ⚡ 3 ações por turno</label><label class="yck"><input type="checkbox" id="dmrank"> 🛡️ Somente cartas de Rank C ou inferior</label><label class="yck"><input type="checkbox" id="dmdouble"> 💥 Dano dobrado</label><label class="yck"><input type="checkbox" id="dmnoskill"> 🚫 Sem habilidades</label><label class="yck"><input type="checkbox" id="dmfast"> ⏱ Turnos curtos · 25 segundos</label><label class="yck"><input type="checkbox" id="dmdraft"> 🎴 Draft · escolha 1 de 3 cartas por rodada</label><label class="yck"><input type="checkbox" id="dmbo3"> 🏆 Melhor de 3 · vence quem ganhar 2 partidas</label><p class="mut">Com o limite de Rank C, cada jogador precisa montar um deck de 12 cartas diferentes dentro desse limite. No melhor de 3, os dois jogadores precisam confirmar que estão prontos antes de cada revanche.</p><button class="bt cy" data-a="dstart">Enviar desafio</button><button class="bt gh" data-a="px">Cancelar</button>`)}
-async function enviarDesafio(){const p=DPT;if(!p)return;const mods={hp2:!!$("dmhp")?.checked,act3:!!$("dmact")?.checked,capC:!!$("dmrank")?.checked,doubleDamage:!!$("dmdouble")?.checked,noSkills:!!$("dmnoskill")?.checked,fastTurns:!!$("dmfast")?.checked,draft:!!$("dmdraft")?.checked};if(mods.hp2)mods.vidaMult=Math.max(.1,(+CONFIG.vidaMult||1)*2);const seed=(Math.random()*2147483646|0)+1;let da;if(mods.draft){toast("🎴 Monte seu deck de Draft escolhendo 1 de 3 cartas por rodada.");da=await cpDraftBuild(seed,mods.capC,0)}else da=duelDeck(mods);if(!da)return toast(mods.capC?"Você precisa de 12 cartas diferentes de Rank C ou inferior para este desafio.":"Não foi possível montar o deck de 12 cartas.");
- const series=$("dmbo3")?.checked?{bestOf:3,scoreA:0,scoreB:0,round:1,ready:[],phase:"match",winner:null,finished:false}:null;
+async function enviarDesafio(){const p=DPT;if(!p)return;const bestOfThree=!!$("dmbo3")?.checked;const mods={hp2:!!$("dmhp")?.checked,act3:!!$("dmact")?.checked,capC:!!$("dmrank")?.checked,doubleDamage:!!$("dmdouble")?.checked,noSkills:!!$("dmnoskill")?.checked,fastTurns:!!$("dmfast")?.checked,draft:!!$("dmdraft")?.checked};if(mods.hp2)mods.vidaMult=Math.max(.1,(+CONFIG.vidaMult||1)*2);const seed=(Math.random()*2147483646|0)+1;let da;if(mods.draft){toast("🎴 Monte seu deck de Draft escolhendo 1 de 3 cartas por rodada.");da=await cpDraftBuild(seed,mods.capC,0)}else da=duelDeck(mods);if(!da)return toast(mods.capC?"Você precisa de 12 cartas diferentes de Rank C ou inferior para este desafio.":"Não foi possível montar o deck de 12 cartas.");
+ const series=bestOfThree?{bestOf:3,scoreA:0,scoreB:0,round:1,ready:[],phase:"match",winner:null,finished:false}:null;
  const id=U.uid.slice(0,6)+Date.now().toString(36);try{await setDoc(doc(db,"duelos",id),{a:U.uid,an:ME.n,b:p.id,bn:p.n,da,mods,series,s:"w",sd:seed,t:Date.now(),cm:[]})}catch(e){return warn("duelo",e)}
  DPT=null;DID=id;modal(`<h4>⚔️ Duelo ao vivo</h4><p>Esperando <b>${esc(p.n)}</b> aceitar… ele precisa estar com o jogo aberto.</p><p class="mut">${duelModText(mods,series)}</p><button class="bt gh" data-a="dx">Cancelar</button>`);lvWatch(id);setTimeout(()=>{DID==id&&!window.LV&&cancelarD()},12e4)}
 function cancelarD(){const id=DID;DID=null;DW&&DW();DW=null;g("cpm")&&g("cpm").remove();id&&updateDoc(doc(db,"duelos",id),{s:"x"}).catch(()=>{})}
 async function aceitarD(id){const d=INV[id],m=d&&d.mods||{};if(!d)return;if(window.LV||bt())return toast("Termine a batalha atual primeiro.");let dk;if(m.draft){toast("🎴 Agora escolha 12 cartas para seu Draft.");dk=await cpDraftBuild(d.sd||1,m.capC,0x9e3779b9)}else dk=duelDeck(m);if(!dk)return toast(m.capC?"Você precisa de 12 cartas diferentes de Rank C ou inferior para aceitar.":"Você precisa de 12 cartas para duelar.");
- try{await updateDoc(doc(db,"duelos",id),{s:"p",db:dk})}catch(e){return warn("duelo",e)}
- lvStart(id,{...d,db:dk,s:"p"},1);lvWatch(id)}
-function recusarD(id){g("cpm")&&g("cpm").remove();updateDoc(doc(db,"duelos",id),{s:"x"}).catch(()=>{})}
-function watchDu(){onSnapshot(query(collection(db,"duelos"),where("b","==",U.uid),where("s","==","w")),s=>{s.docChanges().forEach(ch=>{if(ch.type!="added")return;const d=ch.doc.data();if(d.t<Date.now()-15e4||window.LV||bt())return;INV[ch.doc.id]=d;modal(`<h4>⚔️ Duelo ao vivo!</h4><p><b>${esc(d.an)}</b> te desafiou. Aceitar agora?</p><p class="mut">${esc(duelModText(d.mods||{},d.series))}</p><button class="bt cy" data-a="dac" data-v="${ch.doc.id}">Aceitar</button><button class="bt gh" data-a="dno" data-v="${ch.doc.id}">Recusar</button>`)})},e=>warn("duelo",e))}
+ try{await runTransaction(db,async tx=>{const ref=doc(db,"duelos",id),snap=await tx.get(ref);if(!snap.exists())throw Error("O convite não existe mais.");const fresh=snap.data();if(fresh.s!=="w"||fresh.b!==U.uid)throw Error("O desafio já foi cancelado ou aceito.");if(Date.now()-(+fresh.t||0)>15e4)throw Error("O convite expirou.");tx.update(ref,{s:"p",db:dk})})}catch(e){delete INV[id];g("cpm")&&g("cpm").remove();return toast(esc(e.message||"Não foi possível aceitar o duelo."))}
+ delete INV[id];lvStart(id,{...d,db:dk,s:"p"},1);lvWatch(id)}
+function recusarD(id){delete INV[id];g("cpm")&&g("cpm").remove();updateDoc(doc(db,"duelos",id),{s:"x"}).catch(()=>{});setTimeout(cpShowPendingFriendInvites,0)}
+function watchDu(){onSnapshot(query(collection(db,"duelos"),where("b","==",U.uid),where("s","==","w")),s=>{s.docChanges().forEach(ch=>{const id=ch.doc.id;if(ch.type==="removed"){delete INV[id];return}const d=ch.doc.data();if(!d||d.t<Date.now()-15e4){delete INV[id];return}INV[id]=d});cpShowPendingFriendInvites()},e=>warn("duelo",e))}
 // fim da luta ao vivo: o convidado vê o resultado do lado dele (lado 0) e o placar online é atualizado
 const z0=window.zend2;if(typeof z0=="function")window.zend2=function(){const B=typeof BT!=="undefined"&&BT,L=window.LV;if(B&&B.lv&&L&&L.g&&!B.fl){B.fl=1;S.on=S.on||{};const win=B.w>=0&&B.tm[B.v]==B.w;if(win)S.on.w=(S.on.w||0)+1;else if(B.w>=0)S.on.l=(S.on.l||0)+1;window.mzLeave&&window.mzLeave();restoreDuelConfig(L);window.LV=null;save();pf();return z0.apply(this,arguments)}
  if(B&&B.lv&&L&&!B.fl){B.fl=1;const isSeries=!!(L.series&&L.series.bestOf===3&&!L.g);let nextSeries=null,seriesFinal=false;
@@ -3457,6 +3505,19 @@ const z0=window.zend2;if(typeof z0=="function")window.zend2=function(){const B=t
 const MZM={d:["2x2 · duplas",4],f3:["Todos contra todos · 3",3],f4:["Todos contra todos · 4",4]};
 let MZW=null,MZH="",MZmode="d",MZsel=[];
 const MZI={};
+function cpShowPendingFriendInvites(){
+ if(window.LV||bt()||g("cpm"))return;
+ const now=Date.now();
+ for(const id of Object.keys(INV)){
+  const d=INV[id];if(!d||d.s!=="w"||now-(+d.t||0)>15e4){delete INV[id];continue}
+  modal(`<h4>⚔️ Duelo ao vivo!</h4><p><b>${esc(d.an||"Um amigo")}</b> te desafiou. Aceitar agora?</p><p class="mut">${esc(duelModText(d.mods||{},d.series))}</p><button class="bt cy" data-a="dac" data-v="${id}">Aceitar</button><button class="bt gh" data-a="dno" data-v="${id}">Recusar</button>`);return;
+ }
+ for(const id of Object.keys(MZI)){
+  const d=MZI[id];if(!d||d.s!=="w"||now-(+d.t||0)>3e5||!(d.inv||[]).includes(U.uid)||(d.pl||[]).includes(U.uid)||!MZM[d.m]){delete MZI[id];continue}
+  modal(`<h4>🎴 Convite para a mesa</h4><p><b>${esc(d.hn||"Um amigo")}</b> te chamou para <b>${MZM[d.m][0]}</b>. Aceitar?</p><button class="bt cy" data-a="mza" data-v="${id}">Aceitar</button><button class="bt gh" data-a="mzr" data-v="${id}">Recusar</button>`);return;
+ }
+}
+if(!window.__cpPendingFriendInviteTimer)window.__cpPendingFriendInviteTimer=setInterval(cpShowPendingFriendInvites,1800);
 async function mzMenu(){modal(`<p>Carregando…</p>`);
  try{PL=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
  mzDraw()}
@@ -3468,18 +3529,40 @@ function mzAct(a,v){
  else if(a=="mzp"){const i=MZsel.indexOf(v);if(i>=0)MZsel.splice(i,1);else if(MZsel.length<MZM[MZmode][1]-1)MZsel.push(v);mzDraw()}
  else if(a=="mzc")mzCreate();
  else if(a=="mza")mzJoin(v);
- else if(a=="mzn"){g("cpm")&&g("cpm").remove();MZW&&MZW();MZW=null;updateDoc(doc(db,"mesas",v),{s:"x"}).catch(()=>{})}}
+ else if(a=="mzr")mzDeclineRoom(v)
+ else if(a=="mzn")mzLeaveRoom(v)}
+async function mzDeclineRoom(id){
+ if(!id||!U||!U.uid)return;
+ const ref=doc(db,"mesas",id);
+ try{await runTransaction(db,async tx=>{const snap=await tx.get(ref);if(!snap.exists())return;const d=snap.data();if(d.s!=="w")return;tx.update(ref,{inv:(d.inv||[]).filter(x=>x!==U.uid)})});
+  delete MZI[id];g("cpm")&&g("cpm").remove();toast("Convite recusado · a sala continua aberta para os outros amigos.");
+ }catch(e){warn("recusar convite da mesa",e)}
+}
+async function mzLeaveRoom(id){
+ if(!id||!U||!U.uid)return;
+ const ref=doc(db,"mesas",id);
+ try{
+  await runTransaction(db,async tx=>{
+   const snap=await tx.get(ref);if(!snap.exists())return;
+   const d=snap.data();
+   if(d.h===U.uid){tx.update(ref,{s:"x"});return}
+   if(d.s!=="w")throw Error("A partida já começou; não é possível sair da sala agora.");
+   tx.update(ref,{pl:(d.pl||[]).filter(x=>x!==U.uid),inv:(d.inv||[]).filter(x=>x!==U.uid)});
+  });
+  if(MZW){MZW();MZW=null}delete MZI[id];g("cpm")&&g("cpm").remove();
+ }catch(e){toast(esc(e.message||"Não foi possível sair da sala."));console.warn("sair da mesa",e)}
+}
 async function mzCreate(){const N=MZM[MZmode][1],dk=stats().dk,nm=MZM[MZmode][0];
  if(MZsel.length!=N-1)return toast("Escolha "+(N-1)+" amigos.");if(!dk)return toast("Você precisa de 12 cartas para jogar em grupo.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
  const id=U.uid.slice(0,6)+Date.now().toString(36);
  try{await setDoc(doc(db,"mesas",id),{h:U.uid,hn:ME.n,m:MZmode,inv:MZsel.slice(),pl:[U.uid],j:{[U.uid]:{n:ME.n,dk}},s:"w",t:Date.now(),cm:[]})}catch(e){return warn("mesa",e)}
  MZsel=[];mzWatch(id);modal(`<h4>🎴 ${nm}</h4><p>Esperando os amigos aceitarem… eles precisam estar com o jogo aberto.</p><button class="bt gh" data-a="mzn" data-v="${id}">Cancelar</button>`)}
-async function mzJoin(id){const d=MZI[id],dk=stats().dk;if(!d)return;if(!dk)return toast("Você precisa de 12 cartas para jogar em grupo.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
- try{await updateDoc(doc(db,"mesas",id),{pl:arrayUnion(U.uid),["j."+U.uid]:{n:ME.n,dk}})}catch(e){return warn("mesa",e)}
- mzWatch(id);modal(`<h4>🎴 ${MZM[d.m][0]}</h4><p>Você entrou! Esperando os outros jogadores…</p><button class="bt gh" data-a="mzn" data-v="${id}">Sair</button>`)}
+async function mzJoin(id){const invite=MZI[id],dk=stats().dk;if(!invite)return;if(!dk)return toast("Você precisa de 12 cartas para jogar em grupo.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
+ let mode="",joined=false;
+ try{await runTransaction(db,async tx=>{const ref=doc(db,"mesas",id),snap=await tx.get(ref);if(!snap.exists())throw Error("A sala não existe mais.");const d=snap.data();if(d.s!=="w")throw Error("A sala já começou ou foi encerrada.");if(!(d.inv||[]).includes(U.uid))throw Error("Este convite não pertence a você.");const cap=MZM[d.m]&&MZM[d.m][1];if(!cap)throw Error("Modo de batalha inválido.");const players=Array.isArray(d.pl)?d.pl:[];mode=d.m;if(players.includes(U.uid)){joined=true;return}if(players.length>=cap)throw Error("A sala já está cheia.");tx.update(ref,{pl:[...players,U.uid],["j."+U.uid]:{n:ME.n,dk}});joined=true})}catch(e){return toast(esc(e.message||"Não foi possível entrar na sala."))}
+ if(!joined)return;delete MZI[id];mzWatch(id);modal(`<h4>🎴 ${MZM[mode][0]}</h4><p>Você entrou! Esperando os outros jogadores…</p><button class="bt gh" data-a="mzn" data-v="${id}">Sair</button>`)}
 function mzWatch(id){MZW&&MZW();MZW=onSnapshot(doc(db,"mesas",id),sn=>{const d=sn.data();if(d)mzSnap(id,d)},e=>warn("mesa",e))}
-function watchMz(){onSnapshot(query(collection(db,"mesas"),where("inv","array-contains",U.uid)),s=>{s.docChanges().forEach(ch=>{if(ch.type!="added")return;const d=ch.doc.data();if(d.s!="w"||d.t<Date.now()-3e5||window.LV||bt()||(d.pl||[]).includes(U.uid)||!MZM[d.m])return;MZI[ch.doc.id]=d;
- modal(`<h4>🎴 Convite para a mesa</h4><p><b>${esc(d.hn)}</b> te chamou para <b>${MZM[d.m][0]}</b>. Aceitar?</p><button class="bt cy" data-a="mza" data-v="${ch.doc.id}">Aceitar</button><button class="bt gh" data-a="mzn" data-v="${ch.doc.id}">Recusar</button>`)})},e=>warn("mesa",e))}
+function watchMz(){onSnapshot(query(collection(db,"mesas"),where("inv","array-contains",U.uid)),s=>{s.docChanges().forEach(ch=>{const id=ch.doc.id;if(ch.type==="removed"){delete MZI[id];return}const d=ch.doc.data();if(d.s!=="w"||d.t<Date.now()-3e5||(d.pl||[]).includes(U.uid)||!MZM[d.m]){delete MZI[id];return}MZI[id]=d});cpShowPendingFriendInvites()},e=>warn("mesa",e))}
 function mzSnap(id,d){if(window.LV&&window.LV.g)return lvCm(d);
  if(d.s=="x"){MZW&&MZW();MZW=null;g("cpm")&&g("cpm").remove();return toast("🎴 Mesa cancelada")}
  if(d.s=="w"&&d.h==U.uid&&(d.pl||[]).length==MZM[d.m][1]&&MZH!=id){MZH=id;const i=d.inv,st=d.m=="d"?[d.h,i[1],i[0],i[2]]:[d.h,...i];updateDoc(doc(db,"mesas",id),{st,sd:Math.random()*2147483647|0,s:"p"}).catch(e=>warn("mesa",e))}
@@ -3595,13 +3678,17 @@ async function start(u){
  const id=u.uid,sw=L.cp_uid&&L.cp_uid!==id;ls("cp_uid",id); // outra conta neste aparelho: não mistura os saves
  if(sw){L.removeItem("colprimata_save");ls("cp_lt",0);ls("cp_d","")}
  let s,p;try{[s,p]=await Promise.all([getDoc(doc(db,"saves",id)),getDoc(doc(db,"perfis",id))])}catch(e){if(e.code==="permission-denied")return convite(u);throw e} // sem permissão = ainda não é amigo: pede o código
+ const profileData=p.exists()?p.data():{},resetAt=+profileData.resetAt||0,seenReset=+(L.getItem("cp_reset_"+id)||0);
+ if(resetAt>seenReset){L.removeItem("colprimata_save");ls("cp_reset_"+id,resetAt);ls("cp_lt",0);ls("cp_d","");return reload()} // um reset do ADM prevalece sobre qualquer save antigo
  const c=s.exists()?s.data():null;
- if(c&&c.t>(+L.cp_lt||0)){ls("colprimata_save",c.s);ls("cp_lt",c.t);ls("cp_d","");return reload()} // nuvem mais nova: baixa o save
+ if(c&&c.t>Math.max((+L.cp_lt||0),resetAt)){ls("colprimata_save",c.s);ls("cp_lt",c.t);ls("cp_d","");return reload()} // nuvem mais nova e posterior ao último reset
  if(sw)return reload();
  let n=p.exists()?p.data().n:"";
  if(!n){n=(NK||prompt("Escolha seu apelido (seus amigos vão ver):",(u.displayName||"").split(" ")[0])||"Jogador").trim().slice(0,20);setDoc(doc(db,"perfis",id),{n})}
  
 U=u;ME.n=n;ME.f=p.exists()?p.data().f||"":"";
+ // Se o ADM reiniciar um perfil enquanto ele estiver conectado, descarta o save local sem aguardar sair da conta.
+ try{if(window.__cpResetWatch)window.__cpResetWatch();window.__cpResetWatch=onSnapshot(doc(db,"perfis",id),snap=>{const marker=snap.exists()?(+snap.data().resetAt||0):0,seen=+(L.getItem("cp_reset_"+id)||0);if(marker>seen&&!window.__cpResetReload){window.__cpResetReload=1;L.removeItem("colprimata_save");ls("cp_reset_"+id,marker);ls("cp_lt",0);ls("cp_d","");reload()}})}catch(e){console.warn("watch reset de perfil",e)}
 // API comunitária isolada: torneios e chefe semanal usam o Firebase já inicializado pelo jogo.
 window.cpEventsApi={
  uid:()=>U&&U.uid||null,
@@ -3714,7 +3801,7 @@ const cpSocialStyle=document.createElement("style");cpSocialStyle.textContent=`
 .cp-pl-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.cp-pl-head h4{margin:14px 0 8px}.cp-pl-head small{opacity:.65;font-size:.68rem}
 .cp-social{margin:12px 0 4px;padding:12px;border:1px solid #a78bfa44;border-radius:14px;background:#171321}.cp-social h4{margin:10px 0 4px}.cp-rx-hint,.cp-rx-empty{display:block;margin:4px 0 9px;color:#aaa6b7;font-size:.76rem}.cp-rx-buttons{display:flex;gap:7px;flex-wrap:wrap}.cp-rx-buttons button{min-width:40px;min-height:40px;border:1px solid #ffffff22;border-radius:11px;background:#ffffff0c;color:#fff;font-size:1.2rem;cursor:pointer}.cp-rx-buttons button:active{transform:scale(.92);background:#9b6bff55}.cp-rx-summary,.cp-rx-recent{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.cp-rx-count,.cp-rx-person{padding:5px 8px;border-radius:20px;background:#ffffff0c;border:1px solid #ffffff12;font-size:.77rem}.cp-rx-person{font-size:.72rem;color:#d8d1e5}
 `;document.head.append(cpSocialStyle);
-document.addEventListener("click",e=>{const b=e.target.closest("[data-cp-rx]");if(b){e.preventDefault();e.stopPropagation();cpReact(b.dataset.cpRx);return}if(e.target&&e.target.id==="cpm"){CP_PVIEW="";CP_PROFILE_ID="";clearInterval(CP_PRES_VIEW_TIMER);CP_PRES_VIEW_TIMER=0;cpRxStop();if(CP_PWS){CP_PWS();CP_PWS=null}}});
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-cp-rx]");if(b){e.preventDefault();e.stopPropagation();cpReact(b.dataset.cpRx);return}if(e.target&&e.target.id==="cpm"){CP_PVIEW="";CP_PROFILE_ID="";clearInterval(CP_PRES_VIEW_TIMER);CP_PRES_VIEW_TIMER=0;cpRxStop();if(CP_PWS){CP_PWS();CP_PWS=null}}},true);
 const cpActBase=act;
 act=function(a,v){if(a==="me"){CP_PVIEW="";CP_PROFILE_ID="";clearInterval(CP_PRES_VIEW_TIMER);CP_PRES_VIEW_TIMER=0;cpRxStop();if(CP_PWS){CP_PWS();CP_PWS=null}}else if(a==="pj"){CP_PVIEW="list"}else if(a==="px"){CP_PVIEW="";CP_PROFILE_ID="";clearInterval(CP_PRES_VIEW_TIMER);CP_PRES_VIEW_TIMER=0;cpRxStop();if(CP_PWS){CP_PWS();CP_PWS=null}}return cpActBase.apply(this,arguments)};
 const cpSairBase=sair;
@@ -4280,8 +4367,8 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
  const rounds=(t.bracket||[]).map((round,ri)=>`<div class="ce-block"><b>${esc(round.name||("Rodada "+(ri+1)))}</b><div class="ce-bracket">${round.matches.map((m,mi)=>{const player=(p)=>p?esc(p.n):"Folga";const done=!!m.winner;return `<div class="ce-match"><small>Partida ${mi+1}</small><div class="ce-player ${m.winner===m.a?.uid?"win":""}">${player(m.a)}${m.a?`<span>${done&&m.winner===m.a.uid?"🏆":""}</span>`:""}</div><div class="ce-player ${m.winner===m.b?.uid?"win":""}">${player(m.b)}${m.b?`<span>${done&&m.winner===m.b.uid?"🏆":""}</span>`:""}</div>${isOwner&&m.a&&m.b&&!done?`<div class="ce-actions"><button data-ce="winner" data-round="${ri}" data-match="${mi}" data-winner="${esc(m.a.uid)}">Vence ${esc(m.a.n)}</button><button data-ce="winner" data-round="${ri}" data-match="${mi}" data-winner="${esc(m.b.uid)}">Vence ${esc(m.b.n)}</button></div>`:done?'<span class="ce-chip">Resultado registrado</span>':m.winner?'<span class="ce-chip">Avançou</span>':''}</div>`}).join("")}</div></div>`).join("");
  body.innerHTML=`<div class="ce-actions"><button data-ce="home">‹ Eventos</button><button data-ce="refresh-t" data-id="${esc(t.id)}">↻ Atualizar</button></div><div class="ce-block"><b>${esc(t.name)}</b><p>${t.status==="open"?"Inscrições abertas":t.status==="running"?"Chave em andamento":"Torneio finalizado"} · ${t.players.length}/${t.maxPlayers} participantes</p>${players}${t.status==="open"&&!joined?`<button class="ce-primary" data-ce="join" data-id="${esc(t.id)}">Participar do torneio</button>`:""}${t.status==="open"&&isOwner?`<button class="ce-primary" data-ce="start" data-id="${esc(t.id)}" ${t.players.length<2?"disabled":""}>Sortear chave e iniciar</button>`:""}${t.status==="finished"?`<h3>🏆 Campeão: ${esc(t.champion?.n||"—")}</h3>`:""}</div>${rounds||""}<p>O organizador decide o vencedor de cada partida depois que os amigos jogarem juntos ou registrarem o resultado.</p>`}
  function calcDamage(){const deck=typeof dkv==="function"?dkv():[];if(!deck.length)return 0;const sum=deck.reduce((n,c)=>n+(+c.atk||1)*(typeof mult==="function"?mult(c):1),0);return Math.max(120,Math.min(900,Math.round(120+sum*4)))}
- async function hitBoss(){const api=window.cpEventsApi,damage=calcDamage();if(!damage)return toastEvent("Monte um deck primeiro para participar do chefe.");const dayKey=weekKey()+":"+[new Date().getFullYear(),String(new Date().getMonth()+1).padStart(2,"0"),String(new Date().getDate()).padStart(2,"0")].join("-");try{const r=await api.hitWeeklyBoss(weekKey(),damage,dayKey);toastEvent(`⚔️ Você causou ${r.damage} de dano! Ainda tem ${Math.max(0,3-r.attacksToday)} ataque(s) hoje.`);await renderHome()}catch(e){toastEvent(explainError(e))}}
- async function claimBoss(){const api=window.cpEventsApi,b=await api.weeklyBoss(weekKey()),my=b.players.find(x=>x.uid===api.uid());if((+b.boss.hp||0)>0||!my||!my.damage)return toastEvent("Você precisa ajudar a derrotar o chefe para resgatar.");S.bossClaims=S.bossClaims||{};if(S.bossClaims[weekKey()])return toastEvent("Você já resgatou essa recompensa.");S.fr=(S.fr||0)+500;gift(dpk().id,1,true);S.bossClaims[weekKey()]=1;save();upd();toastEvent("🎁 Você recebeu 500 fragmentos e 1 pacote!");await renderHome()}
+ async function hitBoss(){const api=window.cpEventsApi,damage=calcDamage();if(!damage)return toastEvent("Monte um deck primeiro para participar do chefe.");const dayKey=weekKey()+":"+[new Date().getFullYear(),String(new Date().getMonth()+1).padStart(2,"0"),String(new Date().getDate()).padStart(2,"0")].join("-");try{const r=await api.hitWeeklyBoss(weekKey(),damage,dayKey);bump("boss");toastEvent(`⚔️ Você causou ${r.damage} de dano! Ainda tem ${Math.max(0,3-r.attacksToday)} ataque(s) hoje.`);await renderHome()}catch(e){toastEvent(explainError(e))}}
+ async function claimBoss(){const api=window.cpEventsApi,b=await api.weeklyBoss(weekKey()),my=b.players.find(x=>x.uid===api.uid());if((+b.boss.hp||0)>0||!my||!my.damage)return toastEvent("Você precisa ajudar a derrotar o chefe para resgatar.");S.bossClaims=S.bossClaims||{};if(S.bossClaims[weekKey()])return toastEvent("Você já resgatou essa recompensa.");S.fr=(S.fr||0)+500;gift(dpk().id,1,true);S.bossClaims[weekKey()]=1;bump("bosswin");save();upd();toastEvent("🎁 Você recebeu 500 fragmentos e 1 pacote!");await renderHome()}
  async function eventClick(e){const b=e.target.closest("[data-ce]");if(!b)return;const action=b.dataset.ce;try{
   if(action==="close")return close();if(action==="home")return renderHome();if(action==="refresh")return renderHome();if(action==="refresh-boss")return renderHome();if(action==="refresh-t")return openTournament(b.dataset.id);
   if(action==="rules"){return showRules()}
@@ -4655,7 +4742,7 @@ css.textContent=`#cfg .exc-seg{display:grid;grid-template-columns:repeat(3,1fr);
 #cfg .exc-r input,#cfg .exc-gh input,#cfg .exc-all input{width:22px;height:22px;padding:0;margin:0;flex:none}
 .exc-rk,.exc-em,.exc-av{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;font-style:normal;font-weight:900;font-size:.8rem}#cfg .exc-rk{background:var(--pc,#888);color:#111;text-shadow:none}.exc-em{background:#ffffff10;font-size:1.15rem}.exc-av{overflow:hidden;border-radius:50%;background:#ffffff18}.exc-av img{display:block;width:100%;height:100%;object-fit:cover}
 .exc-t{display:grid;gap:2px;min-width:0}.exc-t b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.84rem;font-weight:800}.exc-t small{font-size:.68rem;font-weight:700;line-height:1.3;color:var(--mut)}.exc-tg{justify-self:start;padding:1px 8px;border-radius:99px;background:#f4566a26;color:#ff8a96;font-style:normal;font-size:.62rem;font-weight:900}
-#cfg #exc_bar{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}#cfg label.exc-all{display:flex;align-items:center;gap:8px;margin:0;font-size:.8rem;color:inherit;white-space:nowrap}#cfg #exc_bar .bt{margin:0;padding:13px 10px;font-size:.78rem}#cfg #exc_bar .bt:disabled{opacity:.45}html:not([data-tema="royale"]) #cfg .exc-go.on{background:#e5484d;color:#fff;border-color:#e5484d}
+#cfg #exc_bar{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center}#cfg #exc_bar.players{grid-template-columns:auto 1fr 1fr}#cfg label.exc-all{display:flex;align-items:center;gap:8px;margin:0;font-size:.8rem;color:inherit;white-space:nowrap}#cfg #exc_bar .bt{margin:0;padding:13px 10px;font-size:.78rem}#cfg #exc_bar .bt:disabled{opacity:.45}html:not([data-tema="royale"]) #cfg .exc-go.on{background:#e5484d;color:#fff;border-color:#e5484d}
 .exc-help{margin:10px 0 4px;padding:0 12px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff12}.exc-help>summary{padding:11px 0;font-size:.74rem;font-weight:800;cursor:pointer}.exc-help p{margin:0 0 8px;font-size:.74rem;line-height:1.45;color:var(--mut)}.exc-help pre{margin:0 0 10px;padding:10px;border-radius:10px;background:#0006;font-size:.68rem;line-height:1.45;overflow-x:auto;white-space:pre;color:#e8e6ee}.exc-help code{font-size:.7rem}#cfg .exc-help .bt{margin:0 0 12px}`;
 document.head.append(css);
 
@@ -4663,16 +4750,24 @@ const E=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;","
 nz=s=>String(s==null?"":s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),
 pl=(n,a,b)=>n==1?a:b,sleep=ms=>new Promise(r=>setTimeout(r,ms)),
 TT={c:["🃏","Cartas"],p:["📦","Pacotes"],j:["👥","Jogadores"]},
-INFO={c:"As cartas somem do jogo e dos pacotes, para todos os jogadores. Não dá para desfazer. As Cartas de Arena (Guardiões) ficam de fora: o jogo depende delas.",p:"O pacote some com todas as cartas dele, para todos os jogadores. Não dá para desfazer.",j:"Apaga perfil, save na nuvem e convite: a pessoa volta para a tela “Só para amigos”. Você não aparece aqui."},
-RULES=`// ADM apaga contas de jogadores
+INFO={c:"As cartas somem do jogo e dos pacotes, para todos os jogadores. Não dá para desfazer. As Cartas de Arena (Guardiões) ficam de fora: o jogo depende delas.",p:"O pacote some com todas as cartas dele, para todos os jogadores. Não dá para desfazer.",j:"Selecione jogadores para reiniciar o progresso (mantém login, apelido, foto e amizades) ou excluir o perfil e o convite. Reiniciar não apaga a conta de autenticação."},
+RULES=`// ADM: reiniciar progresso, excluir perfis e permitir reações
 // Cole dentro de: match /databases/{database}/documents { ... }
 function admApaga() {
   return request.auth != null
     && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
 }
-match /perfis/{id} { allow delete: if admApaga(); }
+match /perfis/{id} { allow update, delete: if admApaga(); }
 match /saves/{id}  { allow delete: if admApaga(); }
-match /amigos/{id} { allow delete: if admApaga(); }`;
+match /amigos/{id} { allow delete: if admApaga(); }
+match /reacoes/{id} {
+  allow read: if request.auth != null;
+  allow create, update: if request.auth != null
+    && request.resource.data.de == request.auth.uid
+    && request.resource.data.para is string;
+  allow delete: if request.auth != null
+    && resource.data.de == request.auth.uid;
+}`;
 let tab="c",q="",rk="",SEL=new Set(),VIS=[],JL=null,JS="idle",JR="",JB=0,busy=0;
 try{if(TT[sessionStorage.cpxt])tab=sessionStorage.cpxt}catch(e){}
 
@@ -4696,12 +4791,12 @@ function paint(){const b=box();if(!b)return;
  +`<div class="exc-tools"${tab=="p"?' data-n="1"':""}><input id="exc_q" type="search" autocomplete="off" placeholder="${tab=="j"?"Buscar jogador":tab=="p"?"Buscar pacote":"Buscar carta ou pacote"}" value="${E(q)}">${tab=="c"?`<select id="exc_r" aria-label="Filtrar por rank"><option value="">Todos os ranks</option>${R.map((r,i)=>`<option value="${i}"${String(i)===rk?" selected":""}>Rank ${r[0]}</option>`).join("")}</select>`:tab=="j"?'<button class="bt gh" data-xc="rf" aria-label="Atualizar lista">↻</button>':""}</div>`
  +`<div id="exc_list"></div>`
  +(tab=="j"?`<details class="exc-help" id="exc_helpd"><summary>🔧 Precisa liberar no Firebase?</summary><p>Se aparecer erro de permissão, cole este bloco nas regras do Firestore e publique. Se suas regras já têm outro teste de administrador, use o mesmo no lugar do <code>return</code>.</p><pre>${E(RULES)}</pre><button class="bt gh" data-xc="cp">📋 Copiar regras</button><p>Se a pessoa estiver com o jogo aberto, ela pode reaparecer até sair do app. Quem ainda souber o código de convite consegue voltar: para barrar de vez, troque o código nas regras.</p></details>`:"")
- +`<div class="dra" id="exc_bar"><label class="exc-all"><input type="checkbox" data-xc="all"> Marcar todas</label><button class="bt gh dg exc-go" data-xc="go" disabled>🗑 Excluir</button></div>`;
+ +`<div class="dra${tab=="j"?" players":""}" id="exc_bar"><label class="exc-all"><input type="checkbox" data-xc="all"> Marcar todas</label>${tab=="j"?`<button class="bt cy exc-reset" data-xc="reset" disabled>♻ Reiniciar progresso</button>`:""}<button class="bt gh dg exc-go" data-xc="go" disabled>🗑 Excluir</button></div>`;
  list()}
 const empty=t=>`<div class="exm">${t}</div>`,
 crow=c=>`<label class="exc-r"><input type="checkbox" data-xc="s" value="${E(c.id)}"${SEL.has(c.id)?" checked":""}><i class="exc-rk" style="--pc:${E(R[c.r][1])}">${E(R[c.r][0])}</i><span class="exc-t"><b>${E(c.n)}</b><small>❤ ${+c.hp||0} · ⚔ ${+c.atk||0}</small></span></label>`,
 prow=p=>{const n=p.cards.length;return`<label class="exc-r"><input type="checkbox" data-xc="s" value="${E(p.id)}"${SEL.has(p.id)?" checked":""}><i class="exc-em">${E(p.e||"🎴")}</i><span class="exc-t"><b>${E(p.n)}</b><small>${n} carta${pl(n,"","s")}${p.ate?" · ⏳ temporário":""}${p.esp?" · ⭐ especial":""}${p.dest?" · em destaque":""}</small></span></label>`},
-jrow=p=>{const im=/^data:image\/jpeg;base64,[\w+\/=]+$/.test(p.f||"");return`<label class="exc-r"><input type="checkbox" data-xc="s" value="${E(p.id)}"${SEL.has(p.id)?" checked":""}><i class="exc-av">${im?`<img src="${p.f}" alt="">`:E((p.n||"?")[0]||"?")}</i><span class="exc-t"><b>${E(p.n||"(sem apelido)")}</b><small>🏆 ${+p.tp||0} · 🃏 ${+p.nc||0}/${+p.tot||0}${p.t?` · visto ${ago(+p.t)}`:""}</small>${sem(p)?'<em class="exc-tg">sem partidas</em>':""}</span></label>`};
+jrow=p=>{const im=/^data:image\/jpeg;base64,[\w+\/=]+$/.test(p.f||""),self=typeof U!=="undefined"&&U&&p.id===U.uid;return`<label class="exc-r"><input type="checkbox" data-xc="s" value="${E(p.id)}"${SEL.has(p.id)?" checked":""}><i class="exc-av">${im?`<img src="${p.f}" alt="">`:E((p.n||"?")[0]||"?")}</i><span class="exc-t"><b>${E(p.n||"(sem apelido)")}${self?" · você (ADM)":""}</b><small>🏆 ${+p.tp||0} · 🃏 ${+p.nc||0}/${+p.tot||0}${p.t?` · visto ${ago(+p.t)}`:""}</small>${sem(p)?'<em class="exc-tg">sem partidas</em>':""}</span></label>`};
 function build(){const k=nz(q);
  if(tab=="c"){const g=[];[...P,...(IND.cards.length?[IND]:[])].forEach(p=>{const cs=p.cards.filter(c=>(rk===""||String(c.r)===rk)&&(!k||nz(c.n).includes(k)||nz(p.n).includes(k)));if(cs.length)g.push([p,cs])});
   return{ids:g.flatMap(x=>x[1].map(c=>c.id)),html:g.map(([p,cs])=>`<div class="exc-g"><label class="exc-gh"><input type="checkbox" data-xc="grp"${cs.every(c=>SEL.has(c.id))?" checked":""}><b>${E(p.e||"🎴")} ${E(p.n)}</b><small>${cs.length} carta${pl(cs.length,"","s")}</small></label>${cs.map(crow).join("")}</div>`).join("")||empty("Nenhuma carta encontrada.")}}
@@ -4712,8 +4807,9 @@ function build(){const k=nz(q);
 function list(){const L=$("exc_list");if(!L)return;const r=build();VIS=r.ids;const v=new Set(VIS);[...SEL].forEach(i=>{if(!v.has(i))SEL.delete(i)}); // só vale o que está na tela
  L.innerHTML=r.html;counts();bar()}
 function counts(){const c={c:PC()+IND.cards.length,p:P.length,j:JL?JL.length:""};Object.keys(c).forEach(k=>{const e=$("exc_n"+k);if(e)e.textContent=c[k]})}
-function bar(){const n=SEL.size,b=document.querySelector("#exc_bar .exc-go"),a=document.querySelector('#exc_bar [data-xc="all"]');
- if(b){b.disabled=!!busy||!n;b.classList.toggle("on",!!n&&!busy);b.textContent=busy?"Excluindo…":"🗑 Excluir"+(n?` (${n})`:"")}
+function bar(){const n=SEL.size,b=document.querySelector("#exc_bar .exc-go"),r=document.querySelector("#exc_bar .exc-reset"),a=document.querySelector('#exc_bar [data-xc="all"]');
+ if(b){b.disabled=!!busy||!n;b.classList.toggle("on",!!n&&!busy);b.textContent=busy?"Processando…":"🗑 Excluir"+(n?` (${n})`:"")}
+ if(r){r.disabled=!!busy||!n;r.textContent=busy?"Processando…":"♻ Reiniciar"+(n?` (${n})`:"")}
  if(a){a.checked=VIS.length>0&&VIS.every(i=>SEL.has(i));a.disabled=!VIS.length}}
 function open(){const b=$("exc_box");if(b&&b.children.length)list();else paint();
  try{const m=sessionStorage.cpxm;if(m){sessionStorage.removeItem("cpxm");setTimeout(()=>toast(m),400)}}catch(e){}
@@ -4725,7 +4821,15 @@ async function loadJ(){if(JB)return;JB=1;if(!JL){JS="load";if($("exc_list"))list
   if(window.cpJog&&window.cpJog.ok()){JL=await window.cpJog.list();JS="ok"}else{JL=null;JS="off"}
  }catch(e){console.warn("exc",e);JL=null;JS="err"}
  JB=0;if(tab=="j"&&$("exc_list"))list()}
-function delJog(ids){const ps=ids.map(i=>(JL||[]).find(p=>p.id==i)).filter(Boolean);if(!ps.length)return;
+function resetJog(ids){const ps=ids.map(i=>(JL||[]).find(p=>p.id==i)).filter(Boolean);if(!ps.length)return;
+ ask(`Reiniciar o progresso de ${ps.length} jogador${pl(ps.length,"","es")}?`,`${names(ps.map(p=>p.n||"(sem apelido)"))}<br>O jogo vai apagar cartas, fragmentos, pacotes, troféus, missões e demais dados de progresso dessas contas.<br><b>Serão mantidos:</b> login, apelido, foto de perfil e amizades.<br>As contas não serão excluídas. O progresso será reiniciado também nos dispositivos que estiverem conectados.`,"Reiniciar progresso",async()=>{
+  busy=1;bar();let r;try{r=await window.cpJog.reset(ps.map(p=>p.id))}catch(e){console.warn("reset ADM",e);r={ok:[],bad:ps.map(p=>p.id),part:[],neg:e&&e.code==="permission-denied"?1:0}}
+  busy=0;const stamp=Date.now(),ok=r.ok.length,bad=r.bad.length,partial=(r.part||[]).length;
+  r.ok.forEach(id=>{const p=(JL||[]).find(x=>x.id===id);if(p)Object.assign(p,{resetAt:stamp,tp:0,nc:0,tot:0,w:0,l:0,ow:0,ol:0});SEL.delete(id)});
+  JR=(ok?`✅ Progresso reiniciado de ${ok} jogador${pl(ok,"","es")}. Login, apelido e amizades preservados.`:"")+(bad?`${ok?"<br>":""}⚠️ ${bad} não puderam ser reiniciados${r.neg?": o Firebase negou a permissão. Publique as regras atualizadas abaixo.":". Atualize a lista e tente novamente."}`:"")+(partial?`<br>⚠️ ${partial} save(s) não foram apagados, mas o marcador de reinício impede que o progresso antigo volte após a atualização das regras.`:"");
+  if(r.neg||partial){const h=$("exc_helpd");if(h)h.open=true}
+  toast(ok?`♻ ${ok} progresso(s) reiniciado(s)`:"⚠️ Nenhum progresso foi reiniciado");list()},1)}
+function delJog(ids){const selected=ids.map(i=>(JL||[]).find(p=>p.id==i)).filter(Boolean),ps=selected.filter(p=>!(typeof U!=="undefined"&&U&&p.id===U.uid));if(selected.length!==ps.length)toast("A conta ADM pode ter o progresso reiniciado, mas não pode ser excluída por este painel.");if(!ps.length)return;
  ask(`Excluir ${ps.length} jogador${pl(ps.length,"","es")}?`,`${names(ps.map(p=>p.n||"(sem apelido)"))}<br>Apaga o perfil, o save na nuvem e o convite. ${ps.length>1?"Essas pessoas voltam":"A pessoa volta"} para a tela “Só para amigos” e perde${ps.length>1?"m":""} o progresso guardado na nuvem.<br>Não dá para desfazer.`,"Excluir",async()=>{
   busy=1;bar();let r;try{r=await window.cpJog.del(ps.map(p=>p.id))}catch(e){console.warn("exc",e);r={ok:[],bad:ps.map(p=>p.id),neg:0,part:0}}
   busy=0;const ok=r.ok.length,bad=r.bad.length;r.ok.forEach(i=>SEL.delete(i));JL=(JL||[]).filter(p=>!r.ok.includes(p.id));
@@ -4759,6 +4863,7 @@ cfg.addEventListener("change",e=>{const t=e.target;if(!t.closest||!t.closest("#d
 cfg.addEventListener("click",e=>{const t=e.target.closest("#ds_z [data-xc]");if(!t||/^(INPUT|SELECT)$/.test(t.tagName))return;const k=t.dataset.xc;
  if(k=="t"){tab=t.dataset.xt;try{sessionStorage.cpxt=tab}catch(x){}SEL.clear();q="";rk="";JR="";paint();if(tab=="j")loadJ()}
  else if(k=="go")go();
+ else if(k=="reset")resetJog([...SEL]);
  else if(k=="rf"){JL=null;JS="idle";JR="";loadJ()}
  else if(k=="cp")copy(RULES)});
 window.cpRegisterAdxOpenHook(function(id){try{if(id=="ds_z")open()}catch(e){console.warn("exc",e)}});
@@ -6481,7 +6586,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!q("cp-el-guide")?.
  const cpInstallTrackers=()=>{const baseAtk=window.aAtk;if(typeof baseAtk==="function"&&!baseAtk.__cpYearWrapped){const wrapped=function(B,u,t){const r=baseAtk.apply(this,arguments);if(r)cpTrackUse(B,u);return r};wrapped.__cpYearWrapped=1;window.aAtk=wrapped}const baseSkill=window.aSk;if(typeof baseSkill==="function"&&!baseSkill.__cpYearWrapped){const wrapped=function(B,u,i,g){const before=u&&u.chg&&u.chg[i],r=baseSkill.apply(this,arguments);if(r&&u&&u.chg&&u.chg[i]!==before&&u.chg[i]){/* carregar não conta como uso */}else if(r&&u)cpTrackUse(B,u);return r};wrapped.__cpYearWrapped=1;window.aSk=wrapped}const wrapResult=name=>{const base=window[name];if(typeof base!=="function"||base.__cpYearWrapped)return;const wrapped=function(){const B=typeof BT!=="undefined"?BT:null;if(B)cpTrackResult(B);return base.apply(this,arguments)};wrapped.__cpYearWrapped=1;window[name]=wrapped};["zend2","zendI","zendG"].forEach(wrapResult)};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",cpInstallTrackers,{once:true});else cpInstallTrackers();
  window.cpOpenYearRetrospective=function(chooseYear){if(typeof window.cpModal!=="function")return toast("A interface online ainda está inicializando. Abra novamente em instantes.");const current=String(new Date().getFullYear()),years=Array.from(new Set([current,...Object.keys(S.cpYears||{})])).sort((a,b)=>+b-+a),y=String(chooseYear||((S.cpYears||{})[current]?current:years[0]||current)),e=(S.cpYears||{})[y]||{uses:{},wins:0,losses:0,bestStreak:0,played:0},best=Object.entries(e.uses||{}).sort((a,b)=>b[1]-a[1])[0],c=best&&byId(best[0]),name=c?c.n:"Ainda sem destaque",opts=years.map(v=>`<option value="${v}"${v===y?" selected":""}>${v}${v===current?" · parcial":""}</option>`).join("");window.cpModal(`<h4>📊 Retrospectiva Primata · ${y}</h4><label class="mut" style="display:block;margin:8px 0">Ano <select id="cpYearSelect">${opts}</select></label><p class="mut">${y===current?"Resumo parcial do ano atual.":"Resumo anual salvo neste perfil/dispositivo."}</p><div class="cp-year-grid"><div><b>${e.played||0}</b><small>Batalhas</small></div><div><b>${e.wins||0}</b><small>Vitórias</small></div><div><b>${e.bestStreak||0}</b><small>Maior sequência</small></div></div><div class="cvb"><small class="mut">🃏 Carta mais usada</small><h3 style="margin:5px 0">${cpSafe(name)}</h3><p>${best?`${best[1]} ações registradas`:`Jogue batalhas para começar a construir sua retrospectiva.`}</p><p class="mut">Sequência atual: ${e.streak||0} · Derrotas: ${e.losses||0}</p></div><button class="bt gh" data-a="px">Fechar</button>`)};document.addEventListener("change",e=>{if(e.target&&e.target.id==="cpYearSelect")window.cpOpenYearRetrospective(e.target.value)});
  // Reação visual do duelo: aparece perto do lado de quem enviou e desaparece sem alterar o estado da partida.
- window.cpShowDuelReaction=function(seat,emoji){if(!BT||!zb||zb.hidden||!/[😂👏🔥]/.test(String(emoji||"")))return;const e=document.createElement("div");e.className="cp-duel-reaction"+(seat===BT.v?" mine":"");e.textContent=emoji;document.body.append(e);setTimeout(()=>e.remove(),1350)};
+ window.cpShowDuelReaction=function(seat,emoji){if(!BT||!zb||zb.hidden||!/[😂👏🔥]/.test(String(emoji||"")))return;const e=document.createElement("div");e.className="cp-duel-reaction "+(seat===BT.v?"mine":"opponent");e.textContent=emoji;document.body.append(e);setTimeout(()=>e.remove(),1350)};
  // Auditoria da biblioteca: destaca blocos inválidos sem apagar nem reescrever habilidades antigas.
  window.cpAuditSkills=function(){
   const issues=[];
@@ -7837,6 +7942,36 @@ html,body{
     animation:cpSSSFilmTravel 24s ease-in-out infinite alternate!important;
   }
 }
+</style>
+
+
+<style id="cp-clean-ux-and-performance">
+/* Coleção Primata · organização visual e desempenho mobile */
+.cp-album-guide{display:flex;align-items:center;gap:10px;padding:14px 15px;margin:8px 0 14px;border-radius:16px;background:#ffffff06;border:1px solid #ffffff0d;box-shadow:none}
+.cp-album-title{min-width:0;flex:1}.cp-album-title small{font-size:.58rem;letter-spacing:.16em;opacity:.65}.cp-album-title h2{font-size:1.15rem;line-height:1.15;margin:4px 0}.cp-album-title p{font-size:.68rem;line-height:1.35;margin:4px 0 0;color:var(--mut)}
+.cp-album-guide .cp-guide-link{flex:none;max-width:42%;padding:9px 10px;border-radius:12px;box-shadow:none;font-size:.68rem}.cp-album-guide .cp-guide-link span{font-size:.58rem}
+#dkp{margin:0 0 10px}#flt{margin:0 0 10px;padding:10px;border-radius:15px;background:#ffffff05;border:1px solid #ffffff0d;box-shadow:none}
+#dkal .cp-collection-gridhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 2px 8px;padding-bottom:7px;border-bottom:1px solid #ffffff12}
+#dkal .cp-collection-gridhead b{font-size:.78rem;letter-spacing:.02em}#dkal .cp-collection-gridhead small{display:block;margin-top:2px;font-size:.63rem;color:var(--mut)}
+#dkal .fr.al{padding:0;background:transparent;border:0;box-shadow:none}#dkal .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+#dkal .dkc,#dkal .cp-dkitem{min-width:0;border:0;background:transparent;box-shadow:none}#dkal .cd{box-shadow:0 3px 9px #0005!important}#dkal .cd,#dkal .cd *{animation:none!important;transition:none!important}
+#dkal .cp-duplicate-count{box-shadow:none;border:1px solid #ffffff44}
+#fc .fch{max-width:430px;padding-top:12px}.fch .cd{margin-bottom:12px;box-shadow:0 8px 22px #0005}
+#fc .fch h2{font-size:1.28rem;letter-spacing:.025em}#fc .fch .rar{margin-top:4px;font-size:.68rem}
+#fc .sg{gap:18px;margin:15px 0 8px}#fc .sg button{font-size:.68rem;letter-spacing:.1em}
+.cp-sheet-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+.cp-sheet-stat{min-width:0;padding:13px 12px;border-radius:14px;background:#ffffff06;border:1px solid #ffffff0d}
+.cp-sheet-stat-top{display:flex;align-items:center;justify-content:space-between;gap:7px}.cp-sheet-stat-top span{font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}.cp-sheet-stat-top b{font-size:1.45rem;line-height:1.1;font-weight:900;font-variant-numeric:tabular-nums}
+.cp-sheet-stat-track{height:6px;margin:9px 0 6px;border-radius:99px;overflow:hidden;background:#ffffff12}.cp-sheet-stat-track i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--ac),#7ee4ae)}
+.cp-sheet-stat small{font-size:.62rem;color:var(--mut)}.cp-sheet-stat small strong{color:#7ee4ae}
+.cp-sheet-origin{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 12px;padding:10px 12px;border-radius:12px;background:#ffffff05}.cp-sheet-origin span{font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}.cp-sheet-origin b{font-size:.74rem;text-align:right}
+#fc .cp-sheet-elements{margin:10px 0 4px;padding:0 12px;border-radius:14px;background:#ffffff05;border:1px solid #ffffff0d}
+#fc .cp-sheet-elements>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;cursor:pointer;list-style:none;font-size:.7rem;font-weight:900}#fc .cp-sheet-elements>summary::-webkit-details-marker{display:none}#fc .cp-sheet-elements>summary:after{content:"＋";color:var(--mut);font-size:.9rem}#fc .cp-sheet-elements[open]>summary:after{content:"−"}
+#fc .cp-sheet-elements>summary span{color:var(--mut);letter-spacing:.08em;text-transform:uppercase}#fc .cp-sheet-elements>summary b{font-size:.7rem;text-align:right}#fc .cp-sheet-el-body{padding:0 0 12px}#fc .cp-sheet-el-body .cp-guide-link{margin:0 0 8px}
+#fc .cp-sheet-el-body .cp-el-relations,#fc .cp-sheet-el-body .cp-el-table{font-size:.68rem}
+.cp-online-fx{position:fixed;z-index:99998;pointer-events:none;transform:translate(-50%,-50%);padding:3px 7px;border-radius:8px;background:#101014d9;font-size:clamp(13px,3.4vw,18px);font-weight:900;text-shadow:0 1px 2px #000;animation:cpOnlineFloat .58s ease-out forwards}.cp-online-fx.damage{color:#ff7b89}.cp-online-fx.heal{color:#81f0a7}@keyframes cpOnlineFloat{0%{opacity:0;translate:0 8px;scale:.82}18%{opacity:1;scale:1.08}100%{opacity:0;translate:0 -34px;scale:.96}}
+@media(max-width:380px){#dkal .grid{gap:6px}.cp-album-guide{padding:11px}.cp-album-guide .cp-guide-link{max-width:40%;font-size:.61rem}.cp-sheet-stat{padding:11px 9px}.cp-sheet-stat-top b{font-size:1.28rem}}
+@media(prefers-reduced-motion:reduce){#dkal .cd,#dkal .cd *,.cp-online-fx{animation:none!important;transition:none!important}}
 </style>
 
 </body>
