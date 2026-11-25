@@ -7306,5 +7306,175 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
   if(typeof YQE==="function"){const base=YQE;YQE=function(){const id=$("hc")?.value;if(id)delete (ADM.cpBalanceSkills||{})[id];return base.apply(this,arguments)}}
 })();
 </script>
+
+<style id="cp-fix-sss-and-card-turn-2026">
+/* SSS: película holográfica sutil SOBRE A ARTE, sem pontos LED e sem moldura duplicada. */
+.cd.cp-art-only.k8:not(.lock)>.art::after{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:2 !important;
+  border-radius:inherit !important;
+  pointer-events:none !important;
+  opacity:.26 !important;
+  mix-blend-mode:soft-light !important;
+  background-image:
+    radial-gradient(ellipse at 18% 20%,rgba(255,92,190,.62),transparent 46%),
+    radial-gradient(ellipse at 82% 28%,rgba(75,218,255,.56),transparent 48%),
+    radial-gradient(ellipse at 66% 84%,rgba(172,105,255,.62),transparent 48%),
+    radial-gradient(ellipse at 16% 76%,rgba(255,218,112,.48),transparent 43%),
+    linear-gradient(128deg,rgba(255,255,255,.05),rgba(255,255,255,0) 42%,rgba(128,220,255,.08) 68%,rgba(255,255,255,0));
+  background-size:155% 155%,155% 155%,160% 160%,150% 150%,100% 100% !important;
+  background-position:0% 0%,100% 0%,100% 100%,0% 100%,0 0;
+  animation:cpSssArtworkPrism 11s ease-in-out infinite alternate !important;
+}
+@keyframes cpSssArtworkPrism{
+  0%{background-position:0% 0%,100% 0%,100% 100%,0% 100%,0 0;filter:hue-rotate(0deg)}
+  48%{background-position:42% 62%,34% 25%,68% 38%,28% 58%,0 0;filter:hue-rotate(28deg)}
+  100%{background-position:100% 100%,0% 100%,0% 0%,100% 0%,0 0;filter:hue-rotate(62deg)}
+}
+/* O aro prismático único gira num ritmo intermediário: mais vivo que 12s, sem pressa. */
+.cd.cp-art-only.k8>.rbw>i,
+.sum.big .cd.cp-art-only.k8>.rbw>i{
+  animation:spin 6s linear infinite !important;
+}
+/* Mantém só um contorno SSS e a aura externa já existente. */
+.cd.cp-art-only.k8>.cp-card-frame{display:none!important;content:none!important}
+
+/* Giro da carta dentro da ficha: frente e verso reais, com arrasto e botão explícito. */
+#fc .fch>.f3d{
+  display:block !important;
+  width:min(66vw,250px) !important;
+  margin:2px auto 0 !important;
+  perspective:1000px !important;
+  touch-action:none !important;
+  cursor:grab;
+  user-select:none;
+  -webkit-user-select:none;
+}
+#fc .fch>.f3d:active{cursor:grabbing}
+#fc .fch>.f3d>.in{
+  position:relative !important;
+  width:100% !important;
+  aspect-ratio:3/4 !important;
+  transform-style:preserve-3d !important;
+  transition:transform .48s cubic-bezier(.2,.8,.2,1);
+}
+#fc .fch>.f3d .cd,
+#fc .fch>.f3d .cb{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  margin:0 !important;
+  aspect-ratio:3/4 !important;
+  backface-visibility:hidden !important;
+  -webkit-backface-visibility:hidden !important;
+}
+#fc .fch>.f3d .cd{transform:none !important}
+#fc .fch>.f3d .cb{
+  transform:rotateY(180deg) !important;
+  border-radius:var(--card-rx,14%) / var(--card-ry,10.5%) !important;
+}
+#fc .cp-card-turn-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:max-content;
+  min-width:150px;
+  margin:8px auto 0;
+  padding:9px 15px;
+  border:1px solid #ffffff24;
+  border-radius:999px;
+  background:#ffffff0d;
+  color:var(--fg);
+  font-size:.7rem;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+#fc .cp-card-turn-btn:active{transform:scale(.97)}
+#fc .f3h{margin:6px 0 0;text-align:center;font-size:.68rem;opacity:.62}
+@media(prefers-reduced-motion:reduce){
+  .cd.cp-art-only.k8:not(.lock)>.art::after{animation:none!important}
+  .cd.cp-art-only.k8>.rbw>i{animation:none!important}
+  #fc .fch>.f3d>.in{transition:none!important}
+}
+</style>
+<script id="cp-fix-card-turn-js-2026">
+(()=>{
+  "use strict";
+  const byId=id=>document.getElementById(id);
+  const makeBack=()=>{
+    try{
+      if(typeof bkH==="function" && typeof FC!=="undefined" && FC) return bkH(FC,FC.p);
+    }catch(e){console.warn("Verso da carta",e)}
+    return '<div class="cb back">✦</div>';
+  };
+  function installFichaTurn(){
+    const root=byId("fc"),sheet=root&&root.querySelector(".fch");
+    if(!sheet)return;
+    let wrapper=sheet.querySelector(":scope > .f3d"),card=wrapper?wrapper.querySelector(":scope > .in > .cd"):sheet.querySelector(":scope > .cd");
+    if(!card)return;
+    let inner;
+    if(!wrapper){
+      wrapper=document.createElement("div");wrapper.className="f3d";
+      inner=document.createElement("div");inner.className="in";
+      card.replaceWith(wrapper);wrapper.append(inner);inner.append(card);
+    }else{
+      inner=wrapper.querySelector(":scope > .in");
+      if(!inner){inner=document.createElement("div");inner.className="in";wrapper.append(inner);inner.append(card)}
+    }
+    if(!inner.querySelector(":scope > .cb"))inner.insertAdjacentHTML("beforeend",makeBack());
+    let note=sheet.querySelector(":scope > .f3h");
+    if(!note){note=document.createElement("p");note.className="f3h";wrapper.insertAdjacentElement("afterend",note)}
+    note.textContent="Arraste para girar · toque na carta ou use o botão para ver o verso";
+    let button=sheet.querySelector(":scope > .cp-card-turn-btn");
+    if(!button){button=document.createElement("button");button.type="button";button.className="cp-card-turn-btn";button.innerHTML="↻ <span>Virar carta</span>";note.insertAdjacentElement("afterend",button)}
+
+    // Substitui event handlers antigos da rotação para evitar dois controles movendo a carta ao mesmo tempo.
+    wrapper.onpointerdown=null;wrapper.onpointermove=null;wrapper.onpointerup=null;wrapper.onpointercancel=null;
+    if(wrapper.dataset.cpTurnReady==="1")return;
+    wrapper.dataset.cpTurnReady="1";
+    let angleY=0,angleX=0,dragging=false,moved=0,lastX=0,lastY=0,pointerId=null;
+    const set=(animate=true)=>{
+      inner.style.transition=animate?"transform .48s cubic-bezier(.2,.8,.2,1)":"none";
+      inner.style.transform=`rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+      button.querySelector("span").textContent=(Math.abs(Math.round(angleY/180))%2)?"Ver frente":"Virar carta";
+      button.setAttribute("aria-pressed",String((Math.abs(Math.round(angleY/180))%2)===1));
+    };
+    const flip=()=>{angleX=0;angleY=(Math.round(angleY/180)+1)*180;set(true)};
+    wrapper.addEventListener("pointerdown",e=>{
+      if(e.button!==undefined&&e.button!==0)return;
+      dragging=true;moved=0;lastX=e.clientX;lastY=e.clientY;pointerId=e.pointerId;
+      try{wrapper.setPointerCapture(pointerId)}catch(_){ }
+      set(false);
+    });
+    wrapper.addEventListener("pointermove",e=>{
+      if(!dragging||e.pointerId!==pointerId)return;
+      const dx=e.clientX-lastX,dy=e.clientY-lastY;moved+=Math.abs(dx)+Math.abs(dy);
+      lastX=e.clientX;lastY=e.clientY;angleY+=dx*.62;angleX=Math.max(-65,Math.min(65,angleX-dy*.42));set(false);
+    });
+    const end=e=>{
+      if(!dragging|| (e&&e.pointerId!==pointerId))return;
+      dragging=false;pointerId=null;
+      if(moved<9)flip();else set(true);
+    };
+    wrapper.addEventListener("pointerup",end);
+    wrapper.addEventListener("pointercancel",()=>{dragging=false;pointerId=null;set(true)});
+    button.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();flip()});
+    set(false);
+  }
+  // O hook acompanha cada abertura/troca de ficha; o RAF espera o HTML ser colocado no DOM.
+  if(typeof window.cpRegisterViewHook==="function")window.cpRegisterViewHook(()=>requestAnimationFrame(installFichaTurn));
+  const fc=byId("fc");
+  if(fc&&typeof MutationObserver!=="undefined"){
+    const mo=new MutationObserver(()=>{if(!fc.hidden)requestAnimationFrame(installFichaTurn)});
+    mo.observe(fc,{childList:true,subtree:true,attributes:true,attributeFilter:["hidden"]});
+  }
+})();
+</script>
+
 </body>
 </html>
