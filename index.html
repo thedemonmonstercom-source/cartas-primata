@@ -2653,12 +2653,16 @@ html,body{
 /* Batalha: efeitos ficam presos dentro da carta; vida e nome sempre por cima */
 .zu{contain:paint;isolation:isolate}.zu .zhud,.zu .nm,.zu .slo,.zu .elo{z-index:30}
 input,select,textarea{font-size:max(16px,1em)}
-/* SSS: brilho prismático giratório + reflexo de seda, só com transform (suave, sem cortes) */
-.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film{inset:3px!important;overflow:hidden!important;opacity:.55!important;background:none!important;filter:none!important;animation:none!important;will-change:auto!important}
-.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before{content:"";position:absolute;left:50%;top:50%;width:190%;aspect-ratio:1;margin:-95% 0 0 -95%;background:conic-gradient(from 0deg,#ff2fa800,#ff2fa8cc,#ffd04aaa,#4dff9e00,#2ad7ffcc,#994affcc,#ff2fa800);animation:cpSpinSSS 10s linear infinite;will-change:transform}
+/* SSS: manchas de cor RGB passeando pela carta inteira (nada sai do centro: sem leque, funil ou raios) + reflexo de seda, só com transform/translate/rotate/scale (suave, sem cortes) */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film{inset:3px!important;overflow:hidden!important;opacity:.7!important;background:none!important;filter:none!important;animation:none!important;will-change:auto!important}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before{content:"";position:absolute;inset:-40%;background:radial-gradient(ellipse 32% 28% at 27% 29%,#ff2fa8f2,#ff2fa800),radial-gradient(ellipse 31% 29% at 74% 27%,#2ad7fff2,#2ad7ff00),radial-gradient(ellipse 33% 30% at 73% 75%,#994afff2,#994aff00),radial-gradient(ellipse 31% 28% at 26% 73%,#4dff9ef2,#4dff9e00),radial-gradient(ellipse 28% 21% at 50% 12%,#ffd04af2,#ffd04a00),radial-gradient(ellipse 23% 30% at 92% 50%,#ff7a45f2,#ff7a4500),radial-gradient(ellipse 23% 30% at 8% 50%,#4d7bfff2,#4d7bff00),radial-gradient(ellipse 28% 21% at 50% 90%,#ff9be8f2,#ff9be800);animation:cpFilmShift 29s ease-in-out infinite,cpFilmTurn 37s ease-in-out infinite alternate,cpFilmBreathe 23s ease-in-out infinite alternate;will-change:translate,rotate,scale}
 .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{content:""!important;position:absolute!important;inset:-10% auto -10% -45%!important;width:38%!important;border-radius:0!important;opacity:.8!important;background:linear-gradient(100deg,#fff0,#ffffffd0 50%,#fff0)!important;background-size:auto!important;background-position:0 0!important;transform:skewX(-18deg);animation:cpSheenSSS 5.5s ease-in-out infinite!important}
-@keyframes cpSpinSSS{to{transform:rotate(360deg)}}
+@keyframes cpFilmShift{0%,100%{translate:-8% -6%}22%{translate:7% -10%}48%{translate:10% 7%}74%{translate:-5% 11%}}
+@keyframes cpFilmTurn{from{rotate:-10deg}to{rotate:10deg}}
+@keyframes cpFilmBreathe{from{scale:1}to{scale:1.16}}
 @keyframes cpSheenSSS{0%,15%{transform:translateX(0) skewX(-18deg)}75%,100%{transform:translateX(480%) skewX(-18deg)}}
+/* SSS sem foto: remove os raios de sol (repeating-conic) que saíam do centro da ilustração gerada. */
+.cd.sss>.art>.ry{display:none!important}
 /* ===== cp-final-3 (origem: linha 8197) ===== */
 .cp-adv{position:absolute;z-index:31;left:2.4cqw;top:2.4cqw;padding:1cqw 2.4cqw;border-radius:99px;font-style:normal;font-weight:900;font-size:max(8px,8cqw);line-height:1;letter-spacing:.02em;color:#fff;box-shadow:0 1px 5px #0009;pointer-events:none}.cp-adv.good{background:#1fa85a}.cp-adv.bad{background:#d63a4a}
 /* ===== cp-redesign-e1 · Redesign etapa 1: base, barra inferior, Pacotes, Batalha, Missões =====
