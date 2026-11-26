@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.2.5">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.2.5 -->
+<meta name="application-version" content="1.3.2">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.0 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.2.5";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.2";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -1300,7 +1300,7 @@ html[data-tema="v2"] #cfg .ytb button.on{background:var(--pk);color:#fff}
 #cpExtra .cp-admin-tools b{grid-column:1/-1;font-size:.78rem}
 #cpExtra .cp-admin-tools button{padding:10px;border-radius:10px;background:#ffffff10;font-size:.72rem;font-weight:900}
 html.cp-lite #zbg canvas,html.cp-lite .rays,html.cp-lite .xspn,html.cp-lite .xorb,html.cp-lite .xctr,html.cp-lite .aura,html.cp-lite .art>.pt,html.cp-lite .art>.ry,html.cp-lite .art>.au,html.cp-lite .art>.nb,html.cp-lite .art>.hl,html.cp-lite .cpfoil{display:none!important}
-html.cp-lite .cd,html.cp-lite .cd *,html.cp-lite .pack,html.cp-lite .pack *{animation:none!important;transition:none!important;filter:none!important}
+html.cp-lite .cd,html.cp-lite .cd *:not(.cp-sss-rgb-cloud),html.cp-lite .pack,html.cp-lite .pack *{animation:none!important;transition:none!important;filter:none!important}
 html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 /* ===== cp-admin-cleanup-v230 (origem: linha 5926) ===== */
 /* Arquivo-fonte: assets/css/15-admin-cleanup.css */
@@ -2555,7 +2555,7 @@ html,body{
 
 /* SSS: camada REAL no HTML, acima da arte e abaixo do aro prismático.
    Não depende de ::after (que regras antigas do tema estavam escondendo). */
-.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film{
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film{
   position:absolute!important;
   display:block!important;
   visibility:visible!important;
@@ -2655,8 +2655,8 @@ html,body{
 input,select,textarea{font-size:max(16px,1em)}
 /* SSS: manchas de cor RGB passeando pela carta inteira (nada sai do centro: sem leque, funil ou raios) + reflexo de seda, só com transform/translate/rotate/scale (suave, sem cortes) */
 .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film{inset:3px!important;overflow:hidden!important;opacity:.7!important;background:none!important;filter:none!important;animation:none!important;will-change:auto!important}
-.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before{content:"";position:absolute;inset:-40%;background:radial-gradient(ellipse 32% 28% at 27% 29%,#ff2fa8f2,#ff2fa800),radial-gradient(ellipse 31% 29% at 74% 27%,#2ad7fff2,#2ad7ff00),radial-gradient(ellipse 33% 30% at 73% 75%,#994afff2,#994aff00),radial-gradient(ellipse 31% 28% at 26% 73%,#4dff9ef2,#4dff9e00),radial-gradient(ellipse 28% 21% at 50% 12%,#ffd04af2,#ffd04a00),radial-gradient(ellipse 23% 30% at 92% 50%,#ff7a45f2,#ff7a4500),radial-gradient(ellipse 23% 30% at 8% 50%,#4d7bfff2,#4d7bff00),radial-gradient(ellipse 28% 21% at 50% 90%,#ff9be8f2,#ff9be800);animation:cpFilmShift 29s ease-in-out infinite,cpFilmTurn 37s ease-in-out infinite alternate,cpFilmBreathe 23s ease-in-out infinite alternate;will-change:translate,rotate,scale}
-.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{content:""!important;position:absolute!important;inset:-10% auto -10% -45%!important;width:38%!important;border-radius:0!important;opacity:.8!important;background:linear-gradient(100deg,#fff0,#ffffffd0 50%,#fff0)!important;background-size:auto!important;background-position:0 0!important;transform:skewX(-18deg);animation:cpSheenSSS 5.5s ease-in-out infinite!important}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::before{content:"";position:absolute;inset:-40%;background:radial-gradient(ellipse 32% 28% at 27% 29%,#ff2fa8f2,#ff2fa800),radial-gradient(ellipse 31% 29% at 74% 27%,#2ad7fff2,#2ad7ff00),radial-gradient(ellipse 33% 30% at 73% 75%,#994afff2,#994aff00),radial-gradient(ellipse 31% 28% at 26% 73%,#4dff9ef2,#4dff9e00),radial-gradient(ellipse 28% 21% at 50% 12%,#ffd04af2,#ffd04a00),radial-gradient(ellipse 23% 30% at 92% 50%,#ff7a45f2,#ff7a4500),radial-gradient(ellipse 23% 30% at 8% 50%,#4d7bfff2,#4d7bff00),radial-gradient(ellipse 28% 21% at 50% 90%,#ff9be8f2,#ff9be800);animation:cpFilmShift 29s ease-in-out infinite,cpFilmTurn 37s ease-in-out infinite alternate,cpFilmBreathe 23s ease-in-out infinite alternate;will-change:translate,rotate,scale}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::after{content:""!important;position:absolute!important;inset:-10% auto -10% -45%!important;width:38%!important;border-radius:0!important;opacity:.8;background:linear-gradient(100deg,#fff0,#ffffffd0 50%,#fff0)!important;background-size:auto!important;background-position:0 0!important;transform:skewX(-18deg);animation:cpSheenSSS 5.5s ease-in-out infinite!important}
 @keyframes cpFilmShift{0%,100%{translate:-8% -6%}22%{translate:7% -10%}48%{translate:10% 7%}74%{translate:-5% 11%}}
 @keyframes cpFilmTurn{from{rotate:-10deg}to{rotate:10deg}}
 @keyframes cpFilmBreathe{from{scale:1}to{scale:1.16}}
@@ -2730,7 +2730,71 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-y:n
 *{touch-action:manipulation}
 @media (pointer:coarse){input,select,textarea{font-size:16px!important}}
 html.cp-lite *,html.cp-lite *::before,html.cp-lite *::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important}
-html.cp-lite::after{content:"⚡";position:fixed;right:6px;bottom:max(6px,env(safe-area-inset-bottom,0px));z-index:2147483000;font-size:12px;line-height:1;opacity:.6;pointer-events:none}
+html.cp-lite::after{content:none!important;display:none!important}
+
+/* ===== atualização geral 1.3.2 ===== */
+/* Rank bloqueado: arte continua visível, com selo discreto e legível. */
+.cd.cp-locked-rank{filter:saturate(.82)}
+.cd.cp-locked-rank>.cp-rank-lock{position:absolute;z-index:12;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:linear-gradient(145deg,#09081255,#090812a8);color:#fff;pointer-events:none;text-shadow:0 2px 8px #000}
+.cd.cp-locked-rank>.cp-rank-lock b{display:grid;place-items:center;width:clamp(24px,20cqw,46px);aspect-ratio:1;border:1px solid #ffffffa0;border-radius:50%;background:#090812a8;font-size:clamp(14px,12cqw,26px);box-shadow:0 0 18px #0008}
+.cd.cp-locked-rank>.cp-rank-lock small{padding:3px 7px;border:1px solid #ffffff55;border-radius:99px;background:#090812d9;font-size:clamp(7px,5.4cqw,11px);font-weight:900;letter-spacing:.12em}
+/* SSS: película RGB difusa por toda a arte, brilho baixo e movimento contínuo sem reset brusco. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film{inset:0!important;opacity:.38!important;mix-blend-mode:screen!important;overflow:hidden!important;border-radius:inherit!important}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before{content:""!important;position:absolute!important;inset:-48%!important;background:
+ radial-gradient(ellipse 54% 42% at 24% 24%,rgba(255,70,178,.28),transparent 78%),
+ radial-gradient(ellipse 56% 44% at 78% 22%,rgba(65,210,255,.25),transparent 80%),
+ radial-gradient(ellipse 58% 48% at 72% 78%,rgba(170,92,255,.27),transparent 80%),
+ radial-gradient(ellipse 55% 45% at 22% 76%,rgba(80,255,185,.2),transparent 80%),
+ radial-gradient(ellipse 65% 58% at 50% 50%,rgba(255,210,95,.14),transparent 82%)!important;
+ background-size:170% 175%,175% 165%,180% 175%,175% 180%,180% 170%!important;
+ background-position:0% 0%,100% 0%,100% 100%,0% 100%,50% 50%!important;
+ animation:cpSSSFieldDrift 34s ease-in-out infinite alternate,cpSSSFieldHue 42s linear infinite!important;will-change:transform,filter}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{content:""!important;position:absolute!important;top:-12%!important;bottom:-12%!important;left:-55%!important;width:34%!important;opacity:.27;border-radius:0!important;background:linear-gradient(100deg,transparent,#ffffffcc 50%,transparent)!important;transform:skewX(-18deg);animation:cpSSSSoftSheen 10s ease-in-out infinite alternate!important}
+@keyframes cpSSSFieldDrift{0%{transform:translate3d(-3%,-2%,0) scale(1) rotate(-3deg)}50%{transform:translate3d(2%,1%,0) scale(1.06) rotate(2deg)}100%{transform:translate3d(3%,3%,0) scale(1.1) rotate(4deg)}}
+@keyframes cpSSSFieldHue{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}
+@keyframes cpSSSSoftSheen{from{transform:translate3d(-15%,0,0) skewX(-18deg)}to{transform:translate3d(420%,0,0) skewX(-18deg)}}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:spin 8s linear infinite!important;opacity:.72}
+/* Batalha mobile: encaixa informação, reservas e ações numa só tela sem arrastar para baixo. */
+@media(max-width:600px){
+ #zb{height:100dvh!important;min-height:0!important;max-height:100dvh!important;overflow:hidden!important;overscroll-behavior:none!important;gap:3px!important;padding:calc(env(safe-area-inset-top,0px) + 3px) 6px calc(env(safe-area-inset-bottom,0px) + 3px)!important}
+ #zb .zt{flex:0 0 auto;padding:2px 4px!important;min-height:26px}
+ #zb .zt b{font-size:.72rem!important}
+ #zb .zqm{flex:1 1 auto;min-height:0;display:flex!important;flex-direction:column;justify-content:space-evenly;gap:2px!important;overflow:hidden!important}
+ #zb .zs{padding:3px 2px!important;gap:2px!important;border-radius:10px!important}
+ #zb .zrow{--cw:clamp(54px,calc((100vw - 44px)/3),86px)!important;gap:3px!important}
+ #zb .zrs{--cw:clamp(38px,calc((100vw - 76px)/4),58px)!important}
+ #zb .zu{gap:2px!important}
+ #zb .zu>.cd{border-width:1px!important}
+ #zb .zu>.yhp{height:7px!important}
+ #zb .zrs .zu>.yhp{height:5px!important}
+ #zb .zu .nm{font-size:max(6px,7cqw)!important;padding:1px 1px 2px!important}
+ #zb .zlog{flex:0 0 auto;min-height:1.5em!important;max-height:2.8em;overflow:hidden;font-size:.58rem!important;line-height:1.2!important;margin:1px 0!important;padding:2px 5px!important}
+ #zb .zc{position:relative!important;flex:0 0 auto!important;max-height:30dvh;overflow:auto!important;margin-top:0!important;padding:5px 5px calc(env(safe-area-inset-bottom,0px) + 5px)!important;border-radius:12px 12px 0 0!important}
+ #zb .zc .zst{font-size:.58rem!important;line-height:1.2!important;margin:0 0 3px!important}
+ #zb .zc .two{gap:4px!important;margin:3px 0!important}
+ #zb .zc .two .bt,#zb .zc>.bt{min-height:32px!important;padding:6px 5px!important;font-size:.61rem!important;line-height:1.15!important}
+ #zb .zq{padding:3px!important}
+ #zb .raid-board{gap:4px!important}
+ #zb .raid-boss{padding:4px!important}
+ #zb .raid-players{gap:3px!important}
+}
+@media(max-width:600px) and (max-height:680px){
+ #zb .zrow{--cw:clamp(47px,calc((100vw - 48px)/3),72px)!important}
+ #zb .zrs{--cw:clamp(33px,calc((100vw - 86px)/4),48px)!important}
+ #zb .zs{padding:2px 1px!important}
+ #zb .zc{max-height:33dvh!important}
+ #zb .zc .two .bt,#zb .zc>.bt{min-height:29px!important;padding:5px 4px!important}
+}
+/* O botão flutuante de som foi removido; o controle permanece no Menu. */
+#sndb{display:none!important}
+/* Ferramentas de busca/ordenação das listas compridas no ADM. */
+#cfg .cp-adm-list-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(130px,.7fr);gap:7px;margin:5px 0 7px}
+#cfg .cp-adm-list-tools input,#cfg .cp-adm-list-tools select{min-width:0;width:100%;padding:9px 10px;border:1px solid #ffffff24;border-radius:10px;background:#111;color:var(--fg);font:700 .75rem Montserrat,system-ui}
+#cfg .at[data-adm="pds_h"],#cfg .at[data-adm="pds_e"],#cfg .at[data-adm="pds_v"]{display:grid!important}
+#cfg .cp-admin-custom-tile{display:flex!important}
+@media(max-width:420px){#cfg .cp-adm-list-tools{grid-template-columns:1fr}.cd.cp-locked-rank>.cp-rank-lock{gap:3px}}
+@media(prefers-reduced-motion:reduce){.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before,.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after,.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:none!important}}
+html.cp-lite .cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before,html.cp-lite .cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{animation:none!important}
 </style>
 
 
@@ -2767,9 +2831,12 @@ lose(){[392,330,262].forEach((f,i)=>T(f,i*.16,.5,"sawtooth",.06))},
 start(){ok();mus()},
 toggle(){on=!on;try{localStorage.setItem("colprimata_som",on?"1":"0")}catch(e){}if(on)mus();else mstop();return on}
 };
-addEventListener("pointerdown",()=>api.start(),{once:true,capture:true});
+addEventListener("pointerdown",()=>api.start(),{capture:true});
+addEventListener("touchstart",()=>api.start(),{passive:true,capture:true});
+addEventListener("keydown",()=>api.start(),{capture:true});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&on){try{if(A&&A.state==="suspended")A.resume();else if(!A)api.start()}catch(e){}}});
 document.addEventListener("pointerdown",e=>{if(e.target.closest&&e.target.closest("button,.bt,.tab,[data-t]"))api.click()},true);
-document.addEventListener("DOMContentLoaded",()=>{const b=document.createElement("button");b.id="sndb";b.setAttribute("aria-label","Som");b.textContent=on?"🔊":"🔇";b.onclick=()=>{b.textContent=api.toggle()?"🔊":"🔇"};document.body.append(b)});
+/* O controle flutuante foi removido; o som continua acessível pelo Menu. */
 return api})();
 
 </script>
@@ -2778,6 +2845,73 @@ return api})();
 
 
 
+
+
+<style id="cp-sss-full-art-roaming-film-2026">
+/* SSS: película RGB difusa que percorre a ilustração inteira. Sem partículas, pontos, linhas brancas ou flashes. */
+.cd.cp-art-only.k8:not(.lock)>ins.aur,.cd.cp-art-only.k8:not(.lock)>ins.emb{display:none!important;animation:none!important}
+.cd.cp-art-only.k8:not(.lock)>.art::after{content:none!important;display:none!important;animation:none!important;background:none!important}
+.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film{
+  position:absolute!important;inset:0!important;z-index:7!important;display:block!important;overflow:hidden!important;
+  border-radius:inherit!important;opacity:1!important;background:none!important;
+  mix-blend-mode:normal!important;filter:none!important;pointer-events:none!important;
+}
+.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before{
+  content:""!important;position:absolute!important;inset:-14%!important;border-radius:0!important;
+  background:
+    radial-gradient(ellipse 52% 42% at 20% 23%,rgba(255,94,192,.62) 0%,rgba(255,94,192,0) 76%),
+    radial-gradient(ellipse 54% 43% at 80% 24%,rgba(65,214,255,.58) 0%,rgba(65,214,255,0) 78%),
+    radial-gradient(ellipse 55% 48% at 75% 78%,rgba(169,104,255,.60) 0%,rgba(169,104,255,0) 78%),
+    radial-gradient(ellipse 54% 44% at 22% 76%,rgba(86,255,190,.52) 0%,rgba(86,255,190,0) 78%),
+    radial-gradient(ellipse 58% 52% at 51% 50%,rgba(255,216,117,.36) 0%,rgba(255,216,117,0) 80%)!important;
+  opacity:.34;mix-blend-mode:color!important;
+  transform:translate3d(-8%,-5%,0) rotate(-7deg) scale(1.08);
+  transform-origin:center;will-change:transform,opacity,filter;
+  animation:cpSSSRoam 38s ease-in-out infinite alternate,cpSSSHue 47s linear infinite,cpSSSBreathe 17s ease-in-out infinite alternate!important;
+}
+.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{
+  content:""!important;position:absolute!important;inset:-16%!important;width:auto!important;top:auto!important;bottom:auto!important;left:auto!important;
+  border-radius:0!important;opacity:.20;mix-blend-mode:soft-light!important;
+  background:
+    radial-gradient(ellipse 48% 35% at 36% 42%,rgba(93,174,255,.34),transparent 78%),
+    radial-gradient(ellipse 42% 38% at 68% 58%,rgba(255,105,199,.32),transparent 80%),
+    radial-gradient(ellipse 45% 42% at 48% 77%,rgba(120,255,190,.25),transparent 82%)!important;
+  transform:translate3d(9%,7%,0) rotate(9deg) scale(1.12);
+  will-change:transform,opacity,filter;
+  animation:cpSSSAurora 51s ease-in-out infinite alternate,cpSSSAuroraHue 63s linear infinite,cpSSSAuroraBreathe 21s ease-in-out infinite alternate!important;
+}
+@keyframes cpSSSRoam{
+  0%{transform:translate3d(-11%,-8%,0) rotate(-9deg) scale(1.08)}
+  28%{transform:translate3d(8%,-10%,0) rotate(4deg) scale(1.16)}
+  58%{transform:translate3d(12%,8%,0) rotate(11deg) scale(1.12)}
+  82%{transform:translate3d(-7%,12%,0) rotate(-3deg) scale(1.18)}
+  100%{transform:translate3d(-11%,-8%,0) rotate(-9deg) scale(1.08)}
+}
+@keyframes cpSSSHue{from{filter:hue-rotate(0deg) saturate(1.08)}to{filter:hue-rotate(360deg) saturate(1.18)}}
+@keyframes cpSSSBreathe{0%{opacity:.22}43%{opacity:.34}72%{opacity:.24}100%{opacity:.36}}
+@keyframes cpSSSAurora{
+  0%{transform:translate3d(10%,10%,0) rotate(12deg) scale(1.1)}
+  35%{transform:translate3d(-8%,4%,0) rotate(-7deg) scale(1.2)}
+  70%{transform:translate3d(-12%,-9%,0) rotate(-14deg) scale(1.13)}
+  100%{transform:translate3d(10%,10%,0) rotate(12deg) scale(1.1)}
+}
+@keyframes cpSSSAuroraHue{from{filter:hue-rotate(40deg) saturate(1.04)}to{filter:hue-rotate(400deg) saturate(1.16)}}
+@keyframes cpSSSAuroraBreathe{0%{opacity:.07}50%{opacity:.16}100%{opacity:.09}}
+@media(prefers-reduced-motion:reduce){
+ .cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before,
+ .cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{animation:none!important;will-change:auto!important;transform:none!important;filter:none!important}
+}
+html.cp-lite .cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before,
+html.cp-lite .cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{animation:none!important;will-change:auto!important}
+/* Lista de Bosses com alvos grandes o bastante para toque em celular. */
+#cpm .cp-raid-pool-wrap{min-width:0;margin:8px 0}
+#cpm .cp-raid-pool{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;max-height:220px;overflow:auto;padding:7px;border:1px solid #ffffff1c;border-radius:10px;background:#111116}
+#cpm .cp-raid-pool-item{display:flex!important;align-items:center;gap:7px;min-width:0;margin:0!important;padding:7px;border:1px solid #ffffff12;border-radius:8px;background:#ffffff06;color:#eee!important;font-size:.66rem!important}
+#cpm .cp-raid-pool-item input{width:16px!important;height:16px!important;flex:none;margin:0}
+#cpm .cp-raid-pool-item span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#cpm #cpRaidFilterCount{font-size:.66rem;margin:2px 0 8px}
+@media(max-width:460px){#cpm .cp-raid-pool{grid-template-columns:1fr;max-height:180px}}
+</style>
 
 </head>
 <body>
@@ -2912,8 +3046,8 @@ const ST=[[133,50],[165,62],[208,78],[261,98],[325,122],[405,152],[507,190],[640
 const FRAG=ADM0.fr&&ADM0.fr.length==9?ADM0.fr:[10,15,25,40,70,130,300,800,3000],CUSTO=ADM0.cu||500,INICIO=ADM0.ini??2500;
 // CONFIG (v0.5): números do jogo num só lugar. admPin = PIN do modo ADM (mude aqui).
 // RECOMPENSAS (rebalanceadas): limiteDia = lutas por dia que dão prêmio · pacVit = vitórias para ganhar 1 pacote · mk = troféus por marco (e fragmentos do marco) · mkPacote = troféus por pacote de marco (100 = 1 pacote a cada marco) · diaria = fragmentos do login · mDia / mSem = fragmentos por missão diária / semanal · mDiaBonus = missões diárias para ganhar 1 pacote de bônus · mSemPac = pacotes por missão semanal · derrota = fragmentos por derrota · arenaPac = pacotes do chefe da arena 1 (+arenaPacMais a cada arena seguinte) · arenaFrag = fragmentos do chefe × número da arena · campPac / campFrag = prêmio do Campeão · gratisLivre = pacotes do dia sem jogar · gratisJogar = batalhas para liberar +1 pacote do dia (0.5 = 2 pacotes por batalha) · amigoFrag / amigoDia = prêmio e limite diário das lutas com amigo.
-const CONFIG={admPin:"11011029",limiteDia:10,pacVit:2,tw:30,tl:20,mk:100,mkPacote:100,mkMax:6000,chefeFinal:6000,chefe:1.2,diaria:300,amigoFrag:60,amigoDia:3,derrota:20,nDia:6,mDia:100,mSem:500,mSemPac:3,mDiaBonus:2,arenaPac:15,arenaPacMais:3,arenaFrag:500,campPac:60,campFrag:10000,rewardRandomChance:0,gratisLivre:1,gratisJogar:.5,imgKB:90,arf0:60,arfK:10,fusArena:3,sArena:5,fusMult:1,faixa:15,som:1,musica:1,botErro:40,botForca:5,botNivel:1,vidas:5,acoes:2,acaoIni:1,turnos:20,iaMs:1200,danoMult:1,vidaMult:1,turnoSeg:60,sumiuSeg:45};
-Object.assign(CONFIG,ADM0.cfg||{});if("bauVit" in CONFIG){if(!(ADM0.cfg&&ADM0.cfg.pacVit!=null))CONFIG.pacVit=CONFIG.bauVit;delete CONFIG.bauVit} // saves antigos usavam outro nome para esta regra
+const CONFIG={admPin:"11011029",limiteDia:10,pacVit:2,tw:30,tl:20,mk:100,mkPacote:100,mkMax:6000,chefeFinal:6000,chefe:1.2,diaria:300,amigoFrag:60,amigoDia:3,derrota:20,nDia:6,mDia:100,mSem:500,mSemPac:3,mDiaBonus:2,arenaPac:15,arenaPacMais:3,arenaFrag:500,campPac:60,campFrag:10000,rewardRandomChance:0,gratisLivre:1,gratisJogar:.5,imgKB:90,arf0:60,arfK:10,fusArena:4,sArena:7,fusMult:1,faixa:15,som:1,musica:1,botErro:40,botForca:5,botNivel:1,vidas:5,acoes:2,acaoIni:1,turnos:20,iaMs:1200,danoMult:1,vidaMult:1,turnoSeg:60,sumiuSeg:45};
+Object.assign(CONFIG,ADM0.cfg||{});CONFIG.fusArena=4;CONFIG.sArena=7;if("bauVit" in CONFIG){if(!(ADM0.cfg&&ADM0.cfg.pacVit!=null))CONFIG.pacVit=CONFIG.bauVit;delete CONFIG.bauVit} // saves antigos usavam outro nome para esta regra
 // relógio: fuso fixo de Brasília (UTC−3); hora que volta para o passado é ignorada
 const nowT=()=>{const t=Date.now(),r=S.rl||0;return t>r?(S.rl=t):r},lnow=()=>nowT()-108e5;
 const IMG=(()=>{try{return JSON.parse(localStorage.getItem("colprimata_img")||"{}")}catch(e){return{}}})();
@@ -2923,7 +3057,8 @@ const P=[{id:"ini",n:"Pacote Inicial",e:"🎴",h:265,cards:[
  d:"Ele ri de qualquer perigo e esconde o olhar sob o capuz; ela quase não fala, mas cada gesto seu é calculado. Costas com costas, formam a dupla mais temida do crepúsculo: o sorriso dele distrai o inimigo e a luz azul dela decide a luta.",
  sk:["Eclipse Azul","“A luz só mostra o caminho a quem não tem medo do escuro.”","Dispara uma esfera de energia azul que atinge todos os inimigos com o dobro do dano, e o parceiro recupera 20% da vida.",{rc:3,ef:[{t:"d",a:"E",m:2},{t:"h",a:"a",p:20}]}],
  img:"/_blob/06539f17cc46bc8c851bbb6104399a31"},
-{r:"F",n:"Exemplo F"},{r:"E",n:"Exemplo E"},{r:"D",n:"Exemplo D"},{r:"C",n:"Exemplo C"},{r:"B",n:"Exemplo B"},{r:"S",n:"Exemplo S"},{r:"SS",n:"Exemplo SS"},{r:"SSS",n:"Exemplo SSS"},{r:"F",n:"Exemplo F2"},{r:"F",n:"Exemplo F3"},{r:"F",n:"Exemplo F4"},{r:"F",n:"Exemplo F5"},{r:"E",n:"Exemplo E2"},{r:"E",n:"Exemplo E3"},{r:"E",n:"Exemplo E4"},{r:"D",n:"Exemplo D2"},{r:"D",n:"Exemplo D3"},{r:"D",n:"Exemplo D4"},{r:"C",n:"Exemplo C2"},{r:"C",n:"Exemplo C3"}
+{r:"F",n:"Exemplo F"},{r:"E",n:"Exemplo E"},{r:"D",n:"Exemplo D"},{r:"C",n:"Exemplo C"},{r:"B",n:"Exemplo B"},{r:"S",n:"Exemplo S"},{r:"SS",n:"Exemplo SS"},{r:"SSS",n:"Exemplo SSS"},{r:"F",n:"Exemplo F2"},{r:"F",n:"Exemplo F3"},{r:"F",n:"Exemplo F4"},{r:"F",n:"Exemplo F5"},{r:"E",n:"Exemplo E2"},{r:"E",n:"Exemplo E3"},{r:"E",n:"Exemplo E4"},{r:"D",n:"Exemplo D2"},{r:"D",n:"Exemplo D3"},{r:"D",n:"Exemplo D4"},{r:"C",n:"Exemplo C2"},{r:"C",n:"Exemplo C3"},
+{r:"F",n:"Exemplo F6"},{r:"F",n:"Exemplo F7"},{r:"F",n:"Exemplo F8"},{r:"F",n:"Exemplo F9"},{r:"F",n:"Exemplo F10"},{r:"F",n:"Exemplo F11"}
 ]},{id:"abi",n:"Pacote Abissal",e:"🐙",h:190,cards:[{r:"F",n:"Alga Solta"},{r:"E",n:"Caranguejo"},{r:"D",n:"Água-viva"},{r:"C",n:"Tubarão Cinza"},{r:"B",n:"Polvo Sombrio"},{r:"A",n:"Sereia da Maré"},{r:"S",n:"Leviatã"},{r:"SS",n:"Kraken"},{r:"SSS",n:"Rei do Abismo"}]}].map(p=>{p.cards.forEach((c,i)=>prep(p,c,i));return p});
 const ALL=P.flatMap(p=>p.cards),$=i=>document.getElementById(i);
 const ov=$("ov"),stage=$("stage"),hint=$("hint"),acts=$("acts");
@@ -2933,19 +3068,19 @@ S.fr=Number.isFinite(S.fr)?Math.max(0,Math.floor(S.fr)):INICIO; // save antigo (
 S.lv=S.lv||{};S.sk=S.sk||0;S.gp=S.gp||{};S.tp=S.tp||0;S.ar=S.ar||0;S.wn=S.wn||0;S.tm=S.tm||0;S.dk=Array.isArray(S.dk)?[...new Set(S.dk)]:[];S.dks=S.dks&&typeof S.dks=="object"?S.dks:{};S.dka=S.dka=="B"||S.dka=="C"?S.dka:"A";S.cn=S.cn||{};S.md=S.md||{};S.mw=S.mw||{};S.fd=S.fd||{};if(!S.v){S.tm=Math.floor((S.tm||0)*250/CONFIG.mk);S.v=2}
 const save=()=>{try{avisos()}catch(e){}try{localStorage.setItem("colprimata_save",JSON.stringify(S))}catch(e){}};
 function avisos(){if(!$("tc"))return;const a=S.ar+1,n=!S.av,v=S.av=S.av||{},L=[];
- if(a>=(CONFIG.fusArena||1)&&!v.fus){v.fus=1;L.push("🔓 <b>Fusões liberadas!</b> Suas cartas já podem subir de nível.")}
- if(a>=(CONFIG.sArena||1)&&!v.rs){v.rs=1;L.push("🔓 <b>Rank S liberado!</b> S, SS e SSS já podem sair nos pacotes.")}
+ if(a>=4&&!v.fus){v.fus=1;L.push("🔓 <b>Fusões liberadas!</b> Você já pode evoluir cartas até Incomum.")}
+ if(a>=(v.rank||1)+1){v.rank=a;L.push(`🏟️ <b>Arena ${a} liberada!</b> Agora você pode usar cartas até o rank <b>${R[Math.min(8,a-1)][0]}</b>.`)}
  const g=v.g=v.g||{},G=[],e=cpxEvOn(),ek=e&&(e.id||e.ate);if(e&&v.ev!==ek&&v.ev!==e.ate){v.ev=ek;if(e.gf>0){S.fr+=e.gf;G.push("🎁 <b>+"+e.gf+" fragmentos</b> de presente do evento")}for(let q=0;q<(e.gq||0);q++){const o=P.filter(x=>!pkBlocked(x)),pk=(e.gk&&P.find(x=>x.id==e.gk))||o[Math.floor(Math.random()*o.length)];if(pk){gift(pk.id,1);G.push("🎁 Pacote de presente: <b>"+pk.n+"</b>")}}if(e.gf>0||e.gq>0){try{save();upd()}catch(x){}}G.push((e.tipo=="natal"?"🎄":"🎉")+" <b>Evento "+e.n+"</b>: fragmentos ×"+e.mf+" nas vitórias até "+new Date(e.ate).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}))}ALL.forEach(c=>{if(c.ga>0&&a>=c.ga&&!g[c.id]){g[c.id]=1;if(!(S.inv[c.id]>0)){S.inv[c.id]=1;G.push("🎁 <b>Carta especial!</b> "+c.n+" entrou na sua coleção.")}}});
  if((L.length&&!n)||G.length)setTimeout(()=>toast((n?[]:L).concat(G).join("<br>")),700)}
 const own=p=>p.cards.filter(c=>S.inv[c.id]).length;
 // CHANCE POR CARTA: coloque ch (em %) na carta, ex.: {r:"SSS",n:"Shadow",ch:0.001}. Sem ch, vale a chance da raridade dividida pelas cartas dessa raridade no pacote (como antes). Para mudar as chances de um pacote inteiro: odds:[F,E,D,C,B,A,S,SS,SSS] dentro do pacote.
 const wc=(p,c)=>c.ch!=null?c.ch:(p.odds?p.odds[c.r]:R[c.r][2])/p.cards.filter(x=>x.r==c.r).length,pcf=v=>(v>=10?v.toFixed(0):v>=1?v.toFixed(1):String(+v.toPrecision(2))).replace(".",",")+"%",cch=c=>pcf(wc(c.p,c)/c.p.cards.reduce((a,x)=>a+wc(c.p,x),0)*100);
-const rkLock=r=>r>5&&S.ar+1<(CONFIG.sArena||1),fusLock=()=>S.ar+1<(CONFIG.fusArena||1);
+const rkLock=r=>Number(r)>Math.min(8,Math.max(0,Number(S.ar)||0)),fusLock=()=>Math.max(0,Number(S.ar)||0)<3;
 const pull=(p,m)=>{
  const T=R.map((_,r)=>p.cards.reduce((a,c)=>a+(c.r==r?wc(p,c):0),0));
  let x=Math.random()*T.reduce((a,b)=>a+b,0),r=0,L;
  for(;r<8;r++){x-=T[r];if(x<0)break}
- r=Math.max(r,m);if(rkLock(r)){r=5;while(r>0&&!p.cards.some(c=>c.r==r))r--}
+ r=Math.max(r,m);
  while(!(L=p.cards.filter(c=>c.r==r)).length)r=(r+1)%9;
  const w=L.map(c=>wc(p,c)),s=w.reduce((a,b)=>a+b,0);let y=Math.random()*s,k=0;
  for(;k<L.length-1;k++){y-=w[k];if(y<0)break}
@@ -2965,7 +3100,7 @@ const gem='<svg class="gi" aria-hidden="true"><use href="#fgem"/></svg>',fmt=n=>
 let shown=S.fr,bt=0,tt=0,SUMR=null,OD=0,LN=10,PQ=10;
 // ===== FUSÃO + RECOMPENSA DIÁRIA (ajuste os números aqui) =====
 // Preços v0.4 (pacote = 500): cada fusão pede NEED[nível] repetidas (valores maiores para ranks S+) e 2×(passo)×valor de conversão em fragmentos. Só funde com todas as repetidas em mãos (não dá para comprar a cópia que falta). Cada nível dá +40% do status base (Mítico = 3× o base, em todas as raridades). Converter vale valor × (nível+1).
-const NEED=[[3,4,6,8,10],[2,3,4,6,8],[2,3,5,8,12]],FM=[4,9,18,32,57],RANK_ECONOMY=[1,1,1,1,1,1,1.45,1.9,2.6],RANK_SELL=[1,1,1,1,1,1,1.6,2.4,3.5],lvl=c=>Math.min(S.lv[c.id]||0,5),mxLv=c=>5,need=c=>NEED[c.r<3?0:c.r<6?1:2][lvl(c)],fcost=c=>Math.round(FRAG[c.r]*FM[lvl(c)]*(CONFIG.fusMult||1)*(RANK_ECONOMY[c.r]||1)),gain=c=>.4,mult=c=>1+gain(c)*lvl(c),fv=c=>Math.round(FRAG[c.r]*(RANK_SELL[c.r]||1));
+const NEED=[[3,4,6,8,10],[2,3,4,6,8],[2,3,5,8,12]],FM=[4,9,18,32,57],FUSION_CAP=[0,0,0,1,2,3,4,4,5],RANK_ECONOMY=[1,1,1,1,1,1,1.45,1.9,2.6],RANK_SELL=[1,1,1,1,1,1,1.6,2.4,3.5],arenaIndex=()=>Math.min(8,Math.max(0,Math.floor(Number(S.ar)||0))),lvl=c=>Math.min(S.lv[c.id]||0,FUSION_CAP[arenaIndex()]),mxLv=c=>FUSION_CAP[arenaIndex()],need=c=>NEED[c.r<3?0:c.r<6?1:2][Math.min(4,lvl(c))],fcost=c=>Math.round(FRAG[c.r]*FM[Math.min(4,lvl(c))]*(CONFIG.fusMult||1)*(RANK_ECONOMY[c.r]||1)),gain=c=>.4,mult=c=>1+gain(c)*lvl(c),fv=c=>Math.round(FRAG[c.r]*(RANK_SELL[c.r]||1));
 // ===== MISSÕES: diárias (CONFIG.nDia por dia, CONFIG.mDia fragmentos cada; a cada CONFIG.mDiaBonus cumpridas = +1 pacote), semanais (3 por semana, CONFIG.mSem fragmentos + CONFIG.mSemPac pacotes cada), de coleção (metas únicas, pacotes na lista CL) e secretas (escondidas até cumprir, pacotes na lista SC) =====
 // bump("chave") conta o que o jogador fez (por dia, por semana e no total). As diárias e as semanais são sorteadas das listas DP e WP (mesmo sorteio o dia todo / a semana toda).
 const wk=()=>Math.floor((day()+3)/7);
@@ -3060,8 +3195,8 @@ function fzAnim(c,L,done){
  [a,b].forEach((e,i)=>{const s=i?1:-1,m=A(e,[{transform:`translateX(${s*dx}px) rotate(${s*10}deg) scale(.9)`,opacity:0},{opacity:1,offset:.3},{transform:`translateX(${s*5}%) rotate(0) scale(1)`,opacity:1}],T,{easing:"cubic-bezier(.6,0,.9,.5)"});if(!i)m.onfinish=swap});
  setTimeout(swap,T+150);
 }
-function fuse(c){if(fusLock())return toast(`🔒 Fusões liberam na <b>Arena ${CONFIG.fusArena}</b>.`);const l=lvl(c),n=need(c),t=fcost(c),m=Math.max(0,n-extra(c));if(l>=mxLv(c))return;if(m)return toast(`Faltam <b>${m}</b> repetida${m>1?"s":""} para fundir.`);if(S.fr<t)return lack(t-S.fr);fzAnim(c,l+1,()=>pop("−"+fmt(t),"neg"));S.inv[c.id]-=n;S.fr-=t;S.lv[c.id]=l+1;bump("fuse");save();sync();upd();toast(`✨ <b>${c.n}</b> subiu para <b>${NIVEIS[l+1]}</b>`)}
-const fzb=(c,n)=>{if(!n)return"";if(fusLock())return`<div class="cvb"><p>🔒 Fusões liberam na <b>Arena ${CONFIG.fusArena}</b></p></div>`;const l=lvl(c),m=mxLv(c);if(l>=m)return`<div class="cvb"><p>Fusão máxima: <b>${NIVEIS[m]}</b></p></div>`;const nd=need(c),t=fcost(c),e=n-1,ok=e>=nd&&S.fr>=t;return`<div class="cvb"><p>Fusão <b>${NIVEIS[l]} → ${NIVEIS[l+1]}</b> · repetidas <b>${Math.min(e,nd)}/${nd}</b> · +${Math.round(gain(c)*100)}% de status</p><div class="two"><button class="bt cy${ok?"":" off"}" data-x="f" style="grid-column:1/-1">Fundir<span class="pr">${gem}${fmt(t)}</span></button></div></div>`};
+function fuse(c){if(rkLock(c.r))return toast(`🔒 Rank ${R[c.r][0]} libera na Arena ${c.r+1}.`);if(fusLock())return toast("🔒 Fusões liberam na Arena 4.");const l=lvl(c),n=need(c),t=fcost(c),m=Math.max(0,n-extra(c));if(l>=mxLv(c))return;if(m)return toast(`Faltam <b>${m}</b> repetida${m>1?"s":""} para fundir.`);if(S.fr<t)return lack(t-S.fr);fzAnim(c,l+1,()=>pop("−"+fmt(t),"neg"));S.inv[c.id]-=n;S.fr-=t;S.lv[c.id]=l+1;bump("fuse");save();sync();upd();toast(`✨ <b>${c.n}</b> subiu para <b>${NIVEIS[l+1]}</b>`)}
+const fzb=(c,n)=>{if(!n)return"";if(rkLock(c.r))return`<div class="cvb"><p>🔒 Esta carta libera na <b>Arena ${c.r+1}</b>.</p></div>`;if(fusLock())return`<div class="cvb"><p>🔒 Fusões liberam na <b>Arena 4</b>.</p></div>`;const l=lvl(c),m=mxLv(c);if(l>=m)return`<div class="cvb"><p>Fusão máxima: <b>${NIVEIS[m]}</b></p></div>`;const nd=need(c),t=fcost(c),e=n-1,ok=e>=nd&&S.fr>=t;return`<div class="cvb"><p>Fusão <b>${NIVEIS[l]} → ${NIVEIS[l+1]}</b> · repetidas <b>${Math.min(e,nd)}/${nd}</b> · +${Math.round(gain(c)*100)}% de status</p><div class="two"><button class="bt cy${ok?"":" off"}" data-x="f" style="grid-column:1/-1">Fundir<span class="pr">${gem}${fmt(t)}</span></button></div></div>`};
 const wal=()=>`<div class="wal">${gem}<span><small>Fragmentos</small><b class="bal">${fmt(shown)}</b></span></div>`,wlt=()=>`<div class="wl">${wal()}</div>`;
 // saldo na tela: conta até o valor novo (todas as carteiras ao mesmo tempo)
 function upd(){
@@ -3202,18 +3337,23 @@ const LK=`<div class="art"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 1
 // Formato progressivo: nível comum mantém o raio do verso (14% / 10,5%).
 // Cada fusão reduz os cantos gradualmente; no nível 5 ficam quase retos.
 const cardRadius=L=>({x:Math.max(1.5,14-Math.min(5,Math.max(0,Number(L)||0))*2.5),y:Math.max(1.1,10.5-Math.min(5,Math.max(0,Number(L)||0))*1.88)});
+/* Atributos aleatórios por camada: cada cartão SSS ganha três movimentos dessincronizados. */
+const cpSSSCloudMarkup=()=>["a","b","c"].map(k=>`<i class="cp-sss-rgb-cloud cp-sss-rgb-${k}" aria-hidden="true" style="--cp-move:${(17+Math.random()*12).toFixed(2)}s;--cp-hue:${(23+Math.random()*19).toFixed(2)}s;--cp-fade:${(10+Math.random()*9).toFixed(2)}s;--cp-delay:${(-Math.random()*24).toFixed(2)}s;--cp-start:${Math.round(Math.random()*360)}deg"></i>`).join("");
 const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),rad=cardRadius(L),im=!lk&&(c.img||IMG[c.id]),
  /* Os efeitos clássicos de raridade também funcionam sobre fotos 3:4. */
  fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;
  const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="lazy" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
+ /* Três manchas RGB independentes, como filhos diretos da arte para misturarem com a própria imagem. */
+ const artWithFilm=!lk&&r===8?art.replace(/<\/div>$/,`${cpSSSCloudMarkup()}</div>`):art;
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
- /* SSS usa um aro prismático recortado; nenhuma peça fica sobre a ilustração. */
- const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<i class="cp-sss-rgb-film" aria-hidden="true"></i><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
- return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${art}${rarityFx}${frame}${xt}</div>`
+ /* SSS usa um aro prismático recortado e opaco, separado da película RGB da ilustração. */
+ const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
+ const rankLocked=!lk&&(S.inv[c.id]||0)>0&&rkLock(r),lockBadge=rankLocked?`<span class="cp-rank-lock" aria-label="Bloqueada até Arena ${r+1}"><b>🔒</b><small>ARENA ${r+1}</small></span>`:"";
+ return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${rankLocked?"cp-locked-rank":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${rankLocked?` data-ranklocked="1"`:""}${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${artWithFilm}${rarityFx}${frame}${lockBadge}${xt}</div>`
 };
 // se a foto de uma carta não carregar, mostra a ilustração gerada
-document.addEventListener("error",e=>{const t=e.target,d=t.tagName=="IMG"&&t.closest(".cd");if(d){d.classList.remove("img");t.parentNode.outerHTML=ill(+d.dataset.r)}},true);
+document.addEventListener("error",e=>{const t=e.target,d=t.tagName=="IMG"&&t.closest(".cd");if(d){d.classList.remove("img");const rr=+d.dataset.r,fb=ill(rr);t.parentNode.outerHTML=rr===8?fb.replace(/<\/div>$/,`${cpSSSCloudMarkup()}</div>`):fb}},true);
 function updCs(){const c=$("cs");if(!c)return;const mid=c.scrollLeft+c.clientWidth/2;let b=9;[...c.children].forEach((s,i)=>{const d=Math.min(1,Math.abs(s.offsetLeft+s.offsetWidth/2-mid)/s.offsetWidth);s.style.transform=`scale(${(1-d*.22).toFixed(3)})`;s.style.opacity=(1-d*.6).toFixed(2);if(d<b){b=d;cur=i}});$("cap").textContent=P[cur].n;updOpen();document.querySelectorAll(".dots i").forEach((e,i)=>e.classList.toggle("on",i==cur));document.querySelectorAll(".ar button").forEach((e,i)=>e.style.opacity=(i?cur<P.length-1:cur>0)?1:.25)}
 const cpos=(c,i)=>{const s=c.children[Math.max(0,Math.min(c.children.length-1,i))];return s?s.offsetLeft-(c.clientWidth-s.offsetWidth)/2:0};
 const goPk=i=>{const c=$("cs");if(c)c.scrollTo({left:cpos(c,i),behavior:"smooth"})};
@@ -3673,7 +3813,7 @@ function applyTribeSynergy(B){
   });
  });
 }
-const tribeStatus=s=>{const a=s.syn||[];return `<p class="ztrib" style="margin:3px 0 7px;text-align:center;font-size:.7rem;line-height:1.4;opacity:.82;text-transform:none;letter-spacing:0">${a.length?"🐾 Sinergias: "+a.map(x=>`${esc(x.name)} ×${x.count} · +${x.atk}% ATQ${x.hp?` / +${x.hp}% VIDA`:""}`).join(" · "):"🐾 Sem sinergias de tribo ativas"}</p>`};
+const tribeStatus=s=>{const a=s.syn||[];return a.length?`<p class="ztrib" style="margin:3px 0 7px;text-align:center;font-size:.7rem;line-height:1.4;opacity:.82;text-transform:none;letter-spacing:0">🐾 Sinergias: ${a.map(x=>`${esc(x.name)} ×${x.count} · +${x.atk}% ATQ${x.hp?` / +${x.hp}% VIDA`:""}`).join(" · ")}</p>`:""};
 const bs=(u,k)=>u.bf.filter(b=>b.k==k).reduce((a,b)=>a+b.p,0),AT=u=>Math.max(1,u.atk*(1+bs(u,"at")/100));
 const dm=(a,t,m=1,attackElements=null)=>Math.max(1,Math.round(AT(a)*m*(CONFIG.danoMult||1)*elCalc(attackElements||elEls(a),elEls(t)).multiplicador*Math.max(.1,1-bs(t,"df")/100)*(1+bs(t,"mk")/100)));
 const shf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -3728,8 +3868,8 @@ function aiMove(B){const L=aiActs(B),ep=B.o.ie!=null?B.o.ie:B.o.m=="a"?Math.max(
 function aiRun(fast){const B=BT;if(!B||B.over||!B.ai||B.t!=1)return;setTimeout(()=>{if(BT!==B||B.over)return;const a0=B.ac,t0=B.t,n0=cur_(B).dk.length;aiMove(B);const dr=B.t==t0&&B.ac==a0&&cur_(B).dk.length<n0; // compra grátis: não gasta ação, então não encerra a vez
  if(!B.over&&B.t==t0&&!dr&&(B.ac<1||B.ac==a0))endT(B);zr();if(B.over)return zend();aiRun(dr)},fast?Math.min(550,CONFIG.iaMs||1200):(CONFIG.iaMs||1200))}
 // ----- DECK DE BATALHA (12 cartas DIFERENTES: a mesma carta nunca entra 2×, mesmo com várias cópias) e código para lutar com amigo -----
-const dkv=()=>{const u={};return(S.dk||[]).map(byId).filter(c=>c&&(S.inv[c.id]||0)>0&&!u[c.id]&&(u[c.id]=1))};
-const dkf=()=>{const d=dkv(),u={},p=[];d.forEach(c=>u[c.id]=1);ALL.forEach(c=>{if(!u[c.id]&&(S.inv[c.id]||0)>0)p.push(c)});p.sort((a,b)=>b.r-a.r||lvl(b)-lvl(a));while(d.length<12&&p.length)d.push(p.shift());S.dk=d.map(c=>c.id);save();return d};
+const dkv=()=>{const u={};return(S.dk||[]).map(byId).filter(c=>c&&(S.inv[c.id]||0)>0&&!rkLock(c.r)&&!u[c.id]&&(u[c.id]=1))};
+const dkf=()=>{const d=dkv(),u={},p=[];d.forEach(c=>u[c.id]=1);ALL.forEach(c=>{if(!u[c.id]&&(S.inv[c.id]||0)>0&&!rkLock(c.r))p.push(c)});p.sort((a,b)=>b.r-a.r||lvl(b)-lvl(a));while(d.length<12&&p.length)d.push(p.shift());S.dk=d.map(c=>c.id);save();return d};
 const dkcode=()=>"DECK~"+dkv().map(c=>c.id+":"+lvl(c)).join(",");
 // ----- DECK NA ABA DECK (estilo Clash Royale): deck no topo, a pessoa escolhe cartas do álbum para colocar -----
 let DSEL=null;
@@ -3750,8 +3890,8 @@ function dkPaint(){
  dkBar()
 }
 const dkSave=()=>{save();dkPaint()};
-function dkUse(id){const ids=dkIds();if(!byId(id))return;if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");if(ids.length>=12)return toast("Deck cheio · toque num espaço do deck para trocar.");ids.push(id);S.dk=ids;DSEL=null;dkSave()}
-function dkPlace(i,id){const ids=dkIds();if(ids[i]==id){DSEL=null;return dkPaint()}if(i<ids.length)ids.splice(i,1);else i=ids.length;if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");ids.splice(i,0,id);S.dk=ids;DSEL=null;dkSave()}
+function dkUse(id){const ids=dkIds(),chosen=byId(id);if(!chosen)return;if(rkLock(chosen.r))return toast(`🔒 Rank ${R[chosen.r][0]} libera na Arena ${chosen.r+1}.`);if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");if(ids.length>=12)return toast("Deck cheio · toque num espaço do deck para trocar.");ids.push(id);S.dk=ids;DSEL=null;dkSave()}
+function dkPlace(i,id){const ids=dkIds(),chosen=byId(id);if(!chosen||rkLock(chosen.r))return toast(chosen?`🔒 Rank ${R[chosen.r][0]} libera na Arena ${chosen.r+1}.` : "Carta não encontrada.");if(ids[i]==id){DSEL=null;return dkPaint()}if(i<ids.length)ids.splice(i,1);else i=ids.length;if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");ids.splice(i,0,id);S.dk=ids;DSEL=null;dkSave()}
 function dkRm(i){const ids=dkIds();if(i>=ids.length)return;ids.splice(i,1);S.dk=ids;dkSave()}
 document.addEventListener("click",e=>{
  const t=e.target.closest("[data-dc],[data-ds],[data-dx],[data-dk]");if(!t)return;const D=t.dataset;
@@ -3763,15 +3903,21 @@ document.addEventListener("click",e=>{
   else if(D.dk=="clear"){if(!dkv().length)return;ask("Limpar o deck?","As 12 vagas ficam vazias. Suas cartas continuam no álbum.","Limpar",()=>{S.dk=[];DSEL=null;dkSave()},1)}
  }
  else if(D.ds!=null){const i=+D.ds;if(DSEL)dkPlace(i,DSEL);else{const c=dkv()[i];c?view(c):toast("Escolha uma carta do álbum abaixo para colocar aqui.")}}
- else if(D.dc){DSEL=DSEL==D.dc?null:D.dc;dkPaint()}
+ else if(D.dc){const c=byId(D.dc);if(c&&rkLock(c.r))return toast(`🔒 Rank ${R[c.r][0]} libera na Arena ${c.r+1}.`);DSEL=DSEL==D.dc?null:D.dc;dkPaint()}
 });
 // inimigo da arena k: 12 cartas do jogo, todas DIFERENTES, com poder médio = 1,15^k × o da F (1ª ≈ F, 9ª ≈ A)
-function enDeck(k,difficultyD){const medal=Math.max(0,Math.floor(window.mdInfo?window.mdInfo().t||0:0)),inf=+k>8,medalScale=inf?1:Math.pow(1.035,medal),D=Number.isFinite(+difficultyD)?Math.max(0,+difficultyD):medal,T=Math.pow(1.15,k)*medalScale,rho=c=>ST[c.r][0]/100,by=ALL.slice().sort((a,b)=>Math.abs(rho(a)-T)-Math.abs(rho(b)-T)),nr=by.slice(0,Math.max(12,Math.min(by.length,16))),u=[];
- // Arena mantém sua escala original. Nas infinitas, rank e fusão avançam até SSS/nível 5; depois o multiplicador sobe com limite para preservar a possibilidade de vitória.
- for(let i=nr.length-1;i>0;i--){const j=Math.random()*(i+1)|0,x=nr[i];nr[i]=nr[j];nr[j]=x}
- nr.slice(0,12).forEach(c=>u.push(c));
- while(u.length<12)u.push(by[u.length%by.length]);
- const av=u.reduce((a,c)=>a+rho(c),0)/12,base=[0,0,1,1,2,2,3,3,4][Math.min(Math.floor(k),8)],LV=Math.max(0,Math.min(5,Math.round(base*(CONFIG.botNivel??1)+Math.floor(medal/6))));return u.map(c=>{const l=Math.min(LV+(k>1&&Math.random()<.3?1:0),c.r>5&&medal<8?Math.max(0,LV-1):5),rawPower=Math.max(.65,Math.min(2.5,T/Math.max(.01,av)))*(1+(CONFIG.botForca??5)/100*k)*(1+Math.min(.35,medal*.012)),pressure=1.85+Math.min(1,Math.max(0,D-15)*.05),power=inf&&D>=15?Math.min(pressure+.25,Math.max(rawPower,pressure)):rawPower;return{c,lv:l,s:power/(1+.4*l)}})}
+function enDeck(k,difficultyD,bossPreview=false){
+ const medal=Math.max(0,Math.floor(window.mdInfo?window.mdInfo().t||0:0)),inf=+k>8,arena=Math.max(0,Math.min(8,Math.floor(+k||0))),medalScale=inf?1:Math.pow(1.035,medal),D=Number.isFinite(+difficultyD)?Math.max(0,+difficultyD):medal,T=Math.pow(1.15,k)*medalScale,rho=c=>ST[c.r][0]/100;
+ const normal=inf?ALL.slice():ALL.filter(c=>c.r<=arena),preview=(!inf&&bossPreview&&arena<8)?ALL.filter(c=>c.r===arena+1):[];
+ const pool=[...normal,...preview],by=pool.slice().sort((a,b)=>Math.abs(rho(a)-T)-Math.abs(rho(b)-T)),u=[],used=new Set();
+ const addPool=(source,limit=12)=>{const list=source.slice();for(let i=list.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[list[i],list[j]]=[list[j],list[i]]}for(const c of list){if(u.length>=limit)break;if(!used.has(c.id)){u.push(c);used.add(c.id)}}};
+ // Os rivais normais usam apenas ranks liberados. O chefe de cada arena revela até duas cartas do próximo rank.
+ if(preview.length)addPool(preview,2);
+ addPool(by,12);
+ if(!u.length)addPool(ALL.filter(c=>inf||c.r<=arena),12);
+ const av=u.reduce((a,c)=>a+rho(c),0)/Math.max(1,u.length),base=[0,0,0,1,2,3,4,4,5][arena],cap=inf?5:FUSION_CAP[arena],LV=Math.max(0,Math.min(cap,Math.round(base*(CONFIG.botNivel??1)+Math.floor(medal/6))));
+ return u.slice(0,12).map(c=>{const l=Math.min(LV+(arena>1&&Math.random()<.3?1:0),cap),rawPower=Math.max(.65,Math.min(2.5,T/Math.max(.01,av)))*(1+(CONFIG.botForca??5)/100*k)*(1+Math.min(.35,medal*.012)),pressure=1.85+Math.min(1,Math.max(0,D-15)*.05),power=inf&&D>=15?Math.min(pressure+.25,Math.max(rawPower,pressure)):rawPower;return{c,lv:l,s:power/(1+.4*l)}})
+}
 // ----- TELA DE BATALHA -----
 const zb=document.createElement("div");zb.id="zb";zb.hidden=true;document.body.append(zb);
 let BT=null,SEL=null,PASS=0,BV="";
@@ -3944,7 +4090,7 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
   else pn+=`<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta para agir · toque de novo (ou no inimigo) para ver status e habilidades</p>`;
   pn+=`<div class="two"><button class="bt gh${s.r.length>=3||!s.dk.length?" off":""}" data-z="draw">${s.r.length>=3?"Banco cheio":!s.dk.length?"Baralho vazio":"Comprar grátis"}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
  // Reações por emoji removidas: não devem enviar eventos nem interferir na sincronização.
- fxSnap();ME=me;zb.innerHTML=(B.p.length>2||(B.o&&B.o.soloBoss))?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();if(!zb.querySelector("[data-cp-el-guide-battle]"))zb.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
+ fxSnap();ME=me;zb.innerHTML=(B.p.length>2||(B.o&&B.o.soloBoss))?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();const actionBar=zb.querySelector(".zc");if(actionBar&&!actionBar.querySelector("[data-cp-el-guide-battle]"))actionBar.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
 function zpost(){const B=BT;if(!B)return;SEL=null;if(!B.over)chk(B);if(!B.over&&B.ac<1)endT(B);if(B.over)return zend();if(!B.ai&&!B.lv&&B.t!=B.v)PASS=1;zr();aiRun()}
 function usk(){const B=BT,u=SEL&&SEL.u,i=SEL&&SEL.i,g=SEL&&SEL.g,before=!!(u&&u.chg&&u.chg[i]),humanSeat=B&&B.lv?B.v:0,ok=aSk(B,u,i,g);if(ok&&B.t===humanSeat){const after=!!(u.chg&&u.chg[i]);if(!before&&after)bump("charge");else if(!after){bump("abil");const ab=u.ab&&u.ab[i];if(ab&&elSkillEls(ab,u).some(k=>k!=="normal"))bump("eluse")}}zpost()}
 function zc(a){const B=BT;if(!B)return;if(String(a).startsWith("rx:"))return;
@@ -3998,23 +4144,24 @@ function startArena(bs){
  if(bs&&S.camp)return toast("🏆 Você já concluiu a campanha e derrotou o chefe final.");
  if(bs&&!bossOK()){const falta=Math.max(0,bcap()-S.tp);return toast(`🔒 Chefe bloqueado · alcance ${fmt(bcap())} troféus. ${falta===1?"Falta":"Faltam"} ${fmt(falta)} ${falta===1?"troféu":"troféus"}.`)}
  const u=mineDeck();if(!u)return;
- const e=enDeck(k).map(x=>bs?{...x,s:(x.s||1)*CONFIG.chefe}:x);
+ const e=enDeck(k,undefined,!!bs).map(x=>bs?{...x,s:(x.s||1)*CONFIG.chefe}:x);
+ if(e.length<12)return toast("Esta arena precisa de 12 cartas diferentes nos ranks já liberados. Revise o catálogo no ADM.");
  zgo({n:"Você",u},{n:(bs?"Chefe · ":"Rival · ")+AR[k][0],u:e},{m:"a",k,ai:IA[k],b:bs?1:0})
 }
-function startFriend(v){const t=String(v||"").trim();if(t.slice(0,5)!="DECK~")return toast("Código inválido · cole o código do deck do seu amigo.");const f=t.slice(5).split(",").map(x=>{const[i,l]=x.split(":"),c=byId(i);return c?{c,lv:Math.max(0,Math.min(5,+l||0))}:null});if(f.length!=12||f.some(x=>!x))return toast("Código inválido · o deck do amigo precisa ter 12 cartas do jogo.");if(new Set(f.map(x=>x.c.id)).size!=12)return toast("Código inválido · o deck do amigo precisa ter 12 cartas diferentes, sem repetir.");const u=mineDeck();if(!u)return;zgo({n:"Você",u},{n:window.ONLN||"Amigo",u:f},{m:"f"})}
+function startFriend(v){const t=String(v||"").trim();if(t.slice(0,5)!="DECK~")return toast("Código inválido · cole o código do deck do seu amigo.");const f=t.slice(5).split(",").map(x=>{const[i,l]=x.split(":"),c=byId(i);return c?{c,lv:Math.max(0,Math.min(5,+l||0))}:null});if(f.length!=12||f.some(x=>!x))return toast("Código inválido · o deck do amigo precisa ter 12 cartas do jogo.");if(new Set(f.map(x=>x.c.id)).size!=12)return toast("Código inválido · o deck do amigo precisa ter 12 cartas diferentes, sem repetir.");if(f.some(x=>rkLock(x.c.r)))return toast("Código inválido · esse deck contém ranks que ainda não foram liberados na sua arena.");const u=mineDeck();if(!u)return;zgo({n:"Você",u},{n:window.ONLN||"Amigo",u:f},{m:"f"})}
 zb.onclick=e=>{const b=e.target.closest("[data-z]");if(!b)return;const a=b.dataset.z;if(a=="close"){BT=null;zb.hidden=true;PASS=0;upd();render(1)}else if(a=="inf"){BT=null;zb.hidden=true;startInf()}else if(a=="again"){const bb=BT&&BT.o.b;BT=null;zb.hidden=true;startArena(bb)}else if(a=="soloBossAgain"){BT=null;zb.hidden=true;window.cpOpenSoloBoss&&window.cpOpenSoloBoss()}else zc(a)};
 // ----- ABA BATALHA -----
 const btl=()=>{const h=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Batalha</span></div>`,nt=t=>`<p class="mut ctr" style="margin:0 0 14px;letter-spacing:.04em;text-transform:none">${t}</p>`;
  const k=Math.max(0,Math.min(8,+S.ar||0)),fd=S.fd.d===day()?S.fd.n:0,need=bcap(),missing=Math.max(0,need-S.tp),missingText=`${missing===1?"Falta":"Faltam"} ${fmt(missing)} ${missing===1?"troféu":"troféus"}`,unlocked=bossOK();
  const arenaBoss=S.camp?`<div class="cp-arena-gate completed"><div><small>PROGRESSÃO DA ARENA</small><b>🏆 Campanha concluída</b><p>Você já derrotou o chefe final.</p></div></div>`:`<div class="cp-arena-gate ${unlocked?"ready":"locked"}"><div class="cp-arena-gate-copy"><small>PRÓXIMO OBJETIVO</small><b>👑 Chefe da Arena ${k+1}</b><p>${unlocked?`Meta atingida: ${fmt(S.tp)} / ${fmt(need)} troféus. Derrote o chefe para liberar a próxima arena.`:`${missingText} · ${fmt(S.tp)} / ${fmt(need)}. Vença batalhas para alcançar a meta.`}</p></div>${unlocked?`<button class="bt cy" data-bz="boss">⚔ Desafiar chefe da arena</button>`:`<span class="cp-arena-lock">🔒 BLOQUEADO</span>`}</div>`;
- return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button>${arenaBoss}<button class="bt cy" data-cp-raid-open style="margin-top:10px">👑 Boss especial · solo/equipe</button>${dkTabs(1)}<button class="bt gh" data-bz="deck" style="margin-top:10px">Deck ${S.dka||"A"} · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
+ return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button>${arenaBoss}${S.ar>=6?`<button class="bt cy" data-cp-raid-open style="margin-top:10px">👑 Boss Raid · solo/equipe</button>`:`<button class="bt gh" disabled style="margin-top:10px;opacity:.7">🔒 Boss Raid desbloqueia na Arena 7</button>`}${dkTabs(1)}<button class="bt gh" data-bz="deck" style="margin-top:10px">Deck ${S.dka||"A"} · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
  `<details class="fd"><summary>Lutar com amigo</summary><div class="cvb"><p>No mesmo celular. Seu amigo manda o código do deck dele. Vencendo: ${gem}<b>${CONFIG.amigoFrag}</b> · hoje <b>${Math.min(fd,3)}/3</b> lutas · sem troféus.</p><input class="cdi" id="fcd" placeholder="Cole o código do deck do seu amigo" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="bt cy" data-bz="friend" style="margin-top:10px">Lutar com amigo</button><button class="bt gh" data-bz="mycode" style="margin-top:10px">Copiar o código do meu deck</button></div></details>`};
 document.addEventListener("click",e=>{if(e.target.closest("[data-cp-solo-boss]")){window.cpOpenSoloBoss&&window.cpOpenSoloBoss();return}const b=e.target.closest("[data-bz]");if(!b)return;const a=b.dataset.bz;
  if(a=="fight")startArena();else if(a=="boss")startArena(1);else if(a=="deck"){if(!dkv().length)dkf();DSEL=null;tab="a";render()}else if(a=="back"){BV="";render(1)}else if(a=="auto"){dkf();render(1)}
  else if(a=="mycode"){if(dkv().length<12&&dkf().length<12)return toast("Monte um deck de 12 cartas primeiro.");const t=dkcode();try{navigator.clipboard.writeText(t).then(()=>toast("Código do deck copiado ✓"),()=>ask("Código do deck",`<input class="cdi" readonly value="${t}" onfocus="this.select()">`,"Fechar",()=>{}))}catch(x){ask("Código do deck",`<input class="cdi" readonly value="${t}" onfocus="this.select()">`,"Fechar",()=>{})}}
  else if(a=="friend"){const i=$("fcd");i&&i.value.trim()?startFriend(i.value):toast("Cole o código do deck do seu amigo primeiro.")}
  else if(a.slice(0,3)=="rm:"){const i=S.dk.indexOf(a.slice(3));if(i>=0)S.dk.splice(i,1);save();render(1)}
- else if(a.slice(0,3)=="ad:"){if(dkv().some(c=>c.id==a.slice(3)))toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");else if(dkv().length<12){S.dk=dkv().map(c=>c.id);S.dk.push(a.slice(3));save()}else toast("O deck já tem 12 cartas · remova uma antes.");render(1)}});
+ else if(a.slice(0,3)=="ad:"){const candidate=byId(a.slice(3));if(candidate&&rkLock(candidate.r))toast(`🔒 Rank ${R[candidate.r][0]} libera na Arena ${candidate.r+1}.`);else if(dkv().some(c=>c.id==a.slice(3)))toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");else if(dkv().length<12){S.dk=dkv().map(c=>c.id);S.dk.push(a.slice(3));save()}else toast("O deck já tem 12 cartas · remova uma antes.");render(1)}});
 
 
 </script>
@@ -4094,10 +4241,10 @@ function starterGo(){
  if(S.ini)return;
  const hasCards=Object.keys(S.inv||{}).some(id=>(+S.inv[id]||0)>0);
  if(!hasCards){
-  const eligible=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr),byId=new Map(eligible.map(c=>[String(c.id),c])),picked=[],seen=new Set();
+  const eligible=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0),byId=new Map(eligible.map(c=>[String(c.id),c])),picked=[],seen=new Set();
   (Array.isArray(ADM.starterCards)?ADM.starterCards:[]).forEach(id=>{const c=byId.get(String(id));if(c&&!seen.has(String(c.id))&&picked.length<12){picked.push(c);seen.add(String(c.id))}});
   // Configuração ausente/incompleta: completar com uma lista determinística, sem sorteio.
-  const fallback=eligible.filter(c=>c.r<4).concat(eligible.filter(c=>c.r>=4));
+  const fallback=eligible.filter(c=>c.r===0);
   fallback.forEach(c=>{if(picked.length<12&&!seen.has(String(c.id))){picked.push(c);seen.add(String(c.id))}});
   picked.forEach(c=>S.inv[c.id]=Math.max(1,+S.inv[c.id]||0));
   S.opened=(S.opened||0)+2;
@@ -4114,18 +4261,18 @@ function cfgView(v){cfg.hidden=false;PEND=null;
  const T=`<div class="in2"><h2>${v=="a"?"Modo ADM":"Ajustes"}</h2>`,E=`<button class="bt gh" data-k="x">Fechar</button></div>`;
  if(v=="a"){
   const op=P.map(p=>`<option value="${p.id}">${p.e} ${p.n}</option>`).join("")+ADM.p.filter(d=>!P.some(p=>p.id==d.id)).map(d=>`<option value="${d.id}">${d.e} ${d.n} · não lançado</option>`).join("")+'<option value="__">➕ Novo pacote…</option>',rk=R.map(r=>`<option>${r[0]}</option>`).join(""),ca=ALL.map(c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`).join(""),pd=P.map(p=>`<option value="${p.id}"${p.dest?" selected":""}>${p.n}</option>`).join(""),
-  starterPool=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr),starterValid=new Set(starterPool.map(c=>String(c.id))),starterSet=new Set((Array.isArray(ADM.starterCards)?ADM.starterCards:[]).map(String).filter(id=>starterValid.has(id)).slice(0,12)),
+  starterPool=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0),starterValid=new Set(starterPool.map(c=>String(c.id))),starterSet=new Set((Array.isArray(ADM.starterCards)?ADM.starterCards:[]).map(String).filter(id=>starterValid.has(id)).slice(0,12)),
   starterEsc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  if(starterSet.size!==12){starterSet.clear();starterPool.filter(c=>c.r<4).slice(0,12).forEach(c=>starterSet.add(String(c.id)));if(starterSet.size<12)starterPool.filter(c=>c.r>=4).forEach(c=>{if(starterSet.size<12)starterSet.add(String(c.id))});}
+  if(starterSet.size!==12){starterSet.clear();starterPool.slice(0,12).forEach(c=>starterSet.add(String(c.id)));}
   const starterRows=starterPool.map(c=>`<label class="yck" data-starter-row="${starterEsc((c.n||"")+" "+R[c.r][0]).toLowerCase()}"><input type="checkbox" data-starter-pick="1" value="${starterEsc(c.id)}"${starterSet.has(String(c.id))?" checked":""}><span>${R[c.r][0]} · ${starterEsc(c.n)}</span></label>`).join("");
   cfg.innerHTML=T+adxEd()+adxHb()+adxPk()+adxRl()+adxGv()+`<details class="fd" id="ds_n"><summary>➕ Nova carta ou pacote</summary><p class="mut" style="margin:0;text-transform:none;letter-spacing:0">As cartas criadas ficam salvas neste aparelho. Para levar aos amigos, use Exportar conteúdo.</p>`
   +cpFl("Pacote",`<select id="ap">${op}</select>`)+`<div id="np" hidden>`+cpFl("Nome do pacote",'<input id="pn">')+cpFl("Emoji",'<input id="pe" value="🎴">')+cpFl("Cor (0 a 360)",'<input id="ph" type="number" value="200">')+cpFl("Preço em fragmentos",`<input id="pc" type="number" value="${CUSTO}">`)+`</div>`
   +cpFl("Nome da carta",'<input id="an">')+adxS("an_el","Elemento 1",ELOPT)+adxS("an_el2","Elemento 2 (opcional)",ELOPT2)+`<div id="cp-new-card-el-preview"></div>`+cpFl("Tribo / família (opcional)",'<input id="atb" maxlength="24" placeholder="Dragões, Bestas, Espíritos…">')+cpFl("Rank",`<select id="ar2">${rk}</select>`)
   +cpFl("Chance % (vazio = automática)",'<input id="ac" type="number" step="any">')+cpFl("História",'<textarea id="ah" rows="3"></textarea>')+cpFl("Habilidades da carta (marque várias)",`<select id="ahb" multiple size="5">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="${a.id}">${a.el&&a.el!=="carta"?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / ")+" · ":"🃏 "}${a.n}</option>`).join("")}</select>`)+cpFl("Habilidade só desta carta (não entra na lista geral)",`<select id="aqs"><option value="">Nenhuma</option>${hxEx.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join("")}</select>`)+cpFl("Imagem (vira WebP leve, até "+CONFIG.imgKB+" KB)",'<input id="fi" type="file" accept="image/*">')+`<label class="yck"><input type="checkbox" id="adr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt" data-k="nc">Salvar carta</button></details>`
   
-  +`<details class="fd" id="ds_st"><summary>🎴 Cartas iniciais para novatos</summary><p class="mut" style="margin:4px 0 12px;text-transform:none;letter-spacing:0">Marque exatamente 12 cartas publicadas. Todo jogador novo recebe esta seleção fixa; cartas em rascunho não aparecem aqui.</p>`
+  +`<details class="fd" id="ds_st"><summary>🎴 Cartas iniciais para novatos</summary><p class="mut" style="margin:4px 0 12px;text-transform:none;letter-spacing:0">Marque exatamente 12 cartas publicadas de Rank F. Todo jogador novo recebe estas 12 cartas, liberadas desde a Arena 1. Crie mais cartas F no editor antes de salvar, se necessário.</p>`
   +cpFl("Buscar carta",'<input id="starterSearch" type="search" placeholder="Digite o nome ou rank">')
-  +`<p id="starterCardsCount" class="mut" style="margin:8px 0;text-transform:none;letter-spacing:0">Selecionadas: ${starterSet.size}/12</p><div id="starterCardsList" style="max-height:340px;overflow:auto;display:grid;gap:6px;padding:8px;border:1px solid #ffffff22;border-radius:12px">${starterRows||'<p class="mut">Crie e publique cartas primeiro.</p>'}</div><p class="mut" style="margin:10px 0;text-transform:none;letter-spacing:0">Use o botão Salvar no rodapé. Se não houver 12 cartas válidas configuradas, o jogo completa a lista com uma seleção fixa de cartas publicadas.</p></details>`
+  +`<p id="starterCardsCount" class="mut" style="margin:8px 0;text-transform:none;letter-spacing:0">Selecionadas: ${starterSet.size}/12</p><div id="starterCardsList" style="max-height:340px;overflow:auto;display:grid;gap:6px;padding:8px;border:1px solid #ffffff22;border-radius:12px">${starterRows||'<p class="mut">Crie e publique cartas primeiro.</p>'}</div><p class="mut" style="margin:10px 0;text-transform:none;letter-spacing:0">A seleção aceita somente Rank F. O jogo completa uma configuração antiga/incompleta com cartas F publicadas; não entrega cartas de ranks bloqueados como cartas iniciais.</p></details>`
   +cpFl("Pacote em destaque",`<select id="ad"><option value="">Rodízio automático</option>${pd}</select>`)+`<button class="bt cy" data-k="nd">Salvar destaque</button><button class="bt cy" data-k="nf">+1.000 fragmentos (teste)</button>`
   +cpFl("Backup completo do ADM (CPB3)",cpTa("cc"))+cpFl("Arquivo JSON para restaurar",'<input id="fcc" type="file" accept=".json,.txt,application/json">')+`<button class="bt cy" data-k="xc">💾 Gerar backup completo</button><button class="bt gh" data-k="ic">📥 Validar e restaurar backup</button><p class="mut">Inclui cartas, pacotes, habilidades, regras/configurações e fotos recuperadas do aparelho e da nuvem. Antes de restaurar, o jogo baixa automaticamente um backup de segurança do conteúdo atual. Guarde os arquivos fora do jogo.</p><button class="bt gh" data-k="m">Ajustes do save</button>`+E;
   $("ap").onchange=e=>$("np").hidden=e.target.value!="__";adxFc();adxFk();yInit();cpSyncNewCardElements();cpSkillPreview();return}
@@ -4238,10 +4385,10 @@ function adxG(w){const n=Math.floor(+$("gn").value);if(!(n>0))return toast("Info
 if(w=="gf")S.fr+=n;else if(w=="gg"){const v=$("gp").value;if(v=="__r")for(let k=0;k<n;k++)gift(P[Math.floor(Math.random()*P.length)].id,1);else gift(v,n)}else if(w=="gk"){const i=$("gc").value;S.inv[i]=(S.inv[i]||0)+n}else ALL.forEach(c=>S.inv[c.id]=S.inv[c.id]||1);
 save();upd();sync();toast("✓ Pronto")}
 function adxSt(){
- const ids=[...cfg.querySelectorAll("[data-starter-pick]:checked")].map(x=>String(x.value)),valid=new Set(ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr).map(c=>String(c.id)));
+ const ids=[...cfg.querySelectorAll("[data-starter-pick]:checked")].map(x=>String(x.value)),valid=new Set(ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0).map(c=>String(c.id)));
  if(ids.length!==12)return toast(`Selecione exatamente 12 cartas. Atualmente: ${ids.length}/12.`);
- if(new Set(ids).size!==12||ids.some(id=>!valid.has(id)))return toast("A seleção contém cartas repetidas, removidas ou não publicadas. Atualize a lista e tente novamente.");
- ADM.starterCards=ids;toast("✓ As 12 cartas iniciais foram salvas para os próximos jogadores.");adxGo();
+ if(new Set(ids).size!==12||ids.some(id=>!valid.has(id)))return toast("A seleção precisa conter 12 cartas F diferentes, publicadas e disponíveis. Atualize a lista e tente novamente.");
+ ADM.starterCards=ids;toast("✓ As 12 cartas Rank F iniciais foram salvas para os próximos jogadores.");adxGo();
 }
 const adxA={sc:adxSc,dc:adxDc,sk:adxSk,dk:adxDk,sr:adxSr,rr:adxRr,sev:cpxEvSave,dev:cpxEvEnd,st:adxSt};
 function adx(k){adxA[k]?adxA[k]():adxG(k)}
@@ -4901,7 +5048,10 @@ function cpV2MakeSheet(obj){
  const rank=cpV2Text(obj.rank||obj.r);if(!rank)extra.push("Rank é obrigatório.");else if(rk(rank)<0)extra.push(`Rank "${rank}" não existe. Use F, E, D, C, B, A, S, SS ou SSS.`);
  const cardName=cpV2Text(obj.name??obj.nome);if(cardName.length>32)extra.push("Nome da carta excede 32 caracteres.");
  const storyText=cpV2Text(obj.story??obj.historia);if(!storyText)extra.push("História é obrigatória.");else if(storyText.length>700)extra.push("História excede 700 caracteres.");
- const tribeText=cpV2Text(obj.tribe??obj.tribo);if(tribeText.length>24)extra.push("Tribo excede 24 caracteres.");
+ const synergyObj=obj.synergy&&typeof obj.synergy==="object"?obj.synergy:null;
+ const synergyText=typeof obj.synergy==="string"?obj.synergy:synergyObj?(synergyObj.group??synergyObj.tribe??synergyObj.name??""):"";
+ const tribeText=cpV2Text(obj.tribe??obj.tribo??synergyText);if(tribeText.length>24)extra.push("Tribo/sinergia excede 24 caracteres.");
+ if(synergyObj&&synergyObj.enabled===true&&!tribeText)extra.push("Sinergia ativada sem grupo. Informe synergy.group com o nome da tribo/família.");
  const sealText=cpV2Text(obj.seal??obj.selo);if(sealText&&!has(SLS,SL(sealText)))extra.push(`Selo "${sealText}" não existe. Use amigo, especial, secreta, evento ou vazio.`);
  const stats=obj.stats&&typeof obj.stats==="object"?obj.stats:{};
  const hp=stats.hp??stats.life??obj.hp,atk=stats.attack??stats.atk??stats.damage??obj.atk;
@@ -4915,7 +5065,7 @@ function cpV2MakeSheet(obj){
  if(els.length===2&&(els[0]==="normal"||els[1]==="normal"||els[0]===els[1]))extra.push("Normal só pode existir sozinho e os dois elementos não podem ser iguais.");
  lines.push([ln++,"FICHA DE CARTA"]);add("Nome",obj.name??obj.nome);add("Rank",rank);
  if(els[0])add("Elemento",els[0]);if(els[1])add("Elemento 2",els[1]);
- add("Vida",hp);add("Dano",atk);add("Tribo",obj.tribe??obj.tribo);add("Selo",obj.seal??obj.selo);add("História",obj.story??obj.historia);
+ add("Vida",hp);add("Dano",atk);add("Tribo",tribeText);add("Selo",obj.seal??obj.selo);add("História",obj.story??obj.historia);
  const skills=Array.isArray(obj.skills)?obj.skills:(Array.isArray(obj.abilities)?obj.abilities:[]);
  if(skills.length<1)extra.push("Inclua pelo menos uma habilidade em skills.");
  if(skills.length>4)extra.push("O jogo aceita no máximo quatro habilidades por carta.");
@@ -4967,6 +5117,18 @@ function cpV2MakeSheet(obj){
   });
  });
  const parsed=parseSheet({lines},{v2:true});
+ skills.slice(0,4).forEach((sk,i)=>{
+  const charge=sk&&sk.charge&&typeof sk.charge==="object"?sk.charge:null;
+  const mode=sk&&(sk.chargeMode??(charge&&charge.mode));
+  const turns=sk&&(sk.chargeTurns??(charge&&charge.turns));
+  if(mode==null||mode==="")return;
+  const tr=trg(sk.trigger??sk.when??sk.quando??"");
+  if(!["same","turns"].includes(String(mode))){extra.push(`Habilidade ${i+1}: chargeMode deve ser "same" ou "turns".`);return}
+  if(tr!=="u"){extra.push(`Habilidade ${i+1}: carga só pode ser usada em habilidade ativa (trigger "ativa").`);return}
+  if(mode==="turns"&&(!Number.isInteger(+turns)||+turns<1||+turns>6)){extra.push(`Habilidade ${i+1}: chargeTurns precisa ser inteiro de 1 a 6.`);return}
+  const target=parsed.card&&parsed.card.abs&&parsed.card.abs[i];
+  if(target){target.chargeMode=String(mode);target.chargeTurns=mode==="turns"?Math.floor(+turns):1}
+ });
  parsed.er.unshift(...extra);
  return parsed;
 }
@@ -5000,7 +5162,7 @@ function apply(cards,pk){
   ADM.c.push(x);
   const hs=[];
   c.abs.forEach(a=>{let hid;do{hid="h"+rid()}while(ADM.ab.some(q=>q.id==hid));
-   const o={id:hid,n:a.n,q:a.q,rc:a.rc,ef:a.ef,solo:id};if(a.tr)o.tr=a.tr;if(a.el)o.el=a.el;if(a.el2)o.el2=a.el2;ADM.ab.push(o);hs.push(hid)});
+   const o={id:hid,n:a.n,q:a.q,rc:a.rc,ef:a.ef,solo:id};if(a.tr)o.tr=a.tr;if(a.el)o.el=a.el;if(a.el2)o.el2=a.el2;if(a.chargeMode){o.chargeMode=a.chargeMode;if(a.chargeMode==="turns")o.chargeTurns=a.chargeTurns}ADM.ab.push(o);hs.push(hid)});
   if(hs.length)ADM.ca[id]=hs;
   ids.push(id)});
  return ids}
@@ -5209,7 +5371,7 @@ window.cpPublishProfile=pubPerfil;
 // Serializa também as publicações de conteúdo ADM: uma edição antiga nunca pode terminar depois da mais nova.
 function pushAdm(){const job=()=>pushAdmNow();admChain=admChain.then(job,job);return admChain}
 function pf(){clearTimeout(pt);pt=setTimeout(pubPerfil,6000)}
-function modal(h){let o=g("cpm");if(!o){o=document.createElement("div");o.id="cpm";o.onclick=e=>{e.stopPropagation();if(e.target===o)return o.remove();const b=e.target.closest("[data-a]");b&&act(b.dataset.a,b.dataset.v)};o.onchange=e=>{e.target.id=="tm"&&fillQ()};document.body.append(o)}o.innerHTML=`<div class="pbx">${h}</div>`;return o}
+function modal(h){let o=g("cpm");if(!o){o=document.createElement("div");o.id="cpm";o.onclick=e=>{e.stopPropagation();if(e.target===o)return o.remove();const wish=e.target.closest("[data-cp-openwish]");if(wish){e.preventDefault();e.stopPropagation();window.cpOpenWishlist&&window.cpOpenWishlist();return}const b=e.target.closest("[data-a]");b&&act(b.dataset.a,b.dataset.v)};o.onchange=e=>{e.target.id=="tm"&&fillQ()};document.body.append(o)}o.innerHTML=`<div class="pbx">${h}</div>`;return o}
 function act(a,v){if(String(a).slice(0,2)=="mz")return mzAct(a,v);if(a=="me")perfil();else if(a=="pj")jogadores();else if(a=="yr")cpOpenYearRetrospective();else if(a=="rnk"||a=="rkr")ranking();else if(a=="rkc")claimSeason();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dstart")enviarDesafio();else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca");else if(a=="px"){const o=g("cpm");o&&o.remove()}}
 function perfil(){const s=stats(),k=TIN.filter(t=>t.s=="p").length;
  modal(`<div class="cxpr"><button class="cxpav" data-a="pf">${av(ME.f,ME.n)}</button><div><b data-a="pn">${esc(ME.n)} ✎</b><small>toque na foto ou no nome para mudar</small></div></div>${window.cpProfileMeta?window.cpProfileMeta(s.title,s.showcase):""}<div class="cxpg"><div><b>🏆 ${s.tp}</b>troféus</div><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}</b>duelos ganhos</div><div><b>${s.ol}</b>duelos perdidos</div></div><button class="bt cy" data-a="pj">👥 Jogadores e trocas${k?" · 🔔 "+k:""}</button><button class="bt cy" data-a="mz">🎴 Batalha em grupo (2x2 ou todos)</button><button class="bt gh" data-a="yr">📊 Retrospectiva Primata</button><button class="bt gh" data-cp-openwish="1">⭐ Editar lista de desejos</button><button class="bt gh" data-a="out">Sair da conta</button>`)}
@@ -5297,7 +5459,7 @@ function rply(c){const B=BT,L=window.LV;if(!B||!L||B.over)return;L.rm=1;L.lt=Dat
  if(!ok){console.warn("duelo: jogada não pôde ser reproduzida",c);L.desync=1;return false}
  zpost();return true}catch(x){console.warn("duelo",x);L.desync=1;return false}finally{L.rm=0}}
 function lvCm(d){const L=window.LV;if(!L||L.repairing||!d.cm||L.desync)return;d.cm.map(x=>{try{return JSON.parse(x)}catch(e){}}).filter(Boolean).sort((a,b)=>a.n-b.n).forEach(c=>{if(c.n==L.qn){L.q.push(c);L.qn++}});pump()}
-function pump(){const L=window.LV;if(!L||L.pb||L.desync||L.repairing)return;L.pb=1;const nx=()=>{if(window.LV!==L){L.pb=0;return}const c=L.q.shift();if(!c){L.pb=0;return}if(rply(c)===false||L.desync){L.pb=0;L.q=[];lvRepair(L);return}setTimeout(nx,c.k=="en"?400:700)};nx()}
+function pump(){const L=window.LV;if(!L||L.pb||L.desync||L.repairing)return;L.pb=1;const nx=()=>{if(window.LV!==L){L.pb=0;return}const c=L.q.shift();if(!c){L.pb=0;return}if(rply(c)===false||L.desync){L.pb=0;L.q=[];lvRepair(L);return}/* A jogada já foi aplicada em rply; esta pausa curta só preserva a leitura da sequência visual. */setTimeout(nx,c.k==="en"||c.k==="ae"?85:115)};nx()}
 async function lvRepair(L){
  if(!L||L.repairing||window.LV!==L)return;
  L.repairing=1;
@@ -5637,57 +5799,121 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   "use strict";
 
   // --- Configuração do Boss Raid, armazenada junto do conteúdo ADM ---
+  const raidUnlocked=()=>Math.max(0,+S.ar||0)>=6;
+  const RAID_RANK_SCALE=[
+    {power:2,fragments:120,packs:0,dropChance:55},
+    {power:3,fragments:180,packs:0,dropChance:50},
+    {power:4,fragments:260,packs:1,dropChance:45},
+    {power:6,fragments:400,packs:1,dropChance:40},
+    {power:8,fragments:650,packs:1,dropChance:34},
+    {power:12,fragments:1000,packs:2,dropChance:28},
+    {power:16,fragments:1800,packs:2,dropChance:22},
+    {power:23,fragments:3200,packs:3,dropChance:16},
+    {power:32,fragments:6000,packs:5,dropChance:12}
+  ];
+  const raidAutoValues=c=>{
+    const index=Math.max(0,Math.min(8,Math.floor(+c?.r||0))),rank=R[index]?.[0]||"F",base=RAID_RANK_SCALE[index]||RAID_RANK_SCALE[0],saved=ADM?.raidBoss?.rankScale?.[rank]||{};
+    const value=(key,min,max)=>{const n=saved[key]==null?base[key]:Math.floor(+saved[key]);return Number.isFinite(n)?Math.max(min,Math.min(max,n)):base[key]};
+    return{power:value("power",2,200),fragments:value("fragments",0,1000000000),packs:value("packs",0,100),dropChance:value("dropChance",0,100)};
+  };
+  const raidIsArena=c=>!!c&&(c.p?.id==="are"||/^are\d+$/i.test(String(c.id||"")));
+  const raidIsSpecial=c=>!!c&&(c.p?.id==="ind"||raidIsArena(c)||!!c.sl||+c.ga>0||+c.p?.esp>0||+c.p?.ate>0);
+  const raidLegacyRanks=value=>({all:R.map(x=>x[0]),low:["F","E","D"],mid:["C","B"],high:["A","S","SS","SSS"],"f-c":["F","E","D","C"],"b-sss":["B","A","S","SS","SSS"]}[value]||(["F","E","D","C","B","A","S","SS","SSS"].includes(value)?[value]:R.map(x=>x[0])));
+  const raidCardMatches=(c,filter,ranks)=>{
+    if(!c)return false;
+    const arena=raidIsArena(c),special=raidIsSpecial(c),r=Math.max(0,Math.min(8,+c.r||0)),packaged=P.some(p=>p.id===c.p?.id),hasImage=!!(c.img||IMG[c.id]);
+    if(filter==="no-special"&&special||filter==="special-only"&&!special||filter==="packages-only"&&!packaged||filter==="no-pack"&&packaged||filter==="arena-only"&&!arena||filter==="no-arena"&&arena||filter==="with-image"&&!hasImage||filter==="without-image"&&hasImage)return false;
+    return Array.isArray(ranks)&&ranks.includes(R[r][0]);
+  };
+  const raidFilteredCards=(filter,ranks)=>ALL.filter(c=>raidCardMatches(c,filter,ranks));
+  const raidHash=value=>{let h=2166136261;const t=String(value);for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+  const raidStableOrder=(items,seed)=>items.slice().sort((a,b)=>raidHash(seed+"|"+a.id)-raidHash(seed+"|"+b.id));
   const raidCfg=()=>{
     const r=ADM&&ADM.raidBoss;
-    if(!r||!r.cardId||!byId(r.cardId))return null;
+    if(!r)return null;
+    const pool=Array.isArray(r.rotationIds)?r.rotationIds.filter(id=>byId(id)):[];
+    const hours=Math.max(1,Math.min(720,Math.floor(+r.rotationHours||24)));
+    const cycle=Math.floor(Math.max(0,Date.now()-(r.rotationMode==="random"?(+r.rotationStartedAt||0):0))/(hours*3600000));
+    const filter=r.rotationFilter||"no-special",ranks=Array.isArray(r.rotationRanks)?r.rotationRanks.filter(v=>R.some(x=>x[0]===v)):raidLegacyRanks(r.rotationRank||"all");
+    const randomPool=raidFilteredCards(filter,ranks);
+    let activeId=r.cardId;
+    if(r.rotationMode==="auto"&&pool.length)activeId=pool[((cycle%pool.length)+pool.length)%pool.length];
+    else if(r.rotationMode==="random"){if(!randomPool.length)return null;activeId=raidStableOrder(randomPool,"raid:"+cycle)[0].id;}
+    const c=byId(activeId);
+    if(!c)return null;
+    const auto=r.autoBalance===true?raidAutoValues(c):null;
     return {
-      cardId:String(r.cardId),
-      power:Math.max(2,Math.min(40,+r.power||12)),
+      cardId:String(activeId),rotationMode:["auto","random"].includes(r.rotationMode)?r.rotationMode:"manual",rotationHours:hours,rotationFilter:filter,rotationRanks:ranks,randomPoolSize:randomPool.length,autoBalance:!!auto,
+      power:Math.max(2,Math.min(200,+(auto?auto.power:r.power)||12)),
       maxPlayers:Math.max(2,Math.min(4,Math.floor(+r.maxPlayers||4))),
-      fragments:Math.max(0,Math.floor(+(r.fragments??600))),
-      packs:Math.max(0,Math.min(20,Math.floor(+(r.packs??1)))),
+      fragments:Math.max(0,Math.floor(+(auto?auto.fragments:(r.fragments??600)))),
+      packs:Math.max(0,Math.min(100,Math.floor(+(auto?auto.packs:(r.packs??1))))),
       dropMode:["chance","all","none","damage"].includes(r.dropMode)?r.dropMode:"chance",
-      dropChance:Math.max(0,Math.min(100,+(r.dropChance??25)))
+      dropChance:Math.max(0,Math.min(100,+(auto?auto.dropChance:(r.dropChance??25))))
     };
   };
   const safeName=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  let RAID_PEOPLE=[],RAID_SELECTED=[],RAID_INVITES={},RAID_UNSUB=null,RAID_INV_UNSUB=null,RAID_ACTIVE_ID="",RAID_STARTED_ID="";
+  let RAID_PEOPLE=[],RAID_SELECTED=[],RAID_INVITES={},RAID_UNSUB=null,RAID_INV_UNSUB=null,RAID_ACTIVE_ID="",RAID_STARTED_ID="",RAID_MENU_CYCLE="";
 
   function raidAdminOpen(){
     if(!(typeof AD!=="undefined"&&AD))return toast("Entre no modo ADM para configurar o Boss Raid.");
-    const r=ADM.raidBoss||{cardId:ALL[0]&&ALL[0].id,power:12,maxPlayers:4,fragments:600,packs:1,dropMode:"chance",dropChance:25};
+    const r=ADM.raidBoss||{cardId:ALL[0]&&ALL[0].id,power:12,maxPlayers:4,fragments:600,packs:1,dropMode:"chance",dropChance:25,autoBalance:true},picked=byId(r.cardId)||ALL[0],auto=r.autoBalance===true,autoVals=raidAutoValues(picked);
+    const manual={power:r.power??autoVals.power,fragments:r.fragments??autoVals.fragments,packs:r.packs??autoVals.packs,dropChance:r.dropChance??autoVals.dropChance};
     const opts=ALL.map(c=>`<option value="${safeName(c.id)}"${c.id===r.cardId?" selected":""}>${R[c.r][0]} · ${safeName(c.n)}</option>`).join("");
-    modal(`<h4>⚔️ Configurar Boss Raid</h4><p>Escolha uma única carta para enfrentar vários jogadores ao mesmo tempo. O Boss entra sozinho, com força multiplicada, enquanto cada participante usa seu deck completo.</p><div class="raid-admin-grid">
-      <label class="raid-wide">Carta escolhida pelo ADM<select id="cpRaidCard">${opts}</select></label>
-      <label>Força do Boss (×)<input id="cpRaidPower" type="number" min="2" max="40" step="1" value="${+r.power||12}"></label>
+    const rotationIds=Array.isArray(r.rotationIds)?r.rotationIds:[r.cardId];
+    const rotationOpts=ALL.map(c=>`<label class="cp-raid-pool-item"><input type="checkbox" data-cp-raid-pool="${safeName(c.id)}"${rotationIds.includes(c.id)?" checked":""}><span><b>${R[c.r][0]}</b> · ${safeName(c.n)}</span></label>`).join("");
+    const typeOpts=[["all","Todas as cartas"],["no-special","Todas, menos especiais"],["special-only","Somente especiais"],["packages-only","Somente de pacotes"],["no-pack","Fora dos pacotes"],["arena-only","Somente de arena"],["no-arena","Todas, menos arena"],["with-image","Somente com imagem"],["without-image","Somente sem imagem"]].map(([v,n])=>`<option value="${v}"${(r.rotationFilter||"no-special")===v?" selected":""}>${n}</option>`).join("");
+    const currentRanks=Array.isArray(r.rotationRanks)?r.rotationRanks.filter(v=>R.some(x=>x[0]===v)):raidLegacyRanks(r.rotationRank||"all"),rankChecks=R.map(x=>x[0]).map(x=>`<label class="cp-rank-chip"><input type="checkbox" data-cp-raid-rank="${x}"${currentRanks.includes(x)?" checked":""}><b>${x}</b></label>`).join("");
+    const raidScaleEditor=R.map((row,i)=>{const rank=row[0],v=raidAutoValues({r:i});return `<div class="cp-raid-scale-row"><b class="cp-raid-scale-rank">${rank}</b><label><span>Força ×</span><input type="number" min="2" max="200" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="power" value="${v.power}"></label><label><span>Fragmentos</span><input type="number" min="0" max="1000000000" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="fragments" value="${v.fragments}"></label><label><span>Pacotes</span><input type="number" min="0" max="100" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="packs" value="${v.packs}"></label><label><span>Drop %</span><input type="number" min="0" max="100" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="dropChance" value="${v.dropChance}"></label></div>`}).join("");
+    modal(`<h4>⚔️ Configurar Boss Raid</h4><p>Escolha um Boss fixo, uma lista selecionada por você ou um sorteio automático no catálogo de cartas existentes. No sorteio do catálogo, todos os jogadores recebem o mesmo Boss durante aquele ciclo; dificuldade e recompensas acompanham o rank sorteado.</p><div class="raid-admin-grid">
+      <label class="raid-wide">Modo de rotação<select id="cpRaidRotationMode"><option value="manual"${!['auto','random'].includes(r.rotationMode)?" selected":""}>Manual · Boss fixo</option><option value="auto"${r.rotationMode==="auto"?" selected":""}>Lista do ADM · alternar Bosses escolhidos</option><option value="random"${r.rotationMode==="random"?" selected":""}>Aleatório · sortear do catálogo de cartas</option></select></label>
+      <label class="raid-wide">Intervalo para trocar o Boss (horas)<input id="cpRaidRotationHours" type="number" min="1" max="720" step="1" value="${Math.max(1,Math.min(720,Math.floor(+r.rotationHours||24)))}"></label>
+      <label class="raid-wide">Filtro de cartas para o sorteio<select id="cpRaidCardFilter">${typeOpts}</select></label>
+      <div class="raid-wide cp-rank-filter"><b>Quais ranks podem aparecer?</b><div class="cp-rank-actions"><button type="button" class="bt gh" data-cp-raid-ranks-all>Selecionar todos</button><button type="button" class="bt gh" data-cp-raid-ranks-none>Limpar seleção</button></div><div class="cp-rank-grid">${rankChecks}</div></div>
+      <div class="raid-wide cp-raid-pool-wrap"><b>Bosses escolhidos pelo ADM (usado no modo “Lista do ADM”)</b><div class="cp-raid-pool">${rotationOpts}</div><small>Marque os Bosses que podem aparecer na rotação. No modo aleatório, essa lista é ignorada.</small></div>
+      <p class="raid-wide mut" id="cpRaidFilterCount">${raidFilteredCards(r.rotationFilter||"no-special",currentRanks).length} cartas disponíveis com os filtros atuais.</p>
+      <label class="raid-wide">Boss fixo (usado no modo manual)<select id="cpRaidCard">${opts}</select></label>
+      <label class="raid-wide cp-raid-auto-toggle"><input id="cpRaidAuto" type="checkbox" ${auto?"checked":""}> Escalar automaticamente por rank (dificuldade e recompensas)</label>
+      <div class="raid-wide cp-raid-scale-editor"><b>Balanceamento automático por rank</b><p>Estes valores mantêm o balanceamento atual do jogo. Edite cada rank para controlar força e recompensas; eles só são usados quando o balanceamento automático está ativado.</p><button type="button" class="bt gh" data-cp-raid-scale-reset>Restaurar valores originais</button><div class="cp-raid-scale-table">${raidScaleEditor}</div></div>
+      <label>Força do Boss (×)<input id="cpRaidPower" type="number" min="2" max="200" step="1" value="${auto?autoVals.power:manual.power}" ${auto?"disabled":""}></label>
       <label>Jogadores (máx. 4)<input id="cpRaidPlayers" type="number" min="2" max="4" step="1" value="${+r.maxPlayers||4}"></label>
-      <label>Fragmentos por vitória<input id="cpRaidFrag" type="number" min="0" step="1" value="${r.fragments??600}"></label>
-      <label>Pacotes por vitória<input id="cpRaidPacks" type="number" min="0" max="20" step="1" value="${r.packs??1}"></label>
+      <label>Fragmentos por vitória<input id="cpRaidFrag" type="number" min="0" step="1" value="${auto?autoVals.fragments:manual.fragments}" ${auto?"disabled":""}></label>
+      <label>Pacotes por vitória<input id="cpRaidPacks" type="number" min="0" max="100" step="1" value="${auto?autoVals.packs:manual.packs}" ${auto?"disabled":""}></label>
       <label class="raid-wide">Como a carta Boss será entregue<select id="cpRaidDrop">
         <option value="chance"${(r.dropMode||"chance")==="chance"?" selected":""}>Chance configurável por jogador</option>
         <option value="all"${r.dropMode==="all"?" selected":""}>Garantida para todos os participantes</option>
         <option value="none"${r.dropMode==="none"?" selected":""}>Nunca vem para os jogadores</option>
         <option value="damage"${r.dropMode==="damage"?" selected":""}>Somente quem causou mais dano</option>
       </select></label>
-      <label class="raid-wide">Chance da carta (%)<input id="cpRaidChance" type="number" min="0" max="100" step="1" value="${r.dropChance??25}"></label>
-    </div><p class="mut">A opção “mais dano” considera o dano real causado ao Boss durante toda a luta. Em empate, vence o primeiro participante da mesa.</p><button class="bt cy" data-raid-action="save-admin">Salvar configuração</button><button class="bt gh" data-raid-action="close">Fechar</button>`);
+      <label class="raid-wide">Chance da carta (%)<input id="cpRaidChance" type="number" min="0" max="100" step="1" value="${auto?autoVals.dropChance:manual.dropChance}" ${auto?"disabled":""}></label>
+    </div><p class="mut" id="cpRaidScalePreview">${R[picked.r][0]} · Força ×${autoVals.power} · ${autoVals.fragments} fragmentos · ${autoVals.packs} pacotes · ${autoVals.dropChance}% de chance de obter a carta.</p><p class="mut">A opção “mais dano” considera o dano real causado ao Boss durante toda a luta. Em empate, vence o primeiro participante da mesa.</p><button class="bt cy" data-raid-action="save-admin">Salvar configuração</button><button class="bt gh" data-raid-action="close">Fechar</button>`);
+    const cardSel=g("cpRaidCard"),autoSel=g("cpRaidAuto"),filterSel=g("cpRaidCardFilter"),rankRoot=g("cpm"),getRanks=()=>[...rankRoot.querySelectorAll("[data-cp-raid-rank]:checked")].map(x=>x.dataset.cpRaidRank);
+    rankRoot.querySelector("[data-cp-raid-scale-reset]")?.addEventListener("click",()=>{R.forEach((row,i)=>{const rank=row[0],v=RAID_RANK_SCALE[i];for(const field of ["power","fragments","packs","dropChance"]){const input=rankRoot.querySelector(`[data-cp-raid-scale-rank="${rank}"][data-cp-raid-scale-field="${field}"]`);if(input)input.value=v[field]}});refresh();toast("Valores originais da Raid restaurados. Salve para aplicar.")});
+    const refresh=()=>{const c=byId(cardSel&&cardSel.value),v=raidAutoValues(c),enabled=!!(autoSel&&autoSel.checked);["cpRaidPower","cpRaidFrag","cpRaidPacks","cpRaidChance"].forEach(id=>{const el=g(id);if(el){el.disabled=enabled;if(enabled)el.value=id==="cpRaidPower"?v.power:id==="cpRaidFrag"?v.fragments:id==="cpRaidPacks"?v.packs:v.dropChance}});const preview=g("cpRaidScalePreview");if(preview&&c)preview.textContent=`${R[c.r][0]} · Força ×${v.power} · ${v.fragments} fragmentos · ${v.packs} pacotes · ${v.dropChance}% de chance de obter a carta.`};
+    const refreshFilterCount=()=>{const el=g("cpRaidFilterCount");if(el)el.textContent=`${raidFilteredCards(filterSel?.value||"no-special",getRanks()).length} cartas disponíveis com os filtros atuais.`};
+    autoSel&&autoSel.addEventListener("change",refresh);cardSel&&cardSel.addEventListener("change",refresh);filterSel&&filterSel.addEventListener("change",refreshFilterCount);rankRoot.querySelectorAll("[data-cp-raid-rank]").forEach(x=>x.addEventListener("change",refreshFilterCount));rankRoot.querySelector("[data-cp-raid-ranks-all]")?.addEventListener("click",()=>{rankRoot.querySelectorAll("[data-cp-raid-rank]").forEach(x=>x.checked=true);refreshFilterCount()});rankRoot.querySelector("[data-cp-raid-ranks-none]")?.addEventListener("click",()=>{rankRoot.querySelectorAll("[data-cp-raid-rank]").forEach(x=>x.checked=false);refreshFilterCount()});
   }
 
+  const raidScreenKey=r=>!r?"none":r.rotationMode==="manual"?`manual:${r.cardId}`:`${r.rotationMode}:${Math.floor(Math.max(0,Date.now()-(r.rotationMode==="random"?(+ADM.raidBoss?.rotationStartedAt||0):0))/(Math.max(1,+r.rotationHours||24)*3600000))}:${r.cardId}`;
   function raidMenuDraw(){
-    const r=raidCfg(),c=r&&byId(r.cardId),max=r?r.maxPlayers-1:3;
+    const r=raidCfg(),c=r&&byId(r.cardId),max=r?r.maxPlayers-1:3;RAID_MENU_CYCLE=raidScreenKey(r);
     modal(`<h4>⚔️ Boss Raid · chamar equipe</h4>${c?`<div class="cvb"><p><b>Boss:</b> ${safeName(c.n)} · força ×${r.power}<br><b>Recompensa:</b> ${r.fragments} fragmentos · ${r.packs} pacote(s)<br><b>Vagas:</b> até ${r.maxPlayers} jogadores contando você</p></div>`:"<p>O ADM ainda não configurou uma carta Boss.</p>"}<p>Escolha até ${max} amigos para convidar. O ataque começa quando pelo menos duas pessoas estiverem na sala.</p><div class="raid-list">${RAID_PEOPLE.map(p=>`<button class="raid-player${RAID_SELECTED.includes(p.id)?" sel":""}" data-raid-pick="${safeName(p.id)}">${p.f?`<img src="${safeName(p.f)}" alt="">`:`<span class="avatar">👤</span>`}<span><b>${safeName(p.n)}</b><small>${RAID_SELECTED.includes(p.id)?"✓ Selecionado":"Toque para selecionar"}</small></span></button>`).join("")||"<p>Nenhum amigo disponível para convidar.</p>"}</div><button class="bt cy" data-raid-action="create" ${!c||!RAID_SELECTED.length?"disabled":""}>Criar sala e convidar (${RAID_SELECTED.length}/${max})</button><button class="bt gh" data-raid-action="close">Cancelar</button>`);
   }
 
-  window.cpSoloBossAvailable=()=>!!raidCfg();
-  function raidSoloPrompt(){const r=raidCfg(),c=r&&byId(r.cardId);if(!c)return toast("O ADM ainda não configurou uma carta Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");modal(`<h4>👑 Enfrentar Boss sozinho</h4><div class="cvb"><p><b>${safeName(c.n)}</b></p><p>O Boss entra como <b>uma única carta</b>, com força ampliada e apenas uma vida. Quando essa carta cair, a luta termina.</p><p>Entre com um deck melhorado e habilidades preparadas. A batalha é local e não cria sala online.</p></div><button class="bt cy" data-raid-action="solo-start">Enfrentar sozinho</button><button class="bt gh" data-raid-action="close">Voltar</button>`)}
-  function raidSoloStart(){const r=raidCfg(),c=r&&byId(r.cardId),raw=dkv()||[],u=raw.map(x=>{const cardData=x&&x.c?x.c:typeof x==="string"?byId(x):x;if(!cardData)return null;return{c:cardData,lv:lvl(cardData),s:1}}).filter(Boolean);if(!r||!c)return toast("O ADM ainda não configurou uma carta Boss.");if(u.length<12)return toast("Monte um deck com 12 cartas antes de enfrentar o Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");const scale=Math.max(2,+r.power||12)*1.35,bossDeck=[{c,lv:0,s:scale}];zgo({n:ME.n||"Você",u},{n:"👑 Boss · desafio solo",u:bossDeck},{m:"a",k:0,ai:2,b:0,soloBoss:1,singleBoss:1,raidConfig:{fragments:+r.fragments||0,packs:+r.packs||0,bossName:c.n,cardId:c.id,dropMode:r.dropMode||"none",dropChance:+r.dropChance||0}})}
+  window.cpSoloBossAvailable=()=>raidUnlocked()&&!!raidCfg();
+  function raidSoloPrompt(){if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");const r=raidCfg(),c=r&&byId(r.cardId);if(!c)return toast("O ADM ainda não configurou uma carta Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");modal(`<h4>👑 Enfrentar Boss sozinho</h4><div class="cvb"><p><b>${safeName(c.n)}</b></p><p>O Boss entra como <b>uma única carta</b>, com força ampliada e apenas uma vida. Quando essa carta cair, a luta termina.</p><p>Entre com um deck melhorado e habilidades preparadas. A batalha é local e não cria sala online.</p></div><button class="bt cy" data-raid-action="solo-start">Enfrentar sozinho</button><button class="bt gh" data-raid-action="close">Voltar</button>`)}
+  function raidSoloStart(){if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");const r=raidCfg(),c=r&&byId(r.cardId),raw=dkv()||[],u=raw.map(x=>{const cardData=x&&x.c?x.c:typeof x==="string"?byId(x):x;if(!cardData)return null;return{c:cardData,lv:lvl(cardData),s:1}}).filter(Boolean);if(!r||!c)return toast("O ADM ainda não configurou uma carta Boss.");if(u.length<12)return toast("Monte um deck com 12 cartas antes de enfrentar o Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");const scale=Math.max(2,+r.power||12)*1.35,bossDeck=[{c,lv:0,s:scale}];zgo({n:ME.n||"Você",u},{n:"👑 Boss · desafio solo",u:bossDeck},{m:"a",k:0,ai:2,b:0,soloBoss:1,singleBoss:1,raidConfig:{fragments:+r.fragments||0,packs:+r.packs||0,bossName:c.n,cardId:c.id,dropMode:r.dropMode||"none",dropChance:+r.dropChance||0}})}
   function raidMenuOpen(){
-    const r=raidCfg(),c=r&&byId(r.cardId);
+    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");
+    const r=raidCfg(),c=r&&byId(r.cardId);RAID_MENU_CYCLE=raidScreenKey(r);
     if(!c)return toast("O ADM ainda não configurou uma carta Boss.");
     if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
     modal(`<h4>👑 Desafio Boss</h4><div class="cvb"><p><b>${safeName(c.n)}</b></p><p>Enfrente a mesma carta Boss sozinho ou reúna uma equipe. O Boss é uma única carta; quando ela for derrotada, a luta acaba.</p></div><div class="cp-boss-choice"><button class="bt cy" data-raid-action="choose-solo">⚔️ Modo solo</button><button class="bt" data-raid-action="choose-team">👥 Em equipe</button></div><button class="bt gh" data-raid-action="close">Cancelar</button>`);
   }
+  // Se o jogador deixar o menu da Raid aberto até virar o ciclo, atualiza o Boss exibido.
+  setInterval(()=>{const heading=$("cpm")?.querySelector("h4");if(!heading||!/^⚔️ Boss Raid · chamar equipe$|^👑 Desafio Boss$/.test(heading.textContent||""))return;const r=raidCfg();if(!r||r.rotationMode==="manual")return;const key=raidScreenKey(r);if(key!==RAID_MENU_CYCLE){if(heading.textContent==="👑 Desafio Boss")raidMenuOpen();else raidMenuDraw()}},15000);
   async function raidTeamMenuOpen(){
+    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");
     if(!U||!U.uid)return toast("Entre na sua conta para iniciar um Boss Raid.");
     if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
     if(!raidCfg())return toast("O ADM ainda não configurou uma carta Boss.");
@@ -5726,6 +5952,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   }
 
   async function raidCreate(){
+    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");
     const r=raidCfg(),c=r&&byId(r.cardId),dk=stats().dk;
     if(!r||!c)return toast("O ADM ainda não configurou o Boss.");
     if(!dk)return toast("Você precisa de 12 cartas diferentes para participar.");
@@ -5741,6 +5968,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   }
 
   async function raidJoin(id){
+    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");
     const dk=stats().dk;if(!dk)return toast("Você precisa de 12 cartas diferentes para participar.");
     if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
     try{
@@ -5795,7 +6023,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
       snap.docChanges().forEach(ch=>{
         if(ch.type!=="added")return;
         const d=ch.doc.data(),id=ch.doc.id;
-        if(d.m!=="boss"||d.s!=="w"||(d.pl||[]).includes(U.uid)||d.t<Date.now()-3e5||window.LV||bt())return;
+        if(!raidUnlocked()||d.m!=="boss"||d.s!=="w"||(d.pl||[]).includes(U.uid)||d.t<Date.now()-3e5||window.LV||bt())return;
         RAID_INVITES[id]=d;
         const c=byId(d.raid&&d.raid.cardId);
         modal(`<h4>⚔️ Convite para Boss Raid</h4><p><b>${safeName(d.hn||"Um amigo")}</b> chamou você para enfrentar <b>${safeName(c&&c.n||d.raid&&d.raid.bossName||"um Boss")}</b> em equipe.</p><p>${(d.pl||[]).length}/${d.maxPlayers||4} jogadores na sala.</p><button class="bt cy" data-raid-action="accept" data-raid-id="${safeName(id)}">Aceitar convite</button><button class="bt gh" data-raid-action="decline" data-raid-id="${safeName(id)}">Recusar</button>`);
@@ -6040,14 +6268,21 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
       if(!(typeof AD!=="undefined"&&AD))return toast("Apenas o ADM pode salvar esta configuração.");
       const cardId=g("cpRaidCard")&&g("cpRaidCard").value;
       if(!byId(cardId))return toast("Escolha uma carta válida para o Boss.");
-      const power=Number(g("cpRaidPower")&&g("cpRaidPower").value),players=Number(g("cpRaidPlayers")&&g("cpRaidPlayers").value),fragments=Number(g("cpRaidFrag")&&g("cpRaidFrag").value),packs=Number(g("cpRaidPacks")&&g("cpRaidPacks").value),dropMode=g("cpRaidDrop")&&g("cpRaidDrop").value,dropChance=Number(g("cpRaidChance")&&g("cpRaidChance").value);
-      if(!Number.isFinite(power)||power<2||power>40)return toast("A força do Boss precisa ficar entre 2 e 40.");
+      const autoBalance=!!(g("cpRaidAuto")&&g("cpRaidAuto").checked),pickedCard=byId(cardId),autoValues=raidAutoValues(pickedCard),power=autoBalance?autoValues.power:Number(g("cpRaidPower")&&g("cpRaidPower").value),players=Number(g("cpRaidPlayers")&&g("cpRaidPlayers").value),fragments=autoBalance?autoValues.fragments:Number(g("cpRaidFrag")&&g("cpRaidFrag").value),packs=autoBalance?autoValues.packs:Number(g("cpRaidPacks")&&g("cpRaidPacks").value),dropMode=g("cpRaidDrop")&&g("cpRaidDrop").value,dropChance=autoBalance?autoValues.dropChance:Number(g("cpRaidChance")&&g("cpRaidChance").value);
+      if(!autoBalance&&(!Number.isFinite(power)||power<2||power>200))return toast("A força do Boss precisa ficar entre 2 e 200.");
       if(!Number.isInteger(players)||players<2||players>4)return toast("A Raid precisa permitir de 2 a 4 jogadores.");
-      if(!Number.isFinite(fragments)||fragments<0)return toast("A recompensa em fragmentos não pode ser negativa.");
-      if(!Number.isInteger(packs)||packs<0||packs>20)return toast("A quantidade de pacotes precisa ficar entre 0 e 20.");
+      if(!autoBalance&&!Number.isFinite(fragments)||(!autoBalance&&fragments<0))return toast("A recompensa em fragmentos não pode ser negativa.");
+      if(!autoBalance&&(!Number.isInteger(packs)||packs<0||packs>100))return toast("A quantidade de pacotes precisa ficar entre 0 e 100.");
       if(!["chance","all","none","damage"].includes(dropMode))return toast("Escolha uma regra válida para entregar a carta Boss.");
-      if(!Number.isFinite(dropChance)||dropChance<0||dropChance>100)return toast("A chance da carta precisa ficar entre 0 e 100%.");
-      ADM.raidBoss={cardId,power:Math.floor(power),maxPlayers:players,fragments:Math.floor(fragments),packs,dropMode,dropChance};
+      if(!autoBalance&&(!Number.isFinite(dropChance)||dropChance<0||dropChance>100))return toast("A chance da carta precisa ficar entre 0 e 100%.");
+      const rotationMode=g("cpRaidRotationMode")?.value==="random"?"random":g("cpRaidRotationMode")?.value==="auto"?"auto":"manual",rotationHours=Math.floor(+(g("cpRaidRotationHours")&&g("cpRaidRotationHours").value)||24),rotationIds=[...document.querySelectorAll("[data-cp-raid-pool]:checked")].map(o=>o.dataset.cpRaidPool).filter(id=>byId(id)),rotationFilter=g("cpRaidCardFilter")?.value||"no-special",rotationRanks=[...document.querySelectorAll("[data-cp-raid-rank]:checked")].map(o=>o.dataset.cpRaidRank),eligibleRaidCards=raidFilteredCards(rotationFilter,rotationRanks);
+      if(!Number.isInteger(rotationHours)||rotationHours<1||rotationHours>720)return toast("O intervalo da Raid precisa ficar entre 1 e 720 horas.");
+      if(rotationMode==="random"&&!rotationRanks.length)return toast("Selecione pelo menos um rank para o sorteio da Raid.");
+      if(rotationMode==="auto"&&rotationIds.length<2)return toast("Marque pelo menos dois Bosses para a rotação da lista do ADM.");
+      if(rotationMode==="random"&&eligibleRaidCards.length<1)return toast("Nenhuma carta atende aos filtros. Escolha mais ranks ou amplie o filtro da Raid.");
+      const rankScale={};
+      for(const row of R){const rank=row[0],read=field=>Math.floor(+(document.querySelector(`[data-cp-raid-scale-rank="${rank}"][data-cp-raid-scale-field="${field}"]`)?.value));const v={power:read("power"),fragments:read("fragments"),packs:read("packs"),dropChance:read("dropChance")};if(!Number.isInteger(v.power)||v.power<2||v.power>200||!Number.isInteger(v.fragments)||v.fragments<0||v.fragments>1000000000||!Number.isInteger(v.packs)||v.packs<0||v.packs>100||!Number.isInteger(v.dropChance)||v.dropChance<0||v.dropChance>100)return toast(`Revise os valores automáticos do rank ${rank}.`);rankScale[rank]=v;}
+      ADM.raidBoss={...ADM.raidBoss,cardId,rotationMode,rotationHours,rotationIds:rotationIds.length?rotationIds:[cardId],rotationStartedAt:Date.now(),rotationFilter,rotationRanks,rotationRank:"all",autoBalance,rankScale,power:Math.floor(power),maxPlayers:players,fragments:Math.floor(fragments),packs,dropMode,dropChance};
       sADM();
       let cloudSaved=false;
       if(U&&canAdm){
@@ -6123,12 +6358,12 @@ function cpxConfetti(){const f=document.createDocumentFragment(),cs=["#ffd24a","
  * Ordem de carregamento obrigatória; ver assets/manifest.json.
  */
 (function(){var q=function(i){return document.getElementById(i)};
-function on(){var b=q('sndb');return !(b&&b.textContent.indexOf('🔇')>-1)}
+function on(){try{return typeof SND!=='undefined'?!!SND.on:localStorage.getItem('colprimata_som')!=='0'}catch(e){return true}}
 function cl(){var o=q('yrm');o&&o.remove()}
 function op(){if(q('yrm'))return cl();var o=document.createElement('div');o.id='yrm';
 o.innerHTML='<div class="yb"><h3>Menu</h3><button data-y="s">'+(on()?'🔊 Som: ligado':'🔇 Som: desligado')+'</button><button data-y="p">👤 Perfil, jogadores e batalha em grupo</button><button data-y="r">🏆 Ranking semanal</button><button data-y="c">🏅 Conquistas, títulos e vitrine</button><button data-y="l">🛒 Loja diária</button><button data-y="lite">⚡ Modo leve / reduzir animações: '+(window.cpLite?'ligado':'desligado')+'</button><button data-y="a">🛠 Ajustes e Modo ADM</button><small>Tema</small><div class="yt">'+window.tmHtml()+'</div><button data-y="x" class="g">Fechar</button><small>Criado por Yrogerg</small></div>';
 o.onclick=function(e){var b=e.target.closest('[data-y]');if(!b){if(e.target===o)cl();return}var k=b.dataset.y;
-if(k=='s'){var s=q('sndb');s&&s.click();b.textContent=on()?'🔊 Som: ligado':'🔇 Som: desligado'}
+if(k=='s'){try{if(typeof SND!=='undefined')SND.toggle()}catch(e){}b.textContent=on()?'🔊 Som: ligado':'🔇 Som: desligado'}
 else if(k=='x')cl();else if(k=='r'){cl();window.cpRanking&&window.cpRanking()}else if(k=='c'){cl();window.cpOpenAchievements&&window.cpOpenAchievements()}else if(k=='l'){cl();window.cpOpenShop&&window.cpOpenShop()}else if(k=='lite'){window.cpToggleLite&&window.cpToggleLite();cl();op()}else if(k.charAt(0)=='t'){window.setTema(k.slice(1));o.querySelector('.yt').innerHTML=window.tmHtml()}else{cl();var t=q(k=='p'?'cpchip':'gear');if(t)t.click();else if(k=='p')alert('Entre na conta para abrir o perfil.')}};
 document.body.appendChild(o)}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-yu]');if(b){e.stopPropagation();e.preventDefault();op()}},true);
@@ -7006,6 +7241,10 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
   S.wish=Array.isArray(S.wish)?S.wish.slice(0,10):[];
   S.shopBought=S.shopBought&&typeof S.shopBought==="object"?S.shopBought:{};
   ADM.shop=Array.isArray(ADM.shop)?ADM.shop:[];
+  ADM.shopSettings=ADM.shopSettings&&typeof ADM.shopSettings==="object"?ADM.shopSettings:{};
+  const cpShopRanksLegacy={all:R.map(x=>x[0]),low:["F","E","D"],mid:["C","B"],high:["A","S","SS","SSS"],"f-c":["F","E","D","C"],"b-sss":["B","A","S","SS","SSS"]};
+  const cpShopSavedRanks=Array.isArray(ADM.shopSettings.rankRanks)?ADM.shopSettings.rankRanks.filter(v=>R.some(x=>x[0]===v)):(cpShopRanksLegacy[ADM.shopSettings.rankFilter]||(["F","E","D","C","B","A","S","SS","SSS"].includes(ADM.shopSettings.rankFilter)?[ADM.shopSettings.rankFilter]:R.map(x=>x[0])));
+  ADM.shopSettings={mode:["manual","random"].includes(ADM.shopSettings.mode)?ADM.shopSettings.mode:"auto",intervalHours:Math.max(1,Math.min(720,Math.floor(+ADM.shopSettings.intervalHours||24))),autoPricing:ADM.shopSettings.autoPricing!==false,manualIds:Array.isArray(ADM.shopSettings.manualIds)?ADM.shopSettings.manualIds.slice(0,3):[],catalogPrice:Math.max(1,Math.floor(+ADM.shopSettings.catalogPrice||500)),randomCount:Math.max(1,Math.min(100,Math.floor(+ADM.shopSettings.randomCount||3))),cardFilter:( ["all","no-special","special-only","packages-only","no-pack","arena-only","no-arena","with-image","without-image"].includes(ADM.shopSettings.cardFilter)?ADM.shopSettings.cardFilter:"no-special"),rankRanks:cpShopSavedRanks.length?cpShopSavedRanks:R.map(x=>x[0]),rankPrices:ADM.shopSettings.rankPrices&&typeof ADM.shopSettings.rankPrices==="object"?{...ADM.shopSettings.rankPrices}:{},revision:Math.max(1,+ADM.shopSettings.revision||1)};
 
   // Preferências são locais: não alteram regras nem salvam dados de coleção na nuvem.
   let prefs={};try{prefs=JSON.parse(localStorage.getItem("cp_ui_prefs")||"{}")}catch(e){}
@@ -7082,21 +7321,39 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     root.querySelector("[data-cp-save-wish]").addEventListener("click",()=>{S.wish=temp.slice(0,10);save();window.cpPublishProfile&&window.cpPublishProfile();root.hidden=true;toast("⭐ Lista de desejos atualizada!")});
   };
 
-  // Daily rotating store: ADM chooses the pool; the same three offers remain all day for everyone.
+  // Loja diária v2: rotação automática por horas ou seleção manual fixa do ADM.
   const validShopOffer=o=>o&&((o.kind==="card"&&ALL.some(c=>c.id===o.item))||(o.kind==="pack"&&P.some(p=>p.id===o.item)))&&Number.isFinite(+o.price)&&+o.price>0&&o.active!==false;
-  const dailyShop=()=>{const pool=ADM.shop.filter(validShopOffer);if(!pool.length)return[];const start=((day()%pool.length)+pool.length)%pool.length;return Array.from({length:Math.min(3,pool.length)},(_,i)=>pool[(start+i)%pool.length])};
+  const shopIsArena=c=>!!c&&(c.p?.id==="are"||/^are\d+$/i.test(String(c.id||"")));
+  const shopIsSpecial=c=>!!c&&(c.p?.id==="ind"||shopIsArena(c)||!!c.sl||+c.ga>0||+c.p?.esp>0||+c.p?.ate>0);
+  const CP_RANK_NAMES=R.map(x=>x[0]);
+  const shopLegacyRanks=value=>({all:CP_RANK_NAMES,low:["F","E","D"],mid:["C","B"],high:["A","S","SS","SSS"],"f-c":["F","E","D","C"],"b-sss":["B","A","S","SS","SSS"]}[value]||(["F","E","D","C","B","A","S","SS","SSS"].includes(value)?[value]:CP_RANK_NAMES));
+  const shopCardMatches=(c,filter,ranks)=>{if(!c)return false;const arena=shopIsArena(c),special=shopIsSpecial(c),r=Math.max(0,Math.min(8,+c.r||0)),packaged=P.some(p=>p.id===c.p?.id),hasImage=!!(c.img||IMG[c.id]);if(filter==="no-special"&&special||filter==="special-only"&&!special||filter==="packages-only"&&!packaged||filter==="no-pack"&&packaged||filter==="arena-only"&&!arena||filter==="no-arena"&&arena||filter==="with-image"&&!hasImage||filter==="without-image"&&hasImage)return false;return Array.isArray(ranks)&&ranks.includes(R[r][0])};
+  const shopFilteredCards=(filter,ranks)=>ALL.filter(c=>shopCardMatches(c,filter,ranks));
+  const shopHash=value=>{let h=2166136261;const t=String(value);for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+  const shopStableOrder=(items,seed)=>items.slice().sort((a,b)=>shopHash(seed+"|"+a.id)-shopHash(seed+"|"+b.id));
+  const SHOP_RANK_PRICES=[80,120,200,300,450,700,1800,4500,12000];
+  const shopSettings=()=>{const x=ADM.shopSettings&&typeof ADM.shopSettings==="object"?ADM.shopSettings:{},ranks=Array.isArray(x.rankRanks)?x.rankRanks.filter(v=>CP_RANK_NAMES.includes(v)):shopLegacyRanks(x.rankFilter||"all"),rankPrices={};CP_RANK_NAMES.forEach((rank,i)=>{const raw=x.rankPrices&&x.rankPrices[rank],n=raw==null?SHOP_RANK_PRICES[i]:Math.floor(+raw);rankPrices[rank]=Number.isFinite(n)?Math.max(1,Math.min(999999999,n)):SHOP_RANK_PRICES[i]});return{mode:["manual","random"].includes(x.mode)?x.mode:"auto",intervalHours:Math.max(1,Math.min(720,Math.floor(+x.intervalHours||24))),autoPricing:x.autoPricing!==false,manualIds:Array.isArray(x.manualIds)?x.manualIds:[],catalogPrice:Math.max(1,Math.floor(+x.catalogPrice||500)),randomCount:Math.max(1,Math.min(100,Math.floor(+x.randomCount||3))),cardFilter:["all","no-special","special-only","packages-only","no-pack","arena-only","no-arena","with-image","without-image"].includes(x.cardFilter)?x.cardFilter:"no-special",rankRanks:ranks.length?ranks:CP_RANK_NAMES.slice(),rankPrices,revision:Math.max(1,+x.revision||1)}};
+  const shopCycle=()=>{const x=shopSettings();return x.mode==="manual"?`manual-${x.revision}`:`${x.mode}-${Math.floor(Math.max(0,Date.now()-(x.mode==="random"?(+x.revision||0):0))/(x.intervalHours*3600000))}`};
+  const shopBuyKey=o=>shopCycle()+"_"+o.id;
+  const shopPrice=o=>{const cfg=shopSettings();if(cfg.autoPricing&&o.kind==="card"){const c=ALL.find(x=>x.id===o.item);if(c)return cfg.rankPrices[CP_RANK_NAMES[c.r]]||SHOP_RANK_PRICES[c.r]||SHOP_RANK_PRICES[0]}return Math.max(1,Math.floor(+o.price||1))};
+  const dailyShop=()=>{const cfg=shopSettings(),cycle=Math.floor(Math.max(0,Date.now()-(cfg.mode==="random"?(+cfg.revision||0):0))/(cfg.intervalHours*3600000));if(cfg.mode==="random"){const eligible=shopFilteredCards(cfg.cardFilter,cfg.rankRanks),draw=shopStableOrder(eligible,"shop:"+cycle).slice(0,cfg.randomCount);return draw.map(c=>({id:`shoprnd_${cycle}_${c.id}`,kind:"card",item:c.id,price:cfg.catalogPrice,active:true,generated:true}))}const pool=ADM.shop.filter(validShopOffer);if(!pool.length)return[];if(cfg.mode==="manual"){const fixed=cfg.manualIds.map(id=>pool.find(o=>o.id===id)).filter(Boolean).slice(0,3);return fixed.length?fixed:pool.slice(0,3)}const start=((cycle%pool.length)+pool.length)%pool.length;return Array.from({length:Math.min(3,pool.length)},(_,i)=>pool[(start+i)%pool.length])};
   const shopLabel=o=>o.kind==="card"?(ALL.find(c=>c.id===o.item)||{}).n:(P.find(p=>p.id===o.item)||{}).n;
   const shopIcon=o=>o.kind==="card"?"🎴":"📦";
+  const shopRotationLabel=()=>{const x=shopSettings();return x.mode==="manual"?"Ofertas escolhidas manualmente pelo ADM":x.mode==="random"?`Sorteio de até ${x.randomCount} cartas do catálogo · a cada ${x.intervalHours} hora(s)`:`Rotação das ofertas cadastradas · a cada ${x.intervalHours} hora(s)`};
+  let shopRenderedCycle="";
   function renderShop(){
+    shopRenderedCycle=shopCycle();
     const offers=dailyShop();
-    const html=offers.length?`<p>Três ofertas por dia, escolhidas pelo ADM. Cada oferta pode ser comprada uma vez por dia. Os preços usam fragmentos.</p><div class="cp-block">${offers.map(o=>{const k=day()+"_"+o.id,bought=!!S.shopBought[k];return `<div class="cp-row"><div style="flex:1"><b>${shopIcon(o)} ${escCP(shopLabel(o)||"Oferta")}</b><small>${o.kind==="card"?"Carta adicionada diretamente à coleção":"Pacote enviado para seus presentes"}</small></div><div style="text-align:right"><b>${fmt(+o.price)} 💎</b><button class="bt ${bought?"gh":"cy"}" style="width:auto;padding:8px 10px;font-size:.65rem;margin-top:5px" data-cp-buy="${escCP(o.id)}" ${bought?"disabled":""}>${bought?"Comprado hoje":"Comprar"}</button></div></div>`}).join("")}</div>`:`<div class="cp-block"><b>🛒 A loja está vazia</b><p>O ADM ainda não adicionou ofertas para a rotação diária.</p></div>`;
-    openExtra("🛒 Loja diária",html+`<p>As ofertas mudam à meia-noite no horário usado pelo jogo. Seu saldo atual: <b>${fmt(S.fr||0)} 💎</b>.</p>`);
+    const html=offers.length?`<p>${shopRotationLabel()}. Cada oferta pode ser comprada uma vez por rotação. Os preços usam fragmentos.</p><div class="cp-block">${offers.map(o=>{const k=shopBuyKey(o),bought=!!S.shopBought[k];return `<div class="cp-row"><div style="flex:1"><b>${shopIcon(o)} ${escCP(shopLabel(o)||"Oferta")}</b><small>${o.kind==="card"?`Carta · Rank ${R[(ALL.find(c=>c.id===o.item)||{r:0}).r][0]}`:"Pacote enviado para seus presentes"}</small></div><div style="text-align:right"><b>${fmt(shopPrice(o))} 💎</b><button class="bt ${bought?"gh":"cy"}" style="width:auto;padding:8px 10px;font-size:.65rem;margin-top:5px" data-cp-buy="${escCP(o.id)}" ${bought?"disabled":""}>${bought?"Comprado":"Comprar"}</button></div></div>`}).join("")}</div>`:`<div class="cp-block"><b>🛒 A loja está vazia</b><p>O ADM ainda não adicionou ofertas para a rotação.</p></div>`;
+    openExtra("🛒 Loja diária",html+`<p>Seu saldo atual: <b>${fmt(S.fr||0)} 💎</b>.</p>`);
   }
   window.cpOpenShop=renderShop;
+  // Se a loja continuar aberta quando terminar o intervalo, atualiza as ofertas sem exigir reabrir a tela.
+  setInterval(()=>{const root=$("cpExtra"),title=root&&root.querySelector(".cp-head h2");if(root&&!root.hidden&&title&&title.textContent==="🛒 Loja diária"&&shopRenderedCycle!==shopCycle())renderShop()},15000);
   function buyShop(id){
-    const o=ADM.shop.find(x=>x.id===id&&validShopOffer(x));if(!o)return toast("Essa oferta não está mais disponível.");
-    const k=day()+"_"+o.id;if(S.shopBought[k])return toast("Você já comprou essa oferta hoje.");
-    const price=Math.floor(+o.price);if((S.fr||0)<price)return toast("Você não tem fragmentos suficientes.");
+    const o=ADM.shop.find(x=>x.id===id&&validShopOffer(x))||dailyShop().find(x=>x.id===id&&validShopOffer(x));if(!o)return toast("Essa oferta não está mais disponível.");
+    const k=shopBuyKey(o);if(S.shopBought[k])return toast("Você já comprou essa oferta nesta rotação.");
+    const price=shopPrice(o);if((S.fr||0)<price)return toast("Você não tem fragmentos suficientes.");
     S.fr-=price;
     if(o.kind==="card"){const c=ALL.find(x=>x.id===o.item);if(!c){S.fr+=price;return toast("Carta não encontrada.")}S.inv[c.id]=(S.inv[c.id]||0)+1}
     else{if(typeof gift==="function")gift(o.item,1);else{S.fr+=price;return toast("Não consegui entregar o pacote.")}}
@@ -7114,10 +7371,14 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
 
   // ADM shop editor. Offers are stored inside ADM and follow the existing cloud backup/sync route.
   function openShopAdmin(){
-    const kind="card",cardOpts=ALL.map(c=>`<option value="${escCP(c.id)}">${R[c.r][0]} · ${escCP(c.n)}</option>`).join(""),packOpts=P.map(p=>`<option value="${escCP(p.id)}">${escCP(p.e||"📦")} ${escCP(p.n)}</option>`).join("");
-    const offers=ADM.shop.map(o=>`<div class="cp-row"><div style="flex:1"><b>${o.kind==="card"?"🎴":"📦"} ${escCP(shopLabel(o)||o.item)}</b><small>${o.kind==="card"?"Carta":"Pacote"} · ${fmt(+o.price||0)} 💎 · ${o.active===false?"pausada":"ativa"}</small></div><button class="bt gh" style="width:auto;padding:7px 9px" data-cp-del-shop="${escCP(o.id)}">Remover</button></div>`).join("")||"<p>Nenhuma oferta cadastrada.</p>";
-    const root=openExtra("🛒 Configurar loja diária",`<p>Adicione cartas ou pacotes à rotação. O jogo mostra até três por dia, em ordem rotativa; os preços são em fragmentos.</p><div class="cp-block"><label>Tipo<select id="cpShopKind"><option value="card">Carta</option><option value="pack">Pacote</option></select></label><label>Item<select id="cpShopItem">${cardOpts}</select></label><label>Preço em fragmentos<input id="cpShopPrice" type="number" min="1" step="1" value="500"></label><button class="bt cy" data-cp-add-shop>Adicionar oferta</button></div><div class="cp-block"><b>Ofertas cadastradas (${ADM.shop.length})</b>${offers}</div>`);
-    const k=root.querySelector("#cpShopKind"),sel=root.querySelector("#cpShopItem");k.addEventListener("change",()=>{sel.innerHTML=k.value==="card"?cardOpts:packOpts});
+    const kind="card",cardOpts=ALL.map(c=>`<option value="${escCP(c.id)}">${R[c.r][0]} · ${escCP(c.n)}</option>`).join(""),packOpts=P.map(p=>`<option value="${escCP(p.id)}">${escCP(p.e||"📦")} ${escCP(p.n)}</option>`).join(""),cfg=shopSettings(),cardFilterOpts=[["all","Todas as cartas"],["no-special","Todas, menos especiais"],["special-only","Somente especiais"],["packages-only","Somente de pacotes"],["no-pack","Fora dos pacotes"],["arena-only","Somente de arena"],["no-arena","Todas, menos arena"],["with-image","Somente com imagem"],["without-image","Somente sem imagem"]].map(([v,n])=>`<option value="${v}"${cfg.cardFilter===v?" selected":""}>${n}</option>`).join(""),shopRankOptions=R.map(x=>x[0]),shopRankChecks=shopRankOptions.map(x=>`<label class="cp-rank-chip"><input type="checkbox" data-cp-shop-rank="${x}"${cfg.rankRanks.includes(x)?" checked":""}><b>${x}</b></label>`).join("");
+    const offers=ADM.shop.map(o=>`<div class="cp-row"><div style="flex:1"><b>${o.kind==="card"?"🎴":"📦"} ${escCP(shopLabel(o)||o.item)}</b><small>${o.kind==="card"?"Carta":"Pacote"} · ${fmt(shopPrice(o))} 💎${cfg.autoPricing&&o.kind==="card"?" · preço por rank":" · preço manual"} · ${o.active===false?"pausada":"ativa"}</small></div><button class="bt gh" style="width:auto;padding:7px 9px" data-cp-del-shop="${escCP(o.id)}">Remover</button></div>`).join("")||"<p>Nenhuma oferta cadastrada.</p>";
+    const manualList=ADM.shop.filter(validShopOffer).map(o=>`<label class="cp-row" style="justify-content:flex-start"><input type="checkbox" data-cp-shop-manual="${escCP(o.id)}" ${cfg.manualIds.includes(o.id)?"checked":""} style="width:18px;flex:none"><span style="flex:1"><b>${escCP(shopLabel(o)||o.item)}</b><small>${o.kind==="card"?"Carta":"Pacote"} · ${fmt(shopPrice(o))} 💎</small></span></label>`).join("")||"<p>Cadastre ofertas para escolher a rotação manual.</p>";
+    const rankPriceFields=CP_RANK_NAMES.map(rank=>`<label class="cp-shop-price-row"><b>${rank}</b><input type="number" min="1" max="999999999" step="1" data-cp-shop-price-rank="${rank}" value="${cfg.rankPrices[rank]}"><small>fragmentos</small></label>`).join("");
+    const root=openExtra("🛒 Configurar loja diária",`<p>Escolha entre ofertas cadastradas ou sorteio do catálogo global. O modo aleatório permite escolher quantas cartas aparecem juntas, combinar qualquer conjunto dos nove ranks e aplicar filtros adicionais de origem e imagem. Todos os jogadores veem o mesmo resultado durante o ciclo.</p>
+      <div class="cp-block"><b>1. Como a loja funciona</b><label>Modo<select id="cpShopMode"><option value="auto" ${cfg.mode==="auto"?"selected":""}>Automático · girar ofertas cadastradas</option><option value="random" ${cfg.mode==="random"?"selected":""}>Aleatório · sortear cartas existentes</option><option value="manual" ${cfg.mode==="manual"?"selected":""}>Manual · ofertas escolhidas</option></select></label><label>Intervalo da rotação (horas)<input id="cpShopHours" type="number" min="1" max="720" step="1" value="${cfg.intervalHours}"></label><label>Quantidade de cartas aleatórias ao mesmo tempo<input id="cpShopRandomCount" type="number" min="1" max="100" step="1" value="${cfg.randomCount}"></label><div class="cp-block"><b>Filtros do sorteio de cartas</b><label>Quais cartas podem aparecer?<select id="cpShopCardFilter">${cardFilterOpts}</select></label><div class="cp-rank-filter"><b>Quais ranks podem aparecer?</b><div class="cp-rank-actions"><button type="button" class="bt gh" data-cp-shop-ranks-all>Selecionar todos</button><button type="button" class="bt gh" data-cp-shop-ranks-none>Limpar seleção</button></div><div class="cp-rank-grid">${shopRankChecks}</div></div><p class="mut" id="cpShopFilterCount">${shopFilteredCards(cfg.cardFilter,cfg.rankRanks).length} cartas disponíveis com os filtros atuais.</p><label>Preço fixo do sorteio (quando o preço por rank estiver desligado)<input id="cpShopCatalogPrice" type="number" min="1" step="1" value="${cfg.catalogPrice}"></label><small>No modo aleatório, a loja sorteia a quantidade configurada de cartas diferentes por ciclo, sem repetir na mesma rotação. Se o catálogo tiver menos cartas elegíveis que a quantidade definida, não salva a configuração.</small></div><label class="cp-row" style="justify-content:flex-start"><input type="checkbox" id="cpShopAutoPrice" ${cfg.autoPricing?"checked":""} style="width:18px;flex:none"><span><b>Preço automático por rank</b><small>F 80 · E 120 · D 200 · C 300 · B 450 · A 700 · S 1.800 · SS 4.500 · SSS 12.000 fragmentos</small></span></label><div class="cp-block cp-shop-price-editor"><b>Preços automáticos por rank</b><p>Valores iniciais preservados do jogo. Ajuste cada rank; estes preços valem para cartas sorteadas e ofertas de cartas quando o preço automático está ligado.</p><button type="button" class="bt gh" data-cp-shop-reset-prices>Restaurar preços originais</button><div class="cp-shop-price-grid">${rankPriceFields}</div></div><div class="cp-block"><b>Ofertas fixas (máximo 3 · usadas nos modos automático/manual)</b>${manualList}</div><button class="bt cy" data-cp-save-shop-settings>Salvar configuração da loja</button></div>
+      <div class="cp-block"><b>2. Adicionar oferta</b><label>Tipo<select id="cpShopKind"><option value="card">Carta</option><option value="pack">Pacote</option></select></label><label>Item<select id="cpShopItem">${cardOpts}</select></label><label>Preço manual em fragmentos<input id="cpShopPrice" type="number" min="1" step="1" value="500"></label><button class="bt cy" data-cp-add-shop>Adicionar oferta</button></div><div class="cp-block"><b>3. Catálogo (${ADM.shop.length})</b>${offers}</div>`);;
+    const k=root.querySelector("#cpShopKind"),sel=root.querySelector("#cpShopItem"),filterSel=root.querySelector("#cpShopCardFilter"),count=root.querySelector("#cpShopFilterCount"),getRanks=()=>[...root.querySelectorAll("[data-cp-shop-rank]:checked")].map(x=>x.dataset.cpShopRank);root.querySelector("[data-cp-shop-reset-prices]")?.addEventListener("click",()=>{CP_RANK_NAMES.forEach((rank,i)=>{const input=root.querySelector(`[data-cp-shop-price-rank="${rank}"]`);if(input)input.value=SHOP_RANK_PRICES[i]});toast("Preços originais restaurados. Salve para aplicar.")});const refreshFilterCount=()=>{const n=shopFilteredCards(filterSel?.value||"no-special",getRanks()).length;if(count)count.textContent=`${n} cartas disponíveis com os filtros atuais.`};filterSel?.addEventListener("change",refreshFilterCount);root.querySelectorAll("[data-cp-shop-rank]").forEach(x=>x.addEventListener("change",refreshFilterCount));root.querySelector("[data-cp-shop-ranks-all]")?.addEventListener("click",()=>{root.querySelectorAll("[data-cp-shop-rank]").forEach(x=>x.checked=true);refreshFilterCount()});root.querySelector("[data-cp-shop-ranks-none]")?.addEventListener("click",()=>{root.querySelectorAll("[data-cp-shop-rank]").forEach(x=>x.checked=false);refreshFilterCount()});k.addEventListener("change",()=>{sel.innerHTML=k.value==="card"?cardOpts:packOpts});
   }
 
   // Central de Operações: reúne os três controles administrativos em um único lugar.
@@ -7125,13 +7386,14 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     const drafts=(ADM.c||[]).filter(c=>c&&c.dr).length;
     const noPhoto=ALL.filter(c=>!(c.img||IMG[c.id])).length;
     const noStory=ALL.filter(c=>!String(c.d||"").trim()).length;
-    const validOffers=ADM.shop.filter(validShopOffer).length;
-    const boss=ADM.raidBoss&&byId(ADM.raidBoss.cardId);
-    const raidStatus=boss?`Configurado · ${escCP(boss.n)}`:"Ainda não configurado";
+    const shopCfg=shopSettings(),validOffers=shopCfg.mode==="random"?shopFilteredCards(shopCfg.cardFilter,shopCfg.rankRanks).length:ADM.shop.filter(validShopOffer).length;
+    const shopSummary=shopCfg.mode==="random"?`${validOffers} elegíveis · ${shopCfg.randomCount} cartas por ciclo · ${shopCfg.rankRanks.length} ranks · a cada ${shopCfg.intervalHours} h`:`${validOffers} ofertas cadastradas`;
+    const raidCfgSummary=ADM.raidBoss||{},boss=byId(raidCfgSummary.cardId),raidHours=Math.max(1,Math.min(720,Math.floor(+raidCfgSummary.rotationHours||24)));
+    const raidStatus=raidCfgSummary.rotationMode==="random"?`Sorteio do catálogo · a cada ${raidHours} h`:raidCfgSummary.rotationMode==="auto"?`Lista do ADM · ${(raidCfgSummary.rotationIds||[]).length} Bosses · a cada ${raidHours} h`:boss?`Boss fixo · ${escCP(boss.n)}`:"Ainda não configurado";
     openExtra("⚙ Central de Operações",`<p>Ferramentas de administração reunidas em uma única aba. Escolha o que deseja gerenciar.</p>
       <div class="cp-ops-grid">
         <button type="button" class="cp-ops-card" data-cp-admin="pending"><span class="cp-ops-icon">📋</span><span class="cp-ops-copy"><b>Pendências de cartas</b><small>${drafts} rascunhos · ${noPhoto} sem imagem · ${noStory} sem história</small></span><span class="cp-ops-arrow">›</span></button>
-        <button type="button" class="cp-ops-card" data-cp-admin="shop"><span class="cp-ops-icon">🛒</span><span class="cp-ops-copy"><b>Configurar loja diária</b><small>${validOffers} ofertas válidas na rotação</small></span><span class="cp-ops-arrow">›</span></button>
+        <button type="button" class="cp-ops-card" data-cp-admin="shop"><span class="cp-ops-icon">🛒</span><span class="cp-ops-copy"><b>Configurar loja diária</b><small>${shopSummary}</small></span><span class="cp-ops-arrow">›</span></button>
         <button type="button" class="cp-ops-card" data-cp-raid-config><span class="cp-ops-icon">⚔️</span><span class="cp-ops-copy"><b>Boss Raid cooperativa</b><small>${raidStatus}</small></span><span class="cp-ops-arrow">›</span></button>
       </div>
       <div class="cp-ops-note"><b>Organização do ADM</b><small>As opções ficam nesta central, sem atalhos soltos no cabeçalho. Os botões de iniciar a loja ou entrar em uma Raid para jogar continuam nos seus lugares próprios.</small></div>`);
@@ -7145,7 +7407,7 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
   }catch(e){console.warn("ficha da carta",e)}});
 
   // Menu-driven achievement and shop navigation uses buttons inside the shared extra panel.
-  document.addEventListener("click",e=>{
+  document.addEventListener("click",async e=>{
     const hub=e.target.closest&&e.target.closest("[data-cp-admin-hub]");
     if(hub){e.preventDefault();e.stopPropagation();openOpsHub();return}
     const claimBtn=e.target.closest&&e.target.closest("[data-cp-claim]");
@@ -7155,9 +7417,11 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     const showBtn=e.target.closest&&e.target.closest("[data-cp-save-showcase]");
     if(showBtn){const ids=[...document.querySelectorAll("#cpExtra [data-cp-show]")].map(x=>x.value).filter(Boolean);if(new Set(ids).size!==ids.length)return toast("Escolha três cartas diferentes.");S.showcase=ids.slice(0,3);save();window.cpPublishProfile&&window.cpPublishProfile();renderAchievements();toast("🎴 Vitrine atualizada!");return}
     const buyBtn=e.target.closest&&e.target.closest("[data-cp-buy]");if(buyBtn){buyShop(buyBtn.dataset.cpBuy);return}
+    const saveShop=e.target.closest&&e.target.closest("[data-cp-save-shop-settings]");
+    if(saveShop){const root=$("cpExtra"),mode=root.querySelector("#cpShopMode").value,hours=Math.floor(+root.querySelector("#cpShopHours").value),randomCount=Math.floor(+root.querySelector("#cpShopRandomCount").value),autoPricing=root.querySelector("#cpShopAutoPrice").checked,manualIds=[...root.querySelectorAll("[data-cp-shop-manual]:checked")].map(x=>x.dataset.cpShopManual),cardFilter=root.querySelector("#cpShopCardFilter").value,rankRanks=[...root.querySelectorAll("[data-cp-shop-rank]:checked")].map(x=>x.dataset.cpShopRank),catalogPrice=Math.floor(+root.querySelector("#cpShopCatalogPrice").value),rankPrices=Object.fromEntries(CP_RANK_NAMES.map(rank=>[rank,Math.floor(+root.querySelector(`[data-cp-shop-price-rank="${rank}"]`)?.value)])),eligible=shopFilteredCards(cardFilter,rankRanks).length;if(Object.entries(rankPrices).some(([,v])=>!Number.isInteger(v)||v<1||v>999999999))return toast("Os preços por rank devem ser números inteiros entre 1 e 999.999.999 fragmentos.");if(!Number.isInteger(hours)||hours<1||hours>720)return toast("O intervalo precisa ser de 1 a 720 horas.");if(!Number.isInteger(randomCount)||randomCount<1||randomCount>100)return toast("A quantidade aleatória da loja precisa ficar entre 1 e 100 cartas.");if(!Number.isInteger(catalogPrice)||catalogPrice<1)return toast("O preço fixo da loja precisa ser maior que zero.");if(mode==="random"&&!rankRanks.length)return toast("Selecione pelo menos um rank para o sorteio da loja.");if(manualIds.length>3)return toast("A loja manual aceita no máximo três ofertas.");if(mode==="manual"&&!manualIds.length)return toast("Escolha ao menos uma oferta para a loja manual.");if(mode==="random"&&eligible<randomCount)return toast(`O filtro encontrou ${eligible} cartas, mas você pediu ${randomCount}. Amplie os filtros ou reduza a quantidade.`);ADM.shopSettings={...shopSettings(),mode,intervalHours:hours,randomCount,autoPricing,manualIds,cardFilter,rankRanks,catalogPrice,rankPrices,revision:Date.now()};sADM();if(U&&canAdm&&ready){const ok=await pushAdm();if(!ok)return toast("Configuração salva neste aparelho, mas a nuvem não confirmou a sincronização.")}toast("✅ Configuração da loja salva.");openShopAdmin();return}
     const addShop=e.target.closest&&e.target.closest("[data-cp-add-shop]");
-    if(addShop){const root=$("cpExtra"),kind=root.querySelector("#cpShopKind").value,item=root.querySelector("#cpShopItem").value,price=Math.floor(+root.querySelector("#cpShopPrice").value);if(!item||!Number.isFinite(price)||price<=0)return toast("Escolha um item e um preço acima de zero.");ADM.shop.push({id:"shop_"+ridCP(),kind,item,price,active:true});sADM();toast("Oferta adicionada à loja!");openShopAdmin();return}
-    const delShop=e.target.closest&&e.target.closest("[data-cp-del-shop]");if(delShop){ADM.shop=ADM.shop.filter(x=>x.id!==delShop.dataset.cpDelShop);sADM();openShopAdmin();toast("Oferta removida.");return}
+    if(addShop){const root=$("cpExtra"),kind=root.querySelector("#cpShopKind").value,item=root.querySelector("#cpShopItem").value,price=Math.floor(+root.querySelector("#cpShopPrice").value);if(!item||!Number.isFinite(price)||price<=0)return toast("Escolha um item e um preço acima de zero.");ADM.shop.push({id:"shop_"+ridCP(),kind,item,price,active:true});sADM();if(U&&canAdm&&ready)await pushAdm();toast("Oferta adicionada à loja!");openShopAdmin();return}
+    const delShop=e.target.closest&&e.target.closest("[data-cp-del-shop]");if(delShop){ADM.shop=ADM.shop.filter(x=>x.id!==delShop.dataset.cpDelShop);ADM.shopSettings.manualIds=shopSettings().manualIds.filter(id=>ADM.shop.some(x=>x.id===id));sADM();if(U&&canAdm&&ready)await pushAdm();openShopAdmin();toast("Oferta removida.");return}
     const wish=e.target.closest&&e.target.closest("[data-cp-openwish]");if(wish){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();window.cpOpenWishlist();return}
     const admin=e.target.closest&&e.target.closest("[data-cp-admin]");if(admin){if(admin.dataset.cpAdmin==="pending")openPending();else openShopAdmin();return}
     const goAdmin=e.target.closest&&e.target.closest("[data-cp-admin-go]");if(goAdmin){const key=goAdmin.dataset.cpAdminGo;$("cpExtra").hidden=true;const b=cfg&&cfg.querySelector(`[data-adm="${key}"]`);b&&b.click();return}
@@ -7200,6 +7464,7 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
   const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
   const tileInfo={
     ds_c:["🃏","Editor de cartas","Ficha, atributos, arte e habilidades no mesmo lugar"],
+    ds_starter:["🎁","Cartas iniciais (12)","Escolha exatamente as 12 cartas que novos jogadores recebem"],
     ds_k:["📦","Pacotes","Cartas, chances, preço e aparência dos pacotes"],
     ds_l:["🚀","Publicar cartas","Rascunhos e lançamentos para todos os jogadores"],
     ds_i:["📥","Importar ficha","Transformar uma ficha criada por IA em carta"],
@@ -7218,10 +7483,11 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     ds_z:["🗑️","Excluir conteúdo","Zona de risco para exclusões permanentes"]
   };
   const groups=[
-    {title:"Conteúdo e cartas",desc:"Crie cartas, importe fichas, gerencie pacotes e publique atualizações.",ids:["ds_c","ds_k","ds_l","ds_i","ds_x"]},
-    {title:"Batalhas e recompensas",desc:"Combate, arenas, Boss e prêmios das partidas.",ids:["ds_b","ds_q"]},
-    {title:"Progressão e recompensas",desc:"Economia, missões, presentes e evolução dos jogadores.",ids:["ds_r","ds_m","ds_t"]},
-    {title:"Sistema e manutenção",desc:"Acompanhamento, testes, backups e operações administrativas.",ids:["ds_p","ds_g","ds_s","ds_z"]}
+    {title:"Cartas e criação",desc:"Editor, fichas de IA, habilidades, elementos e equilíbrio das cartas.",ids:["ds_c","ds_i","ds_h","ds_e","ds_x","ds_l"]},
+    {title:"Pacotes e início do jogo",desc:"Conteúdo, aparência dos pacotes e as 12 cartas de boas-vindas.",ids:["ds_k","ds_v","ds_starter"]},
+    {title:"Batalhas e arenas",desc:"Progressão, regras dos rivais, chefes e recompensas das partidas.",ids:["ds_b","ds_q"]},
+    {title:"Loja e progresso",desc:"Preços, fragmentos, missões, presentes e evolução dos jogadores.",ids:["ds_r","ds_m","ds_t"]},
+    {title:"Sistema e manutenção",desc:"Indicadores, testes, backups e exclusões administrativas.",ids:["ds_p","ds_g","ds_s","ds_z"]}
   ];
   function setButtonText(btn,info){
     if(!btn||!info)return;
@@ -7257,6 +7523,11 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
       header.append(label,n);section.append(header);
       const grid=document.createElement("div");grid.className="adm-home-grid";
       group.ids.forEach(id=>{
+        if(id==="ds_starter"){
+          const btn=document.createElement("button");btn.type="button";btn.className="at cp-admin-custom-tile";btn.dataset.cpAdminShortcut="ds_st";
+          btn.innerHTML='<i>🎁</i><b>Cartas iniciais (12)</b><small>Escolha as 12 cartas que todos os novos jogadores recebem</small>';
+          grid.append(btn);return;
+        }
         const btn=old.get(id);if(!btn)return;
         setButtonText(btn,tileInfo[id]);
         btn.style.removeProperty("--i");
@@ -7313,10 +7584,37 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     }
     page.dataset.cpUiEditor="1";
   }
+  function enhanceAdminLists(){
+    const cfg=$("#cfg");if(!cfg)return;
+    ["#ec","#hb","#ahb","#hg","#hc"].forEach(selector=>{
+      const sel=$(selector,cfg);if(!sel||sel.dataset.cpListTools==="1"||sel.options.length<12)return;
+      const rows=Array.from(sel.options).map((o,index)=>({value:o.value,text:o.textContent,disabled:o.disabled,index,selected:o.selected}));
+      if(rows.length<12)return;
+      sel.dataset.cpListTools="1";
+      const tools=document.createElement("div");tools.className="cp-adm-list-tools";
+      const search=document.createElement("input");search.type="search";search.placeholder="Buscar carta ou habilidade...";search.setAttribute("aria-label","Buscar na lista");
+      const order=document.createElement("select");order.setAttribute("aria-label","Ordenar lista");
+      order.innerHTML='<option value="created">Ordem original</option><option value="rank-up">Rank: F → SSS</option><option value="rank-down">Rank: SSS → F</option><option value="az">Nome: A → Z</option>';
+      tools.append(search,order);sel.before(tools);
+      const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+      const getRank=t=>{const m=String(t).trim().match(/^(SSS|SS|S|A|B|C|D|E|F)\s*[·|—-]/i);return m?({F:0,E:1,D:2,C:3,B:4,A:5,S:6,SS:7,SSS:8})[m[1].toUpperCase()]:99};
+      const render=()=>{
+        const q=norm(search.value),mode=order.value,selected=new Set(Array.from(sel.selectedOptions).map(o=>o.value));
+        let list=rows.filter(x=>!q||norm(x.text).includes(q));
+        if(mode==="az")list.sort((a,b)=>a.text.localeCompare(b.text,"pt-BR"));
+        if(mode==="rank-up")list.sort((a,b)=>getRank(a.text)-getRank(b.text)||a.index-b.index);
+        if(mode==="rank-down")list.sort((a,b)=>getRank(b.text)-getRank(a.text)||a.index-b.index);
+        if(mode==="created")list.sort((a,b)=>a.index-b.index);
+        sel.replaceChildren(...list.map(x=>{const o=document.createElement("option");o.value=x.value;o.textContent=x.text;o.disabled=x.disabled;o.selected=selected.size?selected.has(x.value):x.selected;return o}));
+      };
+      search.addEventListener("input",render);order.addEventListener("change",render);
+    });
+  }
   function tidyAdminPage(){
     const cfg=$("#cfg");if(!cfg||!cfg.classList.contains("adm"))return;
     makeAdminHome();
     groupCardEditor();
+    enhanceAdminLists();
     const nav=$(".anv",cfg);if(nav)nav.remove();
     const opened=$("details.adp[open]",cfg);
     if(opened){
@@ -7376,7 +7674,12 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     // Títulos e vitrine do perfil ficam no Menu; Missões mantém somente objetivos e recompensas.
     if(window.cpRegisterRenderHook)window.cpRegisterRenderHook(enhanceMainNav);
     if(window.cpRegisterCfgViewHook)window.cpRegisterCfgViewHook(v=>{if(v==="a")requestAnimationFrame(tidyAdminPage)});
-    const cfg=$("#cfg");if(cfg){
+    if(cfg){
+      cfg.addEventListener("click",e=>{
+        const shortcut=e.target.closest&&e.target.closest("[data-cp-admin-shortcut]");if(!shortcut)return;
+        const detail=$("#"+shortcut.dataset.cpAdminShortcut,cfg);if(!detail)return toast("A configuração de cartas iniciais não foi encontrada.");
+        detail.open=true;detail.scrollIntoView({behavior:"smooth",block:"center"});
+      });
       cfg.addEventListener("toggle",e=>{
         if(e.target&&e.target.matches&&e.target.matches("details.adp")&&e.target.open){
           requestAnimationFrame(()=>{
@@ -7940,5 +8243,236 @@ const go=()=>{clearTimeout(tm);tm=setTimeout(fit,120)};
 const m=D.getElementById("m");if(m)new MutationObserver(go).observe(m,{childList:true,subtree:true});
 addEventListener("resize",go);addEventListener("orientationchange",go);go()})();</script>
 <script id="cp-lite-anim">(()=>{const A=Element.prototype.animate;if(!A)return;Element.prototype.animate=function(k,o){if(window.cpLite)o=typeof o==="number"?1:Object.assign({},o,{duration:1,delay:0,endDelay:0,iterations:1});return A.call(this,k,o)}})();</script>
+
+<style id="cp-admin-rank-multipick-and-sss-solid-rgb-2026">
+/* ADM: seleção combinável dos nove ranks e filtros mais detalhados */
+.cp-rank-filter{margin:10px 0;padding:10px;border:1px solid #ffffff20;border-radius:12px;background:#ffffff05}
+.cp-rank-filter>b{display:block;margin-bottom:8px;font-size:.75rem}
+.cp-rank-actions{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 8px}
+.cp-rank-actions .bt{width:auto!important;padding:6px 9px!important;font-size:.62rem!important}
+.cp-rank-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.cp-rank-chip{display:flex!important;align-items:center;justify-content:center;gap:5px;min-height:34px;padding:5px!important;margin:0!important;border:1px solid #ffffff20;border-radius:9px;background:#100f16;color:#eee!important;font-size:.7rem!important}
+.cp-rank-chip input{width:14px!important;height:14px!important;flex:none;margin:0!important;accent-color:#c18bff}
+.cp-rank-chip:has(input:checked){border-color:#bc8cffaa;background:#7a45a522;box-shadow:inset 0 0 0 1px #bc8cff33}
+#cpExtra #cpShopRandomCount{max-width:150px}
+@media(max-width:420px){.cp-rank-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* SSS: o aro prismático é uma borda sólida, sem opacidade. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw{
+  opacity:1!important;filter:none!important;z-index:8!important;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;mask-composite:exclude!important;
+}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{
+  opacity:1!important;filter:saturate(1.18) brightness(1.08)!important;
+  background:conic-gradient(from 12deg,#ff2c9b 0deg,#ff9b32 55deg,#ffe85c 105deg,#42f3a3 160deg,#31d6ff 215deg,#657bff 270deg,#bd5cff 320deg,#ff2c9b 360deg)!important;
+  animation:spin 4.8s linear infinite!important;
+}
+
+/* SSS: as duas películas ficam entre a ilustração e o aro. Não há faixa branca nem partículas. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film{
+  display:block!important;visibility:visible!important;position:absolute!important;inset:0!important;z-index:7!important;
+  overflow:hidden!important;pointer-events:none!important;border-radius:inherit!important;
+  opacity:1!important;mix-blend-mode:normal!important;isolation:auto!important;background:none!important;
+}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::before{
+  content:""!important;display:block!important;position:absolute!important;inset:-22%!important;border-radius:0!important;
+  background:
+   radial-gradient(ellipse 48% 40% at 17% 24%,rgba(255,35,160,.94) 0%,rgba(255,35,160,.5) 34%,transparent 75%),
+   radial-gradient(ellipse 50% 43% at 82% 18%,rgba(34,205,255,.9) 0%,rgba(34,205,255,.42) 38%,transparent 76%),
+   radial-gradient(ellipse 48% 44% at 76% 82%,rgba(158,66,255,.92) 0%,rgba(158,66,255,.42) 36%,transparent 77%),
+   radial-gradient(ellipse 50% 42% at 18% 78%,rgba(38,255,157,.82) 0%,rgba(38,255,157,.36) 38%,transparent 78%),
+   radial-gradient(ellipse 45% 40% at 53% 48%,rgba(255,205,55,.65) 0%,rgba(255,205,55,.26) 40%,transparent 78%)!important;
+  opacity:.62;mix-blend-mode:screen!important;filter:saturate(1.32) contrast(1.04);
+  transform:translate3d(-7%,-5%,0) rotate(-4deg) scale(1.08);transform-origin:center!important;
+  animation:cpSSSVisibleRoam 29s ease-in-out infinite alternate,cpSSSVisibleHue 41s linear infinite,cpSSSVisibleFade 16s ease-in-out infinite!important;
+  will-change:transform,opacity,filter!important;
+}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::after{
+  content:""!important;display:block!important;position:absolute!important;inset:-24%!important;border-radius:0!important;width:auto!important;top:auto!important;bottom:auto!important;left:auto!important;
+  background:
+   radial-gradient(ellipse 42% 36% at 70% 30%,rgba(58,245,220,.5) 0%,transparent 78%),
+   radial-gradient(ellipse 45% 38% at 26% 63%,rgba(255,74,190,.52) 0%,transparent 78%),
+   radial-gradient(ellipse 38% 42% at 62% 78%,rgba(87,112,255,.48) 0%,transparent 80%)!important;
+  opacity:.38;mix-blend-mode:soft-light!important;filter:saturate(1.42);
+  transform:translate3d(8%,6%,0) rotate(8deg) scale(1.14);transform-origin:center!important;
+  animation:cpSSSVisibleAurora 37s ease-in-out infinite alternate,cpSSSVisibleAuroraHue 53s linear infinite,cpSSSVisibleAuroraFade 19s ease-in-out infinite!important;
+  will-change:transform,opacity,filter!important;
+}
+@keyframes cpSSSVisibleRoam{
+  0%{transform:translate3d(-12%,-9%,0) rotate(-8deg) scale(1.08)}
+  19%{transform:translate3d(5%,-12%,0) rotate(2deg) scale(1.14)}
+  43%{transform:translate3d(13%,1%,0) rotate(8deg) scale(1.12)}
+  68%{transform:translate3d(4%,12%,0) rotate(-2deg) scale(1.17)}
+  86%{transform:translate3d(-10%,7%,0) rotate(-7deg) scale(1.11)}
+  100%{transform:translate3d(-12%,-9%,0) rotate(-8deg) scale(1.08)}
+}
+@keyframes cpSSSVisibleHue{0%{filter:hue-rotate(0deg) saturate(1.3)}52%{filter:hue-rotate(205deg) saturate(1.42)}100%{filter:hue-rotate(360deg) saturate(1.3)}}
+@keyframes cpSSSVisibleFade{0%,100%{opacity:.22}28%{opacity:.58}57%{opacity:.34}79%{opacity:.66}}
+@keyframes cpSSSVisibleAurora{
+  0%{transform:translate3d(10%,10%,0) rotate(11deg) scale(1.1)}
+  31%{transform:translate3d(-7%,3%,0) rotate(-5deg) scale(1.17)}
+  67%{transform:translate3d(-12%,-10%,0) rotate(-13deg) scale(1.13)}
+  100%{transform:translate3d(10%,10%,0) rotate(11deg) scale(1.1)}
+}
+@keyframes cpSSSVisibleAuroraHue{from{filter:hue-rotate(25deg) saturate(1.16)}to{filter:hue-rotate(385deg) saturate(1.4)}}
+@keyframes cpSSSVisibleAuroraFade{0%,100%{opacity:.1}38%{opacity:.34}66%{opacity:.17}}
+@media(prefers-reduced-motion:reduce){
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::before,
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::after{animation:none!important;transform:none!important;will-change:auto!important}
+}
+html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::before,
+html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::after{animation:none!important;transform:none!important;will-change:auto!important}
+/* Camada interna sobre a fotografia: a mistura RGB agora usa a própria imagem como backdrop. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film{position:absolute!important;inset:0!important;z-index:30!important;display:block!important;overflow:hidden!important;isolation:auto!important;mix-blend-mode:normal!important;pointer-events:none!important;border-radius:inherit!important;background:transparent!important}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::before,
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film::after{position:absolute!important;display:block!important;pointer-events:none!important}
+
+</style>
+<style id="cp-sss-rgb-roaming-clouds-final-2026">
+/* SSS: três áreas de luz RGB independentes, difusas e móveis por toda a ilustração.
+   Cada área tem caminho, cor/fase, duração e pulsação próprios. Elas são irmãs da imagem
+   dentro de .art para que mix-blend-mode combine com a fotografia, não com um wrapper isolado. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-cloud{
+  position:absolute!important;display:block!important;z-index:7!important;pointer-events:none!important;
+  width:56%!important;height:46%!important;border-radius:50%!important;
+  background:radial-gradient(ellipse at 50% 50%,var(--cp-cloud-color) 0%,color-mix(in srgb,var(--cp-cloud-color) 72%,transparent) 38%,transparent 78%)!important;
+  mix-blend-mode:hard-light!important;filter:blur(10px) saturate(1.45);
+  opacity:0;transform:translate3d(0,0,0) scale(.94);
+  transform-origin:center!important;will-change:transform,opacity,filter!important;
+  animation-name:cpSSSCloudMoveA,cpSSSCloudHue,cpSSSCloudFade!important;
+  animation-duration:var(--cp-move,22s),var(--cp-hue,31s),var(--cp-fade,14s)!important;
+  animation-delay:var(--cp-delay,-8s),calc(var(--cp-delay,-8s)*.73),calc(var(--cp-delay,-8s)*1.21)!important;
+  animation-timing-function:ease-in-out,linear,ease-in-out!important;
+  animation-iteration-count:infinite,infinite,infinite!important;
+  animation-direction:alternate,normal,alternate!important;
+}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-a{left:0!important;top:0!important;--cp-cloud-color:#ff3da8;animation-name:cpSSSCloudMoveA,cpSSSCloudHue,cpSSSCloudFade!important}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-b{left:42%!important;top:12%!important;width:55%!important;height:47%!important;--cp-cloud-color:#32dcff;animation-name:cpSSSCloudMoveB,cpSSSCloudHue,cpSSSCloudFadeB!important}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-c{left:10%!important;top:52%!important;width:55%!important;height:46%!important;--cp-cloud-color:#a65aff;animation-name:cpSSSCloudMoveC,cpSSSCloudHue,cpSSSCloudFadeC!important}
+@keyframes cpSSSCloudMoveA{
+  0%{transform:translate3d(0,0,0) scale(.94)}
+  23%{transform:translate3d(80%,0,0) scale(1.08)}
+  48%{transform:translate3d(78%,88%,0) scale(1.02)}
+  74%{transform:translate3d(0,90%,0) scale(1.1)}
+  100%{transform:translate3d(0,0,0) scale(.94)}
+}
+@keyframes cpSSSCloudMoveB{
+  0%{transform:translate3d(0,0,0) scale(1.02)}
+  26%{transform:translate3d(-76%,0,0) scale(.94)}
+  53%{transform:translate3d(-76%,90%,0) scale(1.12)}
+  79%{transform:translate3d(0,90%,0) scale(.98)}
+  100%{transform:translate3d(0,0,0) scale(1.02)}
+}
+@keyframes cpSSSCloudMoveC{
+  0%{transform:translate3d(0,0,0) scale(.96)}
+  25%{transform:translate3d(82%,-96%,0) scale(1.12)}
+  51%{transform:translate3d(82%,0,0) scale(1.02)}
+  76%{transform:translate3d(0,-96%,0) scale(1.1)}
+  100%{transform:translate3d(0,0,0) scale(.96)}
+}
+@keyframes cpSSSCloudHue{
+  0%{filter:blur(13px) hue-rotate(var(--cp-start,0deg)) saturate(1.48)}
+  50%{filter:blur(13px) hue-rotate(calc(var(--cp-start,0deg) + 190deg)) saturate(1.7)}
+  100%{filter:blur(13px) hue-rotate(calc(var(--cp-start,0deg) + 360deg)) saturate(1.5)}
+}
+@keyframes cpSSSCloudFade{
+  0%,100%{opacity:.04}
+  18%{opacity:.32}
+  39%{opacity:.48}
+  63%{opacity:.13}
+  82%{opacity:.39}
+}
+@keyframes cpSSSCloudFadeB{
+  0%,100%{opacity:.12}
+  24%{opacity:.44}
+  49%{opacity:.18}
+  72%{opacity:.52}
+  91%{opacity:.08}
+}
+@keyframes cpSSSCloudFadeC{
+  0%,100%{opacity:.06}
+  16%{opacity:.38}
+  42%{opacity:.12}
+  67%{opacity:.46}
+  86%{opacity:.2}
+}
+/* Modo leve continua poupando efeitos de cenário, mas não congela a película SSS. */
+html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-cloud{
+  animation-duration:calc(var(--cp-move,22s)*1.25),calc(var(--cp-hue,31s)*1.2),calc(var(--cp-fade,14s)*1.1)!important;
+  animation-iteration-count:infinite,infinite,infinite!important;
+}
+/* Se o sistema operacional pedir redução de movimento, conserva a mudança RGB e a pulsação,
+   mas suspende o deslocamento espacial para evitar desconforto. */
+@media(prefers-reduced-motion:reduce){
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-cloud{
+   animation-name:cpSSSCloudHue,cpSSSCloudFade!important;
+   animation-duration:var(--cp-hue,31s),var(--cp-fade,14s)!important;
+   animation-delay:var(--cp-delay,-8s),calc(var(--cp-delay,-8s)*1.2)!important;
+ }
+}
+/* Nenhum indicador ⚡ nem botão de som flutuante na tela. */
+html.cp-lite::after{content:none!important;display:none!important}
+#sndb{display:none!important;visibility:hidden!important;pointer-events:none!important}
+</style>
+
+<style id="cp-online-admin-balance-2026">
+/* Partidas em grupo: os adversários ficam no topo em cartões lado a lado, não em colunas estreitas. */
+@media(max-width:600px){
+ #zb .zqm.n3{display:grid!important;flex:1 1 auto!important;min-height:0!important;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:max-content minmax(110px,1fr) max-content!important;grid-template-areas:"l r" "c c" "b b"!important;align-content:stretch;gap:6px!important;overflow:hidden!important}
+ #zb .zqm.n3 .zql{grid-area:l;min-width:0;overflow:hidden}
+ #zb .zqm.n3 .zqr{grid-area:r;min-width:0;overflow:hidden}
+ #zb .zqm.n3 .zqc{grid-area:c;min-width:0;align-content:center}
+ #zb .zqm.n3 .zqb{grid-area:b;min-width:0;overflow:hidden}
+ #zb .zqm.n3 .zql .zrow,#zb .zqm.n3 .zqr .zrow{grid-template-columns:repeat(3,minmax(0,1fr))!important;--cw:clamp(34px,calc((100vw - 72px)/6),54px)!important;justify-content:center}
+ #zb .zqm.n3 .zql .zrs,#zb .zqm.n3 .zqr .zrs{--cw:clamp(26px,calc((100vw - 104px)/10),38px)!important;grid-template-columns:repeat(4,minmax(0,var(--cw)))!important;justify-content:center}
+ #zb .zqm.n3 .zqh b{font-size:.68rem!important;max-width:68%;}
+ #zb .zqm.n3 .zqh{font-size:.56rem!important;gap:2px!important}
+ #zb .zqm.n3 .zq{height:auto;align-content:start;padding:5px!important;gap:4px!important}
+ #zb .zqm.n3 .zq:not(.me) .ztrib{display:none!important}
+ #zb .zqm.n3 .zqb .zq.me .zrow{--cw:clamp(68px,calc((100vw - 72px)/4),96px)!important}
+ #zb .zqm.n4{display:grid!important;flex:1 1 auto!important;min-height:0!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:max-content max-content minmax(70px,1fr) max-content!important;grid-template-areas:"t t" "l r" "c c" "b b"!important;gap:5px!important;overflow:hidden!important}
+ #zb .zqm.n4 .zqt{grid-area:t;min-width:0;overflow:hidden}
+ #zb .zqm.n4 .zql{grid-area:l;min-width:0;overflow:hidden}
+ #zb .zqm.n4 .zqr{grid-area:r;min-width:0;overflow:hidden}
+ #zb .zqm.n4 .zqc{grid-area:c;min-width:0}
+ #zb .zqm.n4 .zqb{grid-area:b;min-width:0;overflow:hidden}
+ #zb .zqm.n4 .zq{height:auto;padding:4px!important;gap:3px!important}
+ #zb .zqm.n4 .zq:not(.me) .zrow,#zb .zqm.n4 .zql .zrow,#zb .zqm.n4 .zqr .zrow{grid-template-columns:repeat(3,minmax(0,1fr))!important;--cw:clamp(32px,calc((100vw - 80px)/6),50px)!important}
+ #zb .zqm.n4 .zq:not(.me) .ztrib{display:none!important}
+ #zb .zqm.n4 .zqt .zrow{--cw:clamp(38px,calc((100vw - 90px)/6),58px)!important}
+ #zb .zqm.t2{display:grid!important;flex:1 1 auto!important;min-height:0!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:max-content minmax(70px,1fr) max-content!important;gap:6px!important;overflow:hidden!important}
+ #zb .zqm.t2>.zqp:first-child{grid-row:1;grid-column:1/-1;min-width:0}
+ #zb .zqm.t2>.zlog{grid-row:2;grid-column:1/-1}
+ #zb .zqm.t2>.zqp.b{grid-row:3;grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr))!important;min-width:0}
+ #zb .zqm.t2 .zq{min-width:0;height:auto;padding:4px!important}
+ #zb .zqm.t2 .zq:not(.me) .zrow{grid-template-columns:repeat(3,minmax(0,1fr))!important;--cw:clamp(34px,calc((100vw - 80px)/6),54px)!important}
+ #zb .zqm.t2 .zqp.b .zq .zrow{grid-template-columns:repeat(3,minmax(0,1fr))!important;--cw:initial!important}
+ #zb .zqm.t2 .ztrib{display:none!important}
+ #zb .zqm .zqc{position:relative;isolation:isolate}
+ #zb .zqm .zqc::before{content:"";position:absolute;inset:18px 14px;border-radius:26px;border:1px solid #8de5f21c;background:radial-gradient(ellipse at 50% 50%,#8de5f209,transparent 66%),repeating-linear-gradient(135deg,transparent 0 22px,#ffffff04 22px 23px);box-shadow:inset 0 0 28px #4ac6e008;pointer-events:none}
+ #zb .zqm .zlog{position:relative;z-index:1;border:1px solid #ffffff22;border-radius:10px;background:#08121bba;padding:7px 9px!important;font-size:.62rem!important;line-height:1.25!important;max-height:3.2em!important}
+ #zb .zc{max-height:27dvh!important;display:flex;flex-direction:column;gap:4px}
+ #zb .zc .cp-el-guide-float{align-self:flex-end;position:static!important;right:auto!important;bottom:auto!important;z-index:auto!important;margin:2px 0 0!important;box-shadow:none!important;min-height:30px!important}
+}
+@media(max-width:600px) and (max-height:700px){
+ #zb .zqm.n3{grid-template-rows:max-content minmax(85px,1fr) max-content!important}
+ #zb .zqm.n4{grid-template-rows:max-content max-content minmax(65px,1fr) max-content!important}
+ #zb .zc{max-height:30dvh!important}
+}
+/* Tables responsivas de balanceamento no ADM. */
+.cp-shop-price-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:8px}
+.cp-shop-price-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 6px;align-items:center;padding:7px;border:1px solid #ffffff18;border-radius:10px;background:#ffffff07}
+.cp-shop-price-row b{font-size:.78rem}.cp-shop-price-row input{min-width:0;width:100%;padding:7px 5px!important;text-align:right}.cp-shop-price-row small{grid-column:2;color:var(--mut);font-size:.58rem;text-align:right}
+.cp-shop-price-editor>p,.cp-raid-scale-editor>p{margin:5px 0;color:var(--mut);font-size:.67rem;line-height:1.45}
+.cp-raid-scale-table{display:grid;gap:6px;margin-top:8px}
+.cp-raid-scale-row{display:grid;grid-template-columns:36px repeat(4,minmax(0,1fr));gap:6px;align-items:center;padding:6px;border:1px solid #ffffff18;border-radius:10px;background:#ffffff07}
+.cp-raid-scale-rank{display:grid;place-items:center;min-height:34px;border-radius:8px;background:#ffffff13;font-size:.8rem}
+.cp-raid-scale-row label{display:grid;gap:3px;min-width:0}.cp-raid-scale-row label span{font-size:.56rem;color:var(--mut);font-weight:800}.cp-raid-scale-row input{min-width:0;width:100%;padding:7px 4px!important;font-size:.68rem!important;text-align:center}
+@media(max-width:420px){.cp-shop-price-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cp-raid-scale-row{grid-template-columns:32px repeat(2,minmax(0,1fr));gap:5px}.cp-raid-scale-rank{grid-row:span 2}.cp-raid-scale-row label span{font-size:.59rem}}
+/* Não deixar pseudo-elementos antigos do modo leve criarem um ícone solto na borda da tela. */
+html.cp-lite::before,html.cp-lite::after{content:none!important;display:none!important}
+</style>
+
 </body>
 </html>
