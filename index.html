@@ -1300,7 +1300,7 @@ html[data-tema="v2"] #cfg .ytb button.on{background:var(--pk);color:#fff}
 #cpExtra .cp-admin-tools b{grid-column:1/-1;font-size:.78rem}
 #cpExtra .cp-admin-tools button{padding:10px;border-radius:10px;background:#ffffff10;font-size:.72rem;font-weight:900}
 html.cp-lite #zbg canvas,html.cp-lite .rays,html.cp-lite .xspn,html.cp-lite .xorb,html.cp-lite .xctr,html.cp-lite .aura,html.cp-lite .art>.pt,html.cp-lite .art>.ry,html.cp-lite .art>.au,html.cp-lite .art>.nb,html.cp-lite .art>.hl,html.cp-lite .cpfoil{display:none!important}
-html.cp-lite .cd,html.cp-lite .cd *:not(.cp-sss-rgb-cloud),html.cp-lite .pack,html.cp-lite .pack *{animation:none!important;transition:none!important;filter:none!important}
+html.cp-lite .cd,html.cp-lite .cd *:not(.cp-sss-rgb-cloud):not(.cp-sym-stream):not(.cp-sym-glow),html.cp-lite .pack,html.cp-lite .pack *{animation:none!important;transition:none!important;filter:none!important}
 html.cp-reduce *,html.cp-reduce *::before,html.cp-reduce *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 /* ===== cp-admin-cleanup-v230 (origem: linha 5926) ===== */
 /* Arquivo-fonte: assets/css/15-admin-cleanup.css */
@@ -2917,48 +2917,104 @@ html.cp-lite .cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{animation:non
 </style>
 
 
-<style id="cp-card-touch-holo-css">/* Efeito de película holográfica ativado pelo dedo na ficha: somente ranks S, SS e SSS. */
-#fc .fch>.f3d.cp-holo-gesture{touch-action:none!important}
-#fc .fch>.f3d .cd.cp-touch-holo-card>.art{isolation:isolate}
+<style id="cp-card-touch-holo-css">
+/* Película fluida S/SS/SSS: fitas vetoriais curvas, finas e ramificadas. */
+#fc .fch>.f3d{touch-action:none!important;overscroll-behavior:contain}
+#fc .fch>.f3d>.in{transform-style:preserve-3d;will-change:transform}
+#fc .fch>.f3d>.in>.cd.cp-touch-holo-card{transform:none!important;transition:none!important}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art{isolation:isolate;overflow:hidden}
 #fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo,
 #fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-specular{
-  position:absolute!important;inset:-1%!important;display:block!important;width:auto!important;height:auto!important;
+  position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;
   margin:0!important;border:0!important;border-radius:inherit!important;pointer-events:none!important;
-  opacity:0;overflow:hidden!important;transition:opacity .14s ease;will-change:opacity,background-position,filter;
+  opacity:0;overflow:hidden!important;transition:opacity .34s ease;will-change:opacity;
 }
-#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo{
-  z-index:7!important;
-  background:
-    linear-gradient(var(--cp-holo-angle,125deg),transparent 41%,var(--cp-holo-a) 46%,var(--cp-holo-b) 50%,var(--cp-holo-c) 54%,var(--cp-holo-d,transparent) 58%,transparent 64%),
-    repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 1px,transparent 1px 9px);
-  background-size:145% 145%,100% 100%;
-  background-position:var(--cp-holo-x,50%) var(--cp-holo-y,50%),center;
-  mix-blend-mode:color;
-  filter:hue-rotate(var(--cp-holo-hue,0deg)) saturate(1.16);
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo{z-index:7!important;mix-blend-mode:screen;contain:paint}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo .cp-sym-stream{
+  position:absolute;left:-12%;top:-3%;width:124%;height:106%;overflow:visible;
+  transform-origin:50% 50%;mix-blend-mode:screen;opacity:.68;
+  will-change:transform,opacity,filter;pointer-events:none;
+  animation:cpSymbioteDriftA var(--cp-flow-duration,9s) cubic-bezier(.42,.02,.34,.99) var(--cp-flow-delay,-1.7s) infinite,
+            cpSymbioteFadeA var(--cp-flow-duration,9s) ease-in-out var(--cp-flow-delay,-1.7s) infinite,
+            cpSymbioteHue var(--cp-flow-hue-duration,12s) linear var(--cp-flow-delay,-1.7s) infinite;
 }
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo .cp-sym-stream.secondary{
+  left:-11%;top:1%;width:122%;height:100%;opacity:.40;
+  animation-name:cpSymbioteDriftB,cpSymbioteFadeB,cpSymbioteHueB;
+  animation-duration:var(--cp-flow-duration-b,11s),var(--cp-flow-duration-b,11s),var(--cp-flow-hue-duration-b,15s);
+  animation-timing-function:cubic-bezier(.4,.05,.3,.98),ease-in-out,linear;
+  animation-delay:var(--cp-flow-delay-b,-3.2s),var(--cp-flow-delay-b,-3.2s),var(--cp-flow-delay-b,-3.2s);
+  animation-iteration-count:infinite,infinite,infinite;
+}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo svg{display:block;width:100%;height:100%;overflow:visible}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo .cp-sym-glow{fill:none;stroke:url(#cp-sym-gradient);stroke-width:29;stroke-linecap:round;stroke-linejoin:round;opacity:.22;filter:none}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo .cp-sym-core{fill:none;stroke:url(#cp-sym-gradient);stroke-width:13;stroke-linecap:round;stroke-linejoin:round;opacity:.78}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo .cp-sym-branch{fill:none;stroke:url(#cp-sym-gradient);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;opacity:.66}
 #fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-specular{
   z-index:8!important;
-  background:
-    radial-gradient(ellipse 30% 19% at var(--cp-holo-x,50%) var(--cp-holo-y,50%),rgba(255,255,255,.52) 0%,rgba(255,255,255,.16) 33%,transparent 73%),
-    linear-gradient(var(--cp-holo-angle,125deg),transparent 43%,rgba(255,255,255,.22) 49%,rgba(255,255,255,.05) 52%,transparent 58%);
-  mix-blend-mode:screen;
-  filter:blur(.3px);
+  background:linear-gradient(var(--cp-holo-angle,125deg),transparent 35%,rgba(255,255,255,.035) 44%,rgba(255,255,255,.19) 50%,rgba(255,255,255,.06) 54%,transparent 64%);
+  background-size:190% 190%;background-position:var(--cp-holo-x,50%) var(--cp-holo-y,50%);
+  mix-blend-mode:screen;filter:blur(1.2px);
 }
-#fc .fch>.f3d .cd.k6.cp-touch-holo-card{--cp-holo-a:rgba(255,184,35,.52);--cp-holo-b:rgba(255,248,190,.60);--cp-holo-c:rgba(255,132,20,.50);--cp-holo-d:rgba(255,220,120,.12)}
-#fc .fch>.f3d .cd.k7.cp-touch-holo-card{--cp-holo-a:rgba(255,70,85,.52);--cp-holo-b:rgba(255,206,140,.58);--cp-holo-c:rgba(135,80,255,.55);--cp-holo-d:rgba(70,210,255,.13)}
-#fc .fch>.f3d .cd.k8.cp-touch-holo-card{--cp-holo-a:rgba(255,54,190,.58);--cp-holo-b:rgba(65,248,225,.62);--cp-holo-c:rgba(255,220,75,.58);--cp-holo-d:rgba(126,105,255,.36)}
-#fc .fch>.f3d .cd.k6.cp-holo-active>.art>.cp-touch-holo{opacity:.42}
-#fc .fch>.f3d .cd.k7.cp-holo-active>.art>.cp-touch-holo{opacity:.48}
-#fc .fch>.f3d .cd.k8.cp-holo-active>.art>.cp-touch-holo{opacity:.54}
-#fc .fch>.f3d .cd.k6.cp-holo-active>.art>.cp-touch-specular{opacity:.42}
-#fc .fch>.f3d .cd.k7.cp-holo-active>.art>.cp-touch-specular{opacity:.48}
-#fc .fch>.f3d .cd.k8.cp-holo-active>.art>.cp-touch-specular{opacity:.52}
+#fc .fch>.f3d .cd.k6.cp-touch-holo-card{--cp-flow-level:.43;--cp-flow-c1:#d99420;--cp-flow-c2:#fff0a1;--cp-flow-c3:#ff8c43;--cp-flow-c4:#f7ca62}
+#fc .fch>.f3d .cd.k7.cp-touch-holo-card{--cp-flow-level:.51;--cp-flow-c1:#ff5f59;--cp-flow-c2:#ffd18c;--cp-flow-c3:#a05ce9;--cp-flow-c4:#68dff3}
+#fc .fch>.f3d .cd.k8.cp-touch-holo-card{--cp-flow-level:.59;--cp-flow-c1:#ef4fcf;--cp-flow-c2:#63eaff;--cp-flow-c3:#ffe36c;--cp-flow-c4:#9b73ff}
+#fc .fch>.f3d .cd.k6.cp-holo-active>.art>.cp-touch-holo,
+#fc .fch>.f3d .cd.k7.cp-holo-active>.art>.cp-touch-holo,
+#fc .fch>.f3d .cd.k8.cp-holo-active>.art>.cp-touch-holo{opacity:var(--cp-flow-level)}
+#fc .fch>.f3d .cd.k6.cp-holo-active>.art>.cp-touch-specular{opacity:.18}
+#fc .fch>.f3d .cd.k7.cp-holo-active>.art>.cp-touch-specular{opacity:.21}
+#fc .fch>.f3d .cd.k8.cp-holo-active>.art>.cp-touch-specular{opacity:.24}
+@keyframes cpSymbioteDriftA{
+  0%{transform:translate3d(-8%,-3%,0) rotate(calc(var(--cp-flow-rotation,0deg) - 10deg)) scaleX(var(--cp-flow-mirror,1)) scale(.96,.98)}
+  24%{transform:translate3d(7%,5%,0) rotate(calc(var(--cp-flow-rotation,0deg) + 8deg)) scaleX(var(--cp-flow-mirror,1)) scale(1.04,1.02)}
+  49%{transform:translate3d(12%,13%,0) rotate(calc(var(--cp-flow-rotation,0deg) - 6deg)) scaleX(var(--cp-flow-mirror,1)) scale(.97,1.04)}
+  74%{transform:translate3d(-9%,8%,0) rotate(calc(var(--cp-flow-rotation,0deg) + 13deg)) scaleX(var(--cp-flow-mirror,1)) scale(1.03,.96)}
+  100%{transform:translate3d(-8%,-3%,0) rotate(calc(var(--cp-flow-rotation,0deg) - 10deg)) scaleX(var(--cp-flow-mirror,1)) scale(.96,.98)}
+}
+@keyframes cpSymbioteDriftB{
+  0%{transform:translate3d(9%,6%,0) rotate(calc(var(--cp-flow-rotation,0deg) + 15deg)) scaleX(var(--cp-flow-mirror-b,-1)) scale(.98,1)}
+  27%{transform:translate3d(-8%,-7%,0) rotate(calc(var(--cp-flow-rotation,0deg) - 11deg)) scaleX(var(--cp-flow-mirror-b,-1)) scale(1.04,.97)}
+  54%{transform:translate3d(7%,10%,0) rotate(calc(var(--cp-flow-rotation,0deg) + 8deg)) scaleX(var(--cp-flow-mirror-b,-1)) scale(.96,1.05)}
+  80%{transform:translate3d(-11%,3%,0) rotate(calc(var(--cp-flow-rotation,0deg) - 16deg)) scaleX(var(--cp-flow-mirror-b,-1)) scale(1.02,.96)}
+  100%{transform:translate3d(9%,6%,0) rotate(calc(var(--cp-flow-rotation,0deg) + 15deg)) scaleX(var(--cp-flow-mirror-b,-1)) scale(.98,1)}
+}
+@keyframes cpSymbioteFadeA{0%,100%{opacity:.12}17%{opacity:.78}36%{opacity:.40}55%{opacity:.08}72%{opacity:.62}88%{opacity:.22}}
+@keyframes cpSymbioteFadeB{0%,100%{opacity:.08}20%{opacity:.45}43%{opacity:.16}61%{opacity:.58}79%{opacity:.06}91%{opacity:.29}}
+@keyframes cpSymbioteHue{from{filter:hue-rotate(var(--cp-flow-hue,0deg)) saturate(1.42)}to{filter:hue-rotate(calc(var(--cp-flow-hue,0deg) + var(--cp-flow-hue-range,120deg))) saturate(1.42)}}
+@keyframes cpSymbioteHueB{from{filter:hue-rotate(calc(var(--cp-flow-hue,0deg) + 70deg)) saturate(1.48)}to{filter:hue-rotate(calc(var(--cp-flow-hue,0deg) + var(--cp-flow-hue-range,120deg) + 70deg)) saturate(1.48)}}
 #fc .fch>.f3h{max-width:300px;margin:7px auto 0;padding:0 10px;text-align:center;font-size:.65rem;line-height:1.5;opacity:.72}
 @media(prefers-reduced-motion:reduce){
- #fc .fch>.f3d .cd>.art>.cp-touch-holo,#fc .fch>.f3d .cd>.art>.cp-touch-specular{transition:none!important;filter:none!important}
+ #fc .fch>.f3d .cd>.art>.cp-touch-holo .cp-sym-stream{animation:none!important;filter:none!important}
+ #fc .fch>.f3d>.in{transition:none!important}
 }
 </style>
 
+
+<style id="cp-stable-ficha-card-gesture-final">
+/* A carta da ficha só recebe rotação 3D pela camada interna. Nenhum tilt global no próprio card. */
+#fc .fch>.f3d>.in>.cd{transform:none!important;transition:none!important;will-change:auto!important}
+#fc .fch>.f3d>.in{transform-style:preserve-3d!important;backface-visibility:visible}
+#fc .fch>.f3d>.in>.cd>.art>.cp-touch-holo,
+#fc .fch>.f3d>.in>.cd>.art>.cp-touch-specular{pointer-events:none!important}
+/* O modo leve continua reduzindo o restante do jogo, mas não congela o reflexo solicitado pelo toque. */
+html.cp-lite #fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo,
+html.cp-lite #fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-specular{transition:opacity .34s ease!important}
+html.cp-lite #fc .fch>.f3d .cd.cp-holo-active>.art>.cp-touch-holo .cp-sym-stream.primary{
+ animation-name:cpSymbioteDriftA,cpSymbioteFadeA,cpSymbioteHue!important;
+ animation-duration:var(--cp-flow-duration,9s),var(--cp-flow-duration,9s),var(--cp-flow-hue-duration,12s)!important;
+ animation-timing-function:cubic-bezier(.42,.02,.34,.99),ease-in-out,linear!important;
+ animation-delay:var(--cp-flow-delay,-1.7s),var(--cp-flow-delay,-1.7s),var(--cp-flow-delay,-1.7s)!important;
+ animation-iteration-count:infinite,infinite,infinite!important;
+}
+html.cp-lite #fc .fch>.f3d .cd.cp-holo-active>.art>.cp-touch-holo .cp-sym-stream.secondary{
+ animation-name:cpSymbioteDriftB,cpSymbioteFadeB,cpSymbioteHueB!important;
+ animation-duration:var(--cp-flow-duration-b,11s),var(--cp-flow-duration-b,11s),var(--cp-flow-hue-duration-b,15s)!important;
+ animation-timing-function:cubic-bezier(.4,.05,.3,.98),ease-in-out,linear!important;
+ animation-delay:var(--cp-flow-delay-b,-3.2s),var(--cp-flow-delay-b,-3.2s),var(--cp-flow-delay-b,-3.2s)!important;
+ animation-iteration-count:infinite,infinite,infinite!important;
+}
+</style>
 </head>
 <body>
 <div id="intro" role="img" aria-label="Primata">
@@ -3413,17 +3469,20 @@ NI.u='<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';const 
 
 const nrm=t=>String(t).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),skl=c=>{const k=c.sk||[];return Array.isArray(k[0])?k:k.length?[k]:[]},efgrp=t=>(FXG.find(g=>g[1].includes(t))||[])[0];
 const FLT={q:"",r:[],e:[],x:[],st:"",ab:"",o:"r",open:0,all:0};let flT=0;
+// Cartas especiais com colVis="owned" só entram no álbum de quem já as possui.
+const cpCollectionVisible=c=>!!c&&(c.colVis!=="owned"||(S.inv[c.id]||0)>0||(typeof AD!=="undefined"&&AD));
+const cpVisibleOwnedCount=p=>p.cards.filter(c=>cpCollectionVisible(c)&&(S.inv[c.id]||0)>0).length;
 const flOn=()=>!!(FLT.q||FLT.r.length||FLT.e.length||FLT.x.length||FLT.st||FLT.ab);
 const flList=()=>{const q=nrm(FLT.q).split(/\s+/).filter(Boolean),u=dkUsed(dkIds()),pool=FLT.all||FLT.q?ALL:P[as].cards,own1=FLT.e.length||FLT.ab||FLT.x.length||q.length,O={r:(a,b)=>a.r-b.r,R:(a,b)=>b.r-a.r,n:(a,b)=>a.n.localeCompare(b.n),l:(a,b)=>lvl(b)-lvl(a),d:(a,b)=>b.atk-a.atk,v:(a,b)=>b.hp-a.hp,q:(a,b)=>(S.inv[b.id]||0)-(S.inv[a.id]||0)};
- return pool.filter(c=>{const n=S.inv[c.id]||0,k=FLT.st;if(FLT.r.length&&!FLT.r.includes(c.r))return 0;if(k=="own"&&!n||k=="miss"&&n||k=="dup"&&n<2||k=="in"&&!u[c.id]||k=="out"&&(!n||u[c.id]))return 0;if(!own1)return 1;if(!n)return 0;const s=skl(c),ef=s.map(a=>a[3]).filter(a=>a&&a.ef);if(FLT.e.length&&!elEls(c).some(k=>FLT.e.includes(k)))return 0;if(FLT.ab=="com"&&!s.length||FLT.ab=="sem"&&s.length||FLT.ab=="pas"&&!ef.some(a=>a.tr&&a.tr!="u"))return 0;if(FLT.x.length&&!ef.some(a=>a.ef.some(e=>FLT.x.includes(efgrp(e.t)))))return 0;return!q.length||q.every(w=>nrm(c.n+" "+(c.el||"")+" "+(c.tb||"")+" "+(c.d||"")+" "+s.map(a=>a[0]+" "+a[1]+" "+a[2]).join(" ")).includes(w))}).sort((a,b)=>("nldvq".includes(FLT.o)?!S.inv[a.id]-!S.inv[b.id]:0)||O[FLT.o](a,b)||a.r-b.r)};
+ return pool.filter(c=>{if(!cpCollectionVisible(c))return false;const n=S.inv[c.id]||0,k=FLT.st;if(FLT.r.length&&!FLT.r.includes(c.r))return 0;if(k=="own"&&!n||k=="miss"&&n||k=="dup"&&n<2||k=="in"&&!u[c.id]||k=="out"&&(!n||u[c.id]))return 0;if(!own1)return 1;if(!n)return 0;const s=skl(c),ef=s.map(a=>a[3]).filter(a=>a&&a.ef);if(FLT.e.length&&!elEls(c).some(k=>FLT.e.includes(k)))return 0;if(FLT.ab=="com"&&!s.length||FLT.ab=="sem"&&s.length||FLT.ab=="pas"&&!ef.some(a=>a.tr&&a.tr!="u"))return 0;if(FLT.x.length&&!ef.some(a=>a.ef.some(e=>FLT.x.includes(efgrp(e.t)))))return 0;return!q.length||q.every(w=>nrm(c.n+" "+(c.el||"")+" "+(c.tb||"")+" "+(c.d||"")+" "+s.map(a=>a[0]+" "+a[1]+" "+a[2]).join(" ")).includes(w))}).sort((a,b)=>("nldvq".includes(FLT.o)?!S.inv[a.id]-!S.inv[b.id]:0)||O[FLT.o](a,b)||a.r-b.r)};
 const flBar=()=>{const n=FLT.r.length+FLT.e.length+FLT.x.length+(FLT.st?1:0)+(FLT.ab?1:0),ch=(k,v,t,a)=>`<button class="flb${(Array.isArray(a)?a.includes(v):a==v)?" on":""}" data-fl="${k}" data-fv="${v}">${t}</button>`,row=(t,h)=>`<p>${t}</p><div class="flr">${h}</div>`;
  return `<div class="fls"><input id="flq" type="search" placeholder="🔍 Buscar carta ou habilidade" value="${FLT.q.replace(/"/g,"&quot;")}" autocomplete="off"><button class="flk${FLT.open||n?" on":""}" data-fl="tg" aria-label="Filtros">⚙${n?`<b>${n}</b>`:""}</button></div>`
  +(P.length>1?`<div class="chips"><button class="${FLT.all?"on":""}" data-fl="all">Todos</button>${P.map((x,i)=>`<button data-s="${i}" class="${i==as&&!FLT.all?"on":""}">${x.n}</button>`).join("")}</div>`:"")
  +`<div class="flp"${FLT.open?"":" hidden"}>`+row("Rank",R.map((r,i)=>ch("r",i,r[0],FLT.r)).join(""))+row("Elemento",EL_KEYS.map(k=>ch("e",k,`${EL[k]} ${ELN[k]}`,FLT.e)).join(""))+row("Mostrar",[["own","Tenho"],["miss","Faltam"],["dup","Repetidas"],["in","No deck"],["out","Fora do deck"]].map(x=>ch("st",x[0],x[1],FLT.st)).join(""))+row("Habilidade",[["com","Com"],["sem","Sem"],["pas","Passiva"]].map(x=>ch("ab",x[0],x[1],FLT.ab)).join(""))+row("Efeito",FXG.map(g=>ch("x",g[0],g[0],FLT.x)).join(""))+row("Ordenar",[["r","Rank ↑"],["R","Rank ↓"],["n","Nome"],["l","Nível"],["d","Dano"],["v","Vida"],["q","Cópias"]].map(x=>ch("o",x[0],x[1],FLT.o)).join(""))+`<button class="flc" data-fl="clr">Limpar tudo</button></div>`};
 // ladrilho do álbum: a carta ORIGINAL aparece com o nível dela; as cópias repetidas viram só o contador "+N" (sem melhoria, para trocar ou converter)
 const dkTile=c=>{const n=S.inv[c.id]||0,L=lvl(c),rad=cardRadius(L);return n?`<div class="dkc" data-dc="${c.id}" data-cid="${c.id}" style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%">${card(c,"",1)}${n>1?`<span class="cp-duplicate-count" aria-label="${n-1} repetida(s)">+${n-1}</span>`:""}</div>`:`<div class="cp-dkitem" data-cid="${c.id}">${card(c,"",0,1)}</div>`};
-const flGrid=()=>{const q=P[as],a=flOn()||FLT.all,l=a?flList():[...q.cards].sort((x,y)=>x.r-y.r);
- return `<div class="cp-collection-gridhead"><div><b>${a?"Resultados":"Álbum do pacote"}</b><small>${a?`${l.length} ${l.length==1?"carta":"cartas"} · ${FLT.all||FLT.q?"todos os pacotes":q.n}`:`${own(q)} de ${q.cards.length} cartas coletadas`}</small></div>${a?"":cvBtn(q.cards,"p","qc")}</div>`+(l.length?`<div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:`<div class="fle">Nenhuma carta encontrada<br><button class="flc" data-fl="clr">Limpar filtros</button></div>`)+(a?"":exAl()+indAl())};
+const flGrid=()=>{const q=P[as],a=flOn()||FLT.all,l=a?flList():q.cards.filter(cpCollectionVisible).sort((x,y)=>x.r-y.r);
+ return `<div class="cp-collection-gridhead"><div><b>${a?"Resultados":"Álbum do pacote"}</b><small>${a?`${l.length} ${l.length==1?"carta":"cartas"} · ${FLT.all||FLT.q?"todos os pacotes":q.n}`:`${cpVisibleOwnedCount(q)} de ${q.cards.filter(cpCollectionVisible).length} cartas coletadas`}</small></div>${a?"":cvBtn(q.cards,"p","qc")}</div>`+(l.length?`<div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:`<div class="fle">Nenhuma carta encontrada<br><button class="flc" data-fl="clr">Limpar filtros</button></div>`)+(a?"":exAl()+indAl())};
 const flPaint=bar=>{if(!$("dkal"))return;if(bar)$("flt").innerHTML=flBar();$("dkal").innerHTML=flGrid();dkPaint()};
 document.addEventListener("click",e=>{if(e.target.closest(".flt [data-s]")){FLT.all=0;return}const b=e.target.closest("[data-fl]");if(!b)return;const k=b.dataset.fl,v=b.dataset.fv;if(k=="tg")FLT.open=!FLT.open;else if(k=="all")FLT.all=FLT.all?0:1;else if(k=="clr")Object.assign(FLT,{q:"",r:[],e:[],x:[],st:"",ab:"",o:"r",all:0});else if(k=="r"||k=="e"||k=="x"){const a=FLT[k],x=k=="r"?+v:v,i=a.indexOf(x);i<0?a.push(x):a.splice(i,1)}else FLT[k]=FLT[k]==v?(k=="o"?"r":""):v;flPaint(1)},true);
 document.addEventListener("input",e=>{if(e.target.id!="flq")return;FLT.q=e.target.value;clearTimeout(flT);flT=setTimeout(()=>flPaint(0),140)});
@@ -3431,7 +3490,7 @@ document.addEventListener("keydown",e=>{e.target.id=="flq"&&e.key=="Enter"&&e.ta
 const adxQ=()=>["ec","hc","gc"].forEach(id=>{const sl=$(id);if(!sl||sl.dataset.q)return;sl.dataset.q=1;const all=[...sl.options].map(o=>[o.value,o.textContent]),i=document.createElement("input");i.type="search";i.placeholder="🔍 Buscar carta";i.className="sfi";i.oninput=()=>{const q=nrm(i.value),v=sl.value,l=all.filter(o=>nrm(o[1]).includes(q));if(!l.length)return;sl.replaceChildren(...l.map(o=>new Option(o[1],o[0],0,o[0]==v)));if(sl.value!=v)sl.dispatchEvent(new Event("change",{bubbles:true}))};sl.before(i)});
 function render(keep){
  const m=$("m"),p=P[cur],q=P[as];
- if(tab=="h"){const dd=S.dl===day()?"":`<button class="qc" data-d="1">Recompensa diária<span class="pr">${gem}+${fmt(dr())}</span></button>`;m.innerHTML=`<div class="hd top"><div><h1>Coleção Primata</h1><p class="mut">${ALL.filter(c=>S.inv[c.id]).length}/${ALL.length} cartas</p></div>${wlt()}</div><div class="pn"><div class="cs" id="cs">${P.map((x,i)=>`<button class="pk${pkExp(x)||pkFuture(x)?" pkx":""}" data-k="${i}" aria-label="${x.n}">${packEl(x,0,i)}${x.esp>0?`<em class="pke">🎁 Especial</em>`:pkFuture(x)?`<em class="pke">🔒 Começa em ${pkRest(x.ini)}</em>`:x.ate>0?`<em class="pke">⏳ ${pkExp(x)?"Encerrado":"some em "+pkRest(x.ate)}</em>`:""}</button>`).join("")}</div>${P.length>1?`<div class="ar"><button data-p="-1" aria-label="Anterior">‹</button><button data-p="1" aria-label="Próximo">›</button></div>`:""}<small id="cap">${p.n}</small>${P.length>1?`<div class="dots">${P.map(()=>"<i></i>").join("")}</div>`:""}</div><div class="pack-open"><label class="pack-qty" for="packQty"><span>Quantidade</span><select id="packQty" aria-label="Quantidade de pacotes para abrir">${[1,10,25,50,100,250,500,1000].map(n=>`<option value="${n}"${n==PQ?" selected":""}>×${n.toLocaleString("pt-BR")}</option>`).join("")}</select></label><button class="bt pack-open-action" data-open-selected="1"><span data-open-label>Abrir ×${PQ}</span><span class="pr"></span></button></div><button type="button" class="cp-daily-shop-entry" data-cp-open-daily-shop aria-label="Abrir Loja diária"><span class="cp-daily-shop-icon" aria-hidden="true">🛒</span><span class="cp-daily-shop-copy"><b>Loja diária</b><small>Confira as cartas e ofertas disponíveis</small></span><span class="cp-daily-shop-arrow" aria-hidden="true">ABRIR&nbsp;›</span></button><div class="qa">${fpb()}<button class="qc" data-gf="1" id="gf" hidden></button>${dd}</div>`}
+ if(tab=="h"){const dd=S.dl===day()?"":`<button class="qc" data-d="1">Recompensa diária<span class="pr">${gem}+${fmt(dr())}</span></button>`;m.innerHTML=`<div class="hd top"><div><h1>Coleção Primata</h1><p class="mut">${ALL.filter(c=>cpCollectionVisible(c)&&(S.inv[c.id]||0)>0).length}/${ALL.filter(cpCollectionVisible).length} cartas</p></div>${wlt()}</div><div class="pn"><div class="cs" id="cs">${P.map((x,i)=>`<button class="pk${pkExp(x)||pkFuture(x)?" pkx":""}" data-k="${i}" aria-label="${x.n}">${packEl(x,0,i)}${x.esp>0?`<em class="pke">🎁 Especial</em>`:pkFuture(x)?`<em class="pke">🔒 Começa em ${pkRest(x.ini)}</em>`:x.ate>0?`<em class="pke">⏳ ${pkExp(x)?"Encerrado":"some em "+pkRest(x.ate)}</em>`:""}</button>`).join("")}</div>${P.length>1?`<div class="ar"><button data-p="-1" aria-label="Anterior">‹</button><button data-p="1" aria-label="Próximo">›</button></div>`:""}<small id="cap">${p.n}</small>${P.length>1?`<div class="dots">${P.map(()=>"<i></i>").join("")}</div>`:""}</div><div class="pack-open"><label class="pack-qty" for="packQty"><span>Quantidade</span><select id="packQty" aria-label="Quantidade de pacotes para abrir">${[1,10,25,50,100,250,500,1000].map(n=>`<option value="${n}"${n==PQ?" selected":""}>×${n.toLocaleString("pt-BR")}</option>`).join("")}</select></label><button class="bt pack-open-action" data-open-selected="1"><span data-open-label>Abrir ×${PQ}</span><span class="pr"></span></button></div><button type="button" class="cp-daily-shop-entry" data-cp-open-daily-shop aria-label="Abrir Loja diária"><span class="cp-daily-shop-icon" aria-hidden="true">🛒</span><span class="cp-daily-shop-copy"><b>Loja diária</b><small>Confira as cartas e ofertas disponíveis</small></span><span class="cp-daily-shop-arrow" aria-hidden="true">ABRIR&nbsp;›</span></button><div class="qa">${fpb()}<button class="qc" data-gf="1" id="gf" hidden></button>${dd}</div>`}
  else if(tab=="a")m.innerHTML=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><section class="cp-album-guide"><div class="cp-album-title"><small>COLEÇÃO PRIMATA</small><h2>Seu álbum</h2><p>Toque em uma ilustração para abrir a ficha completa.</p></div><button type="button" class="cp-guide-link" data-cp-el-guide="1">Guia de elementos <span>21 elementos</span></button></section><div class="dkb" id="dkp"></div><div id="flt" class="flt">${flBar()}</div><div id="dkal">${flGrid()}</div><div class="dksp"></div><div class="dka" id="dka" hidden></div>`;
  else if(tab=="m")m.innerHTML=msn();else if(tab=="t")m.innerHTML=trk();else if(tab=="b")m.innerHTML=btl();
  m.insertAdjacentHTML("beforeend",nav());
@@ -3623,9 +3682,9 @@ document.addEventListener("change",e=>{const el=e.target;if(!el||!['cpPowerMode'
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#m [data-open-selected]");if(!b)return;const n=selectedPackQty();askMany(cur,n)});
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#m [data-cp-open-daily-shop]");if(!b)return;e.preventDefault();e.stopPropagation();if(typeof window.cpOpenShop==="function")window.cpOpenShop();else toast("A Loja diária não está disponível neste momento.")});
 const rs=c=>["mx","my","rx","ry"].forEach(k=>c.style.removeProperty("--"+k));
-let tl=0;document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.closest(".fch .cd");if(!c||tl)return;const X=e.clientX,Y=e.clientY;tl=requestAnimationFrame(()=>{tl=0;const b=c.getBoundingClientRect(),x=(X-b.left)/b.width,y=(Y-b.top)/b.height;c.style.setProperty("--mx",x*100+"%");c.style.setProperty("--my",y*100+"%");c.style.setProperty("--rx",((.5-y)*16).toFixed(1)+"deg");c.style.setProperty("--ry",((x-.5)*16).toFixed(1)+"deg")})});
-["pointerup","pointercancel"].forEach(t=>document.addEventListener(t,e=>{const c=e.target.closest&&e.target.closest(".fch .cd");if(c)rs(c)}));
-document.addEventListener("pointerout",e=>{const c=e.target.closest&&e.target.closest(".fch .cd");if(c&&!c.contains(e.relatedTarget))rs(c)});
+let tl=0;document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.closest(".fch .cd");if(!c||c.closest(".f3d")||tl)return;const X=e.clientX,Y=e.clientY;tl=requestAnimationFrame(()=>{tl=0;const b=c.getBoundingClientRect(),x=(X-b.left)/b.width,y=(Y-b.top)/b.height;c.style.setProperty("--mx",x*100+"%");c.style.setProperty("--my",y*100+"%");c.style.setProperty("--rx",((.5-y)*16).toFixed(1)+"deg");c.style.setProperty("--ry",((x-.5)*16).toFixed(1)+"deg")})});
+["pointerup","pointercancel"].forEach(t=>document.addEventListener(t,e=>{const c=e.target.closest&&e.target.closest(".fch .cd");if(c&&!c.closest(".f3d"))rs(c)}));
+document.addEventListener("pointerout",e=>{const c=e.target.closest&&e.target.closest(".fch .cd");if(c&&!c.closest(".f3d")&&!c.contains(e.relatedTarget))rs(c)});
 
 </script>
 <script>
@@ -3815,7 +3874,7 @@ EX.cards=AR.map((a,k)=>{const t=ST[k],x=XS[k];return{id:"are"+k,p:EX,r:k,n:"Guar
 ALL.push(...EX.cards);
 // v2.1: cartas ESPECIAIS (sem pacote): criadas no ADM (pacote "Sem pacote"), não saem em pacotes; vêm de presente, de missão ou de batalha. Também recebem as cartas de um pacote temporário que acabou com "manter as cartas".
 const IND={id:"ind",n:"Cartas especiais",e:"🎉",h:300,ex:1,exl:"Exclusiva · só como prêmio ou presente",cards:[]},PX=[]; // PX = pacotes temporários que já acabaram e sumiram da loja
-const indAl=()=>{const l=IND.cards.filter(c=>S.inv[c.id]||(typeof AD!="undefined"&&AD));return l.length?`<p class="mut" style="margin:22px 0 8px">Cartas especiais · ${IND.cards.filter(c=>S.inv[c.id]).length}${typeof AD!="undefined"&&AD?"/"+IND.cards.length+" (ADM vê todas)":""}</p><div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:""},exAl=()=>`<p class="mut" style="margin:22px 0 8px">Cartas de arena · ${EX.cards.filter(c=>S.inv[c.id]).length}/9</p><div class="fr al"><div class="grid">${EX.cards.map(dkTile).join("")}</div></div>`;
+const indAl=()=>{const l=IND.cards.filter(cpCollectionVisible);return l.length?`<p class="mut" style="margin:22px 0 8px">Cartas especiais · ${IND.cards.filter(c=>S.inv[c.id]&&cpCollectionVisible(c)).length}${typeof AD!="undefined"&&AD?"/"+l.length+" (ADM vê todas)":""}</p><div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:""},exAl=()=>{const l=EX.cards.filter(cpCollectionVisible);return l.length?`<p class="mut" style="margin:22px 0 8px">Cartas de arena · ${EX.cards.filter(c=>S.inv[c.id]&&cpCollectionVisible(c)).length}/${l.length}</p><div class="fr al"><div class="grid">${l.map(dkTile).join("")}</div></div>`:""};
 function arenaInit(){if(!S.ag){S.ag=1;S.inv[EX.cards[0].id]=(S.inv[EX.cards[0].id]||0)+1;save()}}
 function prog(){let s="";while((S.tm+1)*MK<=Math.min(S.tp,CONFIG.mkMax)){S.tm++;S.fr+=MK;s+=` · 🏅 ${fmt(S.tm*MK)} 🏆: ${gem}+${MK}`;if(S.tm*MK%CONFIG.mkPacote==0){gift(dpk().id,1,true);s+=" · 🎁 +1 pacote"}}return s}
 const bcap=()=>S.ar<8?TR[S.ar+1]:CONFIG.chefeFinal,bossOK=()=>!S.camp&&S.tp>=bcap();
@@ -4283,14 +4342,14 @@ return L.map((a,i)=>{const m=a[3]||{};return ck(`data-i="${i}"`,(a[0]||"(sem nom
 
 function yPaint(){const b=$("qab"),c=$("ec");if(b&&c)b.innerHTML=qabHtml(c.value)}
 function yMode(){const n=$("ec").value=="__",g=k=>cfg.querySelector(`[data-k="@${k}"]`),s=g("sc"),d=g("dc");if(s)s.textContent=n?"💾 Criar carta e habilidades":"💾 Salvar carta e habilidades";if(d)d.style.display=n?"none":"";
-if(n){["en","ehp","eatk","ech","eh","ebk","ega","etb","eel","eel2"].forEach(i=>$(i).value="");$("er").value=0;cpSyncCardElements()}}
+if(n){["en","ehp","eatk","ech","eh","ebk","ega","etb","eel","eel2"].forEach(i=>$(i).value="");$("er").value=0;if($("ecv"))$("ecv").value="all";cpSyncCardElements()}}
 function yInit(){QP=[];const e=$("ec");if(e&&e.options.length>1){e.selectedIndex=1;adxFc()}const h=$("hc");if(h&&e){h.value=e.value;try{hcLoad()}catch(x){}}const d=$("ds_c");if(d)d.open=true;yPaint()}
 function YAB(id){const q=t=>[...cfg.querySelectorAll(`#qab ${t}`)];ADM.cx=ADM.cx||{};const b=byId(id)||{},o=b.sk0||b.sk||[],L=Array.isArray(o[0])?o:o.length?[o]:[],del=q("[data-s]").filter(x=>!x.checked).map(x=>x.dataset.s),un=q("[data-l]").filter(x=>!x.checked).map(x=>x.dataset.l);
 ADM.ab=ADM.ab.filter(a=>!del.includes(a.id));const z=(ADM.ca[id]||[]).filter(x=>!del.includes(x)&&!un.includes(x));
 q("[data-p]").filter(x=>x.checked).forEach(x=>{const p=QP[+x.dataset.p];if(!p)return;if(p.k=="l")z.push(p.id);else{const h=hxEx[p.i],n="h"+rid();ADM.ab.push({id:n,n:h[0],q:"",rc:h[1],ef:JSON.parse(JSON.stringify(h[2])),tr:h[3],el:h[4],el2:h[5],solo:id});z.push(n)}});
 ADM.ca[id]=z;ADM.cx[id]=L.map(a=>a[0]).filter((n,i)=>{const c=cfg.querySelector(`#qab [data-i="${i}"]`);return c&&!c.checked});QP=[]}
 function YNEW(){const g=i=>$(i).value,n=g("en").trim(),pk=g("ek2");if(!n)return toast("Dê um nome à carta.");if(!pk)return toast("Escolha o pacote.");
-const rr=+g("er"),x={id:"a"+rid(),pk,r:R[rr][0],n,d:g("eh").trim()||undefined},tb=g("etb").trim().slice(0,24),ch=parseFloat(g("ech")),hp=+g("ehp"),at=+g("eatk"),warns=[];if(ALL.some(c=>nrm(c.n)===nrm(n)))warns.push("Já existe uma carta com esse nome.");const band=Math.max(.05,(+CONFIG.faixa||15)/100),base=ST[rr]||[];if(hp>0&&base[0]>0&&(hp<base[0]*(1-band)||hp>base[0]*(1+band)))warns.push("Vida fora da faixa sugerida para o rank.");if(at>0&&base[1]>0&&(at<base[1]*(1-band)||at>base[1]*(1+band)))warns.push("Dano fora da faixa sugerida para o rank.");if(!g("eh").trim())warns.push("Carta sem história.");if(!PEND)warns.push("Carta sem imagem selecionada.");if(warns.length)toast("⚖️ Avisos de equilíbrio: "+warns.join(" "));if(tb)x.tb=tb;if(ch>0)x.ch=ch;if(hp>0)x.hp=hp;if(at>0)x.atk=at;{const el=g("eel"),el2=g("eel2");if(el)x.el=el;else delete x.el;if(el&&el2&&el!==el2)x.el2=el2;else delete x.el2}
+const rr=+g("er"),x={id:"a"+rid(),pk,r:R[rr][0],n,d:g("eh").trim()||undefined,colVis:g("ecv")==="owned"?"owned":"all"},tb=g("etb").trim().slice(0,24),ch=parseFloat(g("ech")),hp=+g("ehp"),at=+g("eatk"),warns=[];if(ALL.some(c=>nrm(c.n)===nrm(n)))warns.push("Já existe uma carta com esse nome.");const band=Math.max(.05,(+CONFIG.faixa||15)/100),base=ST[rr]||[];if(hp>0&&base[0]>0&&(hp<base[0]*(1-band)||hp>base[0]*(1+band)))warns.push("Vida fora da faixa sugerida para o rank.");if(at>0&&base[1]>0&&(at<base[1]*(1-band)||at>base[1]*(1+band)))warns.push("Dano fora da faixa sugerida para o rank.");if(!g("eh").trim())warns.push("Carta sem história.");if(!PEND)warns.push("Carta sem imagem selecionada.");if(warns.length)toast("⚖️ Avisos de equilíbrio: "+warns.join(" "));if(tb)x.tb=tb;if(ch>0)x.ch=ch;if(hp>0)x.hp=hp;if(at>0)x.atk=at;{const el=g("eel"),el2=g("eel2");if(el)x.el=el;else delete x.el;if(el&&el2&&el!==el2)x.el2=el2;else delete x.el2}
 if(PEND&&PW=="fj")IMG[x.id]=PEND;{const d=$("adr2");if(d&&d.checked)x.dr=1}ADM.c.push(x);YAB(x.id);x.dr?drGo():adxGo()}
 document.addEventListener("change",e=>{const t=e.target;if(!t||!t.id)return;
 if(t.id=="ec"){QP=[];const h=$("hc");if(h&&t.value!="__"){h.value=t.value;try{hcLoad()}catch(x){}}yMode();yPaint()}
@@ -4384,7 +4443,7 @@ adxT=(i,l,v,r)=>cpFl(l,`<textarea id="${i}" rows="${r}">${v}</textarea>`),
 adxL={vidas:"Vidas de cada jogador na luta",acoes:"Ações por turno",acaoIni:"Ações do primeiro turno",turnos:"Máximo de turnos da luta",iaMs:"Tempo de reação do rival (ms)",turnoSeg:"Duelo ao vivo · segundos por turno (0 = sem limite)",sumiuSeg:"Duelo ao vivo · segundos extras até poder vencer por abandono",danoMult:"Dano de todas as cartas na luta (×)",vidaMult:"Vida de todas as cartas na luta (×)",admPin:"PIN do modo ADM",limiteDia:"Lutas por dia que dão prêmio",pacVit:"Vitórias para ganhar 1 pacote",tw:"Troféus ganhos por vitória",tl:"Troféus perdidos por derrota",mk:"Troféus por marco (e fragmentos do marco)",mkPacote:"Troféus por pacote de marco",mkMax:"Teto de troféus dos marcos",chefeFinal:"Troféus do chefe final",chefe:"Força do chefe (×)",diaria:"Fragmentos do login diário",amigoFrag:"Fragmentos por luta com amigo",amigoDia:"Lutas com amigo por dia",derrota:"Fragmentos por derrota",nDia:"Missões diárias por dia",mDia:"Fragmentos por missão diária",mSem:"Fragmentos por missão semanal",mSemPac:"Pacotes por missão semanal",mDiaBonus:"Missões diárias para 1 pacote bônus",arenaPac:"Pacotes do chefe da arena 1",arenaPacMais:"Pacotes a mais por arena",arenaFrag:"Fragmentos do chefe × nº da arena",campPac:"Pacotes do Campeão",campFrag:"Fragmentos do Campeão",rewardRandomChance:"Chance de pacote aleatório nas recompensas (0–100%; 0 = pacote normal)",gratisLivre:"Pacotes do dia sem jogar",gratisJogar:"Pacotes do dia por batalha",imgKB:"Tamanho máx. da imagem (KB)",arf0:"Fragmentos da 1ª vitória de arena",arfK:"+ fragmentos a cada arena",fusArena:"Arena que libera as fusões (1 = livre)",sArena:"Arena que libera o rank S e acima (1 = livre)",fusMult:"Preço das fusões (× o padrão)",faixa:"Folga da faixa de status por rank (± %)",som:"Sons do jogo (1 = ligado, 0 = desligado)",musica:"Música de fundo (1 = ligada, 0 = desligada)",botErro:"Erro dos bots na Arena 1 (% de jogadas ao acaso · cai até 2% na Arena 8)",botForca:"Força extra dos bots por arena (%)",botNivel:"Nível de fusão dos bots (× · 0 = sem fusão)"},
 adxPo=()=>adxO(P,p=>`<option value="${p.id}">${p.e} ${p.n}</option>`),
 adxCo=()=>adxO(ALL,c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`),
-adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",`<option value="__">➕ Nova carta…</option>`+adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("eel","Elemento 1",ELOPT)+adxS("eel2","Elemento 2 (opcional)",ELOPT2)+`<div id="cp-card-el-preview"></div>`+cpFl("Tribo / família (opcional)",'<input id="etb" maxlength="24" placeholder="Dragões, Bestas, Humanos, Espíritos…">')+`<p class="mut" style="margin:-4px 0 8px;text-transform:none;letter-spacing:0">Use o mesmo nome nas cartas que pertencem à família. A partir de 2 cartas no deck, a sinergia é ativada.</p>`+adxS("ek2","Pacote",adxPo()+'<option value="ind">🎉 Sem pacote · carta especial</option>')+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+adxI("ebk","Verso desta carta (link da imagem 3:4 · vazio = o do pacote)")+cpFl("Ou envie a imagem do verso desta carta",'<input id="fbk" type="file" accept="image/*">')+adxI("ega","Ganha de prêmio ao chegar na arena (0 = não ganha)","","number")+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+`<p class="mut" style="margin:12px 0 2px">✨ Habilidades desta carta (desmarque para remover)</p><div id="qab">${qabHtml(ALL[0]&&ALL[0].id)}</div>`+adxS("qad","",`<option value="">➕ Adicionar habilidade…</option><optgroup label="Modelos prontos (só desta carta)">${hxEx.map((h,i)=>`<option value="m${i}">${h[0]}</option>`).join("")}</optgroup><optgroup label="Biblioteca">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="l${a.id}">${a.el&&a.el!=="carta"?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / ")+" · ":"🃏 "}${a.n}</option>`).join("")}</optgroup>`)+`<label class="yck"><input type="checkbox" id="adr2" checked> 📦 Se for carta nova: guardar sem lançar</label>`+adxB("sc","💾 Salvar carta e habilidades")+adxB("dc","Excluir carta","gh")),
+adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",`<option value="__">➕ Nova carta…</option>`+adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("eel","Elemento 1",ELOPT)+adxS("eel2","Elemento 2 (opcional)",ELOPT2)+`<div id="cp-card-el-preview"></div>`+cpFl("Tribo / família (opcional)",'<input id="etb" maxlength="24" placeholder="Dragões, Bestas, Humanos, Espíritos…">')+`<p class="mut" style="margin:-4px 0 8px;text-transform:none;letter-spacing:0">Use o mesmo nome nas cartas que pertencem à família. A partir de 2 cartas no deck, a sinergia é ativada.</p>`+adxS("ek2","Pacote",adxPo()+'<option value="ind">🎉 Sem pacote · carta especial</option>')+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+adxI("ebk","Verso desta carta (link da imagem 3:4 · vazio = o do pacote)")+cpFl("Ou envie a imagem do verso desta carta",'<input id="fbk" type="file" accept="image/*">')+adxI("ega","Ganha de prêmio ao chegar na arena (0 = não ganha)","","number")+adxS("ecv","Visibilidade na coleção",'<option value="all">👁️ Aparece na coleção de todos</option><option value="owned">🔒 Só aparece para quem possui a carta</option>')+`<p class="mut" style="margin:-4px 0 10px;text-transform:none;letter-spacing:0">Use “Só aparece para quem possui” em cartas especiais ou exclusivas. Quem ainda não ganhou a carta não verá espaços faltando no álbum.</p>`+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+`<p class="mut" style="margin:12px 0 2px">✨ Habilidades desta carta (desmarque para remover)</p><div id="qab">${qabHtml(ALL[0]&&ALL[0].id)}</div>`+adxS("qad","",`<option value="">➕ Adicionar habilidade…</option><optgroup label="Modelos prontos (só desta carta)">${hxEx.map((h,i)=>`<option value="m${i}">${h[0]}</option>`).join("")}</optgroup><optgroup label="Biblioteca">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="l${a.id}">${a.el&&a.el!=="carta"?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / ")+" · ":"🃏 "}${a.n}</option>`).join("")}</optgroup>`)+`<label class="yck"><input type="checkbox" id="adr2" checked> 📦 Se for carta nova: guardar sem lançar</label>`+adxB("sc","💾 Salvar carta e habilidades")+adxB("dc","Excluir carta","gh")),
 adxPk=()=>adxD("k","📦 Editar pacotes",adxS("ek","Pacote",adxPo()+(PX.length?`<optgroup label="Encerrados (já sumiram da loja)">${PX.map(p=>`<option value="${p.id}">${p.e} ${p.n}</option>`).join("")}</optgroup>`:""))+adxI("kn","Nome")+adxI("ke","Emoji")+adxI("kh","Cor (0 a 360)","","number")+adxI("kc","Preço em fragmentos (vazio = padrão)","","number")+adxI("ko","Chances % por raridade F,E,D,C,B,A,S,SS,SSS (vazio = padrão)")+adxI("kb","Verso das cartas deste pacote (link da imagem 3:4 · vazio = verso padrão)")+cpFl("Ou envie a imagem do verso do pacote",'<input id="fpb" type="file" accept="image/*">')+adxI("kt","Pacote some em (data e hora · vazio = nunca sai)","","datetime-local")+adxI("kx","Pacote especial (1 = não vende · cartas só como prêmio)","","number")+adxS("kf","Depois que o pacote acabar (precisa da data acima)",'<option value="0">Continuar na loja como “Encerrado”</option><option value="1">Sumir da loja e manter as cartas (viram cartas especiais)</option><option value="2">Sumir da loja e excluir as cartas junto</option>')+adxB("sk","Salvar pacote")+adxB("dk","Excluir pacote","gh")),
 adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("cf_"+k,adxL[k]||k,CONFIG[k],typeof CONFIG[k]=="number"?"number":"text")).join("")
 +adxI("rfr","Fragmentos por repetida · F,E,D,C,B,A,S,SS,SSS",FRAG.join(","))+adxI("rcu","Preço padrão do pacote",CUSTO,"number")+adxI("rini","Fragmentos de quem começa",INICIO,"number")
@@ -4399,14 +4458,14 @@ adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("
 +[1,2,3].map(pos=>{const v=weeklyPrizeConfig()[pos-1];return adxI(`wr${pos}pk`,`${pos}º lugar · Pacotes`,v.pk,"number")+adxI(`wr${pos}fr`,`${pos}º lugar · Fragmentos`,v.fr,"number")}).join("")
 +adxB("sr","Salvar regras")+adxB("rr","Restaurar padrões","gh")),
 adxGv=()=>adxD("g","🧪 Dar itens e testes",adxI("gn","Quantidade",10,"number")+adxS("gp","Pacote de presente",adxPo())+adxS("gc","Carta",adxCo())+adxB("gf","Dar fragmentos","cy")+adxB("gg","Dar pacotes de presente","cy")+adxB("gk","Dar a carta","cy")+adxB("ga","Liberar todas as cartas","gh"));
-function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("eel").value=c.el||"";$("eel2").value=c.el2||"";cpSyncCardElements();$("etb").value=c.tb||"";$("ek2").value=c.p.id;$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||"";$("ebk").value=c.bk||"";$("ega").value=c.ga||""}
+function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("eel").value=c.el||"";$("eel2").value=c.el2||"";cpSyncCardElements();$("etb").value=c.tb||"";$("ek2").value=c.p.id;$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||"";$("ebk").value=c.bk||"";$("ega").value=c.ga||"";$("ecv").value=c.colVis==="owned"?"owned":"all"}
 function adxFk(){const p=P.concat(PX).find(q=>q.id==$("ek").value);if(!p)return;$("kn").value=p.n;$("ke").value=p.e;$("kh").value=p.h;$("kc").value=p.cost||"";$("ko").value=p.odds?p.odds.join(","):"";$("kb").value=p.bk||"";$("kt").value=p.ate?new Date(p.ate-new Date(p.ate).getTimezoneOffset()*6e4).toISOString().slice(0,16):"";$("kx").value=p.esp||"";$("kf").value=p.fim||0}
 function adxGo(){sADM();sessionStorage.cpad=[...cfg.querySelectorAll("details[open]")].map(d=>d.id).join();try{sessionStorage.cptab=tab}catch(e){}location.reload()}
 function adxSc(){if($("ec").value=="__")return YNEW();const c=byId($("ec").value);if(!c)return;const g=i=>$(i).value,r=+g("er"),pk=g("ek2");let f=[+g("ehp"),+g("eatk")];
 if(pk!=c.p.id&&c.p.cards.length<2&&c.p!==IND&&!c.p.ex)return toast("O pacote precisa ficar com ao menos 1 carta.");
 if(f.some(x=>!(x>0)))return toast("Vida e dano precisam ser maiores que 0.");
 if(r!=c.r&&f[0]==c.hp&&f[1]==c.atk)f=[ST[r][0],ST[r][1]];
-ADM.o[c.id]={n:g("en").trim()||c.n,r,pk,el:g("eel"),el2:g("eel2"),tb:g("etb").trim().slice(0,24),hp:f[0],atk:f[1],ch:parseFloat(g("ech"))||0,d:g("eh").trim(),bk:g("ebk").trim(),ga:Math.max(0,Math.floor(+g("ega")||0))};if(PEND&&PW=="fj")IMG[c.id]=PEND;if(PEND&&PW=="fbk"){IMG["bk_"+c.id]=PEND;ADM.o[c.id].bk=""}else if(g("ebk").trim())delete IMG["bk_"+c.id];YAB(c.id);adxGo()}
+ADM.o[c.id]={n:g("en").trim()||c.n,r,pk,el:g("eel"),el2:g("eel2"),tb:g("etb").trim().slice(0,24),hp:f[0],atk:f[1],ch:parseFloat(g("ech"))||0,d:g("eh").trim(),bk:g("ebk").trim(),ga:Math.max(0,Math.floor(+g("ega")||0)),colVis:g("ecv")==="owned"?"owned":"all"};if(PEND&&PW=="fj")IMG[c.id]=PEND;if(PEND&&PW=="fbk"){IMG["bk_"+c.id]=PEND;ADM.o[c.id].bk=""}else if(g("ebk").trim())delete IMG["bk_"+c.id];YAB(c.id);adxGo()}
 function adxXp(p){const id=p.id;ADM.p=ADM.p.filter(q=>q.id!=id);ADM.xp=[...new Set([...(ADM.xp||[]),id])];ADM.c.filter(x=>x.pk==id).forEach(x=>delete IMG[x.id]);ADM.c=ADM.c.filter(x=>x.pk!=id);if(ADM.d==id)ADM.d="";delete ADM.po[id];delete IMG["pk_"+id];p.cards.forEach(x=>{delete IMG[x.id];delete S.inv[x.id]})}
 function adxDc(){const c=byId($("ec").value);if(!c)return;const p=c.p,ult=p.cards.length<2&&p!==IND&&!p.ex;if(ult&&P.length<2)return toast("O jogo precisa ter ao menos 1 pacote com 1 carta.");
 ask("Excluir carta?",ult?`<b>${c.n}</b> é a última carta do pacote <b>${p.n}</b> · o pacote também será excluído.`:`<b>${c.n}</b> some do jogo e dos pacotes.`,"Excluir",()=>{ADM.c=ADM.c.filter(x=>x.id!=c.id);delete IMG[c.id];ADM.o[c.id]={del:1};delete S.inv[c.id];if(ult)adxXp(p);save();adxGo()})}
@@ -7938,7 +7997,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!q("cp-el-guide")?.
 
 
 <script id="cp-cards-fx-js">(()=>{let raf=0,cur=0,box=0,X=0,Y=0;
-const find=t=>{if(!t||!t.closest)return[];const c=t.closest('.cd');if(c)return[c,c];const w=t.closest('.f3d');return w?[w.querySelector('.cd'),w]:[]};
+const find=t=>{if(!t||!t.closest)return[];if(t.closest('#fc .f3d'))return[];const c=t.closest('.cd');if(c)return[c,c];const w=t.closest('.f3d');return w?[w.querySelector('.cd'),w]:[]};
 const off=c=>c.classList.remove('cpx');
 const put=()=>{raf=0;if(!cur)return;const b=box.getBoundingClientRect(),f=(v,a,s)=>Math.min(100,Math.max(0,(v-a)/s*100)).toFixed(1);cur.style.setProperty('--cx',f(X,b.left,b.width));cur.style.setProperty('--cy',f(Y,b.top,b.height));cur.classList.add('cpx')};
 const mv=e=>{const[c,b]=find(e.target);if(cur&&cur!==c){off(cur);cur=0}if(!c||c.classList.contains('lock'))return;cur=c;box=b;X=e.clientX;Y=e.clientY;raf||(raf=requestAnimationFrame(put))};
@@ -8075,9 +8134,7 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
   "use strict";
   const byId=id=>document.getElementById(id);
   const makeBack=()=>{
-    try{
-      if(typeof bkH==="function" && typeof FC!=="undefined" && FC) return bkH(FC,FC.p);
-    }catch(e){console.warn("Verso da carta",e)}
+    try{if(typeof bkH==="function"&&typeof FC!=="undefined"&&FC)return bkH(FC,FC.p)}catch(e){console.warn("Verso da carta",e)}
     return '<div class="cb back">✦</div>';
   };
   function installFichaTurn(){
@@ -8097,41 +8154,60 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
     if(!inner.querySelector(":scope > .cb"))inner.insertAdjacentHTML("beforeend",makeBack());
     let note=sheet.querySelector(":scope > .f3h");
     if(!note){note=document.createElement("p");note.className="f3h";wrapper.insertAdjacentElement("afterend",note)}
-    note.textContent="Arraste a carta ou toque nela para ver o verso"; 
-    const oldButton=sheet.querySelector(":scope > .cp-card-turn-btn");
-    if(oldButton)oldButton.remove();
-
-    // Substitui event handlers antigos da rotação para evitar dois controles movendo a carta ao mesmo tempo.
+    note.textContent="Arraste suavemente para revelar o reflexo e inclinar · toque para virar a carta";
+    const oldButton=sheet.querySelector(":scope > .cp-card-turn-btn");if(oldButton)oldButton.remove();
+    // Limpa handlers antigos de f3(); a ficha passa a ter um único controlador de toque.
     wrapper.onpointerdown=null;wrapper.onpointermove=null;wrapper.onpointerup=null;wrapper.onpointercancel=null;
-    if(wrapper.dataset.cpTurnReady==="1")return;
-    wrapper.dataset.cpTurnReady="1";
-    let angleY=0,angleX=0,dragging=false,moved=0,lastX=0,lastY=0,pointerId=null;
-    const set=(animate=true)=>{
-      inner.style.transition=animate?"transform .48s cubic-bezier(.2,.8,.2,1)":"none";
-      inner.style.transform=`rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+    if(wrapper.dataset.cpTurnReady==="2")return;
+    wrapper.dataset.cpTurnReady="2";
+    let baseY=0,currentX=0,currentY=0,targetX=0,targetY=0,raf=0;
+    let pointerId=null,startX=0,startY=0,dragged=false;
+    const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+    const paint=()=>{inner.style.transform=`rotateX(${currentX.toFixed(2)}deg) rotateY(${(baseY+currentY).toFixed(2)}deg)`};
+    const tick=()=>{
+      raf=0;
+      currentX+=(targetX-currentX)*.19;
+      currentY+=(targetY-currentY)*.19;
+      paint();
+      if(Math.abs(targetX-currentX)>.12||Math.abs(targetY-currentY)>.12){raf=requestAnimationFrame(tick);return}
+      currentX=targetX;currentY=targetY;paint();
+      if(pointerId===null)inner.style.transition="transform .30s cubic-bezier(.2,.8,.2,1)";
     };
-    const flip=()=>{angleX=0;angleY=(Math.round(angleY/180)+1)*180;set(true)};
+    const animate=()=>{inner.style.transition="none";if(!raf)raf=requestAnimationFrame(tick)};
+    const resetTilt=()=>{targetX=0;targetY=0;animate()};
+    const flip=()=>{
+      baseY=(baseY+180)%360;currentX=currentY=targetX=targetY=0;
+      inner.style.transition="transform .46s cubic-bezier(.2,.8,.2,1)";paint();
+    };
     wrapper.addEventListener("pointerdown",e=>{
-      if(e.button!==undefined&&e.button!==0)return;
-      dragging=true;moved=0;lastX=e.clientX;lastY=e.clientY;pointerId=e.pointerId;
+      if(!e.isPrimary||pointerId!==null||(e.pointerType==="mouse"&&e.button!==0))return;
+      pointerId=e.pointerId;startX=e.clientX;startY=e.clientY;dragged=false;
+      targetX=currentX;targetY=currentY;inner.style.transition="none";
       try{wrapper.setPointerCapture(pointerId)}catch(_){ }
-      set(false);
     });
     wrapper.addEventListener("pointermove",e=>{
-      if(!dragging||e.pointerId!==pointerId)return;
-      const dx=e.clientX-lastX,dy=e.clientY-lastY;moved+=Math.abs(dx)+Math.abs(dy);
-      lastX=e.clientX;lastY=e.clientY;angleY+=dx*.62;angleX=Math.max(-65,Math.min(65,angleX-dy*.42));set(false);
+      if(pointerId===null||e.pointerId!==pointerId)return;
+      const dx=e.clientX-startX,dy=e.clientY-startY,dist=Math.hypot(dx,dy);
+      // Zona morta: pequenos tremores naturais do dedo não movem a carta.
+      if(!dragged&&dist<6.5)return;
+      dragged=true;
+      // O ângulo depende do deslocamento total desde o início, não do ruído de cada evento.
+      targetY=clamp(dx*.20,-16,16);
+      targetX=clamp(-dy*.16,-11,11);
+      animate();
     });
-    const end=e=>{
-      if(!dragging|| (e&&e.pointerId!==pointerId))return;
-      dragging=false;pointerId=null;
-      if(moved<9)flip();else set(true);
+    const finish=(e,cancelled=false)=>{
+      if(pointerId===null||(e&&e.pointerId!==pointerId))return;
+      const wasDrag=dragged;pointerId=null;
+      if(cancelled){resetTilt();return}
+      if(!wasDrag){flip();return}
+      resetTilt();
     };
-    wrapper.addEventListener("pointerup",end);
-    wrapper.addEventListener("pointercancel",()=>{dragging=false;pointerId=null;set(true)});
-    set(false);
+    wrapper.addEventListener("pointerup",e=>finish(e,false));
+    wrapper.addEventListener("pointercancel",e=>finish(e,true));
+    wrapper.addEventListener("lostpointercapture",e=>{if(pointerId!==null)finish(e,true)});
+    inner.style.transition="transform .30s cubic-bezier(.2,.8,.2,1)";paint();
   }
-  // O hook acompanha cada abertura/troca de ficha; o RAF espera o HTML ser colocado no DOM.
   if(typeof window.cpRegisterViewHook==="function")window.cpRegisterViewHook(()=>requestAnimationFrame(installFichaTurn));
   const fc=byId("fc");
   if(fc&&typeof MutationObserver!=="undefined"){
@@ -8147,66 +8223,88 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
 <script id="cp-touch-holo-ficha-2026">
 (()=>{
  "use strict";
- const root=document.getElementById("fc");
- if(!root)return;
- const $=(sel,base=root)=>base.querySelector(sel);
- const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+ const root=document.getElementById("fc");if(!root)return;
+ const $=(sel,base=root)=>base.querySelector(sel),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
  function prepare(){
    const sheet=$(".fch"),wrap=sheet&&$(":scope > .f3d",sheet),card=wrap&&$(":scope > .in > .cd",wrap);
    if(!wrap||!card)return;
    const rank=Number(card.dataset.r);
    if(rank<6||rank>8||card.classList.contains("lock"))return;
-   const art=$(":scope > .art",card);
-   if(!art)return;
-   if(!$(":scope > .cp-touch-holo",art)){
-     const film=document.createElement("i");
-     film.className="cp-touch-holo";
-     film.setAttribute("aria-hidden","true");
+   const art=$(":scope > .art",card);if(!art)return;
+   if(!$(':scope > .cp-touch-holo',art)){
+     const film=document.createElement("i");film.className="cp-touch-holo";film.setAttribute("aria-hidden","true");
+     const uid="cpsym"+Math.random().toString(36).slice(2,10);
+     const colors=rank===6?["#d99420","#fff0a1","#ff8c43","#f7ca62"]:rank===7?["#ff5f59","#ffd18c","#a05ce9","#68dff3"]:["#ef4fcf","#63eaff","#ffe36c","#9b73ff"];
+     const gradient=(id)=>`<linearGradient id="${id}" x1="0" y1="0" x2="1" y2=".35"><stop offset="0" stop-color="${colors[0]}" stop-opacity=".05"/><stop offset=".18" stop-color="${colors[0]}" stop-opacity=".86"/><stop offset=".39" stop-color="${colors[1]}" stop-opacity=".95"/><stop offset=".61" stop-color="${colors[2]}" stop-opacity=".9"/><stop offset=".82" stop-color="${colors[3]}" stop-opacity=".82"/><stop offset="1" stop-color="${colors[0]}" stop-opacity=".03"/></linearGradient>`;
+     const svg=(cls,gid,d,branches)=>`<svg class="cp-sym-stream ${cls}" viewBox="0 0 360 420" preserveAspectRatio="none" aria-hidden="true"><defs>${gradient(gid)}<filter id="${gid}blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.4"/></filter></defs><path class="cp-sym-glow" d="${d}" style="stroke:url(#${gid});filter:url(#${gid}blur)"/><path class="cp-sym-core" d="${d}" style="stroke:url(#${gid})"/>${branches.map((bd,i)=>`<path class="cp-sym-branch" d="${bd}" style="stroke:url(#${gid})"/>`).join("")}</svg>`;
+     const main="M -28 258 C 8 197 42 294 99 230 C 140 184 150 129 193 172 C 236 215 258 304 300 248 C 339 196 366 154 406 178";
+     const mainBranches=["M 96 234 C 122 207 122 161 149 132 C 165 113 181 111 194 88","M 257 300 C 279 327 304 346 339 355 C 362 360 379 348 397 329","M 298 249 C 316 269 323 288 327 310"];
+     const second="M -26 148 C 27 99 56 178 108 128 C 158 80 196 78 232 120 C 273 167 296 212 346 181 C 375 164 385 137 410 126";
+     const secondBranches=["M 108 129 C 122 100 133 78 158 61","M 230 119 C 248 91 271 76 295 75"];
+     film.innerHTML=svg("primary",uid+"a",main,mainBranches)+svg("secondary",uid+"b",second,secondBranches);
      art.appendChild(film);
    }
-   if(!$(":scope > .cp-touch-specular",art)){
-     const glint=document.createElement("i");
-     glint.className="cp-touch-specular";
-     glint.setAttribute("aria-hidden","true");
-     art.appendChild(glint);
+   if(!$(':scope > .cp-touch-specular',art)){
+     const glint=document.createElement("i");glint.className="cp-touch-specular";glint.setAttribute("aria-hidden","true");art.appendChild(glint);
    }
    card.classList.add("cp-touch-holo-card");
-   wrap.classList.add("cp-holo-gesture");
-   if(wrap.dataset.cpTouchHoloReady==="1")return;
-   wrap.dataset.cpTouchHoloReady="1";
-   let activeId=null,lastX=0,lastY=0,fadeTimer=0,travel=0;
-   const setPoint=(e,dx=0,dy=0)=>{
-     const b=wrap.getBoundingClientRect();
-     if(!b.width||!b.height)return;
-     const x=clamp((e.clientX-b.left)/b.width,0,1),y=clamp((e.clientY-b.top)/b.height,0,1);
-     const angle=(Math.atan2(dy||0.001,dx||1)*180/Math.PI+360)%360;
-     let hue;
-     if(rank===6)hue=(x-.5)*24+(y-.5)*8;
-     else if(rank===7)hue=(x-.5)*82+(y-.5)*34;
-     else hue=(x*210+y*145)%360;
-     card.style.setProperty("--cp-holo-x",(x*100).toFixed(1)+"%");
-     card.style.setProperty("--cp-holo-y",(y*100).toFixed(1)+"%");
-     card.style.setProperty("--cp-holo-angle",(angle+105).toFixed(1)+"deg");
+   if(wrap.dataset.cpTouchHoloReady==="2")return;
+   wrap.dataset.cpTouchHoloReady="2";
+   // Pequenas diferenças por carta e por toque evitam trajetórias repetidas e robóticas.
+   const random=(a,b)=>a+Math.random()*(b-a);
+   const seedFlow=()=>{
+     card.style.setProperty("--cp-flow-duration",random(8.2,11.8).toFixed(2)+"s");
+     card.style.setProperty("--cp-flow-duration-b",random(9.7,13.8).toFixed(2)+"s");
+     card.style.setProperty("--cp-flow-hue-duration",random(10.5,15.5).toFixed(2)+"s");
+     card.style.setProperty("--cp-flow-hue-duration-b",random(13,18).toFixed(2)+"s");
+     card.style.setProperty("--cp-flow-delay",(-random(0,5)).toFixed(2)+"s");
+     card.style.setProperty("--cp-flow-delay-b",(-random(0,7)).toFixed(2)+"s");
+     card.style.setProperty("--cp-flow-rotation",random(-32,32).toFixed(1)+"deg");
+     const mirror=Math.random()<.5?-1:1;
+     card.style.setProperty("--cp-flow-mirror",String(mirror));
+     card.style.setProperty("--cp-flow-mirror-b",String(-mirror));
+     card.style.setProperty("--cp-flow-hue",(rank===6?random(-12,16):rank===7?random(-24,42):random(0,360)).toFixed(1)+"deg");
+     card.style.setProperty("--cp-flow-hue-range",(rank===6?random(28,58):rank===7?random(95,175):360).toFixed(1)+"deg");
+   };
+   let pointerId=null,fadeTimer=0,raf=0,lastX=0,lastY=0;
+   let targetX=.5,targetY=.5,smoothX=.5,smoothY=.5,targetAngle=125,smoothAngle=125;
+   const point=(e)=>{
+     const b=art.getBoundingClientRect();if(!b.width||!b.height)return;
+     targetX=clamp((e.clientX-b.left)/b.width,.02,.98);
+     targetY=clamp((e.clientY-b.top)/b.height,.02,.98);
+   };
+   const write=()=>{
+     card.style.setProperty("--cp-holo-x",(smoothX*100).toFixed(1)+"%");
+     card.style.setProperty("--cp-holo-y",(smoothY*100).toFixed(1)+"%");
+     card.style.setProperty("--cp-holo-angle",smoothAngle.toFixed(1)+"deg");
+     const hue=rank===6?(smoothX-.5)*20:rank===7?330+(smoothX-.5)*70:(smoothX*170+smoothY*190)%360;
      card.style.setProperty("--cp-holo-hue",hue.toFixed(1)+"deg");
    };
+   const tick=()=>{
+     raf=0;smoothX+=(targetX-smoothX)*.18;smoothY+=(targetY-smoothY)*.18;smoothAngle+=(targetAngle-smoothAngle)*.16;write();
+     if(Math.abs(targetX-smoothX)>.002||Math.abs(targetY-smoothY)>.002||Math.abs(targetAngle-smoothAngle)>.4)raf=requestAnimationFrame(tick);
+   };
+   const schedule=()=>{if(!raf)raf=requestAnimationFrame(tick)};
    const activate=e=>{
-     if(e.button!==undefined&&e.button!==0)return;
+     if(!e.isPrimary||(e.pointerType==="mouse"&&e.button!==0))return;
      if(fadeTimer){clearTimeout(fadeTimer);fadeTimer=0}
-     activeId=e.pointerId;lastX=e.clientX;lastY=e.clientY;travel=0;
-     card.classList.add("cp-holo-active");
-     setPoint(e,0,0);
+     pointerId=e.pointerId;lastX=e.clientX;lastY=e.clientY;point(e);
+     smoothX=targetX;smoothY=targetY;targetAngle=smoothAngle=125;
+     seedFlow();write();card.classList.add("cp-holo-active");
    };
    const move=e=>{
-     if(activeId===null||e.pointerId!==activeId)return;
+     if(pointerId===null||e.pointerId!==pointerId)return;
      const dx=e.clientX-lastX,dy=e.clientY-lastY;
-     travel+=Math.abs(dx)+Math.abs(dy);lastX=e.clientX;lastY=e.clientY;
-     setPoint(e,dx,dy);
+     // Filtra o jitter subpixel e evita mudar a luz a cada oscilação microscópica.
+     if(Math.hypot(dx,dy)<1.8)return;
+     lastX=e.clientX;lastY=e.clientY;point(e);
+     targetAngle=(Math.atan2(dy,dx)*180/Math.PI+360)%360+35;
+     schedule();
    };
    const release=e=>{
-     if(activeId===null||(e&&e.pointerId!==undefined&&e.pointerId!==activeId))return;
-     activeId=null;
-     if(fadeTimer)clearTimeout(fadeTimer);
-     fadeTimer=setTimeout(()=>{card.classList.remove("cp-holo-active");fadeTimer=0},travel<3?520:380);
+     if(pointerId===null||(e&&e.pointerId!==undefined&&e.pointerId!==pointerId))return;
+     pointerId=null;if(fadeTimer)clearTimeout(fadeTimer);
+     fadeTimer=setTimeout(()=>{card.classList.remove("cp-holo-active");fadeTimer=0},460);
    };
    wrap.addEventListener("pointerdown",activate,{passive:true});
    wrap.addEventListener("pointermove",move,{passive:true});
@@ -8214,7 +8312,7 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
    wrap.addEventListener("pointercancel",release,{passive:true});
    wrap.addEventListener("lostpointercapture",release,{passive:true});
    const note=$(":scope > .f3h",sheet);
-   if(note)note.textContent="Passe o dedo para revelar o brilho holográfico · arraste para girar · toque para ver o verso";
+   if(note)note.textContent="Deslize o dedo para inclinar e revelar o reflexo holográfico · toque para virar";
  }
  const schedule=()=>requestAnimationFrame(prepare);
  if(typeof window.cpRegisterViewHook==="function")window.cpRegisterViewHook(schedule);
