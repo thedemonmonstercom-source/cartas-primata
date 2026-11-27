@@ -5125,7 +5125,7 @@ const pn=(k,t)=>k=="m"?"mult":k=="p"?"pct":k=="n"?(t=="mh"?"golpes":"turnos"):k=
 const dflt=(t,g)=>HURT.has(t)?"e":SIGN.has(t)?(num(g.p)<0?"e":"s"):"s";
 const rk=v=>{const m=String(v).toUpperCase().replace(/[^A-Z]+/g," ").match(/(?:^|\s)(SSS|SS|S|A|B|C|D|E|F)(?=\s|$)/);return m?R.findIndex(x=>x[0]==m[1]):-1};
 const trg=s=>{const n=SL(s);if(!n)return"u";if(has(TRG,n))return n;
- for(const[k,x]of[["u",/^ativ|manual|^usar/],["in",/entr|chega|invoc|baixad|aparec|coloc.*campo|campo.*coloc/],["mo",/morr|mort|falec|destru|eliminad/],["ti",/inicio|comeco/],["te",/fim|final/],["da",/receb|sofr|dano|atingid/],["at",/atac/],["ki",/elimin|mata|derrot/],["sk",/habilid|skill/],["he",/curad|curar|cura/],["ev",/esquiv|desvi/],["ae",/aliado.*entr|entr.*aliado|aliado.*chega|chega.*aliado/],["am",/aliado.*morr|morr.*aliado|aliado.*morre/]])if(x.test(n))return k;return null};
+ for(const[k,x]of[["u",/^ativ|manual|^usar/],["ae",/aliado.*entr|entr.*aliado|aliado.*chega|chega.*aliado/],["am",/aliado.*morr|morr.*aliado|aliado.*morre/],["in",/entr|chega|invoc|baixad|aparec|coloc.*campo|campo.*coloc/],["mo",/morr|mort|falec|destru|eliminad/],["ti",/inicio|comeco/],["te",/fim|final/],["da",/receb|sofr|dano|atingid/],["at",/atac/],["ki",/elimin|mata|derrot/],["sk",/habilid|skill/],["he",/curad|curar|cura/],["ev",/esquiv|desvi/]])if(x.test(n))return k;return null};
 
 // ---- números dentro dos limites do jogo (com aviso)
 function cl(x,k,t,L,wa,nm){
