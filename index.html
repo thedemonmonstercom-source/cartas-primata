@@ -3044,7 +3044,7 @@ function rm(){el.remove();var s=document.getElementById('ix-css');if(s)s.remove(
 if(!ABERTURA)return rm();
 var RM=matchMedia('(prefers-reduced-motion:reduce)').matches,done=0,tm,rk=0;
 function sorteia(){ // carta real do jogo (menos as secretas); quanto mais rara, menos chance
- try{var l=ALL.filter(function(c){return c&&c.sl!='secreta'&&c.img});if(!l.length)l=ALL.filter(function(c){return c&&c.sl!='secreta'});if(!l.length||typeof card!='function')return;
+ try{var l=ALL.filter(function(c){return c&&cpCardCanDropFromPack(c)&&c.sl!='secreta'&&c.img});if(!l.length)l=ALL.filter(function(c){return c&&cpCardCanDropFromPack(c)&&c.sl!='secreta'});if(!l.length||typeof card!='function')return;
  var w=l.map(function(c){return Math.pow(CHANCE,c.r||0)}),x=Math.random()*w.reduce(function(a,b){return a+b},0);
  for(var i=0;i<l.length;i++){x-=w[i];if(x<=0)return l[i]}return l[l.length-1]}catch(e){}}
 function preparar(){
@@ -3163,6 +3163,11 @@ const P=[{id:"ini",n:"Pacote Inicial",e:"🎴",h:265,cards:[
 {r:"F",n:"Exemplo F6"},{r:"F",n:"Exemplo F7"},{r:"F",n:"Exemplo F8"},{r:"F",n:"Exemplo F9"},{r:"F",n:"Exemplo F10"},{r:"F",n:"Exemplo F11"}
 ]},{id:"abi",n:"Pacote Abissal",e:"🐙",h:190,cards:[{r:"F",n:"Alga Solta"},{r:"E",n:"Caranguejo"},{r:"D",n:"Água-viva"},{r:"C",n:"Tubarão Cinza"},{r:"B",n:"Polvo Sombrio"},{r:"A",n:"Sereia da Maré"},{r:"S",n:"Leviatã"},{r:"SS",n:"Kraken"},{r:"SSS",n:"Rei do Abismo"}]}].map(p=>{p.cards.forEach((c,i)=>prep(p,c,i));return p});
 const ALL=P.flatMap(p=>p.cards),$=i=>document.getElementById(i);
+// Cartas exclusivas: continuam cadastradas para o ADM, mas não aparecem nem são sorteadas publicamente.
+const cpIsOwnerOnly=c=>!!c&&(c.colVis==="owned"||c.collectionVisibility==="ownedOnly");
+const cpCardCanDropFromPack=c=>!!c&&!cpIsOwnerOnly(c);
+const cpPlayerCollectionVisible=c=>!!c&&(!cpIsOwnerOnly(c)||(S.inv&&S.inv[c.id]||0)>0);
+const cpPackHasDrops=p=>!!p&&Array.isArray(p.cards)&&p.cards.some(cpCardCanDropFromPack);
 const ov=$("ov"),stage=$("stage"),hint=$("hint"),acts=$("acts");
 let S={inv:{},opened:0},tab="h",as=0,cur=0;
 try{const j=JSON.parse(localStorage.getItem("colprimata_save")||localStorage.getItem("cartas1")||"null");if(j&&j.inv)S=j}catch(e){}
@@ -3172,21 +3177,22 @@ const save=()=>{try{avisos()}catch(e){}try{localStorage.setItem("colprimata_save
 function avisos(){if(!$("tc"))return;const a=S.ar+1,n=!S.av,v=S.av=S.av||{},L=[];
  if(a>=4&&!v.fus){v.fus=1;L.push("🔓 <b>Fusões liberadas!</b> Você já pode evoluir cartas até Incomum.")}
  if(a>=(v.rank||1)+1){v.rank=a;L.push(`🏟️ <b>Arena ${a} liberada!</b> Agora você pode usar cartas até o rank <b>${R[Math.min(8,a-1)][0]}</b>.`)}
- const g=v.g=v.g||{},G=[],e=cpxEvOn(),ek=e&&(e.id||e.ate);if(e&&v.ev!==ek&&v.ev!==e.ate){v.ev=ek;if(e.gf>0){S.fr+=e.gf;G.push("🎁 <b>+"+e.gf+" fragmentos</b> de presente do evento")}for(let q=0;q<(e.gq||0);q++){const o=P.filter(x=>!pkBlocked(x)),pk=(e.gk&&P.find(x=>x.id==e.gk))||o[Math.floor(Math.random()*o.length)];if(pk){gift(pk.id,1);G.push("🎁 Pacote de presente: <b>"+pk.n+"</b>")}}if(e.gf>0||e.gq>0){try{save();upd()}catch(x){}}G.push((e.tipo=="natal"?"🎄":"🎉")+" <b>Evento "+e.n+"</b>: fragmentos ×"+e.mf+" nas vitórias até "+new Date(e.ate).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}))}ALL.forEach(c=>{if(c.ga>0&&a>=c.ga&&!g[c.id]){g[c.id]=1;if(!(S.inv[c.id]>0)){S.inv[c.id]=1;G.push("🎁 <b>Carta especial!</b> "+c.n+" entrou na sua coleção.")}}});
+ const g=v.g=v.g||{},G=[],e=cpxEvOn(),ek=e&&(e.id||e.ate);if(e&&v.ev!==ek&&v.ev!==e.ate){v.ev=ek;if(e.gf>0){S.fr+=e.gf;G.push("🎁 <b>+"+e.gf+" fragmentos</b> de presente do evento")}for(let q=0;q<(e.gq||0);q++){const o=P.filter(x=>!pkBlocked(x)&&cpPackHasDrops(x)),pk=(e.gk&&P.find(x=>x.id==e.gk))||o[Math.floor(Math.random()*o.length)];if(pk){gift(pk.id,1);G.push("🎁 Pacote de presente: <b>"+pk.n+"</b>")}}if(e.gf>0||e.gq>0){try{save();upd()}catch(x){}}G.push((e.tipo=="natal"?"🎄":"🎉")+" <b>Evento "+e.n+"</b>: fragmentos ×"+e.mf+" nas vitórias até "+new Date(e.ate).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}))}ALL.forEach(c=>{if(c.ga>0&&a>=c.ga&&!g[c.id]){g[c.id]=1;if(!(S.inv[c.id]>0)){S.inv[c.id]=1;G.push("🎁 <b>Carta especial!</b> "+c.n+" entrou na sua coleção.")}}});
  if((L.length&&!n)||G.length)setTimeout(()=>toast((n?[]:L).concat(G).join("<br>")),700)}
-const own=p=>p.cards.filter(c=>S.inv[c.id]).length;
+const own=p=>p.cards.filter(c=>cpPlayerCollectionVisible(c)&&(S.inv[c.id]||0)>0).length;
 // CHANCE POR CARTA: coloque ch (em %) na carta, ex.: {r:"SSS",n:"Shadow",ch:0.001}. Sem ch, vale a chance da raridade dividida pelas cartas dessa raridade no pacote (como antes). Para mudar as chances de um pacote inteiro: odds:[F,E,D,C,B,A,S,SS,SSS] dentro do pacote.
-const wc=(p,c)=>c.ch!=null?c.ch:(p.odds?p.odds[c.r]:R[c.r][2])/p.cards.filter(x=>x.r==c.r).length,pcf=v=>(v>=10?v.toFixed(0):v>=1?v.toFixed(1):String(+v.toPrecision(2))).replace(".",",")+"%",cch=c=>pcf(wc(c.p,c)/c.p.cards.reduce((a,x)=>a+wc(c.p,x),0)*100);
+const wc=(p,c)=>c.ch!=null?c.ch:(p.odds?p.odds[c.r]:R[c.r][2])/Math.max(1,p.cards.filter(x=>x.r==c.r&&cpCardCanDropFromPack(x)).length),pcf=v=>(v>=10?v.toFixed(0):v>=1?v.toFixed(1):String(+v.toPrecision(2))).replace(".",",")+"%",cch=c=>pcf(wc(c.p,c)/Math.max(1,c.p.cards.filter(cpCardCanDropFromPack).reduce((a,x)=>a+wc(c.p,x),0))*100);
 const rkLock=r=>Number(r)>Math.min(8,Math.max(0,Number(S.ar)||0)),fusLock=()=>Math.max(0,Number(S.ar)||0)<3;
 const pull=(p,m)=>{
- const T=R.map((_,r)=>p.cards.reduce((a,c)=>a+(c.r==r?wc(p,c):0),0));
+ const pool=(p&&Array.isArray(p.cards)?p.cards:[]).filter(cpCardCanDropFromPack);if(!pool.length)return null;
+ const T=R.map((_,r)=>pool.reduce((a,c)=>a+(c.r==r?wc(p,c):0),0));
  let x=Math.random()*T.reduce((a,b)=>a+b,0),r=0,L;
  for(;r<8;r++){x-=T[r];if(x<0)break}
- r=Math.max(r,m);
- while(!(L=p.cards.filter(c=>c.r==r)).length)r=(r+1)%9;
- const w=L.map(c=>wc(p,c)),s=w.reduce((a,b)=>a+b,0);let y=Math.random()*s,k=0;
+ r=Math.max(r,m);let guard=0;while(!(L=pool.filter(c=>c.r==r)).length&&guard++<9)r=(r+1)%9;
+ if(!L||!L.length)L=pool;
+ const w=L.map(c=>wc(p,c)),sum=w.reduce((a,b)=>a+b,0);let y=Math.random()*sum,k=0;
  for(;k<L.length-1;k++){y-=w[k];if(y<0)break}
- return L[k]};
+ return L[k]||L[0]};
 
 </script>
 <script>
@@ -3213,7 +3219,7 @@ const DP=[["Abrir 3 pacotes","open",3],["Abrir 5 pacotes","open",5],["Vencer 2 b
 const WP=[["Vencer 10 batalhas na arena","win",10],["Abrir 30 pacotes","open",30],["Fundir 3 vezes","fuse",3],["Usar 15 habilidades em batalha","abil",15],["Derrotar 40 cartas inimigas","kill",40],["Converter 20 repetidas","conv",20],
  ["Usar 10 habilidades elementais","eluse",10],["Iniciar 5 cargas de habilidade","charge",5],["Comprar 20 cartas durante batalhas","draw",20],["Vencer 5 duelos contra amigos","frd",5],["Participar de 3 desafios Boss","boss",3],["Derrotar 1 Boss","bosswin",1],["Jogar 12 batalhas","play",12],["Fundir 6 vezes","fuse",6]];
 // coleção e secretas: [id, título, progresso, meta, pacotes]
-const CL=[["c1","Abrir 3 pacotes",()=>S.opened||0,3,3],["c2","Abrir 20 pacotes",()=>S.opened||0,20,5],["c3","Ter 5 cartas diferentes",()=>ALL.filter(c=>S.inv[c.id]).length,5,3],["c4","Ter 10 cartas diferentes",()=>ALL.filter(c=>S.inv[c.id]).length,10,5],["c5","Fundir uma carta",()=>ALL.reduce((a,c)=>a+lvl(c),0),1,3],["c6","Fundir 5 vezes",()=>ALL.reduce((a,c)=>a+lvl(c),0),5,8],["c7","Ter uma carta A ou melhor",()=>ALL.some(c=>S.inv[c.id]&&c.r>4)?1:0,1,5],["c8","Fazer uma troca com um amigo",()=>S.nt||0,1,5],["c9","Completar um pacote inteiro",()=>P.filter(p=>own(p)==p.cards.length).length,1,15],["c10","Chegar na arena 3",()=>S.ar+1,3,8],["c11","Vencer 10 batalhas na arena",()=>S.wn||0,10,5]];
+const CL=[["c1","Abrir 3 pacotes",()=>S.opened||0,3,3],["c2","Abrir 20 pacotes",()=>S.opened||0,20,5],["c3","Ter 5 cartas diferentes",()=>ALL.filter(c=>S.inv[c.id]).length,5,3],["c4","Ter 10 cartas diferentes",()=>ALL.filter(c=>S.inv[c.id]).length,10,5],["c5","Fundir uma carta",()=>ALL.reduce((a,c)=>a+lvl(c),0),1,3],["c6","Fundir 5 vezes",()=>ALL.reduce((a,c)=>a+lvl(c),0),5,8],["c7","Ter uma carta A ou melhor",()=>ALL.some(c=>S.inv[c.id]&&c.r>4)?1:0,1,5],["c8","Fazer uma troca com um amigo",()=>S.nt||0,1,5],["c9","Completar um pacote inteiro",()=>P.filter(p=>own(p)==p.cards.filter(cpPlayerCollectionVisible).length).length,1,15],["c10","Chegar na arena 3",()=>S.ar+1,3,8],["c11","Vencer 10 batalhas na arena",()=>S.wn||0,10,5]];
 const SC=[["s1","Ter uma carta SSS",()=>ALL.some(c=>S.inv[c.id]&&c.r==8)?1:0,1,20],["s2","Levar uma carta ao Mítico",()=>ALL.some(c=>lvl(c)>4)?1:0,1,20],["s3","Chegar na arena 9",()=>S.ar+1,9,30]];
 if((ADM0.dp||[]).length){const custom=ADM0.dp.filter(x=>Array.isArray(x)&&x.length>=3);const extra=DP.filter(x=>!custom.some(y=>y[0]===x[0]&&y[1]===x[1]));DP.splice(0,DP.length,...custom,...extra)}
 if((ADM0.wp||[]).length){const custom=ADM0.wp.filter(x=>Array.isArray(x)&&x.length>=3);const extra=WP.filter(x=>!custom.some(y=>y[0]===x[0]&&y[1]===x[1]));WP.splice(0,WP.length,...custom,...extra)}
@@ -3344,7 +3350,7 @@ const cvb=(c,n)=>{
 // ===== TROCAS (por código copiado entre amigos, sem servidor) =====
 // Regras v0.4: só repetidas (sempre sem melhoria), do mesmo rank e 1 por 1 · a carta original e o nível dela nunca saem. TROCA = diferença máxima de rank entre as duas cartas (0 = só o mesmo rank).
 // Fluxo: A cria a oferta (a carta sai do inventário dele) e manda o código · B cola, escolhe a carta dele e manda o código de resposta · A cola a resposta e recebe.
-const TROCA=0,byId=i=>ALL.find(c=>c.id==i),okT=(a,b)=>Math.abs(a.r-b.r)<=TROCA,mine=f=>ALL.filter(c=>extra(c)>0&&(!f||okT(c,f))).sort((a,b)=>b.r-a.r),cod=(t,n,i)=>`${t}-${n}-${i}`;
+const TROCA=0,byId=i=>ALL.find(c=>c.id==i),okT=(a,b)=>Math.abs(a.r-b.r)<=TROCA,mine=f=>ALL.filter(c=>!cpIsOwnerOnly(c)&&extra(c)>0&&(!f||okT(c,f))).sort((a,b)=>b.r-a.r),cod=(t,n,i)=>`${t}-${n}-${i}`;
 S.tr=S.tr||{};S.td=S.td||{};let TV=null;
 const trow=(c,a)=>`<button data-${a}="${c.id}" style="--rc:${R[c.r][1]}"><b class="sq">${R[c.r][0]}</b><span>${c.n}</span><em class="pc">${extra(c)} repetida${extra(c)>1?"s":""}</em></button>`;
 const trk=()=>{
@@ -3359,7 +3365,7 @@ function cancelT(n){const i=S.tr[n];if(!i)return;S.inv[i]=(S.inv[i]||0)+1;delete
 function takeT(id){const c=byId(id),o=TV&&TV.o,x=o&&o.c;if(!c||!x||extra(c)<1||!okT(c,x)||S.td[o.n])return;S.inv[id]--;S.inv[x.id]=(S.inv[x.id]||0)+1;S.td[o.n]=1;S.nt=(S.nt||0)+1;save();TV={code:cod("RESPOSTA",o.n,id)};sync();toast(`🔁 Você recebeu <b>${x.n}</b> · mande o código de resposta`)}
 function useCode(v){
  const[t,n,...r]=String(v).trim().split("-"),i=r.join("-"),c=byId(i);
- if(!n||!c||t!="OFERTA"&&t!="RESPOSTA")return toast("Código inválido. Cole o código inteiro.");
+ if(!n||!c||cpIsOwnerOnly(c)||t!="OFERTA"&&t!="RESPOSTA")return toast("Código inválido. Cole o código inteiro.");
  if(t=="OFERTA"){if(S.td[n])return toast("Você já aceitou esta oferta.");TV={o:{n,c}};return sync()}
  const x=byId(S.tr[n]);if(!x)return toast("Esse código não combina com nenhuma oferta sua.");if(!okT(x,c))return toast("Ranks diferentes · troca recusada.");
  delete S.tr[n];S.inv[i]=(S.inv[i]||0)+1;S.nt=(S.nt||0)+1;save();TV=null;sync();toast(`🔁 Troca feita: você recebeu <b>${c.n}</b>`)
@@ -3378,12 +3384,12 @@ const pkExp=p=>p.esp>0||(p.ate>0&&Date.now()>p.ate),pkRest=t=>{const m=Math.max(
 const pkt=id=>P.find(p=>p.id==id)||P[0],gift=(id,n=1,randomReward=false)=>{
  let selected=pkt(id);if(!selected)return null;
  if(randomReward){const chance=Math.max(0,Math.min(100,Number(CONFIG.rewardRandomChance)||0));
-  if(chance>0&&Math.random()*100<chance){const available=P.filter(q=>!pkBlocked(q)),alternatives=available.filter(q=>q.id!==selected.id),pool=alternatives.length?alternatives:available;if(pool.length)selected=pool[Math.floor(Math.random()*pool.length)]}
+  if(chance>0&&Math.random()*100<chance){const available=P.filter(q=>!pkBlocked(q)&&cpPackHasDrops(q)),alternatives=available.filter(q=>q.id!==selected.id),pool=alternatives.length?alternatives:available;if(pool.length)selected=pool[Math.floor(Math.random()*pool.length)]}
  }
  const amount=Number(n);if(Number.isFinite(amount)&&amount>0)S.gp[selected.id]=(S.gp[selected.id]||0)+amount;return selected
 };
-function openGift(pi,count=10){const p=P[pi],d=[],n=Math.min(S.gp[p.id]||0,Math.max(1,Math.min(1000,Math.floor(+count||10))));if(pkFuture(p))return toast("🔒 O presente deste pacote só poderá ser aberto quando o evento começar.");if(!(n>0))return;S.gp[p.id]-=n;for(let i=0;i<n;i++)rollPack(p,d);S.opened+=n;save();play(p,d,pi,n,1)}
-const odds=q=>`${P.length>1?`<div class="chips">${P.map((x,i)=>`<button data-s="${i}" class="${i==as?"on":""}">${x.n}</button>`).join("")}</div>`:""}<div class="rl">${[...q.cards].sort((a,b)=>b.r-a.r).map(c=>`<button${S.inv[c.id]?` data-c="${c.id}"`:""} style="--rc:${R[c.r][1]}"><b class="sq">${R[c.r][0]}</b><span>${S.inv[c.id]?c.n:"???"}</span><em class="pc" style="min-width:64px">${c.sl=="secreta"&&!S.inv[c.id]?"???":cch(c)}</em></button>`).join("")}</div>`;
+function openGift(pi,count=10){const p=P[pi],d=[],n=Math.min(S.gp[p.id]||0,Math.max(1,Math.min(1000,Math.floor(+count||10))));if(!cpPackHasDrops(p))return toast("Este pacote não tem cartas disponíveis para abrir.");if(pkFuture(p))return toast("🔒 O presente deste pacote só poderá ser aberto quando o evento começar.");if(!(n>0))return;S.gp[p.id]-=n;for(let i=0;i<n;i++)rollPack(p,d);S.opened+=n;save();play(p,d,pi,n,1)}
+const odds=q=>`${P.length>1?`<div class="chips">${P.map((x,i)=>`<button data-s="${i}" class="${i==as?"on":""}">${x.n}</button>`).join("")}</div>`:""}<div class="rl">${[...q.cards].filter(cpCardCanDropFromPack).sort((a,b)=>b.r-a.r).map(c=>`<button${S.inv[c.id]?` data-c="${c.id}"`:""} style="--rc:${R[c.r][1]}"><b class="sq">${R[c.r][0]}</b><span>${S.inv[c.id]?c.n:"???"}</span><em class="pc" style="min-width:64px">${c.sl=="secreta"&&!S.inv[c.id]?"???":cch(c)}</em></button>`).join("")}</div>`;
 // ===== PACOTE: envelope de folha metálica (selos serrilhados, laterais curvas e rasgo irregular) =====
 // Tudo em % do pacote (proporção 3:5). TY = altura do rasgo, OV = sobreposição das duas metades, BW = espessura da borda rasgada.
 const rg=(s=>()=>(s=s*16807%2147483647)/2147483647)(11),TY=14,OV=.5,BW=.9;
@@ -3441,14 +3447,14 @@ const LK=`<div class="art"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 1
 const cardRadius=L=>({x:Math.max(1.5,14-Math.min(5,Math.max(0,Number(L)||0))*2.5),y:Math.max(1.1,10.5-Math.min(5,Math.max(0,Number(L)||0))*1.88)});
 /* Atributos aleatórios por camada: cada cartão SSS ganha três movimentos dessincronizados. */
 /* Uma única película em forma de reflexo alongado; os dois brilhos internos seguem tempos diferentes. */
-const cpSSSCloudMarkup=()=>`<i class="cp-sss-fluid-reflection" aria-hidden="true" style="--cp-flow-a:${(17+Math.random()*8).toFixed(2)}s;--cp-flow-b:${(21+Math.random()*9).toFixed(2)}s;--cp-flow-hue-a:${(25+Math.random()*12).toFixed(2)}s;--cp-flow-hue-b:${(31+Math.random()*13).toFixed(2)}s;--cp-flow-fade-a:${(12+Math.random()*6).toFixed(2)}s;--cp-flow-fade-b:${(15+Math.random()*7).toFixed(2)}s;--cp-flow-delay:${(-Math.random()*18).toFixed(2)}s;--cp-flow-start:${Math.round(Math.random()*180)}deg"></i>`;
+const cpSSSCloudMarkup=()=>"";
 const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),rad=cardRadius(L),im=!lk&&(c.img||IMG[c.id]),
  /* Os efeitos clássicos de raridade também funcionam sobre fotos 3:4. */
  fx=lk?"":`${r>3?" fo":""}${r>2?" sw":""}${r>5?" sp":""}${r>4&&r<8?" hi":""}`;
  const art=lk?(c.sl=="secreta"?QQ:LK):im?`<div class="art"><img src="${c.img||IMG[c.id]}" alt="${c.n}" loading="lazy" decoding="async" onerror="this.parentNode.outerHTML=ill(${r})"></div>`:ill(r);
  /* Três manchas RGB independentes, como filhos diretos da arte para misturarem com a própria imagem. */
- const artWithFilm=!lk&&r===8?art.replace(/<\/div>$/,`${cpSSSCloudMarkup()}</div>`):art;
+ const artWithFilm=art;
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
  /* SSS usa um aro prismático recortado e opaco, separado da película RGB da ilustração. */
  const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
@@ -3456,7 +3462,7 @@ const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${rankLocked?"cp-locked-rank":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${rankLocked?` data-ranklocked="1"`:""}${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${artWithFilm}${rarityFx}${frame}${lockBadge}${xt}</div>`
 };
 // se a foto de uma carta não carregar, mostra a ilustração gerada
-document.addEventListener("error",e=>{const t=e.target,d=t.tagName=="IMG"&&t.closest(".cd");if(d){d.classList.remove("img");const rr=+d.dataset.r,fb=ill(rr);t.parentNode.outerHTML=rr===8?fb.replace(/<\/div>$/,`${cpSSSCloudMarkup()}</div>`):fb}},true);
+document.addEventListener("error",e=>{const t=e.target,d=t.tagName=="IMG"&&t.closest(".cd");if(d){d.classList.remove("img");const rr=+d.dataset.r,fb=ill(rr);t.parentNode.outerHTML=fb}},true);
 function updCs(){const c=$("cs");if(!c)return;const mid=c.scrollLeft+c.clientWidth/2;let b=9;[...c.children].forEach((s,i)=>{const d=Math.min(1,Math.abs(s.offsetLeft+s.offsetWidth/2-mid)/s.offsetWidth);s.style.transform=`scale(${(1-d*.22).toFixed(3)})`;s.style.opacity=(1-d*.6).toFixed(2);if(d<b){b=d;cur=i}});$("cap").textContent=P[cur].n;updOpen();document.querySelectorAll(".dots i").forEach((e,i)=>e.classList.toggle("on",i==cur));document.querySelectorAll(".ar button").forEach((e,i)=>e.style.opacity=(i?cur<P.length-1:cur>0)?1:.25)}
 const cpos=(c,i)=>{const s=c.children[Math.max(0,Math.min(c.children.length-1,i))];return s?s.offsetLeft-(c.clientWidth-s.offsetWidth)/2:0};
 const goPk=i=>{const c=$("cs");if(c)c.scrollTo({left:cpos(c,i),behavior:"smooth"})};
@@ -3470,7 +3476,7 @@ NI.u='<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';const 
 const nrm=t=>String(t).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(),skl=c=>{const k=c.sk||[];return Array.isArray(k[0])?k:k.length?[k]:[]},efgrp=t=>(FXG.find(g=>g[1].includes(t))||[])[0];
 const FLT={q:"",r:[],e:[],x:[],st:"",ab:"",o:"r",open:0,all:0};let flT=0;
 // Cartas especiais com colVis="owned" só entram no álbum de quem já as possui.
-const cpCollectionVisible=c=>!!c&&(c.colVis!=="owned"||(S.inv[c.id]||0)>0||(typeof AD!=="undefined"&&AD));
+const cpCollectionVisible=c=>cpPlayerCollectionVisible(c)||(typeof AD!=="undefined"&&!!AD);
 const cpVisibleOwnedCount=p=>p.cards.filter(c=>cpCollectionVisible(c)&&(S.inv[c.id]||0)>0).length;
 const flOn=()=>!!(FLT.q||FLT.r.length||FLT.e.length||FLT.x.length||FLT.st||FLT.ab);
 const flList=()=>{const q=nrm(FLT.q).split(/\s+/).filter(Boolean),u=dkUsed(dkIds()),pool=FLT.all||FLT.q?ALL:P[as].cards,own1=FLT.e.length||FLT.ab||FLT.x.length||q.length,O={r:(a,b)=>a.r-b.r,R:(a,b)=>b.r-a.r,n:(a,b)=>a.n.localeCompare(b.n),l:(a,b)=>lvl(b)-lvl(a),d:(a,b)=>b.atk-a.atk,v:(a,b)=>b.hp-a.hp,q:(a,b)=>(S.inv[b.id]||0)-(S.inv[a.id]||0)};
@@ -3518,10 +3524,10 @@ const sfx=(r,fl)=>{SND.rare(r);
 };
 const CPP=10;
 
-const rollPack=(p,d)=>{bump("open");for(let i=0;i<CPP;i++){const c=pull(p,0),fresh=!(S.inv[c.id]>0);if(fresh&&S.foil&&!S.foil[c.id]&&Math.random()<.008)S.foil[c.id]=Math.random()<.15?"gold":"holo";d.push({c,n:fresh});S.inv[c.id]=(S.inv[c.id]||0)+1}};
+const rollPack=(p,d)=>{if(!cpPackHasDrops(p))return false;bump("open");for(let i=0;i<CPP;i++){const c=pull(p,0);if(!c)continue;const fresh=!(S.inv[c.id]>0);if(fresh&&S.foil&&!S.foil[c.id]&&Math.random()<.008)S.foil[c.id]=Math.random()<.15?"gold":"holo";d.push({c,n:fresh});S.inv[c.id]=(S.inv[c.id]||0)+1}};
 
 // abrir pacote(s): cobra os fragmentos antes de sortear; sem saldo, só avisa quanto falta
-function openMany(pi,n){n=Math.max(1,Math.min(1000,Math.floor(+n||1)));const p=P[pi],d=[];if(pkFuture(p))return toast("🔒 Esse pacote faz parte de um evento que ainda não começou.");if(pkExp(p))return toast(p.esp>0?"🎁 Pacote especial · as cartas dele só saem como prêmio.":"⏳ Esse pacote já encerrou · as cartas dele não saem mais.");if(!pay(p,n))return;for(let k=0;k<n;k++)rollPack(p,d);S.opened+=n;save();upd();SND.rip();play(p,d,pi,n)}
+function openMany(pi,n){n=Math.max(1,Math.min(1000,Math.floor(+n||1)));const p=P[pi],d=[];if(!cpPackHasDrops(p))return toast("Este pacote não tem cartas disponíveis para abrir.");if(pkFuture(p))return toast("🔒 Esse pacote faz parte de um evento que ainda não começou.");if(pkExp(p))return toast(p.esp>0?"🎁 Pacote especial · as cartas dele só saem como prêmio.":"⏳ Esse pacote já encerrou · as cartas dele não saem mais.");if(!pay(p,n))return;for(let k=0;k<n;k++)rollPack(p,d);S.opened+=n;save();upd();SND.rip();play(p,d,pi,n)}
 const openPack=pi=>openMany(pi,1);
 // virar a carta (verso → frente): o verso encolhe e a frente cresce
 const flip=t=>{SND.flip();const f=t.querySelector(".cd"),b=t.querySelector(".cb");if(!f||!b)return;b.animate([{opacity:1,transform:"scaleX(1)"},{opacity:1,transform:"scaleX(0)"}],{duration:140,easing:"ease-in"});f.animate([{transform:"scaleX(0)"},{transform:"scaleX(1)"}],{duration:200,delay:140,easing:"ease-out",fill:"backwards"})};
@@ -3648,7 +3654,7 @@ function view(c,keep){
  f.innerHTML=`<div class="fch"><div class="hd"><button class="bk" data-a="2">‹ Voltar</button>${wlt()}</div>${card(c)}<h2>${c.n}</h2><p class="rar"><span class="rtg" style="--pc:${R[c.r][1]}">Rank ${R[c.r][0]}</span>${c.tb?`<span class="rtg">🐾 ${esc(c.tb)}</span>`:""}${n?`<span class="rtg">${NIVEIS[lvl(c)]}</span>`:""}</p><div class="sg">${[["s","Status"],["h","História"],["k","Habilidade"],...(n?[["r","Repetidas"]]:[])].map(x=>`<button data-f="${x[0]}" class="${ft==x[0]?"on":""}">${x[1]}${x[0]=="r"&&n>1?`<b>${n-1}</b>`:""}</button>`).join("")}</div><div class="pnl">${body}</div></div>`;
  f.hidden=false;if(!keep)f.scrollTop=0;
 }
-function preview(i){const p=P[as]||P[0],r=(p&&p.cards.find(c=>c.r==i))||ALL.find(c=>c.r==i),x=r||ALL.find(c=>!c.img)||ALL[0];PV=r?{...r,id:"pv"}:{...x,img:0,r:i,id:"pv",hp:ST[i][0],atk:ST[i][1]};play(x.p,[{c:PV,n:false}],null)}
+function preview(i){const p=P[as]||P[0],r=(p&&p.cards.find(c=>cpCardCanDropFromPack(c)&&c.r==i))||ALL.find(c=>cpCardCanDropFromPack(c)&&c.r==i),x=r||ALL.find(c=>cpCardCanDropFromPack(c)&&!c.img)||ALL.find(cpCardCanDropFromPack)||ALL[0];PV=r?{...r,id:"pv"}:{...x,img:0,r:i,id:"pv",hp:ST[i][0],atk:ST[i][1]};play(x.p,[{c:PV,n:false}],null)}
 document.addEventListener("click",e=>{
  const t=e.target.closest("[data-t],[data-i],[data-s],[data-c],[data-a],[data-v],[data-p],[data-f],[data-m],[data-k],[data-o],[data-x],[data-d],[data-g],[data-q],[data-w],[data-u],[data-y],[data-z],[data-cp],[data-gf],[data-fp],[data-ri]");if(!t)return;
  // Os botões da batalha têm seu próprio controlador. Não deixe o listener global
@@ -3881,12 +3887,12 @@ const bcap=()=>S.ar<8?TR[S.ar+1]:CONFIG.chefeFinal,bossOK=()=>!S.camp&&S.tp>=bca
 const bossPrize=()=>{const k=S.ar+1;return k>8?{n:CONFIG.campPac,f:CONFIG.campFrag}:{n:CONFIG.arenaPac+CONFIG.arenaPacMais*(k-1),f:CONFIG.arenaFrag*k}};
 function arenaUp(){const k=S.ar+1,z=bossPrize();gift(dpk().id,z.n,true);S.fr+=z.f;if(k>8){S.camp=1;return` · 🏆 Título: Campeão! +${z.n} pacotes · ${gem}+${fmt(z.f)}`}S.ar=k;const e=EX.cards[k].id;S.inv[e]=(S.inv[e]||0)+1;return` · 🏟 Arena nova: ${AR[k][0]} · carta exclusiva + ${z.n} pacotes · ${gem}+${fmt(z.f)}!`}
 // ----- PACOTES GRÁTIS DO DIA: 1 a cada 4 h (0h 4h 8h 12h 16h 20h), acumulam até 6; abrem o Pacote do dia, que troca à meia-noite girando pela lista de pacotes -----
-const SLT=144e5,slt=()=>Math.floor(lnow()/SLT),dpk=()=>P.find(p=>p.dest&&!pkBlocked(p))||P.find(p=>!pkBlocked(p))||P[0];
+const SLT=144e5,slt=()=>Math.floor(lnow()/SLT),dpk=()=>P.find(p=>p.dest&&!pkBlocked(p)&&cpPackHasDrops(p))||P.find(p=>!pkBlocked(p)&&cpPackHasDrops(p))||P.find(cpPackHasDrops)||P[0];
 function tickFp(){const s=slt();if(S.ft==null)S.ft=s-s%6-1;if(s>S.ft){S.fp=Math.min(6,(S.fp||0)+s-S.ft);S.ft=s;save()}}
 const nxt=()=>{const m=Math.ceil(((slt()+1)*SLT-lnow())/6e4);return m>=60?`${m/60|0}h${String(m%60).padStart(2,"0")}`:`${m}min`};
 const fpb=()=>{tickFp();const n=S.fp||0;return`<button class="qc" data-fp="1" id="fpb" style="flex:1 1 100%">🎁 Pacote do dia · ${dpk().n} · <b>${n}/6</b><span class="pr">${n>0&&!fpOK()?"🔒 jogue 1 batalha":n<6?"próximo em "+nxt():"cheio"}</span></button>`};
 const pjn=()=>S.pj&&S.pj.d===day()?S.pj.n:0,fon=()=>S.fo&&S.fo.d===day()?S.fo.n:0,fpOK=()=>fon()<CONFIG.gratisLivre+Math.floor(pjn()/CONFIG.gratisJogar);
-function openFree(){tickFp();if(!(S.fp>0))return toast(`Sem pacotes grátis agora · o próximo chega em <b>${nxt()}</b>`);if(!fpOK())return toast("🔒 Jogue uma batalha para liberar o próximo pacote do dia");let p=dpk();if(pkBlocked(p))p=P.find(q=>!pkBlocked(q))||p;if(pkBlocked(p))return toast("Nenhum pacote está disponível agora.");const d=[];S.fo={d:day(),n:fon()+1};S.fp--;rollPack(p,d);S.opened++;save();play(p,d,P.indexOf(p),1,1)}
+function openFree(){tickFp();if(!cpPackHasDrops(dpk()))return toast("Nenhum pacote tem cartas disponíveis para abrir.");if(!(S.fp>0))return toast(`Sem pacotes grátis agora · o próximo chega em <b>${nxt()}</b>`);if(!fpOK())return toast("🔒 Jogue uma batalha para liberar o próximo pacote do dia");let p=dpk();if(pkBlocked(p)||!cpPackHasDrops(p))p=P.find(q=>!pkBlocked(q)&&cpPackHasDrops(q))||p;if(pkBlocked(p)||!cpPackHasDrops(p))return toast("Nenhum pacote está disponível agora.");const d=[];S.fo={d:day(),n:fon()+1};S.fp--;rollPack(p,d);S.opened++;save();play(p,d,P.indexOf(p),1,1)}
 setInterval(()=>{const b=$("fpb");if(b&&tab=="h"&&ov.hidden)b.outerHTML=fpb()},3e4);
 
 </script>
@@ -4015,13 +4021,13 @@ document.addEventListener("click",e=>{
 // inimigo da arena k: 12 cartas do jogo, todas DIFERENTES, com poder médio = 1,15^k × o da F (1ª ≈ F, 9ª ≈ A)
 function enDeck(k,difficultyD,bossPreview=false){
  const medal=Math.max(0,Math.floor(window.mdInfo?window.mdInfo().t||0:0)),inf=+k>8,arena=Math.max(0,Math.min(8,Math.floor(+k||0))),medalScale=inf?1:Math.pow(1.035,medal),D=Number.isFinite(+difficultyD)?Math.max(0,+difficultyD):medal,T=Math.pow(1.15,k)*medalScale,rho=c=>ST[c.r][0]/100;
- const normal=inf?ALL.slice():ALL.filter(c=>c.r<=arena),preview=(!inf&&bossPreview&&arena<8)?ALL.filter(c=>c.r===arena+1):[];
+ const normal=inf?ALL.filter(cpCardCanDropFromPack):ALL.filter(c=>cpCardCanDropFromPack(c)&&c.r<=arena),preview=(!inf&&bossPreview&&arena<8)?ALL.filter(c=>cpCardCanDropFromPack(c)&&c.r===arena+1):[];
  const pool=[...normal,...preview],by=pool.slice().sort((a,b)=>Math.abs(rho(a)-T)-Math.abs(rho(b)-T)),u=[],used=new Set();
  const addPool=(source,limit=12)=>{const list=source.slice();for(let i=list.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[list[i],list[j]]=[list[j],list[i]]}for(const c of list){if(u.length>=limit)break;if(!used.has(c.id)){u.push(c);used.add(c.id)}}};
  // Os rivais normais usam apenas ranks liberados. O chefe de cada arena revela até duas cartas do próximo rank.
  if(preview.length)addPool(preview,2);
  addPool(by,12);
- if(!u.length)addPool(ALL.filter(c=>inf||c.r<=arena),12);
+ if(!u.length)addPool(ALL.filter(c=>cpCardCanDropFromPack(c)&&(inf||c.r<=arena)),12);
  const av=u.reduce((a,c)=>a+rho(c),0)/Math.max(1,u.length),base=[0,0,0,1,2,3,4,4,5][arena],cap=inf?5:FUSION_CAP[arena],LV=Math.max(0,Math.min(cap,Math.round(base*(CONFIG.botNivel??1)+Math.floor(medal/6))));
  return u.slice(0,12).map(c=>{const l=Math.min(LV+(arena>1&&Math.random()<.3?1:0),cap),rawPower=Math.max(.65,Math.min(2.5,T/Math.max(.01,av)))*(1+(CONFIG.botForca??5)/100*k)*(1+Math.min(.35,medal*.012)),pressure=1.85+Math.min(1,Math.max(0,D-15)*.05),power=inf&&D>=15?Math.min(pressure+.25,Math.max(rawPower,pressure)):rawPower;return{c,lv:l,s:power/(1+.4*l)}})
 }
@@ -4359,7 +4365,7 @@ function starterGo(){
  if(S.ini)return;
  const hasCards=Object.keys(S.inv||{}).some(id=>(+S.inv[id]||0)>0);
  if(!hasCards){
-  const eligible=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0),byId=new Map(eligible.map(c=>[String(c.id),c])),picked=[],seen=new Set();
+  const eligible=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0&&cpCardCanDropFromPack(c)),byId=new Map(eligible.map(c=>[String(c.id),c])),picked=[],seen=new Set();
   (Array.isArray(ADM.starterCards)?ADM.starterCards:[]).forEach(id=>{const c=byId.get(String(id));if(c&&!seen.has(String(c.id))&&picked.length<12){picked.push(c);seen.add(String(c.id))}});
   // Configuração ausente/incompleta: completar com uma lista determinística, sem sorteio.
   const fallback=eligible.filter(c=>c.r===0);
@@ -4379,14 +4385,14 @@ function cfgView(v){cfg.hidden=false;PEND=null;
  const T=`<div class="in2"><h2>${v=="a"?"Modo ADM":"Ajustes"}</h2>`,E=`<button class="bt gh" data-k="x">Fechar</button></div>`;
  if(v=="a"){
   const op=P.map(p=>`<option value="${p.id}">${p.e} ${p.n}</option>`).join("")+ADM.p.filter(d=>!P.some(p=>p.id==d.id)).map(d=>`<option value="${d.id}">${d.e} ${d.n} · não lançado</option>`).join("")+'<option value="__">➕ Novo pacote…</option>',rk=R.map(r=>`<option>${r[0]}</option>`).join(""),ca=ALL.map(c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`).join(""),pd=P.map(p=>`<option value="${p.id}"${p.dest?" selected":""}>${p.n}</option>`).join(""),
-  starterPool=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0),starterValid=new Set(starterPool.map(c=>String(c.id))),starterSet=new Set((Array.isArray(ADM.starterCards)?ADM.starterCards:[]).map(String).filter(id=>starterValid.has(id)).slice(0,12)),
+  starterPool=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0&&cpCardCanDropFromPack(c)),starterValid=new Set(starterPool.map(c=>String(c.id))),starterSet=new Set((Array.isArray(ADM.starterCards)?ADM.starterCards:[]).map(String).filter(id=>starterValid.has(id)).slice(0,12)),
   starterEsc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   if(starterSet.size!==12){starterSet.clear();starterPool.slice(0,12).forEach(c=>starterSet.add(String(c.id)));}
   const starterRows=starterPool.map(c=>`<label class="yck" data-starter-row="${starterEsc((c.n||"")+" "+R[c.r][0]).toLowerCase()}"><input type="checkbox" data-starter-pick="1" value="${starterEsc(c.id)}"${starterSet.has(String(c.id))?" checked":""}><span>${R[c.r][0]} · ${starterEsc(c.n)}</span></label>`).join("");
   cfg.innerHTML=T+adxEd()+adxHb()+adxPk()+adxRl()+adxGv()+`<details class="fd" id="ds_n"><summary>➕ Nova carta ou pacote</summary><p class="mut" style="margin:0;text-transform:none;letter-spacing:0">As cartas criadas ficam salvas neste aparelho. Para levar aos amigos, use Exportar conteúdo.</p>`
   +cpFl("Pacote",`<select id="ap">${op}</select>`)+`<div id="np" hidden>`+cpFl("Nome do pacote",'<input id="pn">')+cpFl("Emoji",'<input id="pe" value="🎴">')+cpFl("Cor (0 a 360)",'<input id="ph" type="number" value="200">')+cpFl("Preço em fragmentos",`<input id="pc" type="number" value="${CUSTO}">`)+`</div>`
   +cpFl("Nome da carta",'<input id="an">')+adxS("an_el","Elemento 1",ELOPT)+adxS("an_el2","Elemento 2 (opcional)",ELOPT2)+`<div id="cp-new-card-el-preview"></div>`+cpFl("Tribo / família (opcional)",'<input id="atb" maxlength="24" placeholder="Dragões, Bestas, Espíritos…">')+cpFl("Rank",`<select id="ar2">${rk}</select>`)
-  +cpFl("Chance % (vazio = automática)",'<input id="ac" type="number" step="any">')+cpFl("História",'<textarea id="ah" rows="3"></textarea>')+cpFl("Habilidades da carta (marque várias)",`<select id="ahb" multiple size="5">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="${a.id}">${a.el&&a.el!=="carta"?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / ")+" · ":"🃏 "}${a.n}</option>`).join("")}</select>`)+cpFl("Habilidade só desta carta (não entra na lista geral)",`<select id="aqs"><option value="">Nenhuma</option>${hxEx.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join("")}</select>`)+cpFl("Imagem (vira WebP leve, até "+CONFIG.imgKB+" KB)",'<input id="fi" type="file" accept="image/*">')+`<label class="yck"><input type="checkbox" id="adr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt" data-k="nc">Salvar carta</button></details>`
+  +cpFl("Chance % (vazio = automática)",'<input id="ac" type="number" step="any">')+cpFl("Visibilidade na coleção",'<select id="an_cv"><option value="all">👁️ Aparece na coleção de todos</option><option value="owned">🔒 Só aparece para quem possui</option></select>')+`<small class="mut">Cartas exclusivas não entram em pacotes, loja aleatória, Raid ou decks de bots.</small>`+cpFl("História",'<textarea id="ah" rows="3"></textarea>')+cpFl("Habilidades da carta (marque várias)",`<select id="ahb" multiple size="5">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="${a.id}">${a.el&&a.el!=="carta"?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / ")+" · ":"🃏 "}${a.n}</option>`).join("")}</select>`)+cpFl("Habilidade só desta carta (não entra na lista geral)",`<select id="aqs"><option value="">Nenhuma</option>${hxEx.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join("")}</select>`)+cpFl("Imagem (vira WebP leve, até "+CONFIG.imgKB+" KB)",'<input id="fi" type="file" accept="image/*">')+`<label class="yck"><input type="checkbox" id="adr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt" data-k="nc">Salvar carta</button></details>`
   
   +`<details class="fd" id="ds_st"><summary>🎴 Cartas iniciais para novatos</summary><p class="mut" style="margin:4px 0 12px;text-transform:none;letter-spacing:0">Marque exatamente 12 cartas publicadas de Rank F. Todo jogador novo recebe estas 12 cartas, liberadas desde a Arena 1. Crie mais cartas F no editor antes de salvar, se necessário.</p>`
   +cpFl("Buscar carta",'<input id="starterSearch" type="search" placeholder="Digite o nome ou rank">')
@@ -4397,7 +4403,7 @@ function cfgView(v){cfg.hidden=false;PEND=null;
  cfg.innerHTML=T+cpFl("Código do save (copie ou cole aqui)",cpTa("sc"))+`<button class="bt cy" data-k="xs">Exportar save</button>`+cpFl("Ou arquivo do save",'<input id="fs" type="file" accept=".json,.txt">')+`<button class="bt gh" data-k="is">Importar save</button>`+cpFl("Modo ADM",'<input id="pw" type="password" inputmode="numeric" placeholder="PIN">')+`<button class="bt gh" data-k="ad">Entrar no modo ADM</button>`+E}
 function nCard(){const n=$("an").value.trim(),pv=$("ap").value;if(!n)return toast("Dê um nome à carta.");let pk=pv;
  if(pv=="__"){const pn=$("pn").value.trim();if(!pn)return toast("Dê um nome ao pacote.");pk="p"+rid();ADM.p.push({id:pk,n:pn,e:$("pe").value||"🎴",h:+$("ph").value||200,cost:+$("pc").value||0})}
- const x={id:"a"+rid(),pk,r:$("ar2").value,n,d:$("ah").value.trim()||undefined},tb=$("atb")&&$("atb").value.trim().slice(0,24),ch=parseFloat($("ac").value),el=$("an_el").value,el2=$("an_el2").value;if(el)x.el=el;if(el&&el2&&el!==el2)x.el2=el2;if(tb)x.tb=tb;if(ch>0)x.ch=ch;
+ const x={id:"a"+rid(),pk,r:$("ar2").value,n,d:$("ah").value.trim()||undefined,colVis:$("an_cv")&&$("an_cv").value==="owned"?"owned":"all"},tb=$("atb")&&$("atb").value.trim().slice(0,24),ch=parseFloat($("ac").value),el=$("an_el").value,el2=$("an_el2").value;if(el)x.el=el;if(el&&el2&&el!==el2)x.el2=el2;if(tb)x.tb=tb;if(ch>0)x.ch=ch;
  const dr=$("adr")&&$("adr").checked;if(dr)x.dr=1;if(PEND&&PW=="fi")IMG[x.id]=PEND;ADM.c.push(x);YCA(x);sADM();if(!dr)addCard(x);toast(dr?`📦 <b>${n}</b> guardada · lance em Lançamentos`:`✅ <b>${n}</b> criada!`);try{sessionStorage.cpad2="ds_c"}catch(e){}if(window.__yca){dr?drGo():adxGo();return}cfgView("a");const dn=$("ds_n");if(dn)dn.open=true}
 gear.onclick=()=>cfgView("m");
 cfg.onchange=e=>{const t=e.target;if(t.matches&&t.matches("[data-starter-pick]")){let n=cfg.querySelectorAll("[data-starter-pick]:checked").length;if(n>12){t.checked=false;n--;toast("O limite é de 12 cartas iniciais.")}const c=$("starterCardsCount");if(c)c.textContent=`Selecionadas: ${n}/12`;return}if((t.id=="fi"||t.id=="fj"||t.id=="fbk"||t.id=="fpb")&&t.files[0])imgOK(t.files[0],u=>{PEND=u;PW=t.id;toast(u?`Imagem pronta · ${Math.round(u.length*.75/1024)} KB`:"Não consegui ler a imagem")})};
@@ -4443,7 +4449,7 @@ adxT=(i,l,v,r)=>cpFl(l,`<textarea id="${i}" rows="${r}">${v}</textarea>`),
 adxL={vidas:"Vidas de cada jogador na luta",acoes:"Ações por turno",acaoIni:"Ações do primeiro turno",turnos:"Máximo de turnos da luta",iaMs:"Tempo de reação do rival (ms)",turnoSeg:"Duelo ao vivo · segundos por turno (0 = sem limite)",sumiuSeg:"Duelo ao vivo · segundos extras até poder vencer por abandono",danoMult:"Dano de todas as cartas na luta (×)",vidaMult:"Vida de todas as cartas na luta (×)",admPin:"PIN do modo ADM",limiteDia:"Lutas por dia que dão prêmio",pacVit:"Vitórias para ganhar 1 pacote",tw:"Troféus ganhos por vitória",tl:"Troféus perdidos por derrota",mk:"Troféus por marco (e fragmentos do marco)",mkPacote:"Troféus por pacote de marco",mkMax:"Teto de troféus dos marcos",chefeFinal:"Troféus do chefe final",chefe:"Força do chefe (×)",diaria:"Fragmentos do login diário",amigoFrag:"Fragmentos por luta com amigo",amigoDia:"Lutas com amigo por dia",derrota:"Fragmentos por derrota",nDia:"Missões diárias por dia",mDia:"Fragmentos por missão diária",mSem:"Fragmentos por missão semanal",mSemPac:"Pacotes por missão semanal",mDiaBonus:"Missões diárias para 1 pacote bônus",arenaPac:"Pacotes do chefe da arena 1",arenaPacMais:"Pacotes a mais por arena",arenaFrag:"Fragmentos do chefe × nº da arena",campPac:"Pacotes do Campeão",campFrag:"Fragmentos do Campeão",rewardRandomChance:"Chance de pacote aleatório nas recompensas (0–100%; 0 = pacote normal)",gratisLivre:"Pacotes do dia sem jogar",gratisJogar:"Pacotes do dia por batalha",imgKB:"Tamanho máx. da imagem (KB)",arf0:"Fragmentos da 1ª vitória de arena",arfK:"+ fragmentos a cada arena",fusArena:"Arena que libera as fusões (1 = livre)",sArena:"Arena que libera o rank S e acima (1 = livre)",fusMult:"Preço das fusões (× o padrão)",faixa:"Folga da faixa de status por rank (± %)",som:"Sons do jogo (1 = ligado, 0 = desligado)",musica:"Música de fundo (1 = ligada, 0 = desligada)",botErro:"Erro dos bots na Arena 1 (% de jogadas ao acaso · cai até 2% na Arena 8)",botForca:"Força extra dos bots por arena (%)",botNivel:"Nível de fusão dos bots (× · 0 = sem fusão)"},
 adxPo=()=>adxO(P,p=>`<option value="${p.id}">${p.e} ${p.n}</option>`),
 adxCo=()=>adxO(ALL,c=>`<option value="${c.id}">${R[c.r][0]} · ${c.n}</option>`),
-adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",`<option value="__">➕ Nova carta…</option>`+adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("eel","Elemento 1",ELOPT)+adxS("eel2","Elemento 2 (opcional)",ELOPT2)+`<div id="cp-card-el-preview"></div>`+cpFl("Tribo / família (opcional)",'<input id="etb" maxlength="24" placeholder="Dragões, Bestas, Humanos, Espíritos…">')+`<p class="mut" style="margin:-4px 0 8px;text-transform:none;letter-spacing:0">Use o mesmo nome nas cartas que pertencem à família. A partir de 2 cartas no deck, a sinergia é ativada.</p>`+adxS("ek2","Pacote",adxPo()+'<option value="ind">🎉 Sem pacote · carta especial</option>')+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+adxI("ebk","Verso desta carta (link da imagem 3:4 · vazio = o do pacote)")+cpFl("Ou envie a imagem do verso desta carta",'<input id="fbk" type="file" accept="image/*">')+adxI("ega","Ganha de prêmio ao chegar na arena (0 = não ganha)","","number")+adxS("ecv","Visibilidade na coleção",'<option value="all">👁️ Aparece na coleção de todos</option><option value="owned">🔒 Só aparece para quem possui a carta</option>')+`<p class="mut" style="margin:-4px 0 10px;text-transform:none;letter-spacing:0">Use “Só aparece para quem possui” em cartas especiais ou exclusivas. Quem ainda não ganhou a carta não verá espaços faltando no álbum.</p>`+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+`<p class="mut" style="margin:12px 0 2px">✨ Habilidades desta carta (desmarque para remover)</p><div id="qab">${qabHtml(ALL[0]&&ALL[0].id)}</div>`+adxS("qad","",`<option value="">➕ Adicionar habilidade…</option><optgroup label="Modelos prontos (só desta carta)">${hxEx.map((h,i)=>`<option value="m${i}">${h[0]}</option>`).join("")}</optgroup><optgroup label="Biblioteca">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="l${a.id}">${a.el&&a.el!=="carta"?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / ")+" · ":"🃏 "}${a.n}</option>`).join("")}</optgroup>`)+`<label class="yck"><input type="checkbox" id="adr2" checked> 📦 Se for carta nova: guardar sem lançar</label>`+adxB("sc","💾 Salvar carta e habilidades")+adxB("dc","Excluir carta","gh")),
+adxEd=()=>adxD("c","✏️ Editar cartas",adxS("ec","Carta",`<option value="__">➕ Nova carta…</option>`+adxCo())+adxI("en","Nome")+adxS("er","Rank",adxO(R,(r,i)=>`<option value="${i}">${r[0]}</option>`))+adxS("eel","Elemento 1",ELOPT)+adxS("eel2","Elemento 2 (opcional)",ELOPT2)+`<div id="cp-card-el-preview"></div>`+cpFl("Tribo / família (opcional)",'<input id="etb" maxlength="24" placeholder="Dragões, Bestas, Humanos, Espíritos…">')+`<p class="mut" style="margin:-4px 0 8px;text-transform:none;letter-spacing:0">Use o mesmo nome nas cartas que pertencem à família. A partir de 2 cartas no deck, a sinergia é ativada.</p>`+adxS("ek2","Pacote",adxPo()+'<option value="ind">🎉 Sem pacote · carta especial</option>')+adxI("ehp","Vida","","number")+adxI("eatk","Dano","","number")+adxI("ech","Chance % (vazio = automática)","","number")+adxT("eh","História","",3)+adxI("ebk","Verso desta carta (link da imagem 3:4 · vazio = o do pacote)")+cpFl("Ou envie a imagem do verso desta carta",'<input id="fbk" type="file" accept="image/*">')+adxI("ega","Ganha de prêmio ao chegar na arena (0 = não ganha)","","number")+adxS("ecv","Visibilidade na coleção",'<option value="all">👁️ Aparece na coleção de todos</option><option value="owned">🔒 Só aparece para quem possui a carta</option>')+`<p class="mut" style="margin:-4px 0 10px;text-transform:none;letter-spacing:0">Use “Só aparece para quem possui” em cartas especiais ou exclusivas. Quem ainda não ganhou não verá espaços faltando no álbum, e a carta fica fora dos sorteios públicos de pacotes, loja, Raid e bots.</p>`+cpFl("Nova imagem (opcional)",'<input id="fj" type="file" accept="image/*">')+`<p class="mut" style="margin:12px 0 2px">✨ Habilidades desta carta (desmarque para remover)</p><div id="qab">${qabHtml(ALL[0]&&ALL[0].id)}</div>`+adxS("qad","",`<option value="">➕ Adicionar habilidade…</option><optgroup label="Modelos prontos (só desta carta)">${hxEx.map((h,i)=>`<option value="m${i}">${h[0]}</option>`).join("")}</optgroup><optgroup label="Biblioteca">${ADM.ab.filter(a=>!a.solo).map(a=>`<option value="l${a.id}">${a.el&&a.el!=="carta"?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / ")+" · ":"🃏 "}${a.n}</option>`).join("")}</optgroup>`)+`<label class="yck"><input type="checkbox" id="adr2" checked> 📦 Se for carta nova: guardar sem lançar</label>`+adxB("sc","💾 Salvar carta e habilidades")+adxB("dc","Excluir carta","gh")),
 adxPk=()=>adxD("k","📦 Editar pacotes",adxS("ek","Pacote",adxPo()+(PX.length?`<optgroup label="Encerrados (já sumiram da loja)">${PX.map(p=>`<option value="${p.id}">${p.e} ${p.n}</option>`).join("")}</optgroup>`:""))+adxI("kn","Nome")+adxI("ke","Emoji")+adxI("kh","Cor (0 a 360)","","number")+adxI("kc","Preço em fragmentos (vazio = padrão)","","number")+adxI("ko","Chances % por raridade F,E,D,C,B,A,S,SS,SSS (vazio = padrão)")+adxI("kb","Verso das cartas deste pacote (link da imagem 3:4 · vazio = verso padrão)")+cpFl("Ou envie a imagem do verso do pacote",'<input id="fpb" type="file" accept="image/*">')+adxI("kt","Pacote some em (data e hora · vazio = nunca sai)","","datetime-local")+adxI("kx","Pacote especial (1 = não vende · cartas só como prêmio)","","number")+adxS("kf","Depois que o pacote acabar (precisa da data acima)",'<option value="0">Continuar na loja como “Encerrado”</option><option value="1">Sumir da loja e manter as cartas (viram cartas especiais)</option><option value="2">Sumir da loja e excluir as cartas junto</option>')+adxB("sk","Salvar pacote")+adxB("dk","Excluir pacote","gh")),
 adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("cf_"+k,adxL[k]||k,CONFIG[k],typeof CONFIG[k]=="number"?"number":"text")).join("")
 +adxI("rfr","Fragmentos por repetida · F,E,D,C,B,A,S,SS,SSS",FRAG.join(","))+adxI("rcu","Preço padrão do pacote",CUSTO,"number")+adxI("rini","Fragmentos de quem começa",INICIO,"number")
@@ -4506,7 +4512,7 @@ function adxG(w){const n=Math.floor(+$("gn").value);if(!(n>0))return toast("Info
 if(w=="gf")S.fr+=n;else if(w=="gg"){const v=$("gp").value;if(v=="__r")for(let k=0;k<n;k++)gift(P[Math.floor(Math.random()*P.length)].id,1);else gift(v,n)}else if(w=="gk"){const i=$("gc").value;S.inv[i]=(S.inv[i]||0)+n}else ALL.forEach(c=>S.inv[c.id]=S.inv[c.id]||1);
 save();upd();sync();toast("✓ Pronto")}
 function adxSt(){
- const ids=[...cfg.querySelectorAll("[data-starter-pick]:checked")].map(x=>String(x.value)),valid=new Set(ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0).map(c=>String(c.id)));
+ const ids=[...cfg.querySelectorAll("[data-starter-pick]:checked")].map(x=>String(x.value)),valid=new Set(ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0&&cpCardCanDropFromPack(c)).map(c=>String(c.id)));
  if(ids.length!==12)return toast(`Selecione exatamente 12 cartas. Atualmente: ${ids.length}/12.`);
  if(new Set(ids).size!==12||ids.some(id=>!valid.has(id)))return toast("A seleção precisa conter 12 cartas F diferentes, publicadas e disponíveis. Atualize a lista e tente novamente.");
  ADM.starterCards=ids;toast("✓ As 12 cartas Rank F iniciais foram salvas para os próximos jogadores.");adxGo();
@@ -5278,7 +5284,7 @@ function apply(cards,pk){
  const ids=[];
  cards.forEach(c=>{
   let id;do{id="a"+rid()}while(byId(id)||ADM.c.some(x=>x.id==id));
-  const x={id,pk,r:R[c.r][0],n:c.n,hp:c.hp,atk:c.atk};
+  const x={id,pk,r:R[c.r][0],n:c.n,hp:c.hp,atk:c.atk,colVis:"all"};
   if(c.d)x.d=c.d;if(c.el)x.el=c.el;if(c.el2)x.el2=c.el2;if(c.sl)x.sl=c.sl;if(c.tb)x.tb=c.tb;
   ADM.c.push(x);
   const hs=[];
@@ -5486,7 +5492,7 @@ const warn=(w,e)=>{console.warn(w,e);if(nw++)return;toast("⚠️ "+w+": "+esc(e
 // fotos que ainda não subiram para a nuvem ficam guardadas no aparelho e voltam depois de atualizar
 const PEND=idb.then(d=>new Promise(ok=>{const q=d.transaction("i").objectStore("i").openCursor(),r=[];q.onsuccess=()=>{const x=q.result;if(x){x.value&&x.value.t<0&&r.push([x.key,x.value]);x.continue()}else{r.forEach(([i,v])=>{if(!IMG[i])put(i,v.d,-1)});if(r.length){bt()||render(1);pa()}ok()}};q.onerror=()=>ok()})).catch(()=>{});
 function stats(){const t=(S.cn&&S.cn.T)||{},w=t.win||0,o=S.on||{},h=ALL.filter(c=>S.inv[c.id]),se=seasonData();let d=dkv();if(d.length<12)d=[...h].sort((a,b)=>b.r-a.r).slice(0,12);
- return{n:ME.n,f:ME.f||"",title:S.title||"",showcase:Array.isArray(S.showcase)?S.showcase.slice(0,3):[],wish:Array.isArray(S.wish)?S.wish.slice(0,10):[],tp:S.tp||0,sId:se.id,sPts:se.pts,pId:S.pId||"",pPts:S.pPts||0,w,l:Math.max(0,(t.play||0)-w),ow:o.w||0,ol:o.l||0,nc:h.length,tot:ALL.length,dk:d.length==12?"DECK~"+d.map(c=>c.id+":"+lvl(c)).join(","):"",ex:Object.fromEntries(ALL.filter(c=>extra(c)>0).map(c=>[c.id,extra(c)])),t:Date.now()}}
+ return{n:ME.n,f:ME.f||"",title:S.title||"",showcase:Array.isArray(S.showcase)?S.showcase.slice(0,3):[],wish:Array.isArray(S.wish)?S.wish.filter(id=>{const c=ALL.find(x=>x.id===id);return c&&cpPlayerCollectionVisible(c)}).slice(0,10):[],tp:S.tp||0,sId:se.id,sPts:se.pts,pId:S.pId||"",pPts:S.pPts||0,w,l:Math.max(0,(t.play||0)-w),ow:o.w||0,ol:o.l||0,nc:h.length,tot:ALL.filter(cpPlayerCollectionVisible).length,dk:d.length==12?"DECK~"+d.map(c=>c.id+":"+lvl(c)).join(","):"",ex:Object.fromEntries(ALL.filter(c=>!cpIsOwnerOnly(c)&&extra(c)>0).map(c=>[c.id,extra(c)])),t:Date.now()}}
 async function pubPerfil(){if(!U)return;try{await setDoc(doc(db,"perfis",U.uid),stats(),{merge:true})}catch(e){warn("perfil",e)}}
 window.cpPublishProfile=pubPerfil;
 // Serializa também as publicações de conteúdo ADM: uma edição antiga nunca pode terminar depois da mais nova.
@@ -5627,7 +5633,7 @@ function lvWatch(id){DW&&DW();DW=onSnapshot(doc(db,"duelos",id),sn=>{const d=sn.
  if(!window.LV){if(d.s=="p"&&d.a==U.uid&&d.db){DID=null;lvStart(id,d,0)}else if(d.s=="e"&&d.series&&d.series.finished){DW&&DW();DW=null;lvDrop()}}
  else if(window.LV.id==id)lvCm(d)
 },e=>warn("duelo",e))}
-function cpDraftBuild(seed,lowRank=false,salt=0){return new Promise(resolve=>{const picked=[],used=new Set();let finished=false;const close=code=>{if(finished)return;finished=true;document.removeEventListener("click",onPick,true);const m=g("cpm");m&&m.remove();resolve(code)};const options=()=>{const list=ALL.filter(c=>!used.has(c.id)&&(!lowRank||c.r<=3));let x=(Math.abs((+seed||1)+salt+picked.length*0x45d9f3b)>>>0)||1;const rnd=()=>{x=(x*16807)%2147483647;return x/2147483647};for(let i=list.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[list[i],list[j]]=[list[j],list[i]]}return list.slice(0,3)};const draw=()=>{if(picked.length>=12)return close("DECK~"+picked.map(c=>c.id+":0").join(","));const list=options();if(!list.length)return close("");modal(`<h4>🎴 Draft Primata · ${picked.length+1}/12</h4><p>Escolha <b>1 de ${list.length} carta(s)</b>. Elas ficam disponíveis para esta partida, mesmo que não estejam na sua coleção.</p><div class="cp-draft-progress"><i style="width:${picked.length/12*100}%"></i></div><div class="cp-draft-grid">${list.map(c=>`<button class="cp-draft-pick" data-cp-draft-pick="${safeName(c.id)}">${card(c)}<b>${R[c.r][0]} · ${safeName(c.n)}</b></button>`).join("")}</div><small class="mut">Cartas escolhidas: ${picked.length}/12 · nenhuma carta será consumida.</small><button type="button" class="bt gh" data-cp-draft-cancel="1">Cancelar Draft</button>`)};const onPick=e=>{if(e.target.closest("[data-cp-draft-cancel]"))return close("");const b=e.target.closest("[data-cp-draft-pick]");if(!b||finished)return;const c=byId(b.dataset.cpDraftPick);if(!c||used.has(c.id))return;used.add(c.id);picked.push(c);draw()};document.addEventListener("click",onPick,true);draw()})}
+function cpDraftBuild(seed,lowRank=false,salt=0){return new Promise(resolve=>{const picked=[],used=new Set();let finished=false;const close=code=>{if(finished)return;finished=true;document.removeEventListener("click",onPick,true);const m=g("cpm");m&&m.remove();resolve(code)};const options=()=>{const list=ALL.filter(c=>cpCardCanDropFromPack(c)&&!used.has(c.id)&&(!lowRank||c.r<=3));let x=(Math.abs((+seed||1)+salt+picked.length*0x45d9f3b)>>>0)||1;const rnd=()=>{x=(x*16807)%2147483647;return x/2147483647};for(let i=list.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[list[i],list[j]]=[list[j],list[i]]}return list.slice(0,3)};const draw=()=>{if(picked.length>=12)return close("DECK~"+picked.map(c=>c.id+":0").join(","));const list=options();if(!list.length)return close("");modal(`<h4>🎴 Draft Primata · ${picked.length+1}/12</h4><p>Escolha <b>1 de ${list.length} carta(s)</b>. Elas ficam disponíveis para esta partida, mesmo que não estejam na sua coleção.</p><div class="cp-draft-progress"><i style="width:${picked.length/12*100}%"></i></div><div class="cp-draft-grid">${list.map(c=>`<button class="cp-draft-pick" data-cp-draft-pick="${safeName(c.id)}">${card(c)}<b>${R[c.r][0]} · ${safeName(c.n)}</b></button>`).join("")}</div><small class="mut">Cartas escolhidas: ${picked.length}/12 · nenhuma carta será consumida.</small><button type="button" class="bt gh" data-cp-draft-cancel="1">Cancelar Draft</button>`)};const onPick=e=>{if(e.target.closest("[data-cp-draft-cancel]"))return close("");const b=e.target.closest("[data-cp-draft-pick]");if(!b||finished)return;const c=byId(b.dataset.cpDraftPick);if(!c||used.has(c.id))return;used.add(c.id);picked.push(c);draw()};document.addEventListener("click",onPick,true);draw()})}
 async function desafiar(i){const p=PL[i];if(!p)return;if(window.LV||bt())return toast("Termine a batalha atual primeiro.");DPT=p;
  modal(`<h4>⚔️ Desafiar ${esc(p.n)}</h4><p>Escolha as regras especiais desta partida. Os modificadores serão aplicados igualmente aos dois jogadores.</p><label class="yck"><input type="checkbox" id="dmhp"> ❤️ Vida das cartas ×2</label><label class="yck"><input type="checkbox" id="dmact"> ⚡ 3 ações por turno</label><label class="yck"><input type="checkbox" id="dmrank"> 🛡️ Somente cartas de Rank C ou inferior</label><label class="yck"><input type="checkbox" id="dmdouble"> 💥 Dano dobrado</label><label class="yck"><input type="checkbox" id="dmnoskill"> 🚫 Sem habilidades</label><label class="yck"><input type="checkbox" id="dmfast"> ⏱ Turnos curtos · 25 segundos</label><label class="yck"><input type="checkbox" id="dmdraft"> 🎴 Draft · escolha 1 de 3 cartas por rodada</label><label class="yck"><input type="checkbox" id="dmbo3"> 🏆 Melhor de 3 · vence quem ganhar 2 partidas</label><p class="mut">Com o limite de Rank C, cada jogador precisa montar um deck de 12 cartas diferentes dentro desse limite. No melhor de 3, os dois jogadores precisam confirmar que estão prontos antes de cada revanche.</p><button class="bt cy" data-a="dstart">Enviar desafio</button><button class="bt gh" data-a="px">Cancelar</button>`)}
 async function enviarDesafio(){const p=DPT;if(!p)return;const bestOfThree=!!$("dmbo3")?.checked;const mods={hp2:!!$("dmhp")?.checked,act3:!!$("dmact")?.checked,capC:!!$("dmrank")?.checked,doubleDamage:!!$("dmdouble")?.checked,noSkills:!!$("dmnoskill")?.checked,fastTurns:!!$("dmfast")?.checked,draft:!!$("dmdraft")?.checked};if(mods.hp2)mods.vidaMult=Math.max(.1,(+CONFIG.vidaMult||1)*2);const seed=(Math.random()*2147483646|0)+1;let da;if(mods.draft){toast("🎴 Monte seu deck de Draft escolhendo 1 de 3 cartas por rodada.");da=await cpDraftBuild(seed,mods.capC,0)}else da=duelDeck(mods);if(!da)return toast(mods.capC?"Você precisa de 12 cartas diferentes de Rank C ou inferior para este desafio.":"Não foi possível montar o deck de 12 cartas.");
@@ -5947,7 +5953,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   const raidIsSpecial=c=>!!c&&(c.p?.id==="ind"||raidIsArena(c)||!!c.sl||+c.ga>0||+c.p?.esp>0||+c.p?.ate>0);
   const raidLegacyRanks=value=>({all:R.map(x=>x[0]),low:["F","E","D"],mid:["C","B"],high:["A","S","SS","SSS"],"f-c":["F","E","D","C"],"b-sss":["B","A","S","SS","SSS"]}[value]||(["F","E","D","C","B","A","S","SS","SSS"].includes(value)?[value]:R.map(x=>x[0])));
   const raidCardMatches=(c,filter,ranks)=>{
-    if(!c)return false;
+    if(!c||!cpCardCanDropFromPack(c))return false;
     const arena=raidIsArena(c),special=raidIsSpecial(c),r=Math.max(0,Math.min(8,+c.r||0)),packaged=P.some(p=>p.id===c.p?.id),hasImage=!!(c.img||IMG[c.id]);
     if(filter==="no-special"&&special||filter==="special-only"&&!special||filter==="packages-only"&&!packaged||filter==="no-pack"&&packaged||filter==="arena-only"&&!arena||filter==="no-arena"&&arena||filter==="with-image"&&!hasImage||filter==="without-image"&&hasImage)return false;
     return Array.isArray(ranks)&&ranks.includes(R[r][0]);
@@ -5958,7 +5964,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   const raidCfg=()=>{
     const r=ADM&&ADM.raidBoss;
     if(!r)return null;
-    const pool=Array.isArray(r.rotationIds)?r.rotationIds.filter(id=>byId(id)):[];
+    const pool=Array.isArray(r.rotationIds)?r.rotationIds.filter(id=>{const c=byId(id);return c&&cpCardCanDropFromPack(c)}):[];
     const hours=Math.max(1,Math.min(720,Math.floor(+r.rotationHours||24)));
     const cycle=Math.floor(Math.max(0,Date.now()-(r.rotationMode==="random"?(+r.rotationStartedAt||0):0))/(hours*3600000));
     const filter=r.rotationFilter||"no-special",ranks=Array.isArray(r.rotationRanks)?r.rotationRanks.filter(v=>R.some(x=>x[0]===v)):raidLegacyRanks(r.rotationRank||"all");
@@ -5967,7 +5973,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
     if(r.rotationMode==="auto"&&pool.length)activeId=pool[((cycle%pool.length)+pool.length)%pool.length];
     else if(r.rotationMode==="random"){if(!randomPool.length)return null;activeId=raidStableOrder(randomPool,"raid:"+cycle)[0].id;}
     const c=byId(activeId);
-    if(!c)return null;
+    if(!c||!cpCardCanDropFromPack(c))return null;
     const auto=r.autoBalance===true?raidAutoValues(c):null;
     return {
       cardId:String(activeId),rotationMode:["auto","random"].includes(r.rotationMode)?r.rotationMode:"manual",rotationHours:hours,rotationFilter:filter,rotationRanks:ranks,randomPoolSize:randomPool.length,autoBalance:!!auto,
@@ -5986,9 +5992,9 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
     if(!(typeof AD!=="undefined"&&AD))return toast("Entre no modo ADM para configurar o Boss Raid.");
     const r=ADM.raidBoss||{cardId:ALL[0]&&ALL[0].id,power:12,maxPlayers:4,fragments:600,packs:1,dropMode:"chance",dropChance:25,autoBalance:true},picked=byId(r.cardId)||ALL[0],auto=r.autoBalance===true,autoVals=raidAutoValues(picked);
     const manual={power:r.power??autoVals.power,fragments:r.fragments??autoVals.fragments,packs:r.packs??autoVals.packs,dropChance:r.dropChance??autoVals.dropChance};
-    const opts=ALL.map(c=>`<option value="${safeName(c.id)}"${c.id===r.cardId?" selected":""}>${R[c.r][0]} · ${safeName(c.n)}</option>`).join("");
+    const opts=ALL.filter(cpCardCanDropFromPack).map(c=>`<option value="${safeName(c.id)}"${c.id===r.cardId?" selected":""}>${R[c.r][0]} · ${safeName(c.n)}</option>`).join("");
     const rotationIds=Array.isArray(r.rotationIds)?r.rotationIds:[r.cardId];
-    const rotationOpts=ALL.map(c=>`<label class="cp-raid-pool-item"><input type="checkbox" data-cp-raid-pool="${safeName(c.id)}"${rotationIds.includes(c.id)?" checked":""}><span><b>${R[c.r][0]}</b> · ${safeName(c.n)}</span></label>`).join("");
+    const rotationOpts=ALL.filter(cpCardCanDropFromPack).map(c=>`<label class="cp-raid-pool-item"><input type="checkbox" data-cp-raid-pool="${safeName(c.id)}"${rotationIds.includes(c.id)?" checked":""}><span><b>${R[c.r][0]}</b> · ${safeName(c.n)}</span></label>`).join("");
     const typeOpts=[["all","Todas as cartas"],["no-special","Todas, menos especiais"],["special-only","Somente especiais"],["packages-only","Somente de pacotes"],["no-pack","Fora dos pacotes"],["arena-only","Somente de arena"],["no-arena","Todas, menos arena"],["with-image","Somente com imagem"],["without-image","Somente sem imagem"]].map(([v,n])=>`<option value="${v}"${(r.rotationFilter||"no-special")===v?" selected":""}>${n}</option>`).join("");
     const currentRanks=Array.isArray(r.rotationRanks)?r.rotationRanks.filter(v=>R.some(x=>x[0]===v)):raidLegacyRanks(r.rotationRank||"all"),rankChecks=R.map(x=>x[0]).map(x=>`<label class="cp-rank-chip"><input type="checkbox" data-cp-raid-rank="${x}"${currentRanks.includes(x)?" checked":""}><b>${x}</b></label>`).join("");
     const raidScaleEditor=R.map((row,i)=>{const rank=row[0],v=raidAutoValues({r:i});return `<div class="cp-raid-scale-row"><b class="cp-raid-scale-rank">${rank}</b><label><span>Força ×</span><input type="number" min="2" max="200" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="power" value="${v.power}"></label><label><span>Fragmentos</span><input type="number" min="0" max="1000000000" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="fragments" value="${v.fragments}"></label><label><span>Pacotes</span><input type="number" min="0" max="100" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="packs" value="${v.packs}"></label><label><span>Drop %</span><input type="number" min="0" max="100" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="dropChance" value="${v.dropChance}"></label></div>`}).join("");
@@ -7409,7 +7415,7 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
   // Profile showcase/title/wishlist helpers are also used by the online Firebase profile views.
   const ownedCards=()=>ALL.filter(c=>(S.inv[c.id]||0)>0);
   window.cpRenderShowcase=ids=>{
-    const list=(Array.isArray(ids)?ids:[]).slice(0,3).map(id=>ALL.find(c=>c.id===id)).filter(Boolean);
+    const list=(Array.isArray(ids)?ids:[]).slice(0,3).map(id=>ALL.find(c=>c.id===id)).filter(c=>c&&cpCollectionVisible(c));
     return list.length?`<div class="cp-showcase">${list.map(c=>`<div class="cp-showcase-card">${card(c,"",1)}</div>`).join("")}</div>`:`<small style="color:var(--mut)">Nenhuma carta na vitrine ainda.</small>`;
   };
   window.cpProfileMeta=(title,showcase)=>{
@@ -7417,7 +7423,7 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     return `<div class="cp-profile-meta">${label}<div class="mut" style="margin:5px 0 4px">VITRINE</div>${window.cpRenderShowcase(showcase)}</div>`;
   };
   window.cpWishlistMarkup=(wish,friendIndex)=>{
-    const ids=(Array.isArray(wish)?wish:[]).filter(id=>ALL.some(c=>c.id===id)).slice(0,10);
+    const ids=(Array.isArray(wish)?wish:[]).filter(id=>ALL.some(c=>c.id===id&&cpCollectionVisible(c))).slice(0,10);
     if(!ids.length)return `<div class="cp-wishlist"><b>⭐ Lista de desejos</b><small>Este jogador ainda não escolheu cartas para procurar.</small></div>`;
     const matches=ids.filter(id=>(S.inv[id]||0)>1).map(id=>ALL.find(c=>c.id===id));
     return `<div class="cp-wishlist"><b>⭐ Procura estas cartas</b><small>${ids.map(id=>{const c=ALL.find(x=>x.id===id);return c?escCP(c.n):""}).join(" · ")}</small>${matches.length?`<small>✨ Você tem repetidas que este amigo procura: <b>${matches.map(c=>escCP(c.n)).join(", ")}</b>. Ao propor troca, elas aparecem primeiro.</small>`:""}</div>`;
@@ -7446,22 +7452,22 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
   }
   window.cpOpenAchievements=renderAchievements;
   window.cpOpenWishlist=()=>{
-    let temp=[...S.wish];
+    let temp=[...S.wish].filter(id=>ALL.some(c=>c.id===id&&cpCollectionVisible(c)));
     const body=`<p>Marque até 10 cartas que você está procurando. Seus amigos verão a lista no seu perfil, e as sugestões de troca vão priorizar as cartas que eles procuram.</p><input type="search" id="cpWishSearch" placeholder="Buscar carta pelo nome"><div class="cp-block" id="cpWishList" style="max-height:48vh;overflow:auto"></div><p id="cpWishCount"></p><button class="bt cy" data-cp-save-wish>Salvar lista de desejos</button>`;
     const root=openExtra("⭐ Lista de desejos",body),list=root.querySelector("#cpWishList"),count=root.querySelector("#cpWishCount");
-    const paint=()=>{const q=nrm(root.querySelector("#cpWishSearch").value||"");const cards=ALL.filter(c=>!q||nrm(c.n+" "+(c.tb||"")).includes(q)).sort((a,b)=>a.n.localeCompare(b.n));list.innerHTML=cards.map(c=>`<label class="cp-row" style="justify-content:flex-start"><input type="checkbox" data-cp-wish="${escCP(c.id)}" ${temp.includes(c.id)?"checked":""} style="width:18px;flex:none"><span style="flex:1"><b>${escCP(c.n)}</b><small>Rank ${R[c.r][0]} · ${escCP(c.p.n)}</small></span></label>`).join("");count.textContent=`${temp.length}/10 cartas selecionadas`};
+    const paint=()=>{const q=nrm(root.querySelector("#cpWishSearch").value||"");const cards=ALL.filter(c=>cpCollectionVisible(c)&&(!q||nrm(c.n+" "+(c.tb||"")).includes(q))).sort((a,b)=>a.n.localeCompare(b.n));list.innerHTML=cards.map(c=>`<label class="cp-row" style="justify-content:flex-start"><input type="checkbox" data-cp-wish="${escCP(c.id)}" ${temp.includes(c.id)?"checked":""} style="width:18px;flex:none"><span style="flex:1"><b>${escCP(c.n)}</b><small>Rank ${R[c.r][0]} · ${escCP(c.p.n)}</small></span></label>`).join("");count.textContent=`${temp.length}/10 cartas selecionadas`};
     paint();root.querySelector("#cpWishSearch").addEventListener("input",paint);
     root.addEventListener("change",e=>{const b=e.target.closest("[data-cp-wish]");if(!b)return;const id=b.dataset.cpWish;if(b.checked){if(temp.length>=10){b.checked=false;toast("Sua lista aceita até 10 cartas.");return}if(!temp.includes(id))temp.push(id)}else temp=temp.filter(x=>x!==id);count.textContent=`${temp.length}/10 cartas selecionadas`});
     root.querySelector("[data-cp-save-wish]").addEventListener("click",()=>{S.wish=temp.slice(0,10);save();window.cpPublishProfile&&window.cpPublishProfile();root.hidden=true;toast("⭐ Lista de desejos atualizada!")});
   };
 
   // Loja diária v2: rotação automática por horas ou seleção manual fixa do ADM.
-  const validShopOffer=o=>o&&((o.kind==="card"&&ALL.some(c=>c.id===o.item))||(o.kind==="pack"&&P.some(p=>p.id===o.item)))&&Number.isFinite(+o.price)&&+o.price>0&&o.active!==false;
+  const validShopOffer=o=>o&&((o.kind==="card"&&ALL.some(c=>c.id===o.item&&cpCardCanDropFromPack(c)))||(o.kind==="pack"&&P.some(p=>p.id===o.item&&cpPackHasDrops(p))))&&Number.isFinite(+o.price)&&+o.price>0&&o.active!==false;
   const shopIsArena=c=>!!c&&(c.p?.id==="are"||/^are\d+$/i.test(String(c.id||"")));
   const shopIsSpecial=c=>!!c&&(c.p?.id==="ind"||shopIsArena(c)||!!c.sl||+c.ga>0||+c.p?.esp>0||+c.p?.ate>0);
   const CP_RANK_NAMES=R.map(x=>x[0]);
   const shopLegacyRanks=value=>({all:CP_RANK_NAMES,low:["F","E","D"],mid:["C","B"],high:["A","S","SS","SSS"],"f-c":["F","E","D","C"],"b-sss":["B","A","S","SS","SSS"]}[value]||(["F","E","D","C","B","A","S","SS","SSS"].includes(value)?[value]:CP_RANK_NAMES));
-  const shopCardMatches=(c,filter,ranks)=>{if(!c)return false;const arena=shopIsArena(c),special=shopIsSpecial(c),r=Math.max(0,Math.min(8,+c.r||0)),packaged=P.some(p=>p.id===c.p?.id),hasImage=!!(c.img||IMG[c.id]);if(filter==="no-special"&&special||filter==="special-only"&&!special||filter==="packages-only"&&!packaged||filter==="no-pack"&&packaged||filter==="arena-only"&&!arena||filter==="no-arena"&&arena||filter==="with-image"&&!hasImage||filter==="without-image"&&hasImage)return false;return Array.isArray(ranks)&&ranks.includes(R[r][0])};
+  const shopCardMatches=(c,filter,ranks)=>{if(!c||!cpCardCanDropFromPack(c))return false;const arena=shopIsArena(c),special=shopIsSpecial(c),r=Math.max(0,Math.min(8,+c.r||0)),packaged=P.some(p=>p.id===c.p?.id),hasImage=!!(c.img||IMG[c.id]);if(filter==="no-special"&&special||filter==="special-only"&&!special||filter==="packages-only"&&!packaged||filter==="no-pack"&&packaged||filter==="arena-only"&&!arena||filter==="no-arena"&&arena||filter==="with-image"&&!hasImage||filter==="without-image"&&hasImage)return false;return Array.isArray(ranks)&&ranks.includes(R[r][0])};
   const shopFilteredCards=(filter,ranks)=>ALL.filter(c=>shopCardMatches(c,filter,ranks));
   const shopHash=value=>{let h=2166136261;const t=String(value);for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
   const shopStableOrder=(items,seed)=>items.slice().sort((a,b)=>shopHash(seed+"|"+a.id)-shopHash(seed+"|"+b.id));
@@ -7505,7 +7511,7 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
 
   // ADM shop editor. Offers are stored inside ADM and follow the existing cloud backup/sync route.
   function openShopAdmin(){
-    const kind="card",cardOpts=ALL.map(c=>`<option value="${escCP(c.id)}">${R[c.r][0]} · ${escCP(c.n)}</option>`).join(""),packOpts=P.map(p=>`<option value="${escCP(p.id)}">${escCP(p.e||"📦")} ${escCP(p.n)}</option>`).join(""),cfg=shopSettings(),cardFilterOpts=[["all","Todas as cartas"],["no-special","Todas, menos especiais"],["special-only","Somente especiais"],["packages-only","Somente de pacotes"],["no-pack","Fora dos pacotes"],["arena-only","Somente de arena"],["no-arena","Todas, menos arena"],["with-image","Somente com imagem"],["without-image","Somente sem imagem"]].map(([v,n])=>`<option value="${v}"${cfg.cardFilter===v?" selected":""}>${n}</option>`).join(""),shopRankOptions=R.map(x=>x[0]),shopRankChecks=shopRankOptions.map(x=>`<label class="cp-rank-chip"><input type="checkbox" data-cp-shop-rank="${x}"${cfg.rankRanks.includes(x)?" checked":""}><b>${x}</b></label>`).join("");
+    const kind="card",cardOpts=ALL.filter(cpCardCanDropFromPack).map(c=>`<option value="${escCP(c.id)}">${R[c.r][0]} · ${escCP(c.n)}</option>`).join(""),packOpts=P.filter(cpPackHasDrops).map(p=>`<option value="${escCP(p.id)}">${escCP(p.e||"📦")} ${escCP(p.n)}</option>`).join(""),cfg=shopSettings(),cardFilterOpts=[["all","Todas as cartas"],["no-special","Todas, menos especiais"],["special-only","Somente especiais"],["packages-only","Somente de pacotes"],["no-pack","Fora dos pacotes"],["arena-only","Somente de arena"],["no-arena","Todas, menos arena"],["with-image","Somente com imagem"],["without-image","Somente sem imagem"]].map(([v,n])=>`<option value="${v}"${cfg.cardFilter===v?" selected":""}>${n}</option>`).join(""),shopRankOptions=R.map(x=>x[0]),shopRankChecks=shopRankOptions.map(x=>`<label class="cp-rank-chip"><input type="checkbox" data-cp-shop-rank="${x}"${cfg.rankRanks.includes(x)?" checked":""}><b>${x}</b></label>`).join("");
     const offers=ADM.shop.map(o=>`<div class="cp-row"><div style="flex:1"><b>${o.kind==="card"?"🎴":"📦"} ${escCP(shopLabel(o)||o.item)}</b><small>${o.kind==="card"?"Carta":"Pacote"} · ${fmt(shopPrice(o))} 💎${cfg.autoPricing&&o.kind==="card"?" · preço por rank":" · preço manual"} · ${o.active===false?"pausada":"ativa"}</small></div><button class="bt gh" style="width:auto;padding:7px 9px" data-cp-del-shop="${escCP(o.id)}">Remover</button></div>`).join("")||"<p>Nenhuma oferta cadastrada.</p>";
     const manualList=ADM.shop.filter(validShopOffer).map(o=>`<label class="cp-row" style="justify-content:flex-start"><input type="checkbox" data-cp-shop-manual="${escCP(o.id)}" ${cfg.manualIds.includes(o.id)?"checked":""} style="width:18px;flex:none"><span style="flex:1"><b>${escCP(shopLabel(o)||o.item)}</b><small>${o.kind==="card"?"Carta":"Pacote"} · ${fmt(shopPrice(o))} 💎</small></span></label>`).join("")||"<p>Cadastre ofertas para escolher a rotação manual.</p>";
     const rankPriceFields=CP_RANK_NAMES.map(rank=>`<label class="cp-shop-price-row"><b>${rank}</b><input type="number" min="1" max="999999999" step="1" data-cp-shop-price-rank="${rank}" value="${cfg.rankPrices[rank]}"><small>fragmentos</small></label>`).join("");
@@ -9139,6 +9145,53 @@ html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-ref
 .cp-hub-footnote{padding:10px 12px;border-radius:12px;background:#ffffff06;color:var(--mut);font-size:.65rem;line-height:1.4}
 @media(max-width:380px){#yrm .yb{gap:8px;padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px))}#yrm .yr-menu-group{padding:10px}#yrm .yr-menu-actions button{padding:8px;font-size:.72rem}#yrm .yr-action-copy b{font-size:.72rem}#yrm .yr-action-copy small{font-size:.57rem}}
 @media(prefers-reduced-motion:reduce){#yrm .yb{animation:none!important}}
+</style>
+
+<style id="cp-sss-inner-rgb-edge-only-2026">
+/* SSS: remove totalmente o simbionte/películas sobre a foto. A arte fica limpa. */
+.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection,
+.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film,
+.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film,
+.cd.cp-art-only.k8:not(.lock)>.art>.cp-touch-holo,
+.cd.cp-art-only.k8:not(.lock)>.art>.cp-touch-specular{
+  display:none!important;visibility:hidden!important;opacity:0!important;animation:none!important;
+  background:none!important;filter:none!important;
+}
+.cd.cp-art-only.k8:not(.lock)>.aur{display:none!important;opacity:0!important;animation:none!important}
+/* A camada emb passa a ser apenas um halo RGB suave que nasce no contorno interno
+   e se espalha alguns pixels para dentro, sem cobrir o centro da ilustração. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb{
+  display:block!important;position:absolute!important;inset:0!important;z-index:4!important;
+  overflow:hidden!important;pointer-events:none!important;border-radius:inherit!important;
+  opacity:1!important;mix-blend-mode:screen!important;background:transparent!important;
+}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb::before{
+  content:none!important;display:none!important;animation:none!important;background:none!important;
+}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb::after{
+  content:""!important;display:block!important;position:absolute!important;inset:-1px!important;
+  border-radius:inherit!important;pointer-events:none!important;
+  background:conic-gradient(from 0deg,
+    #ff4fa8 0deg,#ffbd55 48deg,#fff071 92deg,#51e8a8 142deg,
+    #39d9f2 194deg,#687cff 246deg,#bb69f5 302deg,#ff4fa8 360deg)!important;
+  -webkit-mask-image:radial-gradient(ellipse 76% 80% at 50% 50%,transparent 54%,#000 100%)!important;
+  mask-image:radial-gradient(ellipse 76% 80% at 50% 50%,transparent 54%,#000 100%)!important;
+  filter:blur(10px) saturate(1.25)!important;opacity:.64!important;
+  transform:scale(1.035)!important;transform-origin:center!important;
+  animation:cpSssInnerRgbGlow 11s linear infinite!important;
+}
+@keyframes cpSssInnerRgbGlow{
+  0%{filter:blur(10px) saturate(1.2) hue-rotate(0deg);opacity:.48}
+  50%{filter:blur(12px) saturate(1.45) hue-rotate(180deg);opacity:.72}
+  100%{filter:blur(10px) saturate(1.2) hue-rotate(360deg);opacity:.48}
+}
+/* Preserva a borda prismática externa, sólida e totalmente opaca. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw{opacity:1!important;z-index:8!important}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{opacity:1!important;filter:saturate(1.18) brightness(1.08)!important;animation:spin 4.8s linear infinite!important}
+@media(prefers-reduced-motion:reduce){
+  .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb::after{animation:none!important;filter:blur(10px) saturate(1.2)!important}
+  .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:none!important}
+}
 </style>
 </body>
 </html>
