@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.3.11">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.11 -->
+<meta name="application-version" content="1.3.12">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.12 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.3.11";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.12";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -3241,14 +3241,14 @@ S.fr=Number.isFinite(S.fr)?Math.max(0,Math.floor(S.fr)):INICIO; // save antigo (
 S.lv=S.lv||{};S.sk=S.sk||0;S.gp=S.gp||{};S.tp=S.tp||0;S.ar=S.ar||0;S.wn=S.wn||0;S.tm=S.tm||0;S.dk=Array.isArray(S.dk)?[...new Set(S.dk)]:[];S.dks=S.dks&&typeof S.dks=="object"?S.dks:{};S.dka=S.dka=="B"||S.dka=="C"?S.dka:"A";S.cn=S.cn||{};S.md=S.md||{};S.mw=S.mw||{};S.fd=S.fd||{};if(!S.v){S.tm=Math.floor((S.tm||0)*250/CONFIG.mk);S.v=2}
 const save=()=>{try{avisos()}catch(e){}try{localStorage.setItem("colprimata_save",JSON.stringify(S))}catch(e){}};
 function avisos(){if(!$("tc"))return;const a=S.ar+1,n=!S.av,v=S.av=S.av||{},L=[];
- if(a>=4&&!v.fus){v.fus=1;L.push("🔓 <b>Fusões liberadas!</b> Você já pode evoluir cartas até Incomum.")}
- if(a>=(v.rank||1)+1){v.rank=a;L.push(`🏟️ <b>Arena ${a} liberada!</b> Agora você pode usar cartas até o rank <b>${R[Math.min(8,a-1)][0]}</b>.`)}
+ if(a>=3&&!v.fus){v.fus=1;L.push("🔓 <b>Fusões liberadas!</b> Você já pode evoluir cartas até Incomum.")}
+ if(a>=4&&!v.rk4){v.rk4=1;L.push("🔓 <b>Ranks C, B e A liberados!</b> Você já pode usar essas cartas.")}if(a>=7&&!v.rk7){v.rk7=1;L.push("🔓 <b>Ranks S, SS e SSS liberados!</b> Você já pode usar essas cartas.")}
  const g=v.g=v.g||{},G=[],e=cpxEvOn(),ek=e&&(e.id||e.ate);if(e&&v.ev!==ek&&v.ev!==e.ate){v.ev=ek;if(e.gf>0){S.fr+=e.gf;G.push("🎁 <b>+"+e.gf+" fragmentos</b> de presente do evento")}for(let q=0;q<(e.gq||0);q++){const o=P.filter(x=>!pkBlocked(x)&&cpPackHasDrops(x)),pk=(e.gk&&P.find(x=>x.id==e.gk))||o[Math.floor(Math.random()*o.length)];if(pk){gift(pk.id,1);G.push("🎁 Pacote de presente: <b>"+pk.n+"</b>")}}if(e.gf>0||e.gq>0){try{save();upd()}catch(x){}}G.push((e.tipo=="natal"?"🎄":"🎉")+" <b>Evento "+e.n+"</b>: fragmentos ×"+e.mf+" nas vitórias até "+new Date(e.ate).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}))}ALL.forEach(c=>{if(c.ga>0&&a>=c.ga&&!g[c.id]){g[c.id]=1;if(!(S.inv[c.id]>0)){S.inv[c.id]=1;G.push("🎁 <b>Carta especial!</b> "+c.n+" entrou na sua coleção.")}}});
  if((L.length&&!n)||G.length)setTimeout(()=>toast((n?[]:L).concat(G).join("<br>")),700)}
 const own=p=>p.cards.filter(c=>cpPlayerCollectionVisible(c)&&(S.inv[c.id]||0)>0).length;
 // CHANCE POR CARTA: coloque ch (em %) na carta, ex.: {r:"SSS",n:"Shadow",ch:0.001}. Sem ch, vale a chance da raridade dividida pelas cartas dessa raridade no pacote (como antes). Para mudar as chances de um pacote inteiro: odds:[F,E,D,C,B,A,S,SS,SSS] dentro do pacote.
 const wc=(p,c)=>c.ch!=null?c.ch:(p.odds?p.odds[c.r]:R[c.r][2])/Math.max(1,p.cards.filter(x=>x.r==c.r&&cpCardCanDropFromPack(x)).length),pcf=v=>(v>=10?v.toFixed(0):v>=1?v.toFixed(1):String(+v.toPrecision(2))).replace(".",",")+"%",cch=c=>pcf(wc(c.p,c)/Math.max(1,c.p.cards.filter(cpCardCanDropFromPack).reduce((a,x)=>a+wc(c.p,x),0))*100);
-const CP_RANK_LOCK=false/* true = religa o bloqueio de rank por arena */,rkLock=r=>CP_RANK_LOCK&&Number(r)>Math.min(8,Math.max(0,Number(S.ar)||0)),fusLock=()=>Math.max(0,Number(S.ar)||0)<3;
+const CP_RANK_LOCK=true/* false = libera todos os ranks desde o início */,rkMax=()=>{const a=Math.max(0,Number(S.ar)||0);return a>=6?8:a>=3?5:2}/* Arena 1: F,E,D · Arena 4: C,B,A · Arena 7: S,SS,SSS */,rkArena=r=>Number(r)<=2?1:Number(r)<=5?4:7,rkLock=r=>CP_RANK_LOCK&&Number(r)>rkMax(),fusLock=()=>Math.max(0,Number(S.ar)||0)<2/* fusões: Arena 3 */;
 const pull=(p,m)=>{
  const pool=(p&&Array.isArray(p.cards)?p.cards:[]).filter(cpCardCanDropFromPack);if(!pool.length)return null;
  const T=R.map((_,r)=>pool.reduce((a,c)=>a+(c.r==r?wc(p,c):0),0));
@@ -3370,8 +3370,8 @@ function fzAnim(c,L,done){
  [a,b].forEach((e,i)=>{const s=i?1:-1,m=A(e,[{transform:`translateX(${s*dx}px) rotate(${s*10}deg) scale(.9)`,opacity:0},{opacity:1,offset:.3},{transform:`translateX(${s*5}%) rotate(0) scale(1)`,opacity:1}],T,{easing:"cubic-bezier(.6,0,.9,.5)"});if(!i)m.onfinish=swap});
  setTimeout(swap,T+150);
 }
-function fuse(c){if(rkLock(c.r))return toast(`🔒 Rank ${R[c.r][0]} libera na Arena ${c.r+1}.`);if(fusLock())return toast("🔒 Fusões liberam na Arena 4.");const l=lvl(c),n=need(c),t=fcost(c),m=Math.max(0,n-extra(c));if(l>=mxLv(c))return;if(m)return toast(`Faltam <b>${m}</b> repetida${m>1?"s":""} para fundir.`);if(S.fr<t)return lack(t-S.fr);fzAnim(c,l+1,()=>pop("−"+fmt(t),"neg"));S.inv[c.id]-=n;S.fr-=t;S.lv[c.id]=l+1;bump("fuse");save();sync();upd();toast(`✨ <b>${c.n}</b> subiu para <b>${NIVEIS[l+1]}</b>`)}
-const fzb=(c,n)=>{if(!n)return"";if(rkLock(c.r))return`<div class="cvb"><p>🔒 Esta carta libera na <b>Arena ${c.r+1}</b>.</p></div>`;if(fusLock())return`<div class="cvb"><p>🔒 Fusões liberam na <b>Arena 4</b>.</p></div>`;const l=lvl(c),m=mxLv(c);if(l>=m)return`<div class="cvb"><p>Fusão máxima: <b>${NIVEIS[m]}</b></p></div>`;const nd=need(c),t=fcost(c),e=n-1,ok=e>=nd&&S.fr>=t;return`<div class="cvb"><p>Fusão <b>${NIVEIS[l]} → ${NIVEIS[l+1]}</b> · repetidas <b>${Math.min(e,nd)}/${nd}</b> · +${Math.round(gain(c)*100)}% de status</p><div class="two"><button class="bt cy${ok?"":" off"}" data-x="f" style="grid-column:1/-1">Fundir<span class="pr">${gem}${fmt(t)}</span></button></div></div>`};
+function fuse(c){if(rkLock(c.r))return toast(`🔒 Rank ${R[c.r][0]} libera na Arena ${rkArena(c.r)}.`);if(fusLock())return toast("🔒 Fusões liberam na Arena 3.");const l=lvl(c),n=need(c),t=fcost(c),m=Math.max(0,n-extra(c));if(l>=mxLv(c))return;if(m)return toast(`Faltam <b>${m}</b> repetida${m>1?"s":""} para fundir.`);if(S.fr<t)return lack(t-S.fr);fzAnim(c,l+1,()=>pop("−"+fmt(t),"neg"));S.inv[c.id]-=n;S.fr-=t;S.lv[c.id]=l+1;bump("fuse");save();sync();upd();toast(`✨ <b>${c.n}</b> subiu para <b>${NIVEIS[l+1]}</b>`)}
+const fzb=(c,n)=>{if(!n)return"";if(rkLock(c.r))return`<div class="cvb"><p>🔒 Esta carta libera na <b>Arena ${rkArena(c.r)}</b>.</p></div>`;if(fusLock())return`<div class="cvb"><p>🔒 Fusões liberam na <b>Arena 3</b>.</p></div>`;const l=lvl(c),m=mxLv(c);if(l>=m)return`<div class="cvb"><p>Fusão máxima: <b>${NIVEIS[m]}</b></p></div>`;const nd=need(c),t=fcost(c),e=n-1,ok=e>=nd&&S.fr>=t;return`<div class="cvb"><p>Fusão <b>${NIVEIS[l]} → ${NIVEIS[l+1]}</b> · repetidas <b>${Math.min(e,nd)}/${nd}</b> · +${Math.round(gain(c)*100)}% de status</p><div class="two"><button class="bt cy${ok?"":" off"}" data-x="f" style="grid-column:1/-1">Fundir<span class="pr">${gem}${fmt(t)}</span></button></div></div>`};
 const wal=()=>`<div class="wal">${gem}<span><small>Fragmentos</small><b class="bal">${fmt(shown)}</b></span></div>`,wlt=()=>`<div class="wl">${wal()}</div>`;
 // saldo na tela: conta até o valor novo (todas as carteiras ao mesmo tempo)
 function upd(){
@@ -3525,7 +3525,7 @@ const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
  /* SSS usa um aro prismático recortado e opaco, separado da película RGB da ilustração. */
  const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<i class="cp-sss-inner-glow" aria-hidden="true"></i><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
- const rankLocked=!lk&&(S.inv[c.id]||0)>0&&rkLock(r),lockBadge=rankLocked?`<span class="cp-rank-lock" aria-label="Bloqueada até Arena ${r+1}"><b>🔒</b><small>ARENA ${r+1}</small></span>`:"";
+ const rankLocked=!lk&&(S.inv[c.id]||0)>0&&rkLock(r),lockBadge=rankLocked?`<span class="cp-rank-lock" aria-label="Bloqueada até Arena ${rkArena(r)}"><b>🔒</b><small>ARENA ${rkArena(r)}</small></span>`:"";
  return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${rankLocked?"cp-locked-rank":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${rankLocked?` data-ranklocked="1"`:""}${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${artWithFilm}${rarityFx}${frame}${lockBadge}${xt}</div>`
 };
 // se a foto de uma carta não carregar, mostra a ilustração gerada
@@ -4088,8 +4088,8 @@ function dkPaint(){
  dkBar()
 }
 const dkSave=()=>{save();dkPaint()};
-function dkUse(id){const ids=dkIds(),chosen=byId(id);if(!chosen)return;if(rkLock(chosen.r))return toast(`🔒 Rank ${R[chosen.r][0]} libera na Arena ${chosen.r+1}.`);if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");if(ids.length>=12)return toast("Deck cheio · toque num espaço do deck para trocar.");ids.push(id);S.dk=ids;DSEL=null;dkSave()}
-function dkPlace(i,id){const ids=dkIds(),chosen=byId(id);if(!chosen||rkLock(chosen.r))return toast(chosen?`🔒 Rank ${R[chosen.r][0]} libera na Arena ${chosen.r+1}.` : "Carta não encontrada.");if(ids[i]==id){DSEL=null;return dkPaint()}if(i<ids.length)ids.splice(i,1);else i=ids.length;if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");ids.splice(i,0,id);S.dk=ids;DSEL=null;dkSave()}
+function dkUse(id){const ids=dkIds(),chosen=byId(id);if(!chosen)return;if(rkLock(chosen.r))return toast(`🔒 Rank ${R[chosen.r][0]} libera na Arena ${rkArena(chosen.r)}.`);if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");if(ids.length>=12)return toast("Deck cheio · toque num espaço do deck para trocar.");ids.push(id);S.dk=ids;DSEL=null;dkSave()}
+function dkPlace(i,id){const ids=dkIds(),chosen=byId(id);if(!chosen||rkLock(chosen.r))return toast(chosen?`🔒 Rank ${R[chosen.r][0]} libera na Arena ${rkArena(chosen.r)}.` : "Carta não encontrada.");if(ids[i]==id){DSEL=null;return dkPaint()}if(i<ids.length)ids.splice(i,1);else i=ids.length;if(ids.includes(id))return toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");ids.splice(i,0,id);S.dk=ids;DSEL=null;dkSave()}
 function dkRm(i){const ids=dkIds();if(i>=ids.length)return;ids.splice(i,1);S.dk=ids;dkSave()}
 document.addEventListener("click",e=>{
  const t=e.target.closest("[data-dc],[data-ds],[data-dx],[data-dk]");if(!t)return;const D=t.dataset;
@@ -4101,7 +4101,7 @@ document.addEventListener("click",e=>{
   else if(D.dk=="clear"){if(!dkv().length)return;ask("Limpar o deck?","As 12 vagas ficam vazias. Suas cartas continuam no álbum.","Limpar",()=>{S.dk=[];DSEL=null;dkSave()},1)}
  }
  else if(D.ds!=null){const i=+D.ds;if(DSEL)dkPlace(i,DSEL);else{const c=dkv()[i];c?view(c):toast("Escolha uma carta do álbum abaixo para colocar aqui.")}}
- else if(D.dc){const c=byId(D.dc);if(c&&rkLock(c.r))return toast(`🔒 Rank ${R[c.r][0]} libera na Arena ${c.r+1}.`);DSEL=DSEL==D.dc?null:D.dc;dkPaint()}
+ else if(D.dc){const c=byId(D.dc);if(c&&rkLock(c.r))return toast(`🔒 Rank ${R[c.r][0]} libera na Arena ${rkArena(c.r)}.`);DSEL=DSEL==D.dc?null:D.dc;dkPaint()}
 });
 // inimigo da arena k: 12 cartas do jogo, todas DIFERENTES, com poder médio = 1,15^k × o da F (1ª ≈ F, 9ª ≈ A)
 function enDeck(k,difficultyD,bossPreview=false){
@@ -4378,14 +4378,14 @@ zb.onclick=e=>{const b=e.target.closest("[data-z]");if(!b)return;const a=b.datas
 const btl=()=>{const h=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Batalha</span></div>`,nt=t=>`<p class="mut ctr" style="margin:0 0 14px;letter-spacing:.04em;text-transform:none">${t}</p>`;
  const k=Math.max(0,Math.min(8,+S.ar||0)),fd=S.fd.d===day()?S.fd.n:0,need=bcap(),missing=Math.max(0,need-S.tp),missingText=`${missing===1?"Falta":"Faltam"} ${fmt(missing)} ${missing===1?"troféu":"troféus"}`,unlocked=bossOK();
  const arenaBoss=S.camp?`<div class="cp-arena-gate completed"><div><small>PROGRESSÃO DA ARENA</small><b>🏆 Campanha concluída</b><p>Você já derrotou o chefe final.</p></div></div>`:`<div class="cp-arena-gate ${unlocked?"ready":"locked"}"><div class="cp-arena-gate-copy"><small>PRÓXIMO OBJETIVO</small><b>👑 Chefe da Arena ${k+1}</b><p>${unlocked?`Meta atingida: ${fmt(S.tp)} / ${fmt(need)} troféus. Derrote o chefe para liberar a próxima arena.`:`${missingText} · ${fmt(S.tp)} / ${fmt(need)}. Vença batalhas para alcançar a meta.`}</p></div>${unlocked?`<button class="bt cy" data-bz="boss">⚔ Desafiar chefe da arena</button>`:`<span class="cp-arena-lock">🔒 BLOQUEADO</span>`}</div>`;
- return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button>${arenaBoss}${S.ar>=6?`<button class="bt cy" data-cp-raid-open style="margin-top:10px">👑 Boss Raid · solo/equipe</button>`:`<button class="bt gh" disabled style="margin-top:10px;opacity:.7">🔒 Boss Raid desbloqueia na Arena 7</button>`}${dkTabs(1)}<button class="bt gh" data-bz="deck" style="margin-top:10px">Deck ${S.dka||"A"} · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
+ return h+`<div id="a3"></div><div class="cvb"><div class="trp"><span class="ti" aria-hidden="true">🏆</span><div><small>Seus troféus</small><b>${fmt(S.tp)}</b></div></div><button class="bt" data-bz="fight" style="margin-top:12px">Lutar na arena</button>${arenaBoss}${S.ar>=5?`<button class="bt cy" data-cp-raid-open style="margin-top:10px">👑 Boss Raid · solo/equipe</button>`:`<button class="bt gh" disabled style="margin-top:10px;opacity:.7">🔒 Boss Raid desbloqueia na Arena 6</button>`}${dkTabs(1)}<button class="bt gh" data-bz="deck" style="margin-top:10px">Deck ${S.dka||"A"} · ${dkv().length}/12</button></div>`+(window.infHtml?infHtml():"")+
  `<details class="fd"><summary>Lutar com amigo</summary><div class="cvb"><p>No mesmo celular. Seu amigo manda o código do deck dele. Vencendo: ${gem}<b>${CONFIG.amigoFrag}</b> · hoje <b>${Math.min(fd,3)}/3</b> lutas · sem troféus.</p><input class="cdi" id="fcd" placeholder="Cole o código do deck do seu amigo" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="bt cy" data-bz="friend" style="margin-top:10px">Lutar com amigo</button><button class="bt gh" data-bz="mycode" style="margin-top:10px">Copiar o código do meu deck</button></div></details>`};
 document.addEventListener("click",e=>{if(e.target.closest("[data-cp-solo-boss]")){window.cpOpenSoloBoss&&window.cpOpenSoloBoss();return}const b=e.target.closest("[data-bz]");if(!b)return;const a=b.dataset.bz;
  if(a=="fight")startArena();else if(a=="boss")startArena(1);else if(a=="deck"){if(!dkv().length)dkf();DSEL=null;tab="a";render()}else if(a=="back"){BV="";render(1)}else if(a=="auto"){dkf();render(1)}
  else if(a=="mycode"){if(dkv().length<12&&dkf().length<12)return toast("Monte um deck de 12 cartas primeiro.");const t=dkcode();try{navigator.clipboard.writeText(t).then(()=>toast("Código do deck copiado ✓"),()=>ask("Código do deck",`<input class="cdi" readonly value="${t}" onfocus="this.select()">`,"Fechar",()=>{}))}catch(x){ask("Código do deck",`<input class="cdi" readonly value="${t}" onfocus="this.select()">`,"Fechar",()=>{})}}
  else if(a=="friend"){const i=$("fcd");i&&i.value.trim()?startFriend(i.value):toast("Cole o código do deck do seu amigo primeiro.")}
  else if(a.slice(0,3)=="rm:"){const i=S.dk.indexOf(a.slice(3));if(i>=0)S.dk.splice(i,1);save();render(1)}
- else if(a.slice(0,3)=="ad:"){const candidate=byId(a.slice(3));if(candidate&&rkLock(candidate.r))toast(`🔒 Rank ${R[candidate.r][0]} libera na Arena ${candidate.r+1}.`);else if(dkv().some(c=>c.id==a.slice(3)))toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");else if(dkv().length<12){S.dk=dkv().map(c=>c.id);S.dk.push(a.slice(3));save()}else toast("O deck já tem 12 cartas · remova uma antes.");render(1)}});
+ else if(a.slice(0,3)=="ad:"){const candidate=byId(a.slice(3));if(candidate&&rkLock(candidate.r))toast(`🔒 Rank ${R[candidate.r][0]} libera na Arena ${rkArena(candidate.r)}.`);else if(dkv().some(c=>c.id==a.slice(3)))toast("Essa carta já está no deck · o deck precisa de 12 cartas diferentes.");else if(dkv().length<12){S.dk=dkv().map(c=>c.id);S.dk.push(a.slice(3));save()}else toast("O deck já tem 12 cartas · remova uma antes.");render(1)}});
 
 
 </script>
@@ -6245,7 +6245,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   "use strict";
 
   // --- Configuração do Boss Raid, armazenada junto do conteúdo ADM ---
-  const raidUnlocked=()=>Math.max(0,+S.ar||0)>=6;
+  const raidUnlocked=()=>Math.max(0,+S.ar||0)>=5;
   const RAID_RANK_SCALE=[
     {power:2,fragments:120,packs:0,dropChance:55},
     {power:3,fragments:180,packs:0,dropChance:50},
@@ -6347,10 +6347,10 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   }
 
   window.cpSoloBossAvailable=()=>raidUnlocked()&&!!raidCfg();
-  function raidSoloPrompt(){if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");const r=raidCfg(),c=r&&byId(r.cardId);if(!c)return toast("O ADM ainda não configurou uma carta Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");modal(`<h4>👑 Enfrentar Boss sozinho</h4><div class="cvb"><p><b>${safeName(c.n)}</b></p><p>O Boss entra como <b>uma única carta</b>, com força ampliada e apenas uma vida. Quando essa carta cair, a luta termina.</p><p>Entre com um deck melhorado e habilidades preparadas. A batalha é local e não cria sala online.</p></div><button class="bt cy" data-raid-action="solo-start">Enfrentar sozinho</button><button class="bt gh" data-raid-action="close">Voltar</button>`)}
-  function raidSoloStart(){if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");const r=raidCfg(),c=r&&byId(r.cardId),raw=dkv()||[],u=raw.map(x=>{const cardData=x&&x.c?x.c:typeof x==="string"?byId(x):x;if(!cardData)return null;return{c:cardData,lv:lvl(cardData),s:1}}).filter(Boolean);if(!r||!c)return toast("O ADM ainda não configurou uma carta Boss.");if(u.length<12)return toast("Monte um deck com 12 cartas antes de enfrentar o Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");const scale=Math.max(2,+r.power||12)*1.35,bossDeck=[{c,lv:0,s:scale}];zgo({n:ME.n||"Você",u},{n:"👑 Boss · desafio solo",u:bossDeck},{m:"a",k:0,ai:2,b:0,soloBoss:1,singleBoss:1,raidConfig:{fragments:+r.fragments||0,packs:+r.packs||0,bossName:c.n,cardId:c.id,dropMode:r.dropMode||"none",dropChance:+r.dropChance||0}})}
+  function raidSoloPrompt(){if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 6.");const r=raidCfg(),c=r&&byId(r.cardId);if(!c)return toast("O ADM ainda não configurou uma carta Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");modal(`<h4>👑 Enfrentar Boss sozinho</h4><div class="cvb"><p><b>${safeName(c.n)}</b></p><p>O Boss entra como <b>uma única carta</b>, com força ampliada e apenas uma vida. Quando essa carta cair, a luta termina.</p><p>Entre com um deck melhorado e habilidades preparadas. A batalha é local e não cria sala online.</p></div><button class="bt cy" data-raid-action="solo-start">Enfrentar sozinho</button><button class="bt gh" data-raid-action="close">Voltar</button>`)}
+  function raidSoloStart(){if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 6.");const r=raidCfg(),c=r&&byId(r.cardId),raw=dkv()||[],u=raw.map(x=>{const cardData=x&&x.c?x.c:typeof x==="string"?byId(x):x;if(!cardData)return null;return{c:cardData,lv:lvl(cardData),s:1}}).filter(Boolean);if(!r||!c)return toast("O ADM ainda não configurou uma carta Boss.");if(u.length<12)return toast("Monte um deck com 12 cartas antes de enfrentar o Boss.");if(window.LV||bt())return toast("Termine a batalha atual primeiro.");const scale=Math.max(2,+r.power||12)*1.35,bossDeck=[{c,lv:0,s:scale}];zgo({n:ME.n||"Você",u},{n:"👑 Boss · desafio solo",u:bossDeck},{m:"a",k:0,ai:2,b:0,soloBoss:1,singleBoss:1,raidConfig:{fragments:+r.fragments||0,packs:+r.packs||0,bossName:c.n,cardId:c.id,dropMode:r.dropMode||"none",dropChance:+r.dropChance||0}})}
   function raidMenuOpen(){
-    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");
+    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 6.");
     const r=raidCfg(),c=r&&byId(r.cardId);RAID_MENU_CYCLE=raidScreenKey(r);
     if(!c)return toast("O ADM ainda não configurou uma carta Boss.");
     if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
@@ -6359,7 +6359,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   // Se o jogador deixar o menu da Raid aberto até virar o ciclo, atualiza o Boss exibido.
   setInterval(()=>{const heading=$("cpm")?.querySelector("h4");if(!heading||!/^⚔️ Boss Raid · chamar equipe$|^👑 Desafio Boss$/.test(heading.textContent||""))return;const r=raidCfg();if(!r||r.rotationMode==="manual")return;const key=raidScreenKey(r);if(key!==RAID_MENU_CYCLE){if(heading.textContent==="👑 Desafio Boss")raidMenuOpen();else raidMenuDraw()}},15000);
   async function raidTeamMenuOpen(){
-    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");
+    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 6.");
     if(!U||!U.uid)return toast("Entre na sua conta para iniciar um Boss Raid.");
     if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
     if(!raidCfg())return toast("O ADM ainda não configurou uma carta Boss.");
@@ -6405,7 +6405,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   }
 
   async function raidCreate(){
-    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");
+    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 6.");
     const r=raidCfg(),c=r&&byId(r.cardId),dk=stats().dk;
     if(!r||!c)return toast("O ADM ainda não configurou o Boss.");
     if(!dk)return toast("Você precisa de 12 cartas diferentes para participar.");
@@ -6421,7 +6421,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
   }
 
   async function raidJoin(id){
-    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 7.");
+    if(!raidUnlocked())return toast("🔒 Boss Raid desbloqueia na Arena 6.");
     const dk=stats().dk;if(!dk)return toast("Você precisa de 12 cartas diferentes para participar.");
     if(window.LV||bt())return toast("Termine a batalha atual primeiro.");
     try{
@@ -6966,7 +6966,7 @@ function back(){try{
  B.ev=[];BT=B;SEL=null;PASS=!B.ai&&!B.lv&&B.t!=B.v?1:0;
  try{zth(B.o&&B.o.m=="a"?B.o.k:S.ar)}catch(e){}
  zb.hidden=false;zr();aiRun()
-}catch(e){console.warn("batalha",e);try{localStorage.removeItem(K)}catch(x){}}}
+}catch(e){console.warn("batalha",e);try{localStorage.removeItem(K)}catch(x){}try{BT=null;SEL=null;PASS=0;zb.hidden=true;zb.innerHTML=""}catch(x){}}}
 back();
 const z1=zr;zr=function(){const r=z1.apply(this,arguments);sync();return r};
 setInterval(()=>{const B=typeof BT!=="undefined"?BT:null;if(B&&!B.over&&!B.zq&&!B.lv&&!document.hidden)sync(true)},8000);addEventListener("pagehide",()=>sync(true));addEventListener("visibilitychange",()=>{if(document.hidden)sync(true)})
@@ -9933,6 +9933,69 @@ html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSS
 .cp-arena-gate.cp-arena-gate .bt{width:100%;max-width:100%;flex:0 0 auto;margin:0}
 .cp-arena-gate.cp-arena-gate .cp-arena-lock{align-self:flex-start}
 </style>
+<script id="cp-battle-hud-safety-1-3-12">
+/* COLEÇÃO PRIMATA · PROTEÇÃO DO HUD DE BATALHA (1.3.12)
+ * Problema corrigido: se zr() (desenho do HUD) lançasse erro depois de zb.hidden=false, ficava só o cenário (#zbg)
+ * cobrindo o app, sem HUD e sem saída. Agora: (a) erro de desenho vira painel com botões e a mensagem do erro;
+ * (b) batalha restaurada que falha ao abrir é descartada sozinha; (c) falha ao iniciar a luta volta ao menu.
+ * Este bloco precisa ficar DEPOIS de todos os scripts que reatribuem zr/zgo. */
+(()=>{try{
+const RB=(typeof BT!=="undefined")?BT:null,MIN=40;let fails=0,last=""; // RB = batalha já existente ao carregar (restaurada de cp_bt)
+const msg=e=>{try{return String(e&&(e.stack||e.message)||e).split("\n").slice(0,3).join(" · ").slice(0,260)}catch(x){return"erro"}};
+const esc=s=>String(s).replace(/[&<>"']/g,k=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[k]));
+const say=h=>{try{toast(h)}catch(e){}};
+function reset(){
+ try{localStorage.removeItem("cp_bt")}catch(e){}
+ try{BT=null;SEL=null;PASS=0}catch(e){}
+ try{zb.hidden=true;zb.innerHTML="";zb.classList.remove("zfriend","zinf","zraid")}catch(e){}
+ try{window.LV=null}catch(e){}
+ try{render(1)}catch(e){try{render()}catch(x){}}
+}
+function panel(e){
+ try{
+  zb.hidden=false;
+  zb.innerHTML=`<div class="zres" data-cpf-box><h2>⚠️ Não deu para desenhar a batalha</h2><p>Toque em <b>Tentar de novo</b>. Se continuar, toque em <b>Sair da batalha</b> para descartar essa luta e voltar ao menu.</p><p style="font-size:.7rem;opacity:.7;word-break:break-word;text-transform:none;letter-spacing:0">${esc(msg(e))}</p><button class="bt" data-cpf="retry">Tentar de novo</button><button class="bt gh" data-cpf="leave">Sair da batalha</button></div>`;
+ }catch(x){}
+}
+zb.addEventListener("click",ev=>{
+ const b=ev.target.closest&&ev.target.closest("[data-cpf]");if(!b)return;
+ ev.stopPropagation();ev.preventDefault();
+ if(b.dataset.cpf==="retry"){fails=0;try{zr()}catch(e){}}
+ else reset();
+},true);
+
+const zrBase=zr;
+zr=function(){
+ let r;
+ try{
+  r=zrBase.apply(this,arguments);
+  if(BT&&!zb.hidden&&!zb.querySelector("[data-cpf-box]")&&zb.innerHTML.trim().length<MIN)throw new Error("HUD vazio");
+  fails=0;return r;
+ }catch(e){
+  fails++;last=msg(e);console.error("[batalha] falha ao desenhar o HUD",e);
+  if(RB&&BT===RB&&!RB.lv){ // era a batalha restaurada ao abrir o jogo e ela não desenha: descarta
+   reset();say("⚠️ A batalha salva não pôde ser retomada e foi descartada.");return;
+  }
+  panel(e);
+ }
+};
+const zgoBase=zgo;
+zgo=function(){
+ try{return zgoBase.apply(this,arguments)}
+ catch(e){console.error("[batalha] falha ao iniciar",e);reset();say("⚠️ Não foi possível iniciar a batalha. Tente de novo.<br><small>"+esc(msg(e)).slice(0,120)+"</small>")}
+};
+
+// Rede de segurança: HUD aberto e vazio, ou cenário sobrando sem batalha
+function watch(){try{
+ if(zb.hidden)return;
+ if(!BT){zb.hidden=true;return}
+ if(!zb.querySelector("[data-cpf-box]")&&zb.innerHTML.trim().length<MIN)zr();
+}catch(e){}}
+setTimeout(watch,600);setTimeout(watch,2500);setInterval(watch,4000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)setTimeout(watch,200)});
+window.cpBattleReset=reset;
+}catch(e){console.warn("cp-battle-hud-safety",e)}})();
+</script>
 </body>
 </html>
 
