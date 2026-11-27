@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.3.2">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.0 -->
+<meta name="application-version" content="1.3.3">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.3 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.3.2";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.3";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -3208,7 +3208,7 @@ const gem='<svg class="gi" aria-hidden="true"><use href="#fgem"/></svg>',fmt=n=>
 let shown=S.fr,bt=0,tt=0,SUMR=null,OD=0,LN=10,PQ=10;
 // ===== FUSÃO + RECOMPENSA DIÁRIA (ajuste os números aqui) =====
 // Preços v0.4 (pacote = 500): cada fusão pede NEED[nível] repetidas (valores maiores para ranks S+) e 2×(passo)×valor de conversão em fragmentos. Só funde com todas as repetidas em mãos (não dá para comprar a cópia que falta). Cada nível dá +40% do status base (Mítico = 3× o base, em todas as raridades). Converter vale valor × (nível+1).
-const NEED=[[3,4,6,8,10],[2,3,4,6,8],[2,3,5,8,12]],FM=[4,9,18,32,57],FUSION_CAP=[0,0,0,1,2,3,4,4,5],RANK_ECONOMY=[1,1,1,1,1,1,1.45,1.9,2.6],RANK_SELL=[1,1,1,1,1,1,1.6,2.4,3.5],arenaIndex=()=>Math.min(8,Math.max(0,Math.floor(Number(S.ar)||0))),lvl=c=>Math.min(S.lv[c.id]||0,FUSION_CAP[arenaIndex()]),mxLv=c=>FUSION_CAP[arenaIndex()],need=c=>NEED[c.r<3?0:c.r<6?1:2][Math.min(4,lvl(c))],fcost=c=>Math.round(FRAG[c.r]*FM[Math.min(4,lvl(c))]*(CONFIG.fusMult||1)*(RANK_ECONOMY[c.r]||1)),gain=c=>.4,mult=c=>1+gain(c)*lvl(c),fv=c=>Math.round(FRAG[c.r]*(RANK_SELL[c.r]||1));
+const NEED=[[3,4,6,8,10],[2,3,4,6,8],[2,3,5,8,12]],FM=[4,9,18,32,57],FUSION_CAP=[0,0,0,1,2,3,4,5,5],RANK_ECONOMY=[1,1,1,1,1,1,1.45,1.9,2.6],RANK_SELL=[1,1,1,1,1,1,1.6,2.4,3.5],arenaIndex=()=>Math.min(8,Math.max(0,Math.floor(Number(S.ar)||0))),lvl=c=>Math.min(S.lv[c.id]||0,FUSION_CAP[arenaIndex()]),mxLv=c=>FUSION_CAP[arenaIndex()],need=c=>NEED[c.r<3?0:c.r<6?1:2][Math.min(4,lvl(c))],fcost=c=>Math.round(FRAG[c.r]*FM[Math.min(4,lvl(c))]*(CONFIG.fusMult||1)*(RANK_ECONOMY[c.r]||1)),gain=c=>.4,mult=c=>1+gain(c)*lvl(c),fv=c=>Math.round(FRAG[c.r]*(RANK_SELL[c.r]||1));
 // ===== MISSÕES: diárias (CONFIG.nDia por dia, CONFIG.mDia fragmentos cada; a cada CONFIG.mDiaBonus cumpridas = +1 pacote), semanais (3 por semana, CONFIG.mSem fragmentos + CONFIG.mSemPac pacotes cada), de coleção (metas únicas, pacotes na lista CL) e secretas (escondidas até cumprir, pacotes na lista SC) =====
 // bump("chave") conta o que o jogador fez (por dia, por semana e no total). As diárias e as semanais são sorteadas das listas DP e WP (mesmo sorteio o dia todo / a semana toda).
 const wk=()=>Math.floor((day()+3)/7);
@@ -4028,7 +4028,7 @@ function enDeck(k,difficultyD,bossPreview=false){
  if(preview.length)addPool(preview,2);
  addPool(by,12);
  if(!u.length)addPool(ALL.filter(c=>cpCardCanDropFromPack(c)&&(inf||c.r<=arena)),12);
- const av=u.reduce((a,c)=>a+rho(c),0)/Math.max(1,u.length),base=[0,0,0,1,2,3,4,4,5][arena],cap=inf?5:FUSION_CAP[arena],LV=Math.max(0,Math.min(cap,Math.round(base*(CONFIG.botNivel??1)+Math.floor(medal/6))));
+ const av=u.reduce((a,c)=>a+rho(c),0)/Math.max(1,u.length),base=[0,0,0,1,2,3,4,5,5][arena],cap=inf?5:FUSION_CAP[arena],LV=Math.max(0,Math.min(cap,Math.round(base*(CONFIG.botNivel??1)+Math.floor(medal/6))));
  return u.slice(0,12).map(c=>{const l=Math.min(LV+(arena>1&&Math.random()<.3?1:0),cap),rawPower=Math.max(.65,Math.min(2.5,T/Math.max(.01,av)))*(1+(CONFIG.botForca??5)/100*k)*(1+Math.min(.35,medal*.012)),pressure=1.85+Math.min(1,Math.max(0,D-15)*.05),power=inf&&D>=15?Math.min(pressure+.25,Math.max(rawPower,pressure)):rawPower;return{c,lv:l,s:power/(1+.4*l)}})
 }
 // ----- TELA DE BATALHA -----
@@ -5383,6 +5383,7 @@ let U=null,NK="",admStr=null,lastA=null,CF={},meta={},ready=0,canAdm=true,t1=0,t
 // o jogo grava no localStorage; aqui espelhamos para a nuvem sem mexer no resto do código
 Storage.prototype.setItem=function(k,v){
  if(this!==L)return SI.call(this,k,v);
+ if(k==="colprimata_save"&&window.__cpResetBlocked){SI.call(this,k,JSON.stringify({inv:{},opened:0}));return}
  if(k==="colprimata_img"){try{const o=JSON.parse(v);for(const id in o){const m=meta[id];if(!m||m.k!==H(o[id]))is(id,{t:-1,d:o[id]})}}catch(e){}pa();return SI.call(this,k,"{}")} // fotos não ficam no aparelho (estouram o limite); vão para a nuvem + cache
  SI.call(this,k,v);
  if(k==="colprimata_save"){ls("cp_lt",Date.now());ls("cp_d","1");sv();pf()}
@@ -5393,7 +5394,7 @@ function pushSave(){
  const uid=U&&U.uid;if(!uid)return Promise.resolve();
  const job=async()=>{
   // A fila evita que duas gravações simultâneas terminem fora de ordem.
-  if(!U||U.uid!==uid||L.getItem("cp_uid")!==uid)return;
+  if(!U||U.uid!==uid||L.getItem("cp_uid")!==uid||window.__cpResetBlocked)return;
   const s=L.getItem("colprimata_save");if(!s)return;
   const t=Date.now();
   try{
@@ -5422,13 +5423,48 @@ async function pushAdmNow(){ // só o administrador consegue (as regras do Fireb
  }catch(e){if(e.code==="permission-denied"){canAdm=false;L.removeItem("cp_pa");ls("cp_v","0");toast("⚠️ Mudanças só neste aparelho · entre no modo ADM com o PIN certo para enviar a todos")}else{console.warn(e);toast("⚠️ Falha ao enviar: "+esc(e.code||e.message));pa()}return false}}
 window.cpAdm=async pin=>{if(!U)return null;try{await setDoc(doc(db,"admins",U.uid),{c:pin});canAdm=true;pa();return true}catch(e){return e.code==="permission-denied"?false:null}};
 // ADM · excluir jogadores (usado pela tela Excluir do ADM): apaga primeiro o convite (tira o acesso), depois o save na nuvem e o perfil
-window.cpJog={ok:()=>!!U,
+window.cpJog={ok:()=>!!U,admin:()=>!!U&&!!canAdm,
  async list(){if(!U)throw Error("Entre na conta ADM.");const s=await getDocs(collection(db,"perfis"));return s.docs.map(d=>({id:d.id,...d.data()}))},
  async reset(ids){if(!U||!canAdm)throw Error("Somente ADM autenticado pode reiniciar jogadores.");const ok=[],bad=[],part=[];let neg=0;
   for(const id of [...new Set(ids||[])]){if(!id){bad.push(id);continue}
-   try{const resetAt=Date.now();await updateDoc(doc(db,"perfis",id),{resetAt,tp:0,nc:0,tot:0,w:0,l:0,ow:0,ol:0});ok.push(id);try{await deleteDoc(doc(db,"saves",id))}catch(e){part.push(id);if(e.code==="permission-denied")neg=1}}
+   try{const resetAt=Date.now();await updateDoc(doc(db,"perfis",id),{resetAt,tp:0,nc:0,tot:0,w:0,l:0,ow:0,ol:0,sPts:0,pPts:0,pId:"",title:"",showcase:[],wish:[],ex:{},dk:""});ok.push(id);try{await deleteDoc(doc(db,"saves",id))}catch(e){part.push(id);if(e.code==="permission-denied")neg=1}}
    catch(e){bad.push(id);if(e.code==="permission-denied")neg=1;console.warn("reinício de jogador",id,e)}}
   return{ok,bad,part,neg}},
+ async resetAll(){
+  if(!U||!canAdm)throw Error("Somente ADM autenticado pode reiniciar o jogo inteiro.");
+  const resetAt=Date.now(),week=seasonId(),profiles=await getDocs(collection(db,"perfis"));
+  const reset=[],failed=[],warnings=[];let savesDeleted=0,savesFailed=0;
+  const resetProfile=async(id)=>{
+   const patch={resetAt,tp:0,nc:0,tot:0,w:0,l:0,ow:0,ol:0,sId:week,sPts:0,pId:"",pPts:0,title:"",showcase:[],wish:[],ex:{},dk:"",online:false,lastSeen:0,t:resetAt};
+   await updateDoc(doc(db,"perfis",id),patch);
+   reset.push(id);
+   try{await deleteDoc(doc(db,"saves",id));savesDeleted++}
+   catch(e){savesFailed++;warnings.push("Save de "+id+": "+(e.code||e.message));}
+  };
+  for(const d of profiles.docs){try{await resetProfile(d.id)}catch(e){failed.push(d.id);warnings.push("Perfil de "+d.id+": "+(e.code||e.message));console.warn("reset global perfil",d.id,e)}}
+  // A conta que iniciou o reset também deve sair com a coleção zerada, mesmo se ainda não havia perfil publicado.
+  if(!reset.includes(U.uid)){
+   try{
+    await setDoc(doc(db,"perfis",U.uid),{n:ME.n||U.displayName||"Jogador",f:ME.f||"",resetAt,tp:0,nc:0,tot:0,w:0,l:0,ow:0,ol:0,sId:week,sPts:0,pId:"",pPts:0,title:"",showcase:[],wish:[],ex:{},dk:"",online:false,lastSeen:0,t:resetAt},{merge:true});
+    reset.push(U.uid);
+    try{await deleteDoc(doc(db,"saves",U.uid));savesDeleted++}catch(e){savesFailed++;warnings.push("Save da conta ADM: "+(e.code||e.message))}
+   }catch(e){failed.push(U.uid);warnings.push("Perfil ADM: "+(e.code||e.message))}
+  }
+  // Apaga recompensas pendentes, trocas e salas para que nada antigo continue após o reinício.
+  const cleared={};
+  for(const name of ["presentes","trocas","duelos","mesas"]){
+   try{
+    const snap=await getDocs(collection(db,name));let count=0,errors=0;
+    for(let i=0;i<snap.docs.length;i+=20){
+     const batch=await Promise.allSettled(snap.docs.slice(i,i+20).map(d=>deleteDoc(doc(db,name,d.id))));
+     batch.forEach(r=>r.status==="fulfilled"?count++:errors++);
+    }
+    cleared[name]=count;
+    if(errors)warnings.push(name+": "+errors+" registro(s) não puderam ser apagados.");
+   }catch(e){cleared[name]=0;warnings.push(name+": limpeza bloqueada ("+(e.code||e.message)+").");console.warn("reset global coleção",name,e)}
+  }
+  return{totalProfiles:Math.max(profiles.size,reset.length),resetProfiles:reset.length,failedProfiles:failed.length,savesDeleted,savesFailed,cleared,warnings,ownReset:reset.includes(U.uid),resetAt};
+ },
  async del(ids){if(!U||!canAdm)throw Error("Somente ADM autenticado pode excluir jogadores.");const ok=[],bad=[];let neg=0,part=0;
   for(const id of ids){if(!id||id===U.uid){bad.push(id);continue}
    try{await deleteDoc(doc(db,"amigos",id))}catch(e){bad.push(id);if(e.code==="permission-denied")neg=1;continue}
@@ -5493,7 +5529,7 @@ const warn=(w,e)=>{console.warn(w,e);if(nw++)return;toast("⚠️ "+w+": "+esc(e
 const PEND=idb.then(d=>new Promise(ok=>{const q=d.transaction("i").objectStore("i").openCursor(),r=[];q.onsuccess=()=>{const x=q.result;if(x){x.value&&x.value.t<0&&r.push([x.key,x.value]);x.continue()}else{r.forEach(([i,v])=>{if(!IMG[i])put(i,v.d,-1)});if(r.length){bt()||render(1);pa()}ok()}};q.onerror=()=>ok()})).catch(()=>{});
 function stats(){const t=(S.cn&&S.cn.T)||{},w=t.win||0,o=S.on||{},h=ALL.filter(c=>S.inv[c.id]),se=seasonData();let d=dkv();if(d.length<12)d=[...h].sort((a,b)=>b.r-a.r).slice(0,12);
  return{n:ME.n,f:ME.f||"",title:S.title||"",showcase:Array.isArray(S.showcase)?S.showcase.slice(0,3):[],wish:Array.isArray(S.wish)?S.wish.filter(id=>{const c=ALL.find(x=>x.id===id);return c&&cpPlayerCollectionVisible(c)}).slice(0,10):[],tp:S.tp||0,sId:se.id,sPts:se.pts,pId:S.pId||"",pPts:S.pPts||0,w,l:Math.max(0,(t.play||0)-w),ow:o.w||0,ol:o.l||0,nc:h.length,tot:ALL.filter(cpPlayerCollectionVisible).length,dk:d.length==12?"DECK~"+d.map(c=>c.id+":"+lvl(c)).join(","):"",ex:Object.fromEntries(ALL.filter(c=>!cpIsOwnerOnly(c)&&extra(c)>0).map(c=>[c.id,extra(c)])),t:Date.now()}}
-async function pubPerfil(){if(!U)return;try{await setDoc(doc(db,"perfis",U.uid),stats(),{merge:true})}catch(e){warn("perfil",e)}}
+async function pubPerfil(){if(!U||window.__cpResetBlocked)return;try{await setDoc(doc(db,"perfis",U.uid),stats(),{merge:true})}catch(e){warn("perfil",e)}}
 window.cpPublishProfile=pubPerfil;
 // Serializa também as publicações de conteúdo ADM: uma edição antiga nunca pode terminar depois da mais nova.
 function pushAdm(){const job=()=>pushAdmNow();admChain=admChain.then(job,job);return admChain}
@@ -5837,7 +5873,8 @@ async function start(u){
  if(sw){L.removeItem("colprimata_save");ls("cp_lt",0);ls("cp_d","")}
  let s,p;try{[s,p]=await Promise.all([getDoc(doc(db,"saves",id)),getDoc(doc(db,"perfis",id))])}catch(e){if(e.code==="permission-denied")return convite(u);throw e} // sem permissão = ainda não é amigo: pede o código
  const profileData=p.exists()?p.data():{},resetAt=+profileData.resetAt||0,seenReset=+(L.getItem("cp_reset_"+id)||0);
- if(resetAt>seenReset){L.removeItem("colprimata_save");ls("cp_reset_"+id,resetAt);ls("cp_lt",0);ls("cp_d","");return reload()} // um reset do ADM prevalece sobre qualquer save antigo
+ if(resetAt>seenReset){window.__cpResetBlocked=true;L.removeItem("colprimata_save");ls("cp_reset_"+id,resetAt);ls("cp_lt",0);ls("cp_d","");return reload()} // um reset do ADM prevalece sobre qualquer save antigo
+ window.__cpResetBlocked=false;
  const c=s.exists()?s.data():null;
  if(c&&c.t>Math.max((+L.cp_lt||0),resetAt)){ls("colprimata_save",c.s);ls("cp_lt",c.t);ls("cp_d","");return reload()} // nuvem mais nova e posterior ao último reset
  if(sw)return reload();
@@ -5846,7 +5883,7 @@ async function start(u){
  
 U=u;ME.n=n;ME.f=p.exists()?p.data().f||"":"";
  // Se o ADM reiniciar um perfil enquanto ele estiver conectado, descarta o save local sem aguardar sair da conta.
- try{if(window.__cpResetWatch)window.__cpResetWatch();window.__cpResetWatch=onSnapshot(doc(db,"perfis",id),snap=>{const marker=snap.exists()?(+snap.data().resetAt||0):0,seen=+(L.getItem("cp_reset_"+id)||0);if(marker>seen&&!window.__cpResetReload){window.__cpResetReload=1;L.removeItem("colprimata_save");ls("cp_reset_"+id,marker);ls("cp_lt",0);ls("cp_d","");reload()}})}catch(e){console.warn("watch reset de perfil",e)}
+ try{if(window.__cpResetWatch)window.__cpResetWatch();window.__cpResetWatch=onSnapshot(doc(db,"perfis",id),snap=>{const marker=snap.exists()?(+snap.data().resetAt||0):0,seen=+(L.getItem("cp_reset_"+id)||0);if(marker>seen&&!window.__cpResetReload){window.__cpResetBlocked=true;window.__cpResetReload=1;L.removeItem("colprimata_save");ls("cp_reset_"+id,marker);ls("cp_lt",0);ls("cp_d","");if(!window.__cpGlobalResetRunning)reload()}})}catch(e){console.warn("watch reset de perfil",e)}
 if(L.getItem("colprimata_save")&&(!c||L.cp_d))pushSave();cpPresenceStart();
  g("cpl")&&g("cpl").remove();chip();watchTr();watchDu();try{lvResume()}catch(e){console.warn("duelo",e)}try{watchMz()}catch(e){console.warn("mesa",e)}try{window.cpWatchBossRaids&&window.cpWatchBossRaids()}catch(e){console.warn("boss raid",e)}try{watchPres()}catch(e){console.warn("presentes",e)}pf();
  onSnapshot(doc(db,"conteudo","adm"),s=>{const d=s.data();if(!d){ready=1;L.cp_pa&&pa();window.cpStarterGo&&window.cpStarterGo();return}lastA=d.adm;
@@ -6673,12 +6710,33 @@ setInterval(()=>{const B=typeof BT!=="undefined"?BT:null;if(B&&!B.over&&!B.zq&&!
 (function(){
 const st=()=>{const e=$("tst_st");if(!e)return;e.innerHTML=`${AR[S.ar][1]} Arena ${S.ar+1}/9 · ${AR[S.ar][0]} · 🏆 ${fmt(S.tp)}<br>${S.camp?"Campeão (chefe final vencido)":"Chefe libera com "+fmt(bcap())+" 🏆"+(bossOK()?" · <b>liberado</b>":"")}`;const s=$("tst_ar");if(s)s.value=S.ar},
 box=()=>{const g=$("ds_g")&&$("ds_g").querySelector(".fg");if(!g||$("tst_box"))return;const d=document.createElement("div");d.id="tst_box";
-d.innerHTML=`<style>#tst_box{display:grid;gap:10px}#tst_box .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}</style><h3 class="ash">Troféus e arenas</h3><p class="mut" id="tst_st" style="text-transform:none;letter-spacing:.02em;margin:0"></p><div class="r2"><button class="bt cy" data-tst="t100">+100 🏆</button><button class="bt cy" data-tst="t500">+500 🏆</button><button class="bt cy" data-tst="t1000">+1.000 🏆</button><button class="bt cy" data-tst="boss">⚔ Liberar o chefe</button></div><select id="tst_ar">${AR.map((a,k)=>`<option value="${k}">${a[1]} Arena ${k+1} · ${a[0]} · ${fmt(TR[k])} 🏆</option>`).join("")}</select><button class="bt cy" data-tst="go">Ir para a arena escolhida</button><h3 class="ash">Zona de risco</h3><button class="bt dg" data-tst="reset">🗑 Reiniciar meu save</button>`;g.append(d);st()};
+d.innerHTML=`<style>#tst_box{display:grid;gap:10px}#tst_box .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}</style><h3 class="ash">Troféus e arenas</h3><p class="mut" id="tst_st" style="text-transform:none;letter-spacing:.02em;margin:0"></p><div class="r2"><button class="bt cy" data-tst="t100">+100 🏆</button><button class="bt cy" data-tst="t500">+500 🏆</button><button class="bt cy" data-tst="t1000">+1.000 🏆</button><button class="bt cy" data-tst="boss">⚔ Liberar o chefe</button></div><select id="tst_ar">${AR.map((a,k)=>`<option value="${k}">${a[1]} Arena ${k+1} · ${a[0]} · ${fmt(TR[k])} 🏆</option>`).join("")}</select><button class="bt cy" data-tst="go">Ir para a arena escolhida</button><h3 class="ash">Reinício global</h3><p class="mut" style="text-transform:none;letter-spacing:0;margin:0">Zera o progresso de todas as contas: cartas obtidas, fragmentos, pacotes, ranks liberados, fusões, troféus, missões, recompensas e ranking semanal. Também limpa presentes pendentes, trocas e salas online. Mantém os logins, apelidos, fotos, amizades, catálogo de cartas/pacotes e configurações do ADM. Se o Firebase bloquear alguma limpeza, confira as regras em ADM → Jogadores → Precisa liberar no Firebase.</p><button class="bt dg" data-tst="global-reset">☠ REINICIAR O JOGO INTEIRO · TODAS AS CONTAS</button><h3 class="ash">Zona de risco local</h3><button class="bt gh" data-tst="reset">🗑 Reiniciar apenas meu save</button>`;g.append(d);st()};
 cfg.addEventListener("click",e=>{const b=e.target.closest("[data-tst]");if(!b)return;const k=b.dataset.tst,ok=m=>{save();try{upd()}catch(x){}try{render(1)}catch(x){}st();toast(m)};
  if(k[0]=="t"){const n=+k.slice(1);S.tp+=n;ok("+"+fmt(n)+" 🏆"+prog())}
  else if(k=="boss"){if(S.camp)return toast("Você já venceu o chefe final.");S.tp=Math.max(S.tp,bcap());ok("Chefe liberado · vá na aba Batalha"+prog())}
  else if(k=="go"){const a=+$("tst_ar").value;for(let j=S.ar+1;j<=a;j++){const c=EX.cards[j];c&&(S.inv[c.id]=(S.inv[c.id]||0)+1)}S.ar=a;S.tp=Math.max(S.tp,TR[a]);ok(AR[a][1]+" "+AR[a][0]+" liberada"+prog())}
- else if(k=="reset")ask("Reiniciar seu save?","Apaga <b>todo o seu progresso</b> (cartas, fragmentos, troféus, arenas e deck) neste aparelho e na sua conta. Cartas criadas, imagens e regras do ADM não mudam.","Reiniciar",()=>{try{BT=null;S={inv:{},opened:0};localStorage.removeItem("cartas1");localStorage.removeItem("cp_bt");localStorage.setItem("colprimata_save",JSON.stringify(S));sessionStorage.cpad="";sessionStorage.cpad2="ds_g";sessionStorage.cptab=tab}catch(x){return toast("Não deu para reiniciar.")}location.reload()},1)});
+ else if(k=="global-reset"){
+  if(!(window.cpJog&&cpJog.admin&&cpJog.admin()&&cpJog.resetAll))return toast("Entre no Modo ADM online com permissão para reiniciar todas as contas.");
+  ask("☠ Reiniciar a Coleção Primata inteira?","<b>TODAS as contas</b> terão o progresso apagado: coleção, cópias, fusões, fragmentos, pacotes, troféus, arenas, missões, presentes recebidos e pontuação semanal. Presentes pendentes, trocas e salas online também serão limpos.<br><br><b>Serão mantidos:</b> login/senha, apelido, foto, amizades, cartas e pacotes cadastrados, imagens e regras do ADM. As contas poderão entrar novamente do zero.<br><br>Para continuar, será necessário digitar <b>REINICIAR</b>.","Continuar",()=>{
+   const typed=prompt("AÇÃO IRREVERSÍVEL\n\nDigite REINICIAR para zerar o progresso de TODAS as contas:");
+   if(typed!=="REINICIAR")return toast("Reinício global cancelado.");
+   ask("Última confirmação","O ranking semanal atual e os resultados da temporada anterior também serão zerados. Não será possível recuperar o progresso apagado.","REINICIAR TUDO",async()=>{
+    window.__cpResetBlocked=true;window.__cpGlobalResetRunning=true;
+    try{
+     const r=await window.cpJog.resetAll();
+     if(!r.ownReset){
+      window.__cpGlobalResetRunning=false;window.__cpResetBlocked=false;
+      return toast("⚠️ O ADM não conseguiu zerar a própria conta. O Firebase recusou parte da operação; confira as permissões.");
+     }
+     try{BT=null;localStorage.removeItem("colprimata_save");localStorage.removeItem("cartas1");localStorage.removeItem("cp_bt");sessionStorage.cpad="";sessionStorage.cpad2="ds_g";sessionStorage.cptab=tab}catch(x){}
+     const issues=(r.failedProfiles||0)+(r.savesFailed||0)+(r.warnings||[]).length;
+     toast(issues?`⚠️ Reinício parcial: ${r.resetProfiles}/${r.totalProfiles} perfis zerados. Algumas limpezas do Firebase falharam; veja o console.`:`✅ Jogo reiniciado! ${r.resetProfiles} contas voltaram ao zero. Ranking semanal, recompensas e salas foram limpos.`);
+     window.__cpGlobalResetRunning=false;location.reload();
+    }catch(err){window.__cpGlobalResetRunning=false;window.__cpResetBlocked=false;console.warn("reset global",err);toast("⚠️ Não foi possível concluir o reinício global: "+(err.code||err.message||"erro no Firebase"))}
+   },1)
+  },1)
+ }
+ else if(k=="reset")ask("Reiniciar seu save?","Apaga <b>somente o seu progresso</b> neste aparelho e na sua conta. As outras contas não são afetadas. Cartas criadas, imagens e regras do ADM não mudam.","Reiniciar",()=>{try{BT=null;S={inv:{},opened:0};localStorage.removeItem("cartas1");localStorage.removeItem("cp_bt");localStorage.setItem("colprimata_save",JSON.stringify(S));sessionStorage.cpad="";sessionStorage.cpad2="ds_g";sessionStorage.cptab=tab}catch(x){return toast("Não deu para reiniciar.")}location.reload()},1)});
 window.cpRegisterCfgViewHook(function(v){try{if(v=="a")box()}catch(x){console.warn("testes",x)}});
 try{box()}catch(x){}
 })();
@@ -6817,7 +6875,12 @@ function admApaga() {
 }
 match /perfis/{id} { allow update, delete: if admApaga(); }
 match /saves/{id}  { allow delete: if admApaga(); }
-match /amigos/{id} { allow delete: if admApaga(); }`;
+match /amigos/{id} { allow delete: if admApaga(); }
+// Leitura administrativa e limpeza no reinício global:
+match /trocas/{id} { allow read, delete: if admApaga(); }
+match /duelos/{id} { allow read, delete: if admApaga(); }
+match /mesas/{id}  { allow read, delete: if admApaga(); }
+match /presentes/{id} { allow read, delete: if admApaga(); }`;
 let tab="c",q="",rk="",SEL=new Set(),VIS=[],JL=null,JS="idle",JR="",JB=0,busy=0;
 try{if(TT[sessionStorage.cpxt])tab=sessionStorage.cpxt}catch(e){}
 
