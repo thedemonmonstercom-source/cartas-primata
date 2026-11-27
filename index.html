@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.3.3">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.3 -->
+<meta name="application-version" content="1.3.4">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.4 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.3.3";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.4";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -664,6 +664,11 @@ body:has(#ov:not([hidden])) #tb,body:has(#fc:not([hidden])) #tb,body:has(#zb:not
 .xw{display:grid;gap:6px}.xw p{margin:0;padding:9px 12px;border-radius:10px;font-size:.76rem;background:#f0b4291a;border:1px solid #f0b42944}.xw p.ok{background:#43a8631a;border-color:#43a86355}
 .exm{padding:9px 12px;border-radius:10px;font-size:.76rem;line-height:1.4;background:#ffffff0a;border:1px dashed #ffffff2a}
 .vpw{display:grid;place-items:center;padding:20px 0;border-radius:16px;background:radial-gradient(circle at 50% 40%,#2a2a32,#17171a)}.vpw .pack{width:140px}
+#cfg #ds_v .cp-pack-visual-editor{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px!important;margin-top:12px;border:1px solid #ffffff18;border-radius:14px;background:#ffffff05}
+#cfg #ds_v .cp-pack-visual-editor>.afl:first-child,#cfg #ds_v .cp-pack-visual-editor .vpw,#cfg #ds_v .cp-pack-visual-editor>[data-zx]{grid-column:1/-1}
+#cfg #ds_v .cp-pack-visual-editor .vpw{min-height:160px;display:grid;place-items:center;padding:14px;border-radius:12px;background:#0003;overflow:hidden}
+#cfg #ds_v .cp-pack-visual-editor .vpw .pack{width:min(48%,190px);max-height:300px}
+@media(max-width:520px){#cfg #ds_v .cp-pack-visual-editor{grid-template-columns:1fr 1fr}#cfg #ds_v .cp-pack-visual-editor .vpw .pack{width:min(58%,180px)}}
 #cfg .afl input.vh{-webkit-appearance:none;appearance:none;height:14px;padding:0;border:0;border-radius:7px;background:linear-gradient(90deg,#f33,#ff3,#3f3,#3ff,#33f,#f3f,#f33)}.vh::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid #0008}.vh::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid #0008}
 .pa{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.fa .rs,.fa .orb{display:none}
 .em2.pi{top:29%;height:42%}.em2.pi img{max-width:84cqw;max-height:100%;object-fit:contain;filter:drop-shadow(0 1.6cqw 1.6cqw #0007)}.em2.md img{width:58cqw;height:58cqw;border-radius:50%;object-fit:cover;border:1.4cqw solid #fff;box-shadow:0 0 0 .8cqw hsl(var(--h) 70% 30%),0 2cqw 3cqw #0008}
@@ -4867,7 +4872,7 @@ GN=(()=>{try{return gain(ALL[0])||.4}catch(e){return .4}})(),
 rkc=(p,r)=>{const s=p.cards.reduce((a,c)=>a+wc(p,c),0);return s?p.cards.filter(c=>c.r==r).reduce((a,c)=>a+wc(p,c),0)/s*100:0},
 ri=s=>/^\d+$/.test(s)?+s:R.findIndex(x=>x[0]==s),
 mini=r=>`Exemplo ${R[r][0]}: <b>❤ ${ST[r][0]}</b> vida · <b>⚔ ${ST[r][1]}</b> dano · <b>${pcf(R[r][2])}</b> de chance · ${gem}${fmt(Math.round(FRAG[r]*(RANK_SELL[r]||1)))} por repetida`,
-cur=()=>P.find(x=>x.id==$("z_vk").value)||P[0],
+cur=()=>{const s=$("z_vk");return P.find(x=>x.id==(s&&s.value))||P[0]||null},
 pkImg=(f,cb)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),x=c.getContext("2d");let m="image/webp";if(c.toDataURL(m).slice(5,15)!="image/webp")m="image/png";for(const w of[420,340,280,220,160]){const k=Math.min(1,w/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);x.clearRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);for(let q=.9;q>.35;q-=.15){const u=c.toDataURL(m,q);if(u.length*.75<=61440)return cb(u)}}cb(c.toDataURL(m,.3))};im.onerror=()=>cb(null);im.src=r.result};r.readAsDataURL(f)};
 let XR=0,LAST="",VP; // XR = rank mostrado nos exemplos · VP = foto nova do pacote (undefined = sem mudança, "" = remover)
 
@@ -4927,22 +4932,24 @@ $("z_sr").innerHTML=`<p class="mut">${fmt(N)} pacotes (${fmt(t)} cartas) · cust
 function upd(){const a=$("er"),b=$("ar2");if(a&&$("z_e1")){const r=ri(a.value);if(r>=0){XR=r;$("z_e1").innerHTML=mini(r)}}if(b&&$("z_e2")){const r=ri(b.value);if(r>=0)$("z_e2").innerHTML=mini(r)}}
 
 // ----- VISUAL DO PACOTE -----
-function pv(){const p=cur(),t=Object.assign({},p,{e:$("v_e").value||"🎴",h:+$("v_h").value,sh:$("v_s").value,pm:$("v_m").value,lt:$("v_lt").value,rt:$("v_rt").value,ct:$("v_ct").value,img:VP===undefined?p.img:VP});$("v_pv").innerHTML=packEl(t,0)}
-function vf(){const p=cur();$("v_e").value=p.e||"";$("v_h").value=p.h||0;$("v_s").value=p.sh||"c";$("v_m").value=p.pm||"m";$("v_lt").value=p.lt||"";$("v_rt").value=p.rt||"";$("v_ct").value=p.ct||"";VP=undefined;pv()}
-function sv2(){const p=cur(),o=ADM.po[p.id]=ADM.po[p.id]||{};Object.assign(o,{e:$("v_e").value||"🎴",h:+$("v_h").value||0,sh:$("v_s").value,pm:$("v_m").value,lt:$("v_lt").value.trim().slice(0,12),rt:$("v_rt").value.trim().slice(0,24),ct:$("v_ct").value.trim().slice(0,30)});
+function pv(){const p=cur(),preview=$("v_pv");if(!preview)return;if(!p){preview.innerHTML='<p class="mut">Cadastre um pacote antes de configurar o visual.</p>';return}const t=Object.assign({},p,{e:$("v_e")?.value||"🎴",h:+($("v_h")?.value||p.h||0),sh:$("v_s")?.value||"c",pm:$("v_m")?.value||"m",lt:$("v_lt")?.value||"",rt:$("v_rt")?.value||"",ct:$("v_ct")?.value||"",img:VP===undefined?p.img:VP});preview.innerHTML=packEl(t,0)}
+function vf(){const p=cur();if(!p){const preview=$("v_pv");if(preview)preview.innerHTML='<p class="mut">Nenhum pacote cadastrado. Crie um pacote primeiro na aba Pacote.</p>';return}$("v_e").value=p.e||"";$("v_h").value=p.h||0;$("v_s").value=p.sh||"c";$("v_m").value=p.pm||"m";$("v_lt").value=p.lt||"";$("v_rt").value=p.rt||"";$("v_ct").value=p.ct||"";VP=undefined;pv()}
+function sv2(){const p=cur();if(!p||!$("v_e"))return toast("Crie ou selecione um pacote antes de salvar o visual.");const o=ADM.po[p.id]=ADM.po[p.id]||{};Object.assign(o,{e:$("v_e").value||"🎴",h:+$("v_h").value||0,sh:$("v_s").value,pm:$("v_m").value,lt:$("v_lt").value.trim().slice(0,12),rt:$("v_rt").value.trim().slice(0,24),ct:$("v_ct").value.trim().slice(0,30)});
 if(VP)IMG["pk_"+p.id]=VP;else if(VP==="")delete IMG["pk_"+p.id];try{sessionStorage.zvk=p.id}catch(e){}adxGo()}
 
 // ----- monta as páginas novas (chamado pelo tidy() do v1.0) e abre cada uma atualizada -----
 window.adxNew=w=>{LAST="";VP=undefined;
-[["er","z_e1"],["ar2","z_e2"]].forEach(([i,z])=>{const f=$(i)&&$(i).closest(".afl");if(f){const d=document.createElement("div");d.className="exm";d.id=z;f.after(d)}});
-["ke","kh"].forEach((i,n)=>{const f=$(i)&&$(i).closest(".afl");if(!f)return;if(!n){const d=document.createElement("div");d.className="exm";d.innerHTML="🎨 Foto, emoji, cor e formato ficam em <b>Visual do pacote</b>.";f.before(d)}f.style.display="none";f.dataset.hid=1});
-$("ds_x").insertAdjacentHTML("beforeend",'<div id="z_xp"></div>');$("ds_p").insertAdjacentHTML("beforeend",'<div id="z_pp"></div>');
-$("ds_v").insertAdjacentHTML("beforeend",`<div class="fg">${F("z_vk","Pacote",`<select id="z_vk">${P.map(p=>`<option value="${E(p.id)}">${E(p.e)} ${E(p.n)}</option>`).join("")}</select>`)}<div class="vpw" id="v_pv"></div>
+[["er","z_e1"],["ar2","z_e2"]].forEach(([i,z])=>{const f=$(i)&&$(i).closest(".afl");if(f&&!$(z)){const d=document.createElement("div");d.className="exm";d.id=z;f.after(d)}});
+["ke","kh"].forEach((i,n)=>{const f=$(i)&&$(i).closest(".afl");if(!f)return;if(!n&&!f.previousElementSibling?.classList.contains("cp-pack-visual-note")){const d=document.createElement("div");d.className="exm cp-pack-visual-note";d.innerHTML="🎨 Foto, emoji, cor e formato ficam em <b>Visual do pacote</b>.";f.before(d)}f.style.display="none";f.dataset.hid=1});
+if($("ds_x")&&!$("z_xp"))$("ds_x").insertAdjacentHTML("beforeend",'<div id="z_xp"></div>');if($("ds_p")&&!$("z_pp"))$("ds_p").insertAdjacentHTML("beforeend",'<div id="z_pp"></div>');
+const visualPage=$("ds_v");if(visualPage&&!$("z_vk"))visualPage.insertAdjacentHTML("beforeend",`<div class="fg cp-pack-visual-editor">${F("z_vk","Pacote",`<select id="z_vk">${P.length?P.map(p=>`<option value="${E(p.id)}">${E(p.e)} ${E(p.n)}</option>`).join(""):'<option value="">Nenhum pacote cadastrado</option>'}</select>`)}<div class="vpw" id="v_pv"></div>
 ${F("v_f","Foto do pacote (PNG sem fundo fica melhor)",'<input id="v_f" type="file" accept="image/*">')}${F("v_m","Como a foto aparece",'<select id="v_m"><option value="m">Medalhão</option><option value="l">Livre</option><option value="a">Arte inteira</option></select>',0)}${F("v_s","Formato",'<select id="v_s"><option value="c">Clássico</option><option value="r">Reto</option><option value="l">Liso</option><option value="f">Cintura funda</option></select>',0)}
 ${F("v_e","Emoji (sem foto)",'<input id="v_e">',0)}${F("v_h","Cor",'<input id="v_h" class="vh" type="range" min="0" max="360">',0)}${F("v_lt","Logo (padrão CARTAS)",'<input id="v_lt" maxlength="12" placeholder="CARTAS">',0)}${F("v_rt","Faixa",'<input id="v_rt" maxlength="24" placeholder="Pacote de coleção">',0)}${F("v_ct","Rodapé",'<input id="v_ct" maxlength="30" placeholder="10 cartas no pacote">')}
 <button class="bt gh" data-zx="rf">Remover foto</button><button class="bt gh" data-zx="rs">Restaurar visual padrão</button></div>`);
-try{const k=sessionStorage.zvk;if(k&&P.some(p=>p.id==k))$("z_vk").value=k}catch(e){}};
-window.adxOpen=id=>{if(!id){LAST="";return}if(id==LAST)return;LAST=id;if(id=="ds_x")rx();else if(id=="ds_p")rp();else if(id=="ds_v")vf();else if(id=="ds_c")upd()};
+try{const k=sessionStorage.zvk;if(k&&P.some(p=>p.id==k)&&$("z_vk"))$("z_vk").value=k}catch(e){}};
+window.adxOpen=id=>{if(!id){LAST="";return}if(id==="ds_v"&&!$("z_vk")){try{window.adxNew(cfg.querySelector(".in2"));LAST=""}catch(e){console.warn("montagem visual do pacote",e)}}if(id==LAST)return;LAST=id;if(id==="ds_x")rx();else if(id==="ds_p")rp();else if(id==="ds_v")vf();else if(id==="ds_c")upd()};
+// Recupera também o caso em que o ADM/aba já estava aberta antes deste módulo terminar de carregar.
+try{if(cfg.classList.contains("adm")&&$("ds_v")?.open&&!$("z_vk")){window.adxNew(cfg.querySelector(".in2"));LAST="";vf()}}catch(e){console.warn("recuperação do visual do pacote",e)}
 // PONTO ÚNICO DE EXTENSÃO DA ABERTURA DAS SEÇÕES DO ADM.
 // Os hooks executam em ordem inversa ao registro, antes da rotina-base,
 // preservando a ordem da antiga cadeia de wrappers.
