@@ -3457,7 +3457,7 @@ const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const artWithFilm=art;
  const frame=lk?"":`<i class="cp-card-frame" aria-hidden="true"></i>${S.foil&&S.foil[c.id]?`<u class="cpfoil ${S.foil[c.id]}"></u>`:""}`;
  /* SSS usa um aro prismático recortado e opaco, separado da película RGB da ilustração. */
- const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
+ const rarityFx=lk?"":`${r>5?'<ins class="aur" aria-hidden="true"></ins><ins class="emb" aria-hidden="true"></ins>':""}${r===8?'<i class="cp-sss-inner-glow" aria-hidden="true"></i><u class="rbw" aria-hidden="true"><i class="lyr"></i></u>':""}`;
  const rankLocked=!lk&&(S.inv[c.id]||0)>0&&rkLock(r),lockBadge=rankLocked?`<span class="cp-rank-lock" aria-label="Bloqueada até Arena ${r+1}"><b>🔒</b><small>ARENA ${r+1}</small></span>`:"";
  return `<div class="cd cp-art-only k${r} ${lk?"lock":r==8?"sss":""} ${rankLocked?"cp-locked-rank":""} ${im?"img":""}${fx} ${!lk&&L>=5?"cp-final":""} ${cl}" data-r="${r}"${rankLocked?` data-ranklocked="1"`:""}${L?` data-l="${L}"`:""} style="--l:${L};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%;--rc:${R[r][1]};--ah:${HU[r]};--as:${SA[r]}%;--h:${c.p.h};--g:${lk?0:r+L*.38};--f:${Math.min(1,(F[r]||0)+L*.08)};--sd:${(4.2-r*.3).toFixed(1)}s">${artWithFilm}${rarityFx}${frame}${lockBadge}${xt}</div>`
 };
@@ -9147,50 +9147,215 @@ html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-ref
 @media(prefers-reduced-motion:reduce){#yrm .yb{animation:none!important}}
 </style>
 
-<style id="cp-sss-inner-rgb-edge-only-2026">
-/* SSS: remove totalmente o simbionte/películas sobre a foto. A arte fica limpa. */
-.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection,
-.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film,
-.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film,
-.cd.cp-art-only.k8:not(.lock)>.art>.cp-touch-holo,
-.cd.cp-art-only.k8:not(.lock)>.art>.cp-touch-specular{
+
+<style id="cp-sss-rgb-inner-glow-and-touch-final-2026">
+/* SSS: elimina apenas as películas permanentes antigas da foto; mantém o efeito especial por toque. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection,
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-film,
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-rgb-cloud,
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film{
   display:none!important;visibility:hidden!important;opacity:0!important;animation:none!important;
-  background:none!important;filter:none!important;
 }
-.cd.cp-art-only.k8:not(.lock)>.aur{display:none!important;opacity:0!important;animation:none!important}
-/* A camada emb passa a ser apenas um halo RGB suave que nasce no contorno interno
-   e se espalha alguns pixels para dentro, sem cobrir o centro da ilustração. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.aur{display:none!important;opacity:0!important;animation:none!important}
+
+/* Luz RGB inspirada nas cartas S/SS: parte de todos os lados da borda e se espalha para dentro. */
 .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb{
-  display:block!important;position:absolute!important;inset:0!important;z-index:4!important;
-  overflow:hidden!important;pointer-events:none!important;border-radius:inherit!important;
-  opacity:1!important;mix-blend-mode:screen!important;background:transparent!important;
+  display:block!important;visibility:visible!important;position:absolute!important;inset:0!important;
+  z-index:4!important;overflow:hidden!important;pointer-events:none!important;
+  border-radius:inherit!important;opacity:1!important;mix-blend-mode:screen!important;background:transparent!important;
 }
 .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb::before{
-  content:none!important;display:none!important;animation:none!important;background:none!important;
+  content:""!important;display:block!important;position:absolute!important;inset:-15%!important;
+  border-radius:inherit!important;pointer-events:none!important;
+  background-image:
+    radial-gradient(ellipse 86% 43% at 50% 0%,rgba(255,65,145,.78) 0%,rgba(255,65,145,.34) 48%,transparent 88%),
+    radial-gradient(ellipse 86% 43% at 50% 100%,rgba(54,171,255,.76) 0%,rgba(54,171,255,.30) 48%,transparent 88%),
+    radial-gradient(ellipse 48% 82% at 0% 50%,rgba(169,76,255,.72) 0%,rgba(169,76,255,.28) 50%,transparent 88%),
+    radial-gradient(ellipse 48% 82% at 100% 50%,rgba(255,194,61,.72) 0%,rgba(255,194,61,.27) 50%,transparent 88%)!important;
+  background-size:140% 140%,140% 140%,140% 140%,140% 140%!important;
+  background-position:50% 0%,50% 100%,0% 50%,100% 50%;
+  background-repeat:no-repeat!important;
+  filter:blur(18px) saturate(1.65) brightness(1.12) hue-rotate(0deg);
+  opacity:.82;transform:scale(1.06);transform-origin:center;
+  animation:cpSssInnerEdgeFlow 16s ease-in-out infinite alternate,
+            cpSssInnerEdgeHue 8s linear infinite,
+            cpSssInnerEdgePulse 4.5s ease-in-out infinite!important;
+  will-change:transform,filter,opacity,background-position!important;
 }
 .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb::after{
-  content:""!important;display:block!important;position:absolute!important;inset:-1px!important;
+  content:""!important;display:block!important;position:absolute!important;inset:-5%!important;
   border-radius:inherit!important;pointer-events:none!important;
-  background:conic-gradient(from 0deg,
-    #ff4fa8 0deg,#ffbd55 48deg,#fff071 92deg,#51e8a8 142deg,
-    #39d9f2 194deg,#687cff 246deg,#bb69f5 302deg,#ff4fa8 360deg)!important;
-  -webkit-mask-image:radial-gradient(ellipse 76% 80% at 50% 50%,transparent 54%,#000 100%)!important;
-  mask-image:radial-gradient(ellipse 76% 80% at 50% 50%,transparent 54%,#000 100%)!important;
-  filter:blur(10px) saturate(1.25)!important;opacity:.64!important;
-  transform:scale(1.035)!important;transform-origin:center!important;
-  animation:cpSssInnerRgbGlow 11s linear infinite!important;
+  background-image:conic-gradient(from 0deg,#ff4b91,#ffbd49,#dfff58,#51f0a6,#35dce9,#5989ff,#b45cff,#ff4b91)!important;
+  -webkit-mask-image:radial-gradient(ellipse 100% 104% at 50% 50%,transparent 68%,rgba(0,0,0,.4) 78%,#000 91%,transparent 100%)!important;
+  mask-image:radial-gradient(ellipse 100% 104% at 50% 50%,transparent 68%,rgba(0,0,0,.4) 78%,#000 91%,transparent 100%)!important;
+  filter:blur(10px) saturate(1.6) hue-rotate(0deg);opacity:.58;
+  transform:scale(1.04);transform-origin:center;
+  animation:cpSssInnerRim 9s linear infinite,cpSssInnerRimHue 7.5s linear infinite!important;
+  will-change:transform,filter,opacity!important;
 }
-@keyframes cpSssInnerRgbGlow{
-  0%{filter:blur(10px) saturate(1.2) hue-rotate(0deg);opacity:.48}
-  50%{filter:blur(12px) saturate(1.45) hue-rotate(180deg);opacity:.72}
-  100%{filter:blur(10px) saturate(1.2) hue-rotate(360deg);opacity:.48}
+@keyframes cpSssInnerEdgeFlow{
+  0%{background-position:42% 0%,58% 100%,0% 42%,100% 58%;transform:scale(1.04)}
+  38%{background-position:58% 7%,42% 93%,8% 58%,92% 42%;transform:scale(1.09)}
+  72%{background-position:48% 3%,55% 97%,3% 46%,97% 54%}
+  100%{background-position:55% 0%,45% 100%,0% 55%,100% 45%;transform:scale(1.08)}
 }
-/* Preserva a borda prismática externa, sólida e totalmente opaca. */
-.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw{opacity:1!important;z-index:8!important}
-.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{opacity:1!important;filter:saturate(1.18) brightness(1.08)!important;animation:spin 4.8s linear infinite!important}
+@keyframes cpSssInnerEdgeHue{from{filter:blur(18px) saturate(1.65) brightness(1.12) hue-rotate(0deg)}to{filter:blur(18px) saturate(1.65) brightness(1.12) hue-rotate(360deg)}}
+@keyframes cpSssInnerEdgePulse{0%,100%{opacity:.68}45%{opacity:.94}72%{opacity:.76}}
+@keyframes cpSssInnerRim{to{transform:scale(1.04) rotate(360deg)}}
+@keyframes cpSssInnerRimHue{from{filter:blur(10px) saturate(1.6) hue-rotate(0deg)}to{filter:blur(10px) saturate(1.6) hue-rotate(360deg)}}
+
+/* Mantém o aro arco-íris externo inteiramente opaco e em rotação contínua. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw{
+  display:block!important;opacity:1!important;visibility:visible!important;z-index:8!important;overflow:hidden!important;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;mask-composite:exclude!important;
+}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{
+  display:block!important;opacity:1!important;visibility:visible!important;
+  background:conic-gradient(from 0deg,#ff315f 0deg,#ff9b35 48deg,#fff04a 92deg,#43ef91 142deg,#25d9ed 194deg,#477dff 246deg,#b54cff 302deg,#ff315f 360deg)!important;
+  filter:saturate(1.35) brightness(1.12)!important;transform-origin:50% 50%!important;
+  animation:cpSssOuterBorderRGB 5.5s linear infinite!important;
+}
+@keyframes cpSssOuterBorderRGB{to{transform:rotate(360deg)}}
+
+/* Recupera o reflexo da ficha ao mexer com o dedo: aparece somente durante o gesto. */
+#fc .fch>.f3d .cd.k8.cp-touch-holo-card>.art>.cp-touch-holo,
+#fc .fch>.f3d .cd.k8.cp-touch-holo-card>.art>.cp-touch-specular{
+  display:block!important;visibility:visible!important;pointer-events:none!important;
+  opacity:0!important;transition:opacity .28s ease!important;
+}
+#fc .fch>.f3d .cd.k8.cp-touch-holo-card.cp-holo-active>.art>.cp-touch-holo{
+  opacity:.62!important;visibility:visible!important;display:block!important;
+}
+#fc .fch>.f3d .cd.k8.cp-touch-holo-card.cp-holo-active>.art>.cp-touch-specular{
+  opacity:.32!important;visibility:visible!important;display:block!important;
+}
+#fc .fch>.f3d .cd.k8.cp-touch-holo-card>.art>.cp-touch-holo .cp-sym-stream{
+  animation:cpSymbioteDriftA var(--cp-flow-duration,9s) cubic-bezier(.42,.02,.34,.99) var(--cp-flow-delay,-1.7s) infinite,
+    cpSymbioteFadeA var(--cp-flow-duration,9s) ease-in-out var(--cp-flow-delay,-1.7s) infinite,
+    cpSymbioteHue var(--cp-flow-hue-duration,12s) linear var(--cp-flow-delay,-1.7s) infinite!important;
+}
+#fc .fch>.f3d .cd.k8.cp-touch-holo-card>.art>.cp-touch-holo .cp-sym-stream.secondary{
+  animation-name:cpSymbioteDriftB,cpSymbioteFadeB,cpSymbioteHueB!important;
+}
 @media(prefers-reduced-motion:reduce){
-  .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb::after{animation:none!important;filter:blur(10px) saturate(1.2)!important}
-  .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:none!important}
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb::before,
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb::after,
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:none!important}
+}
+</style>
+
+
+<style id="cp-sss-inner-glow-full-frame-fix-2026">
+/* SSS: brilho RGB distribuído pelo contorno INTERNO completo, sem concentrar no canto. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow{
+  position:absolute!important;inset:2px!important;display:block!important;
+  width:auto!important;height:auto!important;box-sizing:border-box!important;
+  z-index:5!important;pointer-events:none!important;overflow:hidden!important;
+  border-radius:inherit!important;opacity:1!important;background:transparent!important;
+  isolation:isolate!important;
+}
+/* Camada colorida: gradiente cônico ocupa a caixa inteira, máscara recorta um aro largo e uniforme. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::before{
+  content:""!important;position:absolute!important;inset:0!important;display:block!important;
+  box-sizing:border-box!important;padding:22px!important;border-radius:inherit!important;
+  background:conic-gradient(from 0deg,
+    #ff315f 0deg,#ff9b35 48deg,#fff04a 92deg,#43ef91 142deg,
+    #25d9ed 194deg,#477dff 246deg,#b54cff 302deg,#ff315f 360deg)!important;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+  mask-composite:exclude!important;
+  filter:saturate(1.65) brightness(1.16)!important;
+  opacity:.96!important;
+  animation:cpSSSFullRimHue 7s linear infinite!important;
+}
+/* Segunda camada desfocada amplia a luz para DENTRO da carta em todos os lados. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::after{
+  content:""!important;position:absolute!important;inset:0!important;display:block!important;
+  box-sizing:border-box!important;padding:31px!important;border-radius:inherit!important;
+  background:conic-gradient(from 0deg,
+    #ff315f,#ff9b35,#fff04a,#43ef91,#25d9ed,#477dff,#b54cff,#ff315f)!important;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+  mask-composite:exclude!important;
+  filter:blur(13px) saturate(1.8) brightness(1.2) hue-rotate(0deg)!important;
+  opacity:.72!important;
+  animation:cpSSSFullRimHue 7s linear infinite,cpSSSFullRimPulse 3.8s ease-in-out infinite!important;
+}
+@keyframes cpSSSFullRimHue{from{filter:saturate(1.65) brightness(1.16) hue-rotate(0deg)}to{filter:saturate(1.65) brightness(1.16) hue-rotate(360deg)}}
+@keyframes cpSSSFullRimPulse{0%,100%{opacity:.52}50%{opacity:.82}}
+/* O antigo overlay emb da SSS era alinhado por regras herdadas e podia ficar visualmente deslocado. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>ins.emb{display:none!important;visibility:hidden!important;opacity:0!important}
+@media(prefers-reduced-motion:reduce){
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::before,
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::after{animation:none!important}
+}
+</style>
+
+
+<style id="cp-sss-diffuse-halo-rgb-live-fix-2026">
+/* Propriedades interpoláveis: impedem a cor e a pulsação de ficarem congeladas por !important. */
+@property --cp-sss-inner-hue-a{syntax:"<angle>";inherits:false;initial-value:0deg}
+@property --cp-sss-inner-hue-b{syntax:"<angle>";inherits:false;initial-value:180deg}
+@property --cp-sss-inner-alpha-a{syntax:"<number>";inherits:false;initial-value:.78}
+@property --cp-sss-inner-alpha-b{syntax:"<number>";inherits:false;initial-value:.52}
+@property --cp-sss-border-hue{syntax:"<angle>";inherits:false;initial-value:0deg}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow{
+  position:absolute!important;inset:4px!important;display:block!important;width:auto!important;height:auto!important;
+  box-sizing:border-box!important;z-index:5!important;pointer-events:none!important;overflow:hidden!important;
+  border-radius:inherit!important;opacity:1!important;background:transparent!important;isolation:isolate!important;
+  mix-blend-mode:screen!important;
+}
+/* Luz superior/inferior e laterais, com gradiente distribuído por toda a caixa da carta. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::before{
+  content:""!important;position:absolute!important;display:block!important;inset:-12%!important;
+  width:auto!important;height:auto!important;border:0!important;border-radius:inherit!important;pointer-events:none!important;
+  background:conic-gradient(from 0deg,#ff315f 0deg,#ff963b 48deg,#fff04a 92deg,#43ef91 142deg,#25d9ed 194deg,#477dff 246deg,#b54cff 302deg,#ff315f 360deg)!important;
+  -webkit-mask-image:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 25%,rgba(0,0,0,.30) 38%,rgba(0,0,0,.92) 57%,rgba(0,0,0,.82) 73%,transparent 100%)!important;
+  mask-image:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 25%,rgba(0,0,0,.30) 38%,rgba(0,0,0,.92) 57%,rgba(0,0,0,.82) 73%,transparent 100%)!important;
+  filter:blur(22px) saturate(2.05) brightness(1.32) hue-rotate(var(--cp-sss-inner-hue-a))!important;
+  opacity:var(--cp-sss-inner-alpha-a)!important;transform:scale(1.02)!important;transform-origin:center!important;
+  animation:cpSSSInnerHueA 6s linear infinite,cpSSSInnerPulseA 3.8s ease-in-out infinite!important;
+  will-change:filter,opacity!important;
+}
+/* Segunda camada: difusão mais larga, defasada, para o halo parecer luz e não tinta/moldura. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::after{
+  content:""!important;position:absolute!important;display:block!important;inset:-18%!important;
+  width:auto!important;height:auto!important;border:0!important;border-radius:inherit!important;pointer-events:none!important;
+  background:conic-gradient(from 205deg,#ff5acb 0deg,#ffc15b 58deg,#d7ff69 110deg,#63f5c7 164deg,#56cfff 218deg,#8d77ff 278deg,#ff5acb 360deg)!important;
+  -webkit-mask-image:radial-gradient(ellipse 104% 105% at 50% 50%,transparent 16%,rgba(0,0,0,.28) 33%,rgba(0,0,0,.78) 56%,rgba(0,0,0,.56) 76%,transparent 98%)!important;
+  mask-image:radial-gradient(ellipse 104% 105% at 50% 50%,transparent 16%,rgba(0,0,0,.28) 33%,rgba(0,0,0,.78) 56%,rgba(0,0,0,.56) 76%,transparent 98%)!important;
+  filter:blur(29px) saturate(1.95) brightness(1.25) hue-rotate(var(--cp-sss-inner-hue-b))!important;
+  opacity:var(--cp-sss-inner-alpha-b)!important;transform:scale(1.04)!important;transform-origin:center!important;
+  animation:cpSSSInnerHueB 8.4s linear infinite,cpSSSInnerPulseB 5.1s ease-in-out infinite!important;
+  will-change:filter,opacity!important;
+}
+/* As variáveis registradas animam mesmo que filter/opacity estejam protegidos por !important. */
+@keyframes cpSSSInnerHueA{from{--cp-sss-inner-hue-a:0deg}to{--cp-sss-inner-hue-a:360deg}}
+@keyframes cpSSSInnerHueB{from{--cp-sss-inner-hue-b:180deg}to{--cp-sss-inner-hue-b:540deg}}
+@keyframes cpSSSInnerPulseA{0%,100%{--cp-sss-inner-alpha-a:.52}43%{--cp-sss-inner-alpha-a:.90}72%{--cp-sss-inner-alpha-a:.65}}
+@keyframes cpSSSInnerPulseB{0%,100%{--cp-sss-inner-alpha-b:.30}48%{--cp-sss-inner-alpha-b:.68}78%{--cp-sss-inner-alpha-b:.40}}
+/* A borda de fora permanece opaca; o espectro inteiro gira e troca de matiz. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw{opacity:1!important;visibility:visible!important;display:block!important}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{
+  opacity:1!important;visibility:visible!important;display:block!important;
+  background:conic-gradient(from 0deg,#ff315f 0deg,#ff9b35 48deg,#fff04a 92deg,#43ef91 142deg,#25d9ed 194deg,#477dff 246deg,#b54cff 302deg,#ff315f 360deg)!important;
+  filter:saturate(1.45) brightness(1.18) hue-rotate(var(--cp-sss-border-hue))!important;
+  animation:cpSSSBorderHueLive 7s linear infinite,cpSSSBorderSpinLive 6s linear infinite!important;
+  transform-origin:50% 50%!important;will-change:transform,filter!important;
+}
+@keyframes cpSSSBorderHueLive{from{--cp-sss-border-hue:0deg}to{--cp-sss-border-hue:360deg}}
+@keyframes cpSSSBorderSpinLive{to{transform:rotate(360deg)}}
+/* Modo leve desacelera, sem congelar as cores. */
+html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::before{animation:cpSSSInnerHueA 8s linear infinite,cpSSSInnerPulseA 5.2s ease-in-out infinite!important}
+html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::after{animation:cpSSSInnerHueB 11s linear infinite,cpSSSInnerPulseB 6.5s ease-in-out infinite!important}
+html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSSBorderHueLive 9s linear infinite,cpSSSBorderSpinLive 8s linear infinite!important}
+@media(prefers-reduced-motion:reduce){
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::before{animation:cpSSSInnerHueA 14s linear infinite,cpSSSInnerPulseA 12s ease-in-out infinite!important}
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::after{animation:cpSSSInnerHueB 17s linear infinite,cpSSSInnerPulseB 14s ease-in-out infinite!important}
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSSBorderHueLive 18s linear infinite,cpSSSBorderSpinLive 16s linear infinite!important}
 }
 </style>
 </body>
