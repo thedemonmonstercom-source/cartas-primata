@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.3.6">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.6 -->
+<meta name="application-version" content="1.3.9">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.9 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.3.6";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.9";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -833,7 +833,7 @@ body:has(#cfg:not([hidden])) #cpchip{display:none}#cpchip{position:fixed;right:8
 .cpxsk i{display:block;font-style:normal;font-weight:700;font-size:.78rem;color:#fff;opacity:.85;margin-top:.2em}
 .cpxcf{position:fixed;top:0;width:9px;height:14px;z-index:99985;pointer-events:none;border-radius:2px}
 /* ===== cp-battle-element-seals (origem: linha 871) ===== */
-.cp-el-seal{position:absolute;z-index:8;left:2.4cqw;top:2.4cqw;max-width:55%;padding:1.1cqw 2.5cqw;border-radius:99px;border:1px solid currentColor;background:#080a0eee;color:#fff;font:900 clamp(8px,2.25cqw,11px)/1.15 system-ui,sans-serif;letter-spacing:.01em;white-space:nowrap;text-shadow:0 1px 2px #000;pointer-events:none}.cp-el-seal.super_duplo{color:#8cff9b;background:#073c20f2;border-color:#67f58b}.cp-el-seal.super{color:#baffb8;background:#12351df2;border-color:#87e99a}.cp-el-seal.fraco{color:#ffb4b4;background:#4b1017f2;border-color:#ff7777}.cp-el-seal.muito_fraco{color:#fff;background:#781c28f2;border-color:#ff5268}
+.cp-el-seal{position:absolute;z-index:8;left:2.4cqw;top:2.4cqw;max-width:55%;padding:1.1cqw 2.5cqw;border-radius:99px;border:1px solid currentColor;background:#080a0eee;color:#fff;font:900 clamp(8px,2.25cqw,11px)/1.15 system-ui,sans-serif;letter-spacing:.01em;white-space:nowrap;text-shadow:0 1px 2px #000;pointer-events:none}.cp-el-seal.super_duplo{color:#8cff9b;background:#073c20f2;border-color:#67f58b}.cp-el-seal.super{color:#baffb8;background:#12351df2;border-color:#87e99a}.cp-el-seal.fraco{color:#ffb4b4;background:#4b1017f2;border-color:#ff7777}.cp-el-seal.muito_fraco{color:#fff;background:#781c28f2;border-color:#ff5268}.cp-battle-element-indicator{position:absolute;z-index:35;left:5px;top:5px;display:inline-flex;align-items:center;justify-content:center;min-width:34px;padding:4px 6px;border:1px solid currentColor;border-radius:999px;background:#080a0ef2;color:#fff;font:900 10px/1 system-ui,sans-serif;letter-spacing:-.02em;white-space:nowrap;text-shadow:0 1px 2px #000;box-shadow:0 1px 5px #0009;pointer-events:none}.cp-battle-element-indicator.super_duplo{color:#a6ffb5;background:#073c20f2;border-color:#67f58b}.cp-battle-element-indicator.super{color:#c8ffc9;background:#12351df2;border-color:#87e99a}.cp-battle-element-indicator.fraco{color:#ffc0c4;background:#4b1017f2;border-color:#ff7777}.cp-battle-element-indicator.muito_fraco{color:#fff;background:#781c28f2;border-color:#ff5268}.cp-battle-element-indicator.neutro{color:#e1e5ec;background:#303541ee;border-color:#aab3c2}.cp-battle-element-legend{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:9px;margin:0 0 3px;font-size:.62rem;font-weight:900;line-height:1.2}.cp-battle-element-legend .up{color:#8cffb0}.cp-battle-element-legend .down{color:#ff9da7}.cp-battle-element-legend .neutral{color:#c6ccd6}
 /* ===== cp-battle-quality-fixes (origem: linha 873) ===== */
 /* Banco de reservas do rival: o verso ocupa sempre o cartão inteiro, sem colapsar no grid. */
 #zb .zu.zbk{width:100%;min-width:0;aspect-ratio:3/4;position:relative;min-height:0;border-radius:12px}
@@ -3722,8 +3722,21 @@ document.addEventListener("click",e=>{
 });
 const selectedPackQty=()=>{const e=$("packQty"),n=Math.floor(+(e&&e.value||PQ)||10);return [1,10,25,50,100,250,500,1000].includes(n)?n:10};
 document.addEventListener("change",e=>{if(e.target&&e.target.id=="packQty"){PQ=selectedPackQty();updOpen()}});
-try{window.CP_POWER_MODE=["status","skills","all"].includes(localStorage.getItem("cp_power_mode"))?localStorage.getItem("cp_power_mode"):"status";window.CP_POWER_EXCLUDE_SPECIAL=localStorage.getItem("cp_power_exclude_special")==="1"}catch(e){window.CP_POWER_MODE="status";window.CP_POWER_EXCLUDE_SPECIAL=false}
+try{
+ window.CP_POWER_MODE=["status","skills","all"].includes(localStorage.getItem("cp_power_mode"))?localStorage.getItem("cp_power_mode"):"status";
+ window.CP_POWER_EXCLUDE_SPECIAL=localStorage.getItem("cp_power_exclude_special")==="1";
+ const savedRanks=JSON.parse(localStorage.getItem("cp_power_ranks")||"null");
+ window.CP_POWER_RANKS=Array.isArray(savedRanks)?[...new Set(savedRanks.map(Number).filter(v=>Number.isInteger(v)&&v>=0&&v<R.length))]:R.map((_,i)=>i);
+}catch(e){window.CP_POWER_MODE="status";window.CP_POWER_EXCLUDE_SPECIAL=false;window.CP_POWER_RANKS=R.map((_,i)=>i)}
 document.addEventListener("change",e=>{const el=e.target;if(!el)return;
+ if(el.matches&&el.matches("[data-cp-power-rank]")){
+  const rank=Number(el.dataset.cpPowerRank),selected=new Set(Array.isArray(window.CP_POWER_RANKS)?window.CP_POWER_RANKS:R.map((_,i)=>i));
+  if(el.checked)selected.add(rank);else selected.delete(rank);
+  window.CP_POWER_RANKS=[...selected].filter(v=>Number.isInteger(v)&&v>=0&&v<R.length).sort((a,b)=>a-b);
+  try{localStorage.setItem("cp_power_ranks",JSON.stringify(window.CP_POWER_RANKS))}catch(x){}
+  if(typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1);
+  return;
+ }
  if(["cpPowerMode","cpDeckPowerMode"].includes(el.id)){window.CP_POWER_MODE=["status","skills","all"].includes(el.value)?el.value:"status";try{localStorage.setItem("cp_power_mode",window.CP_POWER_MODE)}catch(x){}if(el.id==="cpPowerMode"&&typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1);else if(el.id==="cpDeckPowerMode"&&typeof dkPaint==="function")dkPaint();return}
  if(["cpPowerExcludeSpecial","cpDeckPowerExcludeSpecial"].includes(el.id)){window.CP_POWER_EXCLUDE_SPECIAL=!!el.checked;try{localStorage.setItem("cp_power_exclude_special",window.CP_POWER_EXCLUDE_SPECIAL?"1":"0")}catch(x){}if(el.id==="cpPowerExcludeSpecial"&&typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1);else if(el.id==="cpDeckPowerExcludeSpecial"&&typeof dkPaint==="function")dkPaint()}
 });
@@ -4214,9 +4227,30 @@ function fxEnd(B){if(FXOFF())return;const w=B.w,win=B.ai?w==0:w>=0,lose=B.ai&&w=
 
 const hrt=n=>"♥".repeat(Math.max(0,n))+"♡".repeat(Math.max(0,5-n)),ico=u=>u.bf.map(b=>(b.k=="at"||b.k=="df"?(b.p>0?"▲":"▼"):"")+(BI[b.k]||"✦")+b.n).join(" ")+" "+elEls(u).map(k=>EL[k]).join("");
 function cpAdvBadge(u,en,B){try{if(!B||!B.p||!u||!(u.hp>0))return"";const me=B.p.findIndex(x=>[...x.f,...x.r].includes(u));if(me<0)return"";const tm=i=>B.tm?B.tm[i]:i,foes=B.p.filter((x,i)=>tm(i)!==tm(me)).flatMap(x=>x.f).filter(c=>c&&c.hp>0);if(!foes.length)return"";const own=elEls(u),m=Math.max(...foes.map(c=>elCalc(own,elEls(c)).multiplicador));if(m<1.05&&m>=.95)return"";const up=m>=1.05;return `<i class="cp-adv ${up!==!!en?"good":"bad"}">${up?"▲":"▼"} ×${String(Math.round(m*100)/100).replace(".",",")}</i>`}catch(e){return""}}
-const zu=(u,en,act)=>{if(!u)return'<div class="zu ze"></div>';const lv=u.lv==null?lvl(u.c):Math.min(u.lv,5),rad=cardRadius(lv),B=BT,q=SEL&&SEL.q&&SEL.q[0],sk=SEL&&SEL.m==="s"&&SEL.u&&SEL.u.ab&&SEL.u.ab[SEL.i],skEnemy=sk&&sk.ef.some(e=>["e","E","r","w","x","T"].includes(e.a)),skAll=sk&&sk.ef.some(e=>["E","T"].includes(e.a)),skChosen=SEL&&SEL.g&&SEL.g.e,skillPreview=!!(SEL&&SEL.preview&&skEnemy&&(!skChosen||skAll||skChosen.id===u.id)),v=act&&SEL&&(en?SEL.m=="a"||q=="e"||skillPreview: q=="a"),kf=n=>n>999?(n/1e3).toFixed(1).replace(".",",").replace(",0","")+"k":n,pc=Math.max(0,Math.min(100,Math.round(u.hp/u.mx*100))),ic=ico(u).trim(),preview=act&&en&&v&&SEL&&SEL.u?(SEL.m=="a"?elCalc(elEls(SEL.u),elEls(u)):sk?elCalc(elSkillEls(sk,SEL.u),elEls(u)):null):null,seal=preview&&preview.estado!="neutro"?`<i class="cp-el-seal ${preview.estado}">${preview.estado=="super_duplo"?"▲▲ ×2":preview.estado=="super"?"▲ ×1,5":preview.estado=="fraco"?"▼ ×0,67":"▼▼ ×0,5"}</i>`:cpAdvBadge(u,en,B);
+function cpBattleSelectionBadge(target,isEnemy,isActive,B){
+ try{
+  if(!isActive||!isEnemy||!B||!Array.isArray(B.p)||!SEL||!SEL.u||SEL.u===target||!(target.hp>0))return"";
+  const source=SEL.u;
+  // A seleção só gera prévia quando a carta escolhida está ativa no nosso campo.
+  const sourceSeat=B.p.findIndex(seat=>Array.isArray(seat.f)&&seat.f.includes(source));
+  const targetSeat=B.p.findIndex(seat=>Array.isArray(seat.f)&&seat.f.includes(target));
+  if(sourceSeat<0||targetSeat<0)return"";
+  const sourceTeam=B.tm?B.tm[sourceSeat]:sourceSeat,targetTeam=B.tm?B.tm[targetSeat]:targetSeat;
+  if(sourceTeam===targetTeam)return"";
+  // Ao escolher uma habilidade, a prévia acompanha o elemento dela; na seleção inicial usa o elemento da carta.
+  const skill=SEL.m==="s"&&source.ab&&source.ab[SEL.i]?source.ab[SEL.i]:null;
+  const attackElements=skill?elSkillEls(skill,source):elEls(source);
+  const result=elCalc(attackElements,elEls(target)),m=result.multiplicador;
+  const value=String(Math.round(m*100)/100).replace(".",",");
+  const state=result.estado||"neutro";
+  const label=m>1.05?"Vantagem elemental":m<.95?"Fraqueza elemental":"Dano neutro";
+  const sign=m>1.05?"+":m<.95?"−":"=";
+  return `<span class="cp-battle-element-indicator ${state}" title="${label} · multiplicador ×${value}" aria-label="${label}, multiplicador ${value}">${sign}${value}×</span>`;
+ }catch(error){console.warn("Prévia elemental da batalha",error);return""}
+}
+const zu=(u,en,act)=>{if(!u)return'<div class="zu ze"></div>';const lv=u.lv==null?lvl(u.c):Math.min(u.lv,5),rad=cardRadius(lv),B=BT,q=SEL&&SEL.q&&SEL.q[0],sk=SEL&&SEL.m==="s"&&SEL.u&&SEL.u.ab&&SEL.u.ab[SEL.i],skEnemy=sk&&sk.ef.some(e=>["e","E","r","w","x","T"].includes(e.a)),skAll=sk&&sk.ef.some(e=>["E","T"].includes(e.a)),skChosen=SEL&&SEL.g&&SEL.g.e,skillPreview=!!(SEL&&SEL.preview&&skEnemy&&(!skChosen||skAll||skChosen.id===u.id)),v=act&&SEL&&(en?SEL.m=="a"||q=="e"||skillPreview: q=="a"),kf=n=>n>999?(n/1e3).toFixed(1).replace(".",",").replace(",0","")+"k":n,pc=Math.max(0,Math.min(100,Math.round(u.hp/u.mx*100))),ic=ico(u).trim(),seal=cpBattleSelectionBadge(u,en,act,B);
  const xt=`${ic?`<i class="zic">${ic}</i>`:""}${u.u?'<b class="zdn">atacou</b>':""}<div class="zhud"><div class="zhp" style="--p:${pc}%;--hc:${pc>50?"#4fd36b":pc>25?"#f2b632":"#f4566a"}"><i></i><span>❤ ${kf(u.hp)}/${kf(u.mx)}</span></div><div class="zsx"><span>⚔ ${kf(Math.round(AT(u)))}</span><span>${u.ab.map((a,i)=>u.cd[i]?"✦"+u.cd[i]:"✦").join(" ")}</span></div></div>`;
- return`<button class="zu${B.hit.includes(u.id)?" ht":""}${SEL&&SEL.u==u?" on":""}${v?" vt":""}${u.u?" dn":""}" data-z="u:${u.id}" data-r="${u.c.r}" style="--rc:${R[u.c.r][1]};--l:${lv};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%">${card({...u.c,el:u.el!==undefined?u.el:u.c.el,el2:u.el!==undefined?u.el2:u.c.el2},"",0,0,"",u.lv)}${yhb(u)}</button>`};
+ return`<button class="zu${B.hit.includes(u.id)?" ht":""}${SEL&&SEL.u==u?" on":""}${v?" vt":""}${u.u?" dn":""}" data-z="u:${u.id}" data-r="${u.c.r}" style="--rc:${R[u.c.r][1]};--l:${lv};--card-rx:${rad.x.toFixed(2)}%;--card-ry:${rad.y.toFixed(2)}%">${card({...u.c,el:u.el!==undefined?u.el:u.c.el,el2:u.el!==undefined?u.el2:u.c.el2},"",0,0,"",u.lv)}${seal}${yhb(u)}</button>`};
 const zs=(s,en)=>{const f=`<div class="zrow">${s.f.map(u=>zu(u,en,1)).join("")}</div>`,r=`<div class="zrow zrs">${[0,1,2].map(i=>{const u=s.r[i];if(!u)return `<div class="zu ze"></div>`;return en?`<div class="zu zbk" aria-label="Carta reservada oculta">${bkH(u.c,u.c.p)}</div>`:zu(u,0,0)}).join("")}</div>`;return `<div class="zs">${en?r+f:f+r}</div>`};
 
 function yhb(u){const pc=Math.max(0,Math.min(100,Math.round(u.hp/u.mx*100))),k=n=>n>999?(n/1e3).toFixed(1).replace(".",",").replace(",0","")+"k":n;return `<div class="yhp" style="--p:${pc}%;--hc:${pc>50?"#4fd36b":pc>25?"#f2b632":"#f4566a"}"><i></i><span>${u.u?"✓ ":""}${k(u.hp)}/${k(u.mx)}</span></div>`}
@@ -4242,7 +4276,7 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
   if(SEL&&SEL.m=="a")pn+=`<p class="zst">Toque no inimigo que vai apanhar</p><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else if(SEL&&SEL.m==="s"&&SEL.q.length){const ab=SEL.u.ab[SEL.i],els=elSkillEls(ab,SEL.u);pn+=`<div class="cp-battle-skill-preview"><b>✦ ${ab.n}</b><div>${els.map(elChip).join(" ")}</div><p>Escolha ${SEL.q[0]==="e"?"o inimigo":"o aliado"}. Os selos nos alvos indicam a efetividade desta habilidade.</p></div><button class="bt gh" data-z="cancel">Cancelar</button>`}
   else if(SEL&&SEL.m==="s"&&SEL.preview){const ab=SEL.u.ab[SEL.i],els=elSkillEls(ab,SEL.u),enTargets=ab.ef.some(e=>["e","E","r","w","x","T"].includes(e.a)),ch=SEL.u.chg&&SEL.u.chg[SEL.i],pending=!!(ab.chargeMode&&ch&&B.n<ch.readyAt),ready=!!(ab.chargeMode&&ch&&B.n>=ch.readyAt),loading=!!(ab.chargeMode&&!ch);const label=pending?`Carregando · ${Math.max(1,ch.readyAt-B.n)} turno(s)`:loading?`Carregar habilidade · 1 ação`:ab.chargeMode&&ready?`Usar habilidade carregada · 1 ação`:`Usar habilidade`;pn+=`<div class="cp-battle-skill-preview"><b>✦ ${ab.n}</b><div>${els.map(elChip).join(" ")}</div><p>${ab.chargeMode?(pending?`A carga ainda precisa de ${Math.max(1,ch.readyAt-B.n)} turno(s).`:loading?`Carregar consome uma ação. ${ab.chargeMode==="same"?"Depois você pode usar ainda neste turno, gastando outra ação.":`A habilidade ficará pronta após ${Math.max(1,+ab.chargeTurns||1)} turno(s).`}`:`Carga completa. Usar agora consome mais uma ação.`):(enTargets?"Os selos exibem a efetividade contra cada inimigo antes de confirmar.":"Esta habilidade não seleciona inimigos como alvo.")}</p></div><button class="bt cy${B.ac<1||pending?" off":""}" data-z="useSk"${B.ac<1||pending?" disabled":""}>${label}</button><button class="bt gh" data-z="cancel">Cancelar</button>`}
-  else if(u&&!SEL.r)pn+=`${u.ab.length>1?`<p class="zst" style="text-transform:none;letter-spacing:.03em">Escolha: atacar ou uma das ${u.ab.length} habilidades (cada uma tem sua recarga)</p>`:""}<div class="two"${u.ab.length>1?` style="grid-template-columns:1fr"`:""}><button class="bt${!u.u&&fo&&B.ac?"":" off"}" data-z="atk">${elEls(u).map(k=>EL[k]).join("")} Atacar</button>${u.ab.map((a,i)=>{const ch=u.chg&&u.chg[i],pending=!!(a.chargeMode&&ch&&B.n<ch.readyAt),ready=!!(a.chargeMode&&ch&&B.n>=ch.readyAt),needTwo=a.chargeMode==="same"&&!ch&&B.ac<2,lock=u.cd[i]||!B.ac||pending||needTwo;return `<button class="bt cy${lock?" off":""}" data-z="k${i}"${lock?" disabled":""}>${elSkillEls(a,u).map(k=>EL[k]).join("")} ✦ ${a.n}${pending?` · carregando ${Math.max(1,ch.readyAt-B.n)}`:needTwo?" · requer 2 ações":a.chargeMode&&ready?" · carregada":u.cd[i]?` (${u.cd[i]})`:""}</button>`}).join("")}</div><button class="bt gh" data-z="cancel">Cancelar</button>`;
+  else if(u&&!SEL.r)pn+=`<div class="cp-battle-element-legend"><span class="up">+ Vantagem</span><span class="down">− Fraqueza</span><span class="neutral">= Neutro</span></div>${u.ab.length>1?`<p class="zst" style="text-transform:none;letter-spacing:.03em">Escolha: atacar ou uma das ${u.ab.length} habilidades (cada uma tem sua recarga)</p>`:""}<div class="two"${u.ab.length>1?` style="grid-template-columns:1fr"`:""}><button class="bt${!u.u&&fo&&B.ac?"":" off"}" data-z="atk">${elEls(u).map(k=>EL[k]).join("")} Atacar</button>${u.ab.map((a,i)=>{const ch=u.chg&&u.chg[i],pending=!!(a.chargeMode&&ch&&B.n<ch.readyAt),ready=!!(a.chargeMode&&ch&&B.n>=ch.readyAt),needTwo=a.chargeMode==="same"&&!ch&&B.ac<2,lock=u.cd[i]||!B.ac||pending||needTwo;return `<button class="bt cy${lock?" off":""}" data-z="k${i}"${lock?" disabled":""}>${elSkillEls(a,u).map(k=>EL[k]).join("")} ✦ ${a.n}${pending?` · carregando ${Math.max(1,ch.readyAt-B.n)}`:needTwo?" · requer 2 ações":a.chargeMode&&ready?" · carregada":u.cd[i]?` (${u.cd[i]})`:""}</button>`}).join("")}</div><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else if(u)pn+=`<button class="bt${emp&&B.ac?"":" off"}" data-z="place">Colocar em campo · 1 ação</button><button class="bt gh" data-z="cancel">Cancelar</button>`;
   else pn+=`<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta para agir · toque de novo (ou no inimigo) para ver status e habilidades</p>`;
   pn+=`<div class="two"><button class="bt gh${s.r.length>=3||!s.dk.length?" off":""}" data-z="draw">${s.r.length>=3?"Banco cheio":!s.dk.length?"Baralho vazio":"Comprar grátis"}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
@@ -4883,26 +4917,30 @@ function cpPowerScore(c,mode){
  if(mode==="all")return status*(1+Math.min(.8,skills*.10));
  return status;
 }
-function cpPowerRanking(c,mode,excludeSpecial){
- const rows=ALL.filter(x=>x&&!x.dr&&(!excludeSpecial||!cpPowerIsSpecial(x))).map(x=>{const score=Number(cpPowerScore(x,mode));return{id:String(x.id),score:Number.isFinite(score)?score:0}});
+function cpPowerRanking(c,mode,rankFilter){
+ const selected=new Set((Array.isArray(rankFilter)?rankFilter:[]).map(Number));
+ const rows=ALL.filter(x=>x&&!x.dr&&selected.has(Number(x.r))).map(x=>{const score=Number(cpPowerScore(x,mode));return{id:String(x.id),score:Number.isFinite(score)?score:0}});
  rows.sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id));
  let max=0;rows.forEach(x=>{if(x.score>max)max=x.score});
  const index=rows.findIndex(x=>x.id===String(c&&c.id)),position=index<0?0:rows.findIndex(x=>x.score===rows[index].score)+1,tied=index<0?0:rows.filter(x=>x.score===rows[index].score).length;
- return{position,total:rows.length,max,tied};
+ return{position,total:rows.length,max,tied,included:index>=0};
 }
 function stp(c,n){
- const m=mult(c),hp=Math.round(c.hp*m),dn=Math.round(c.atk*m),top=ST[Math.min(window.CPREF==null?ST.length-1:window.CPREF,ST.length-1)]||ST[0],maxLevel=1+gain(c)*mxLv(c),hpMax=Math.max(1,top[0]*maxLevel),dnMax=Math.max(1,top[1]*maxLevel),
+ const m=mult(c),hp=Math.round(c.hp*m),dn=Math.round(c.atk*m),maxLevel=1+gain(c)*mxLv(c),refIndex=window.CPREF_USER_SET&&Number.isInteger(Number(window.CPREF))?Math.max(0,Math.min(R.length-1,Number(window.CPREF))):Math.max(0,Math.min(R.length-1,Number(c.r)||0)),refStats=ST[refIndex]||ST[ST.length-1]||ST[0],hpMax=Math.max(1,refStats[0]*maxLevel),dnMax=Math.max(1,refStats[1]*maxLevel),
  barPct=(value,maximum)=>Math.max(value>0?1.2:0,Math.min(100,value/maximum*100)),
- stat=(icon,label,value,base,maximum)=>`<div class="cp-sheet-stat"><div class="cp-sheet-stat-top"><span>${icon} ${label}</span><b>${value}</b></div><div class="cp-sheet-stat-track" role="img" aria-label="${label}: ${value}; escala comum entre todos os ranks até ${Math.round(maximum)}"><i style="width:${barPct(value,maximum).toFixed(1)}%"></i></div><small>Base ${base}${value>base?` · <strong>+${value-base}</strong> do nível`:""} · escala global até SSS ${Math.round(maximum)}</small></div>`,
+ stat=(icon,label,value,maximum)=>`<div class="cp-sheet-stat"><div class="cp-sheet-stat-top"><span>${icon} ${label}</span><b>${value}</b></div><div class="cp-sheet-stat-track" role="img" aria-label="${label}: ${value}"><i style="width:${barPct(value,maximum).toFixed(1)}%"></i></div></div>`,
  els=elEls(c),elementNames=els.map(k=>(EL[k]||EL.normal)+" "+(ELN[k]||"Normal")).join(" / "),
- elementPanel=`<details class="cp-sheet-elements" open><summary><span>Elementos e relações</span><b>${elementNames}</b></summary><div class="cp-sheet-el-body"><button type="button" class="cp-guide-link small" data-cp-el-guide="1">Abrir guia de elementos</button>${elRelationsHTML(c)}</div></details>`,
+ elementPanel=`<details class="cp-sheet-elements"><summary><span>Elementos</span><b>${elementNames}</b></summary><div class="cp-sheet-el-body">${elRelationsHTML(c)}</div></details>`,
  packName=(c.p&&c.p.e?c.p.e+" ":"")+(c.p&&c.p.n||"Carta especial"),
- powerMode=["status","skills","all"].includes(window.CP_POWER_MODE)?window.CP_POWER_MODE:"status",excludeSpecial=!!window.CP_POWER_EXCLUDE_SPECIAL,
- power=cpPowerScore(c,powerMode),powerRank=cpPowerRanking(c,powerMode,excludeSpecial),powerPct=powerRank.max>0?Math.max(0,Math.min(100,power/powerRank.max*100)):0,
- powerRankText=powerRank.position?(powerRank.tied>1?`${powerRank.position}ª posição · empate entre ${powerRank.tied} cartas`:`${powerRank.position}ª mais forte · ${powerRank.total} cartas no ranking`):excludeSpecial&&cpPowerIsSpecial(c)?"Carta especial · fora do ranking filtrado":"Sem posição no ranking",
- powerLabels={status:"Apenas status",skills:"Só habilidades",all:"Status + habilidades"},
- powerPanel=`<section class="cp-sheet-power"><div class="cp-sheet-power-head"><div><small>⚡ PODER DA CARTA · ${powerLabels[powerMode]}</small><b>${Math.round(power).toLocaleString("pt-BR")}</b></div><strong>${powerRankText}</strong></div><div class="cp-sheet-power-track" role="img" aria-label="Poder ${Math.round(power)} de referência ${Math.round(powerRank.max)}"><i style="width:${powerPct.toFixed(1)}%"></i></div><div class="cp-sheet-power-meta">${excludeSpecial?"Cartas especiais ignoradas no ranking":"Todas as cartas publicadas entram no ranking"}</div><div class="cp-sheet-power-controls"><label>Critério do poder<select id="cpPowerMode" aria-label="Critério do poder da carta"><option value="status"${powerMode==="status"?" selected":""}>Apenas status</option><option value="skills"${powerMode==="skills"?" selected":""}>Só habilidades</option><option value="all"${powerMode==="all"?" selected":""}>Status + habilidades</option></select></label><label class="cp-power-check"><input type="checkbox" id="cpPowerExcludeSpecial"${excludeSpecial?" checked":""}><span>Não contar cartas especiais</span></label></div></section>`;
- return `${(()=>{try{return window.cpRefSel(R.map((r,k)=>{const t=ST[Math.min(k,ST.length-1)]||ST[0];return[r[0],Math.max(1,t[0]*maxLevel),Math.max(1,t[1]*maxLevel)]}))}catch(e){return""}})()}${powerPanel}<div class="cp-sheet-stats">${stat("❤","Vida",hp,c.hp,hpMax)}${stat("⚔","Dano",dn,c.atk,dnMax)}</div><p class="cp-stat-scale-note">Barras de status comparáveis entre ranks · referência: SSS no nível máximo</p><div class="cp-sheet-origin"><span>Pacote</span><b>${packName}</b></div>${elementPanel}`;
+ powerMode=["status","skills","all"].includes(window.CP_POWER_MODE)?window.CP_POWER_MODE:"status",
+ selectedRanks=(Array.isArray(window.CP_POWER_RANKS)?window.CP_POWER_RANKS:R.map((_,i)=>i)).map(Number).filter((v,i,a)=>Number.isInteger(v)&&v>=0&&v<R.length&&a.indexOf(v)===i).sort((a,b)=>a-b),
+ power=cpPowerScore(c,powerMode),powerRank=cpPowerRanking(c,powerMode,selectedRanks),powerPct=powerRank.max>0?Math.max(0,Math.min(100,power/powerRank.max*100)):0,
+ powerRankText=!selectedRanks.length?"Marque ao menos um rank":!selectedRanks.includes(Number(c.r))?`Rank ${R[c.r][0]} fora do filtro`:powerRank.position?(powerRank.tied>1?`${powerRank.position}ª posição · empate entre ${powerRank.tied}`:`${powerRank.position}ª mais forte`):"Sem posição no ranking",
+ powerLabels={status:"Status",skills:"Habilidades",all:"Status + habilidades"},
+ rankOptions=R.map((r,k)=>`<label class="cp-power-rank-chip" style="--cp-rank-color:${r[1]}"><input type="checkbox" data-cp-power-rank="${k}"${selectedRanks.includes(k)?" checked":""} aria-label="Incluir rank ${r[0]}"><span>${r[0]}</span></label>`).join(""),
+ powerPanel=`<section class="cp-sheet-power"><div class="cp-sheet-power-head"><div><small>⚡ PODER · ${powerLabels[powerMode]}</small><b>${Math.round(power).toLocaleString("pt-BR")}</b></div><div class="cp-sheet-power-position"><strong>${powerRankText}</strong>${powerRank.position?`<small>entre ${powerRank.total} cartas</small>`:""}</div></div><div class="cp-sheet-power-track" role="img" aria-label="Poder ${Math.round(power)} de referência ${Math.round(powerRank.max)}"><i style="width:${powerPct.toFixed(1)}%"></i></div><div class="cp-sheet-power-controls"><label>Calcular poder<select id="cpPowerMode" aria-label="Critério do poder da carta"><option value="status"${powerMode==="status"?" selected":""}>Status</option><option value="skills"${powerMode==="skills"?" selected":""}>Habilidades</option><option value="all"${powerMode==="all"?" selected":""}>Status + habilidades</option></select></label></div><div class="cp-power-rank-filter"><span>Comparar apenas ranks marcados</span><div class="cp-power-rank-options">${rankOptions}</div></div></section>`,
+ refControl=(()=>{try{window.CPREF=refIndex;return window.cpRefSel(R.map((r,k)=>{const t=ST[Math.min(k,ST.length-1)]||ST[0];return[r[0],Math.max(1,t[0]*maxLevel),Math.max(1,t[1]*maxLevel)]}))}catch(e){return ""}})();
+ return `<div class="cp-sheet-stats">${stat("❤","Vida",hp,hpMax)}${stat("⚔","Dano",dn,dnMax)}</div>${refControl}${powerPanel}<div class="cp-sheet-origin"><span>Pacote</span><b>${packName}</b></div>${elementPanel}`;
 }
 
 
@@ -5041,7 +5079,7 @@ cfg.addEventListener("input",e=>{const i=e.target.id;if(e.target.closest("#ds_v"
  * Ordem de carregamento obrigatória; ver assets/manifest.json.
  */
 
-// ===== v4.0 (27/11/2026): formato textual único; remove importação JSON e compatibilidade com fichas antigas =====
+// ===== v4.1 (27/11/2026): ficha individual simples, importação em lote e preparação de habilidades =====
 (()=>{try{
 const E=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
 N=s=>String(s==null?"":s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(),
@@ -5054,11 +5092,11 @@ const txt=(s,max,W,nm)=>{let t=smart(String(s==null?"":s).replace(/[<>`\u0000-\u
  if(max&&t.length>max){W&&W(`${nm} muito longo: cortei em ${max} letras.`);t=t.slice(0,max).replace(/\s+\S*$/,"")+"…"}return t};
 
 // ---- vocabulário da ficha (nome em português → código interno do jogo). O código curto do jogo também vale.
-const TY={dano:"d",dano_percentual:"dp",dano_fixo:"dv",dano_vida_atual:"dh",golpes_multiplos:"mh",eliminar:"ex",execucao:"ex",tirar_vida_inimigo:"lx",
+const TY={dano:"d",dano_percentual:"dp",dano_fixo:"dv",dano_vida_atual:"dh",dano_da_vida_atual:"dh",golpes_multiplos:"mh",eliminar:"ex",execucao:"ex",tirar_vida_inimigo:"lx",
  cura:"h",cura_fixa:"hv",vida_maxima:"mx",regeneracao:"rg",roubo_de_vida:"ls",reviver:"rv",ganhar_vida:"lf",trocar_vida:"sp",
  ataque:"at",defesa:"df",escudo:"sh",reflexo:"rf",esquiva:"ev",critico:"cr",invulneravel:"im",provocar:"tn",purificar:"pu",copiar_ataque:"ca",mudar_elemento:"el",
  veneno:"po",sangramento:"bl",marcar:"mk",marca:"mk",marcar_alvo:"mk",vulnerabilizar:"mk",atordoar:"st",silenciar:"cu",desarmar:"dz",atrasar_habilidades:"ci",dissipar:"di",
- recarga:"cd",acao_extra:"ac",comprar:"dr",recuar:"bk",convocar:"pl",devolver_baralho:"rd",descartar_reserva:"dc",queimar_baralho:"mm"};
+ recarga:"cd",acao_extra:"ac",comprar:"dr",comprar_carta:"dr",comprar_cartas:"dr",recuar:"bk",convocar:"pl",convocar_da_reserva:"pl",convocar_reserva:"pl",devolver_baralho:"rd",devolver_ao_baralho:"rd",devolver_para_o_baralho:"rd",descartar_reserva:"dc",descartar_da_reserva:"dc",queimar_baralho:"mm",eliminar_na_hora:"ex"};
 const TA={si:"s",si_mesma:"s",propria_carta:"s",a_propria_carta:"s",inimigo:"e",um_inimigo:"e",todos_inimigos:"E",todos_os_inimigos:"E",inimigos:"E",
  aliado:"a",um_aliado:"a",todos_aliados:"A",todos_os_aliados:"A",aliados:"A",inimigo_aleatorio:"r",inimigo_menos_vida:"w",inimigo_com_menos_vida:"w",inimigo_mais_fraco:"w",
  inimigo_mais_vida:"x",inimigo_com_mais_vida:"x",inimigo_mais_forte:"x",aliado_aleatorio:"q",aliado_menos_vida:"m",aliado_com_menos_vida:"m",aliado_mais_fraco:"m",outros_aliados:"o",todas_cartas:"T",todas_as_cartas:"T"};
@@ -5231,8 +5269,8 @@ const cpImportError=message=>({
  ok:false
 });
 const cpLineKey=s=>SL(s).replace(/_/g,"_");
-const cpStartCard=s=>/^={2,}\s*carta(?:\s+\d+)?\s*={2,}$/i.test(s.trim());
-const cpEndCard=s=>/^={2,}\s*fim\s+da\s+carta\s*={2,}$/i.test(s.trim());
+const cpStartCard=s=>/^={2,}\s*(?:carta(?:\s+\d+)?|ficha(?:\s+\d+)?)\s*={2,}$/i.test(s.trim());
+const cpEndCard=s=>/^={2,}\s*fim\s+(?:da\s+)?(?:carta|ficha)\s*={2,}$/i.test(s.trim());
 const cpMarker=s=>s.trim().replace(/^\[\s*|\s*\]$/g,"").replace(/:$/," ").trim().replace(/\s+/g," ");
 const cpDecorative=s=>!s.trim()||/^[\s=*_#\-–—━─·•]+$/.test(s.trim());
 const cpPair=s=>{const m=s.match(/^\s*([^:：]{1,42}?)\s*[:：]\s*(.*?)\s*$/);return m?{key:cpLineKey(m[1]),value:m[2].trim()}:null};
@@ -5264,7 +5302,7 @@ function cpEffectExpression(effect,skillNo,effectNo,er){
   else if(k==="element")dest="elemento";
   else if(k==="element2")dest="elemento_2";
   else if(k==="preserve")dest="poupar";
-  if(!dest){er.push(`${prefix}: o campo adicional "${k}" não é reconhecido.`);return}
+  if(!dest){if((k==="power"||k==="intensity")&&params.length===0)return;er.push(`${prefix}: o campo adicional "${k}" não é reconhecido.`);return}
   add(dest,v)
  });
  if(effect.condition){
@@ -5291,33 +5329,29 @@ function cpParseCardBlock(block,cardNumber){
  const fail=(ln,msg)=>er.push((ln?`Linha ${ln}: `:"")+msg);
  const field=(obj,key,value,ln)=>{obj[key]=value;obj["$"+key]=ln};
  const rootKeys={nome:"name",rank:"rank",vida:"hp",hp:"hp",dano:"atk",ataque:"atk",atk:"atk",elemento:"element",elemento_2:"element2",segundo_elemento:"element2",historia:"story",sinergia:"synergy",tribo:"synergy"};
- const skillKeys={nome:"name",tipo:"type",tipo_de_habilidade:"type",ativacao:"type",gatilho:"trigger",quando:"trigger",descricao:"description",descricao_da_habilidade:"description",frase:"description",recarga:"cooldown",elemento:"element",elemento_da_habilidade:"element",elemento_2:"element2",segundo_elemento:"element2"};
+ const skillKeys={nome:"name",tipo:"type",tipo_de_habilidade:"type",ativacao:"type",gatilho:"trigger",quando:"trigger",descricao:"description",descricao_da_habilidade:"description",frase:"description",recarga:"cooldown",elemento:"element",elemento_da_habilidade:"element",elemento_2:"element2",segundo_elemento:"element2",preparacao:"preparation",preparacao_da_habilidade:"preparation",carga:"preparation",turnos_de_carga:"chargeTurns"};
  const effectKeys={tipo:"type",acao:"type",alvo:"target",alvos:"target",potencia:"power",intensidade:"intensity",multiplicador:"mult",porcentagem:"pct",percentual:"pct",valor:"value",duracao:"turns",turnos:"turns",golpes:"hits",quantidade:"quantity",vidas:"lives",cartas:"cards",acoes:"actions",elemento:"element",elemento_2:"element2",segundo_elemento:"element2",poupar:"preserve",poupar_habilidade_usada:"preserve",condicao:"condition",limite:"limit",chance:"chance"};
 
  block.lines.forEach(([ln,raw])=>{
   let t=String(raw||"").replace(/\*\*/g,"").replace(/^\s*[-•]\s*/,"").trim();
   if(cpDecorative(t))return;
   const marker=cpMarker(t),mk=SL(marker);
-  if(/^habilidade(?:_\d+)?$/.test(mk)){
-   if(effect)fail(effect.ln,"encerre o efeito com [FIM DO EFEITO] antes de iniciar outra habilidade.");
-   if(skill)fail(skill.ln,"encerre a habilidade com [FIM DA HABILIDADE] antes de iniciar outra.");
-   skill={ln,name:"",description:"",type:"",trigger:"",cooldown:"",element:"",element2:"",effects:[]};
+  if(["habilidades","efeitos","dados_da_carta","ficha_de_carta"].includes(mk)){lastText=null;return}
+  if(/^(?:habilidade(?:_\d+)?|nova_habilidade)$/.test(mk)){
+   // O próximo cabeçalho encerra automaticamente a habilidade/efeito anterior.
+   skill={ln,name:"",description:"",type:"",trigger:"",cooldown:"",element:"",element2:"",preparation:"",chargeTurns:"",effects:[]};
    skills.push(skill);effect=null;section="skill";lastText=null;return
   }
-  if(/^efeito(?:_\d+)?$/.test(mk)){
-   if(!skill){fail(ln,"o bloco [EFEITO] precisa estar dentro de uma [HABILIDADE].");return}
-   if(effect)fail(effect.ln,"encerre o efeito anterior com [FIM DO EFEITO].");
+  if(/^(?:efeito(?:_\d+)?|novo_efeito)$/.test(mk)){
+   if(!skill){fail(ln,"o efeito precisa estar dentro de uma habilidade.");return}
    effect={ln,type:"",target:"",power:"",intensity:"",mult:"",pct:"",value:"",turns:"",hits:"",quantity:"",lives:"",cards:"",actions:"",element:"",element2:"",preserve:"",condition:"",limit:"",chance:""};
    skill.effects.push(effect);section="effect";lastText=null;return
   }
   if(mk==="fim_do_efeito"){
-   if(!effect)fail(ln,"[FIM DO EFEITO] sem um bloco [EFEITO] aberto.");
    effect=null;section=skill?"skill":"card";lastText=null;return
   }
   if(mk==="fim_da_habilidade"){
-   if(effect){fail(ln,"encerre o efeito com [FIM DO EFEITO] antes de finalizar a habilidade.");effect=null}
-   if(!skill)fail(ln,"[FIM DA HABILIDADE] sem uma habilidade aberta.");
-   skill=null;section="card";lastText=null;return
+   effect=null;skill=null;section="card";lastText=null;return
   }
   const pair=cpPair(t);
   if(!pair){
@@ -5344,8 +5378,8 @@ function cpParseCardBlock(block,cardNumber){
   field(card,key,pair.value,ln);
   if(key==="story")lastText={section:"card",key};
  });
- if(effect)fail(effect.ln,"falta [FIM DO EFEITO].");
- if(skill)fail(skill.ln,"falta [FIM DA HABILIDADE].");
+ // O fim do texto também encerra automaticamente o último efeito e habilidade.
+ effect=null;skill=null;
 
  const rankIndex=card.rank!==undefined?rk(card.rank):-1;
  if(!card.name)fail(card.$name,"falta Nome.");
@@ -5398,6 +5432,24 @@ function cpParseCardBlock(block,cardNumber){
   });
  });
  const parsed=parseSheet({lines},{strict:true});
+ parsed.card.abs.forEach((a,i)=>{
+  const sk=skills[i];if(!sk)return;
+  const prep=SL(sk.preparation||"");
+  let mode="";
+  if(prep&&/^(?:sem_carga|sem_preparacao|sem_preparo|nenhuma|nenhum|nao|nao_tem|nao_usa|none|off)$/.test(prep))mode="";
+  else if(prep&&/(?:same|mesmo_turno|duas_acoes|carregar_e_usar)/.test(prep))mode="same";
+  else if(prep&&/(?:turns|outro_turno|aguardar|carregar_e_aguardar|turno)/.test(prep)){mode="turns";const m=prep.match(/(\d+)/);if(m)sk.chargeTurns=m[1]}
+  else if(prep){const m=prep.match(/(\d+)/);if(m){mode="turns";sk.chargeTurns=m[1]}else fail(sk.$preparation,`Habilidade ${i+1}: preparação não reconhecida. Use Sem carga, Mesmo turno ou Aguardar turnos.`)}
+  if(sk.chargeTurns!==undefined&&sk.chargeTurns!=="")mode="turns";
+  if(mode){
+   if(a.tr)fail(sk.$preparation||sk.ln,`Habilidade ${i+1}: preparação só pode ser usada em habilidade ativa.`);
+   else if(mode==="turns"){
+    const n=Number(sk.chargeTurns||1);
+    if(!Number.isInteger(n)||n<1||n>6)fail(sk.$chargeTurns||sk.$preparation||sk.ln,`Habilidade ${i+1}: turnos de preparação devem ser de 1 a 6.`);
+    else{a.chargeMode="turns";a.chargeTurns=n}
+   }else a.chargeMode="same";
+  }
+ });
  parsed.er.unshift(...er);
  parsed.wa.unshift(...wa);
  return parsed;
@@ -5406,26 +5458,30 @@ function cpParseCardBlock(block,cardNumber){
 function parse(text){
  const raw=String(text||"").replace(/[\u200b-\u200d\u2060\ufeff]/g,"").replace(/[\u00a0\u2007\u202f]/g," ").replace(/\r\n?/g,"\n");
  if(/^\s*[\[{]/.test(raw)||/```\s*json|"format"\s*:|"cards"\s*:/i.test(raw))
-  return cpImportError("JSON não é mais aceito como ficha. Use somente o formato textual do PDF, começando por === CARTA 1 === e terminando em === FIM DA CARTA ===.");
- const blocks=[];let current=null,found=false,problems=[];
- raw.split("\n").forEach((line,i)=>{
-  const t=line.replace(/\*\*/g,"").trim();
-  if(/^```/.test(t))return;
-  if(cpStartCard(t)){
+  return cpImportError("JSON não é aceito. Cole a ficha em texto simples, com os campos Nome, Rank, Vida, Dano, Elemento, História e Habilidade.");
+ const rows=raw.split("\n").map((line,i)=>({line:line.replace(/\*\*/g,""),n:i+1,t:line.replace(/\*\*/g,"").trim()})).filter(x=>!/^```/.test(x.t));
+ const blocks=[];let current=null,found=false;
+ rows.forEach(x=>{
+  if(cpStartCard(x.t)){
    found=true;
-   if(current){problems.push(`A carta iniciada na linha ${current.startLine} não terminou com === FIM DA CARTA ===.`);blocks.push(current)}
-   current={startLine:i+1,lines:[]};return
+   if(current)blocks.push(current); // fecha automaticamente a carta anterior
+   current={startLine:x.n,lines:[]};return
   }
-  if(cpEndCard(t)){
-   if(!current){problems.push(`Linha ${i+1}: encontrei FIM DA CARTA sem uma carta aberta.`);return}
-   blocks.push(current);current=null;return
+  if(cpEndCard(x.t)){
+   if(current){blocks.push(current);current=null}
+   return
   }
-  if(current)current.lines.push([i+1,line]);
+  if(current)current.lines.push([x.n,x.line]);
  });
- if(current){problems.push(`A carta iniciada na linha ${current.startLine} não terminou com === FIM DA CARTA ===.`);blocks.push(current)}
- if(!found)return cpImportError("Não encontrei nenhuma carta. Cada ficha deve começar com === CARTA 1 === e terminar com === FIM DA CARTA ===.");
+ if(current)blocks.push(current); // o fim da mensagem encerra a última carta
+ if(!found){
+  // Uma ficha individual pode começar diretamente em Nome:, sem cabeçalhos especiais.
+  const first=rows.findIndex(x=>/^(?:nome|nome_da_carta|rank|vida|hp|dano|ataque|elemento|historia|sinergia|tribo)\s*[:：]/i.test(x.t)||/^\[?habilidade(?:\s*\d+)?\]?$/i.test(x.t));
+  if(first<0)return cpImportError("Não encontrei os campos de uma carta. Comece com Nome: e inclua Rank, Vida, Dano, Elemento, História e pelo menos uma Habilidade.");
+  blocks.push({startLine:rows[first].n,lines:rows.slice(first).filter(x=>!cpEndCard(x.t)).map(x=>[x.n,x.line])});
+ }
+ if(!blocks.length)return cpImportError("Não encontrei nenhuma ficha de carta.");
  const sheets=blocks.map((b,i)=>cpParseCardBlock(b,i+1));
- problems.forEach(p=>sheets.push({card:{n:"Ficha inválida",r:0,hp:ST[0][0],atk:ST[0][1],abs:[]},er:[p],wa:[]}));
  return{sheets,ok:sheets.length>0&&sheets.every(x=>!x.er.length)};
 }
 
@@ -5492,9 +5548,9 @@ function build(){
  let last="";try{last=localStorage.getItem("cp_impk")||""}catch(e){}
  const ops=P.concat(ADM.p.filter(d=>!P.some(p=>p.id==d.id))).map(p=>`<option value="${E(p.id)}"${p.id==last?" selected":""}>${E(p.e||"")} ${E(p.n)}${p.cards?"":" · não lançado"}</option>`).join("")+`<option value="ind"${last=="ind"?" selected":""}>🎉 Sem pacote · carta especial</option>`;
  d.insertAdjacentHTML("beforeend",`<div class="fg">
-<div class="exm"><b>✦ FICHA TEXTUAL · PADRÃO ÚNICO</b><br>Peça a carta à IA e envie o PDF <b>Manual de Criação de Cartas · PRIMATA</b> junto da foto ou descrição. Cole aqui o texto que ela gerar. Cada carta começa em <b>=== CARTA 1 ===</b> e termina em <b>=== FIM DA CARTA ===</b>. Para criar várias, basta repetir os blocos: o jogo separa, confere e mostra a prévia de cada carta.<br><br><b>O que é conferido:</b> Rank, Vida, Dano, Elemento, História, habilidades, efeitos e limites do jogo. Todas as fichas precisam estar válidas para liberar a criação em lote. <b>JSON e formatos antigos de ficha não são aceitos.</b><br><br><b>Sinergia:</b> só aparece quando você pedir expressamente. <b>Imagem:</b> depois de importar, adicione a foto no editor de Cartas. A chance de aparecer em pacotes também é configurada no editor.</div>
+<div class="exm"><b>✦ FICHA TEXTUAL · PADRÃO ÚNICO</b><br>Cole aqui uma ficha simples. Uma carta pode começar diretamente em <b>Nome:</b>; não precisa de cabeçalho nem de marcador de fim. Para várias cartas, separe cada uma com <b>=== CARTA ===</b>. O jogo confere os campos e mostra a prévia antes de criar.<br><br>Use apenas campos que pertencem à ficha. Sinergia só entra quando for solicitada. A imagem é adicionada depois, no editor de Cartas.</div>
 <div class="afl w"><label for="z_ip">Em qual pacote a carta entra?</label><select id="z_ip">${ops}</select></div>
-<div class="afl w"><label for="z_it">Ficha ou lote de fichas (texto puro)</label><textarea id="z_it" rows="14" placeholder="=== CARTA 1 ===&#10;Nome: Exemplo&#10;Rank: F&#10;Vida: 130&#10;Dano: 20&#10;Elemento: Fogo&#10;História: Uma breve história...&#10;&#10;[HABILIDADE 1]&#10;Nome: Chama Vital&#10;Tipo: Ativa&#10;Descrição: Uma chama que restaura a própria carta.&#10;Recarga: 3&#10;[EFEITO 1]&#10;Tipo: Cura&#10;Alvo: Própria carta&#10;Potência: 20%&#10;[FIM DO EFEITO]&#10;[FIM DA HABILIDADE]&#10;=== FIM DA CARTA ===" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
+<div class="afl w"><label for="z_it">Ficha de carta (uma ou várias)</label><textarea id="z_it" rows="14" placeholder="Nome: Exemplo&#10;Rank: F&#10;Vida: 130&#10;Dano: 20&#10;Elemento: Fogo&#10;História: Uma breve história.&#10;&#10;Habilidade:&#10;Nome: Chama Vital&#10;Tipo: Ativa&#10;Descrição: Recupera parte da própria vida.&#10;Recarga: 3&#10;&#10;Efeito:&#10;Tipo: Cura&#10;Alvo: Própria carta&#10;Potência: 20%" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
 <div class="ivb"><button class="bt gh" data-k="@ixp">📋 Colar</button><button class="bt gh" data-k="@ixl">🧹 Limpar</button></div>
 <div id="z_iv"></div>
 <label class="yck"><input type="checkbox" id="z_dr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt off" id="z_ix" data-k="@ix">Criar cartas</button></div>`)}
@@ -5514,7 +5570,7 @@ Object.assign(adxA,{
  ixl:()=>{const t=$("z_it");if(t){t.value="";paint();t.focus()}},
  ixp:async()=>{const t=$("z_it");if(!t)return;try{const s=await navigator.clipboard.readText();if(!s||!s.trim())return toast("A área de transferência está vazia.");t.value=s;paint();toast("Ficha colada. Confira abaixo.")}catch(e){toast("Não consegui colar sozinho: segure no campo e toque em Colar.");t.focus()}},
  ixe:()=>{if(!S)return;const L=[];S.sheets.forEach((s,i)=>s.er.forEach(x=>L.push("- "+(S.sheets.length>1?`Carta ${i+1} · `:"")+x)));
-  cp("A ficha da carta deu erro ao importar no jogo:\n"+L.join("\n")+"\n\nCorrija e me mande a ficha COMPLETA de novo, no formato textual novo do PDF, incluindo os marcadores de início e fim da carta.")}});
+  cp("A ficha da carta deu erro ao importar no jogo:\n"+L.join("\n")+"\n\nCorrija e me mande a ficha completa novamente, mantendo os nomes dos campos e dos efeitos.")}});
 cfg.addEventListener("input",e=>{if(e.target.id=="z_it"){clearTimeout(tm);tm=setTimeout(paint,250)}});
 cfg.addEventListener("change",e=>{if(e.target.id=="z_it")paint();if(e.target.id=="z_ip")try{localStorage.setItem("cp_impk",e.target.value)}catch(x){}});
 window.cpRegisterAdxOpenHook(function(id){try{if(id=="ds_i"){build();paint()}else if(id=="ds_c")sel()}catch(e){console.warn("imp",e)}});
@@ -7637,8 +7693,13 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
     const id=vf.dataset.cpViewfav;S.fav=Array.isArray(S.fav)?S.fav:[];
     S.fav=isFav(id)?S.fav.filter(x=>x!==id):[...S.fav,id];
-    save();vf.textContent=isFav(id)?"★ Favorita":"☆ Favoritar";
-    vf.setAttribute("aria-pressed",String(isFav(id)));
+    save();
+    const active=isFav(id),label=active?"Remover dos favoritos":"Adicionar aos favoritos";
+    vf.textContent=active?"★":"☆";
+    vf.setAttribute("aria-pressed",String(active));
+    vf.setAttribute("aria-label",label);vf.title=label;
+    vf.setAttribute("aria-label",isFav(id)?"Remover dos favoritos":"Adicionar aos favoritos");
+    vf.title=isFav(id)?"Remover dos favoritos":"Adicionar aos favoritos";
   },true);
 
   // Profile showcase/title/wishlist helpers are also used by the online Firebase profile views.
@@ -7770,8 +7831,10 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
 
   // Compartilhamento de cartas como imagem removido a pedido do administrador.
   window.cpRegisterViewHook(function(c){try{
-    const f=$("fc")&&$("fc").querySelector(".fch");if(f&&c){const old=f.querySelector(".cp-card-actions");if(old)old.remove();const actions=document.createElement("div");actions.className="cp-card-actions";actions.innerHTML=`<button class="bt gh" data-cp-viewfav="${escCP(c.id)}">${isFav(c.id)?"★ Favorita":"☆ Favoritar"}</button>`;f.append(actions);
-      const tags=f.querySelector(".rar");if(tags){if(S.foil[c.id])tags.insertAdjacentHTML("beforeend",`<span class="rtg">${S.foil[c.id]==="gold"?"✨ Dourada":"🌈 Holo"}</span>`);if((S.inv[c.id]||0)>0&&lvl(c)>=5)tags.insertAdjacentHTML("beforeend",'<span class="rtg cp-final-label">🌟 Forma final</span>')}
+    const f=$("fc")&&$("fc").querySelector(".fch");if(f&&c){const old=f.querySelector(".cp-card-actions");if(old)old.remove();const actions=document.createElement("div");actions.className="cp-card-actions";actions.innerHTML=`<button type="button" class="cp-sheet-fav" data-cp-viewfav="${escCP(c.id)}" aria-label="${isFav(c.id)?"Remover dos favoritos":"Adicionar aos favoritos"}" title="${isFav(c.id)?"Remover dos favoritos":"Adicionar aos favoritos"}" aria-pressed="${isFav(c.id)}">${isFav(c.id)?"★":"☆"}</button>`;
+      const tags=f.querySelector(".rar"),title=f.querySelector("h2");
+      if(tags)tags.append(actions);else if(title)title.insertAdjacentElement("afterend",actions);else f.append(actions);
+      if(tags){if(S.foil[c.id])tags.insertAdjacentHTML("beforeend",`<span class="rtg">${S.foil[c.id]==="gold"?"✨ Dourada":"🌈 Holo"}</span>`);if((S.inv[c.id]||0)>0&&lvl(c)>=5)tags.insertAdjacentHTML("beforeend",'<span class="rtg cp-final-label">🌟 Forma final</span>')}
     }
   }catch(e){console.warn("ficha da carta",e)}});
 
@@ -8715,8 +8778,8 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
 
 
 <script id="cp-final">(()=>{const D=document,H=D.documentElement;D.addEventListener("visibilitychange",()=>H.classList.toggle("cp-hid",D.hidden));try{if(!localStorage.getItem("cp_lite_auto")){localStorage.setItem("cp_lite_auto","1");if(((navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4)&&!window.cpLite&&window.cpToggleLite)window.cpToggleLite()}}catch(e){}
-window.cpRefSel=r=>{const i=window.CPREF==null?r.length-1:window.CPREF;return `<label class="cp-ref">Comparar com <select data-cp-ref data-refs='${JSON.stringify(r)}'>${r.map((x,k)=>`<option value="${k}"${k==i?" selected":""}>${x[0]}</option>`).join("")}</select></label>`};
-D.addEventListener("change",e=>{const s=e.target.closest&&e.target.closest("[data-cp-ref]");if(!s)return;const i=+s.value,rf=JSON.parse(s.dataset.refs)[i];window.CPREF=i;D.querySelectorAll(".cp-sheet-stat").forEach((el,k)=>{const mx=rf[k+1],v=+el.querySelector(".cp-sheet-stat-top b").textContent.replace(/\D/g,"")||0;el.querySelector(".cp-sheet-stat-track i").style.width=Math.max(v>0?1.2:0,Math.min(100,v/mx*100)).toFixed(1)+"%";const m=el.querySelector("small");m.innerHTML=m.innerHTML.replace(/escala global até \S+ \d+/,"escala global até "+rf[0]+" "+Math.round(mx))});const n=D.querySelector(".cp-stat-scale-note");if(n)n.textContent="Barras comparadas com o rank "+rf[0]+" no nível máximo"})})();</script>
+window.cpRefSel=r=>{const i=window.CPREF==null?r.length-1:window.CPREF;return `<label class="cp-ref">Barras contra <select aria-label="Comparar barras com rank" data-cp-ref data-refs='${JSON.stringify(r)}'>${r.map((x,k)=>`<option value="${k}"${k==i?" selected":""}>${x[0]}</option>`).join("")}</select></label>`};
+D.addEventListener("change",e=>{const s=e.target.closest&&e.target.closest("[data-cp-ref]");if(!s)return;const i=+s.value,rf=JSON.parse(s.dataset.refs)[i];window.CPREF=i;window.CPREF_USER_SET=true;D.querySelectorAll(".cp-sheet-stat").forEach((el,k)=>{const mx=rf[k+1],v=+el.querySelector(".cp-sheet-stat-top b").textContent.replace(/\D/g,"")||0;el.querySelector(".cp-sheet-stat-track i").style.width=Math.max(v>0?1.2:0,Math.min(100,v/mx*100)).toFixed(1)+"%";const m=el.querySelector("small");m.innerHTML=m.innerHTML.replace(/escala global até \S+ \d+/,"escala global até "+rf[0]+" "+Math.round(mx))});const n=D.querySelector(".cp-stat-scale-note");if(n)n.textContent="Barras comparadas com o rank "+rf[0]+" no nível máximo"})})();</script>
 
 
 <script id="cp-nozoom">(()=>{const D=document,k=e=>e.preventDefault();["gesturestart","gesturechange","gestureend"].forEach(n=>D.addEventListener(n,k,{passive:false}));D.addEventListener("touchmove",e=>{if(e.touches&&e.touches.length>1&&e.cancelable)e.preventDefault()},{passive:false})})();</script>
@@ -9733,6 +9796,58 @@ html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSS
   .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{
     animation:cpSSSVividBorderSpin 18s linear infinite!important;
   }
+}
+
+/* ===== Ficha 1.3.9 · título centralizado, favorito discreto e comparação restaurada ===== */
+#fc .fch>.rar{position:relative;min-height:36px;padding:0 44px;box-sizing:border-box}
+#fc .fch>.rar>.cp-card-actions{position:absolute!important;right:0;top:50%;transform:translateY(-50%);display:flex!important;align-items:center;justify-content:center;width:34px!important;height:34px;margin:0!important;padding:0!important;z-index:2}
+#fc .cp-sheet-fav{display:grid!important;place-items:center;width:33px;height:33px;min-width:33px;padding:0!important;margin:0!important;border:1px solid #f0cf78a8!important;border-radius:50%!important;background:#17131bdc!important;color:#ffe08a!important;font-size:1.15rem!important;line-height:1!important;box-shadow:0 2px 8px #0007!important}
+#fc .cp-sheet-fav[aria-pressed="true"]{background:#e9bd55!important;color:#211708!important;border-color:#fff0b7!important}
+#fc .cp-ref{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin:-3px 2px 10px!important;color:var(--mut);font-size:.61rem;font-weight:800;letter-spacing:.02em}
+#fc .cp-ref select{max-width:105px;min-width:65px;padding:6px 9px;border:1px solid #ffffff24;border-radius:9px;background:#ffffff08;color:var(--fg);font:inherit;font-size:.65rem}
+#fc .cp-ref select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+/* A interação da carta continua disponível, mas sem a legenda explicativa. */
+#fc .f3h{display:none!important}
+/* Painel de repetidas: todos os valores ficam dentro dos botões, inclusive em telas estreitas. */
+#fc .pnl .cvb{box-sizing:border-box;width:100%;min-width:0;max-width:100%;overflow:hidden}
+#fc .pnl .cvb p,#fc .pnl .cvb p b{min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:normal}
+#fc .pnl .cvb .two{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;width:100%;min-width:0}
+#fc .pnl .cvb .two>*{box-sizing:border-box;width:100%;min-width:0!important;max-width:100%;flex:none!important}
+#fc .pnl .cvb .bt{box-sizing:border-box;min-width:0!important;max-width:100%;overflow:hidden;text-align:center;overflow-wrap:anywhere;word-break:normal}
+#fc .pnl .cvb .pr{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;width:fit-content;min-width:0;max-width:100%;white-space:normal!important;overflow-wrap:anywhere;word-break:break-word}
+#fc .pnl .cvb .pr .gi{flex:0 0 auto}
+#fc .cp-sheet-stats{gap:9px;margin:8px 0 12px}
+#fc .cp-sheet-stat{padding:15px 13px;background:#ffffff0a;border-color:#ffffff18}
+#fc .cp-sheet-stat-top span{font-size:.7rem;letter-spacing:.07em}
+#fc .cp-sheet-stat-top b{font-size:1.75rem}
+#fc .cp-sheet-stat-track{height:7px;margin:10px 0 0}
+#fc .cp-sheet-stat small{display:none!important}
+#fc .cp-sheet-power{gap:9px;margin:9px 0 12px;padding:11px;border-color:#8c72d733;background:#ffffff05}
+#fc .cp-sheet-power-head>div b{font-size:1.35rem}
+#fc .cp-sheet-power-position{display:grid;justify-items:end;gap:2px;max-width:58%;text-align:right}
+#fc .cp-sheet-power-position>strong{font-size:.78rem;color:#d6c5ff;line-height:1.3}
+#fc .cp-sheet-power-position>small{font-size:.59rem;color:var(--mut)}
+#fc .cp-sheet-power-controls{grid-template-columns:minmax(0,1fr)}
+#fc .cp-sheet-power-controls>label{display:flex;align-items:center;justify-content:space-between;gap:10px}
+#fc .cp-sheet-power-controls select{max-width:190px}
+#fc .cp-power-rank-filter{display:grid;gap:6px}
+#fc .cp-power-rank-filter>span{font-size:.61rem;font-weight:800;color:var(--mut);letter-spacing:.07em;text-transform:uppercase}
+#fc .cp-power-rank-options{display:flex;flex-wrap:wrap;gap:6px}
+#fc .cp-power-rank-chip{position:relative;display:inline-flex;cursor:pointer}
+#fc .cp-power-rank-chip input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+#fc .cp-power-rank-chip span{display:grid;place-items:center;min-width:34px;height:30px;padding:0 7px;border:1px solid #ffffff24;border-radius:8px;background:#ffffff08;color:#aaa;font-size:.68rem;font-weight:900;transition:background .12s,border-color .12s,color .12s}
+#fc .cp-power-rank-chip input:checked+span{border-color:var(--cp-rank-color);background:color-mix(in srgb,var(--cp-rank-color) 28%,#17171b);color:#fff;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--cp-rank-color) 45%,transparent)}
+#fc .cp-power-rank-chip input:focus-visible+span{outline:2px solid var(--ac);outline-offset:2px}
+#fc .cp-sheet-elements{margin-top:8px}
+#fc .cp-sheet-elements>summary{min-height:42px}
+@media(max-width:380px){
+ #fc .fch>.rar{padding:0 40px}
+ #fc .fch>.rar>.cp-card-actions{width:31px!important;height:31px}
+ #fc .cp-sheet-fav{width:30px;height:30px;min-width:30px;font-size:1.08rem!important}
+ #fc .cp-sheet-stat{padding:12px 9px}
+ #fc .cp-sheet-stat-top b{font-size:1.48rem}
+ #fc .cp-sheet-power-head>strong{font-size:.7rem}
+ #fc .pnl .cvb .two{grid-template-columns:minmax(0,1fr)!important}
 }
 </style>
 </body>
