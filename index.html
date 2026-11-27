@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.3.11">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.11 -->
+<meta name="application-version" content="1.3.12">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.12 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.3.11";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.12";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -4309,7 +4309,7 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
   else pn+=`<p class="zst" style="text-transform:none;letter-spacing:.03em">Toque numa carta para agir · toque de novo (ou no inimigo) para ver status e habilidades</p>`;
   pn+=`<div class="two"><button class="bt gh${s.r.length>=3||!s.dk.length?" off":""}" data-z="draw">${s.r.length>=3?"Banco cheio":!s.dk.length?"Baralho vazio":"Comprar grátis"}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
  // Reações por emoji removidas: não devem enviar eventos nem interferir na sincronização.
- fxSnap();ME=me;zb.innerHTML=(B.p.length>2||(B.o&&B.o.soloBoss))?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();const actionBar=zb.querySelector(".zc");if(actionBar&&!actionBar.querySelector("[data-cp-el-guide-battle]"))actionBar.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
+ fxSnap();ME=me;zb.innerHTML=(B.p.length>2||(B.o&&(B.o.soloBoss||(B.o.m==="a"&&B.o.b))))?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();const actionBar=zb.querySelector(".zc");if(actionBar&&!actionBar.querySelector("[data-cp-el-guide-battle]"))actionBar.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
 function zpost(){const B=BT;if(!B)return;SEL=null;if(!B.over)chk(B);
  // Em Raid, o jogador que perdeu a última vida não pode continuar segurando o turno.
  // O motor salta imediatamente para o próximo aliado vivo, mesmo que ainda houvesse ações.
@@ -8730,13 +8730,15 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
   if(typeof zg!=="function"||zg.__cpSoloBossCentered)return;
   const previous=zg;
   const centered=function(B,me,pn){
-   if(!B||!B.o||!B.o.soloBoss)return previous.apply(this,arguments);
+   const arenaBoss=!!(B&&B.o&&B.o.m==="a"&&B.o.b);
+   if(!B||!B.o||(!B.o.soloBoss&&!arenaBoss))return previous.apply(this,arguments);
    const player=B.p&&B.p[0],boss=B.p&&B.p[1];
    if(!player||!boss)return previous.apply(this,arguments);
    const cpEscape=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
    const card=(boss.f||[]).filter(Boolean).slice(0,1).map(u=>zu(u,true,1)).join("")||'<div class="zu ze" aria-label="Boss fora de campo"></div>';
+   const bossContent=arenaBoss?`<div class="cp-arena-boss-deck">${tribeStatus(boss)}${zs(boss,true)}</div>`:`<div class="cp-solo-boss-card">${card}</div><p class="cp-solo-boss-caption">UMA CARTA · UMA VIDA · DERROTE O BOSS</p>`;
    const playerView=`<div class="zq me${player.life<1?" ko":""}"><div class="zqh"><b>${cpEscape(player.n)} · VOCÊ</b><span class="zl">${hrt(player.life)}</span><small>🂠 ${player.dk.length}</small></div>${tribeStatus(player)}${zs(player,false)}</div>`;
-   return `<div class="cp-solo-boss-board"><section class="cp-solo-boss-feature"><div class="cp-solo-boss-heading"><div><small>DESAFIO SOLO · CHEFE ÚNICO</small><b>${cpEscape(boss.n||"Boss")}</b></div><span class="cp-solo-boss-life">${hrt(boss.life)}</span></div><div class="cp-solo-boss-card">${card}</div><p class="cp-solo-boss-caption">UMA CARTA · UMA VIDA · DERROTE O BOSS</p></section><section class="cp-solo-boss-player">${playerView}</section><p class="zlog">Turno ${B.n}/${MAXT}<br>${B.log.slice(-2).join("<br>")||"&nbsp;"}</p></div><div class="zc">${pn}</div>`;
+   return `<div class="cp-solo-boss-board${arenaBoss?" cp-arena-boss-board":""}"><section class="cp-solo-boss-feature${arenaBoss?" cp-arena-boss-feature":""}"><div class="cp-solo-boss-heading"><div><small>${arenaBoss?"CHEFE DA ARENA · BATALHA FINAL":"DESAFIO SOLO · CHEFE ÚNICO"}</small><b>${cpEscape(boss.n||"Boss")}</b></div><span class="cp-solo-boss-life">${hrt(boss.life)}</span></div>${bossContent}</section><section class="cp-solo-boss-player">${playerView}</section><p class="zlog">Turno ${B.n}/${MAXT}<br>${B.log.slice(-2).join("<br>")||"&nbsp;"}</p></div><div class="zc">${pn}</div>`;
   };
   centered.__cpSoloBossCentered=true;
   zg=centered;
@@ -9923,6 +9925,37 @@ html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSS
 #fc .fch>.rar{margin-top:0!important}
 @media(max-width:380px){
  #fc .fch>h2{margin-top:17px!important;margin-bottom:11px!important;font-size:clamp(1.38rem,6.2vw,1.62rem)!important;padding:0 10px!important}
+}
+
+/* ===== cp-arena-boss-layout-hotfix · 1.3.12 ===== */
+/* O bloco de objetivo não deve esmagar o texto para abrir espaço ao botão lateral. */
+.cp-arena-gate{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(170px,220px);align-items:center;gap:12px}
+.cp-arena-gate-copy{width:100%;min-width:0;overflow-wrap:anywhere}
+.cp-arena-gate .bt{width:100%;max-width:220px;min-width:0;white-space:normal;line-height:1.25;overflow-wrap:anywhere}
+.cp-arena-gate .cp-arena-lock{justify-self:end}
+@media(max-width:600px){
+ .cp-arena-gate{grid-template-columns:minmax(0,1fr);gap:9px}
+ .cp-arena-gate .bt{width:100%;max-width:none;min-height:44px}
+ .cp-arena-gate .cp-arena-lock{justify-self:start}
+}
+/* Chefe da campanha: o campo inimigo e o do jogador ficam dentro da área de batalha. */
+#zb .cp-arena-boss-board{flex:1 1 auto;min-height:0;align-content:center;gap:clamp(6px,1.2vh,12px);overflow:hidden}
+#zb .cp-arena-boss-feature{width:min(100%,620px);padding:9px 10px;border-color:#d9b66a66;background:linear-gradient(150deg,#25202aeb,#15131beF 75%)}
+#zb .cp-arena-boss-deck{min-width:0}
+#zb .cp-arena-boss-deck .zs{gap:4px;padding:2px 0!important;background:transparent;border:0;box-shadow:none}
+#zb .cp-arena-boss-deck .zrow{--cw:clamp(64px,min(calc((100vw - 42px)/3),calc(var(--zr)*.17)),108px);gap:4px}
+#zb .cp-arena-boss-deck .zrs{--cw:clamp(44px,min(calc((100vw - 84px)/4),calc(var(--zr)*.11)),72px)}
+#zb .cp-arena-boss-deck .zu{opacity:1}
+#zb .cp-arena-boss-player{width:min(100%,620px);padding:7px 8px}
+#zb .cp-arena-boss-player .zrow{--cw:clamp(66px,min(calc((100vw - 42px)/3),calc(var(--zr)*.18)),112px);gap:4px}
+#zb .cp-arena-boss-player .zrs{--cw:clamp(44px,min(calc((100vw - 84px)/4),calc(var(--zr)*.11)),72px)}
+#zb .cp-arena-boss-board>.zlog{font-size:.65rem;line-height:1.35}
+@media(max-height:760px){
+ #zb .cp-arena-boss-board{gap:5px}
+ #zb .cp-arena-boss-feature{padding:6px 8px}
+ #zb .cp-arena-boss-deck .zrow{--cw:clamp(56px,min(calc((100vw - 42px)/3),calc(var(--zr)*.145)),92px)}
+ #zb .cp-arena-boss-deck .zrs{--cw:clamp(38px,min(calc((100vw - 84px)/4),calc(var(--zr)*.09)),62px)}
+ #zb .cp-arena-boss-player .zrow{--cw:clamp(58px,min(calc((100vw - 42px)/3),calc(var(--zr)*.15)),98px)}
 }
 </style>
 </body>
