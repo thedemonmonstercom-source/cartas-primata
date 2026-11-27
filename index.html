@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.3.5">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.5 -->
+<meta name="application-version" content="1.3.6">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.6 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.3.5";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.6";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -2666,6 +2666,12 @@ html,body{
 #fc .pnl .cvb .bt{min-width:0;max-width:100%;min-height:42px;padding:9px 5px;font-size:.62rem;letter-spacing:.04em;white-space:normal;overflow-wrap:anywhere}
 #fc .pnl .cvb .pr{max-width:100%;font-size:.59rem;white-space:normal;overflow-wrap:anywhere}
 #fc .cp-stat-scale-note{margin:0 0 9px!important;color:var(--mut);font-size:.58rem;line-height:1.4;text-align:left;letter-spacing:.02em}
+.cp-sheet-power{display:grid;gap:8px;margin:10px 0 12px;padding:12px;border:1px solid #8c72d744;border-radius:14px;background:linear-gradient(135deg,#9170df12,#ffffff05)}
+.cp-sheet-power-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.cp-sheet-power-head>div{display:grid;gap:3px}.cp-sheet-power-head small{font-size:.59rem;font-weight:900;letter-spacing:.1em;color:var(--mut)}.cp-sheet-power-head>div b{font-size:1.45rem;line-height:1.05;font-variant-numeric:tabular-nums}.cp-sheet-power-head>strong{max-width:55%;text-align:right;font-size:.76rem;color:#c9b5ff}
+.cp-sheet-power-track{height:10px;overflow:hidden;border-radius:99px;background:#ffffff14}.cp-sheet-power-track i{display:block;height:100%;min-width:0;border-radius:inherit;background:linear-gradient(90deg,#8562d9,#c6a7ff,#72e0bd)}.cp-sheet-power-meta{font-size:.6rem;color:var(--mut)}
+.cp-sheet-power-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:end;gap:8px}.cp-sheet-power-controls>label{display:grid;gap:4px;font-size:.62rem;font-weight:800;color:var(--mut)}.cp-sheet-power-controls select{width:100%;min-width:0;padding:8px;border:1px solid #ffffff24;border-radius:9px;background:var(--bg,#161618);color:var(--fg);font:inherit;font-size:.68rem}.cp-sheet-power-controls .cp-power-check{display:flex;align-items:center;gap:7px;min-height:34px}.cp-power-check input,.cp-deck-exclude input{width:16px;height:16px;accent-color:#a98bff;flex:none}
+.cp-deck-exclude{display:flex;align-items:center;gap:7px;min-height:34px;color:var(--mut);font-size:.67rem;font-weight:800}
+@media(max-width:380px){.cp-sheet-power-controls{grid-template-columns:1fr}.cp-sheet-power-head>strong{font-size:.68rem}}
 .cp-sheet-stat-track{height:8px!important}
 .cp-sheet-stat-track i{min-width:0!important}
 .cp-social-presence-only{margin:10px 0 4px;padding:9px 11px;border:1px solid #ffffff12;border-radius:11px;background:#ffffff05}
@@ -3716,8 +3722,11 @@ document.addEventListener("click",e=>{
 });
 const selectedPackQty=()=>{const e=$("packQty"),n=Math.floor(+(e&&e.value||PQ)||10);return [1,10,25,50,100,250,500,1000].includes(n)?n:10};
 document.addEventListener("change",e=>{if(e.target&&e.target.id=="packQty"){PQ=selectedPackQty();updOpen()}});
-try{window.CP_POWER_MODE=localStorage.getItem("cp_power_mode")||"status"}catch(e){window.CP_POWER_MODE="status"}
-document.addEventListener("change",e=>{const el=e.target;if(!el||!['cpPowerMode','cpDeckPowerMode'].includes(el.id))return;window.CP_POWER_MODE=["status","skills","all"].includes(el.value)?el.value:"status";try{localStorage.setItem("cp_power_mode",window.CP_POWER_MODE)}catch(x){}if(el.id==="cpPowerMode"&&typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1);else if(el.id==="cpDeckPowerMode"&&typeof dkPaint==="function")dkPaint()});
+try{window.CP_POWER_MODE=["status","skills","all"].includes(localStorage.getItem("cp_power_mode"))?localStorage.getItem("cp_power_mode"):"status";window.CP_POWER_EXCLUDE_SPECIAL=localStorage.getItem("cp_power_exclude_special")==="1"}catch(e){window.CP_POWER_MODE="status";window.CP_POWER_EXCLUDE_SPECIAL=false}
+document.addEventListener("change",e=>{const el=e.target;if(!el)return;
+ if(["cpPowerMode","cpDeckPowerMode"].includes(el.id)){window.CP_POWER_MODE=["status","skills","all"].includes(el.value)?el.value:"status";try{localStorage.setItem("cp_power_mode",window.CP_POWER_MODE)}catch(x){}if(el.id==="cpPowerMode"&&typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1);else if(el.id==="cpDeckPowerMode"&&typeof dkPaint==="function")dkPaint();return}
+ if(["cpPowerExcludeSpecial","cpDeckPowerExcludeSpecial"].includes(el.id)){window.CP_POWER_EXCLUDE_SPECIAL=!!el.checked;try{localStorage.setItem("cp_power_exclude_special",window.CP_POWER_EXCLUDE_SPECIAL?"1":"0")}catch(x){}if(el.id==="cpPowerExcludeSpecial"&&typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1);else if(el.id==="cpDeckPowerExcludeSpecial"&&typeof dkPaint==="function")dkPaint()}
+});
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#m [data-open-selected]");if(!b)return;const n=selectedPackQty();askMany(cur,n)});
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#m [data-cp-open-daily-shop]");if(!b)return;e.preventDefault();e.stopPropagation();if(typeof window.cpOpenShop==="function")window.cpOpenShop();else toast("A Loja diária não está disponível neste momento.")});
 const rs=c=>["mx","my","rx","ry"].forEach(k=>c.style.removeProperty("--"+k));
@@ -4026,7 +4035,9 @@ const DKS=["A","B","C"],
 dkTabs=m=>`<div class="dkt"${m?' style="margin:10px 0 0"':""}>${DKS.map(x=>`<button data-dkt="${x}" class="${(S.dka||"A")==x?"on":""}">Deck ${x}</button>`).join("")}</div>`,
 dkTrocar=x=>{const a=S.dka||"A";if(x==a||!DKS.includes(x))return;const cur=dkIds();S.dks=S.dks||{};S.dks[a]=cur;const novo=!S.dks[x];S.dk=(novo?cur:S.dks[x]).slice();S.dka=x;DSEL=null;save();tab=="a"?dkPaint():render(1);toast(novo?`<b>Deck ${x}</b> criado a partir do ${a} · mude as cartas à vontade`:`<b>Deck ${x}</b> ativo`)};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-dkt]");b&&dkTrocar(b.dataset.dkt)});
-const dkPanel=()=>{const d=dkv(),count=d.filter(Boolean).length,mode=["status","skills","all"].includes(window.CP_POWER_MODE)?window.CP_POWER_MODE:"status",labels={status:"Apenas status",skills:"Só habilidades",all:"Status + habilidades"},pow=Math.round(d.reduce((n,c)=>n+(c?(window.cpPowerScore?cpPowerScore(c,mode):Math.sqrt(Math.max(0,c.hp*c.atk))*mult(c)):0),0));return `${dkTabs()}<div class="dkh"><b>Deck de batalha<small>12 cartas diferentes · 1 de cada</small></b><span class="${d.length==12?"ok":""}">${d.length}/12</span></div><div class="cp-deck-power"><div><small>⚔ Poder · ${labels[mode]}</small><b>${count?fmt(pow):"—"}</b></div><label class="cp-deck-mode"><small>Critério do poder</small><select id="cpDeckPowerMode" aria-label="Critério do poder do deck"><option value="status"${mode==="status"?" selected":""}>Apenas status</option><option value="skills"${mode==="skills"?" selected":""}>Só habilidades</option><option value="all"${mode==="all"?" selected":""}>Status + habilidades</option></select></label></div><div class="dkg">${Array.from({length:12},(_,i)=>dkSlot(d[i],i)).join("")}</div><div class="two"><button class="bt gh" data-dk="auto">Preencher</button><button class="bt gh" data-dk="clear">Limpar</button></div>`};
+// Cartas com selo, do pacote exclusivo do ADM ou de pacote especial podem ser ignoradas no poder do deck.
+function cpPowerIsSpecial(c){return !!c&&(!!c.sl||c.colVis==="owned"||c.collectionVisibility==="ownedOnly"||!!(c.p&&(c.p.id==="ind"||c.p.ex||Number(c.p.esp)>0)))}
+const dkPanel=()=>{const d=dkv(),count=d.length,mode=["status","skills","all"].includes(window.CP_POWER_MODE)?window.CP_POWER_MODE:"status",exclude=!!window.CP_POWER_EXCLUDE_SPECIAL,labels={status:"Apenas status",skills:"Só habilidades",all:"Status + habilidades"},counted=d.filter(c=>!exclude||!cpPowerIsSpecial(c)),pow=Math.round(counted.reduce((n,c)=>n+(window.cpPowerScore?cpPowerScore(c,mode):Math.sqrt(Math.max(0,c.hp*c.atk))*mult(c)),0));return `${dkTabs()}<div class="dkh"><b>Deck de batalha<small>12 cartas diferentes · 1 de cada</small></b><span class="${count==12?"ok":""}">${count}/12</span></div><div class="cp-deck-power"><div><small>⚔ Poder · ${labels[mode]}</small><b>${counted.length?fmt(pow):"—"}</b><small>${counted.length} de ${count} cartas contabilizadas</small></div><label class="cp-deck-mode"><small>Critério do poder</small><select id="cpDeckPowerMode" aria-label="Critério do poder do deck"><option value="status"${mode==="status"?" selected":""}>Apenas status</option><option value="skills"${mode==="skills"?" selected":""}>Só habilidades</option><option value="all"${mode==="all"?" selected":""}>Status + habilidades</option></select></label><label class="cp-deck-exclude"><input type="checkbox" id="cpDeckPowerExcludeSpecial"${exclude?" checked":""}><span>Não contar cartas especiais</span></label></div><div class="dkg">${Array.from({length:12},(_,i)=>dkSlot(d[i],i)).join("")}</div><div class="two"><button class="bt gh" data-dk="auto">Preencher</button><button class="bt gh" data-dk="clear">Limpar</button></div>`};
 function dkBar(){const el=$("dka");if(!el)return;const c=DSEL&&byId(DSEL);el.hidden=!c;if(c)el.innerHTML=`<span><b>${c.n}</b> · Rank ${R[c.r][0]}</span><button class="bt" data-dk="use">Usar</button><button class="bt gh" data-dk="info">Ficha</button>`}
 function dkPaint(){
  const p=$("dkp");if(!p)return;if(DSEL&&!(S.inv[DSEL]>0))DSEL=null;
@@ -4395,19 +4406,19 @@ if(t.id=="ec"){QP=[];const h=$("hc");if(h&&t.value!="__"){h.value=t.value;try{hc
 else if(t.id=="qad"&&t.value){const v=t.value;let p;if(v[0]=="m")p={k:"m",i:+v.slice(1),n:hxEx[+v.slice(1)][0]};else{const a=ADM.ab.find(x=>x.id==v.slice(1));if(a)p={k:"l",id:a.id,n:a.n}}if(p)QP.push(p);t.value="";yPaint()}});
 ADM.cx=ADM.cx||{};[...new Set([...Object.keys(ADM.ca),...Object.keys(ADM.cx)])].forEach(i=>{const c=byId(i);if(!c)return;const k=c.sk||[];c.sk0=k;let l=Array.isArray(k[0])?k.slice():k.length?[k]:[];l=l.filter(a=>!(ADM.cx[i]||[]).includes(a[0]));(ADM.ca[i]||[]).forEach(id=>{const a=ADM.ab.find(x=>x.id==id);if(a)l.push([a.n,a.q?"“"+a.q+"”":"",dsc(a),{rc:a.rc,ef:a.ef,tr:a.tr,el:a.el,el2:a.el2,chargeMode:a.chargeMode,chargeTurns:a.chargeTurns}])});c.sk=l});
 function starterGo(){
- if(S.ini)return;
- const hasCards=Object.keys(S.inv||{}).some(id=>(+S.inv[id]||0)>0);
- if(!hasCards){
-  const eligible=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0&&cpCardCanDropFromPack(c)),byId=new Map(eligible.map(c=>[String(c.id),c])),picked=[],seen=new Set();
-  (Array.isArray(ADM.starterCards)?ADM.starterCards:[]).forEach(id=>{const c=byId.get(String(id));if(c&&!seen.has(String(c.id))&&picked.length<12){picked.push(c);seen.add(String(c.id))}});
-  // Configuração ausente/incompleta: completar com uma lista determinística, sem sorteio.
-  const fallback=eligible.filter(c=>c.r===0);
-  fallback.forEach(c=>{if(picked.length<12&&!seen.has(String(c.id))){picked.push(c);seen.add(String(c.id))}});
-  picked.forEach(c=>S.inv[c.id]=Math.max(1,+S.inv[c.id]||0));
-  S.opened=(S.opened||0)+2;
-  setTimeout(()=>toast(`🎴 Você ganhou <b>${picked.length} cartas iniciais fixas</b> e <b>2 pacotes de boas-vindas</b>!`),700);
- }
- S.ini=1;save();return true;
+ // iniV corrige saves antigos que receberam a marca de inicialização, mas não ganharam as 12 cartas do ADM.
+ if(Math.max(0,Number(S.iniV)||0)>=2)return false;
+ const firstStart=!(Number(S.ini)>0),eligible=ALL.filter(c=>c&&c.id&&c.p&&!c.p.ex&&!c.dr&&c.r===0&&cpCardCanDropFromPack(c)),byId=new Map(eligible.map(c=>[String(c.id),c])),picked=[],seen=new Set();
+ (Array.isArray(ADM.starterCards)?ADM.starterCards:[]).forEach(id=>{const c=byId.get(String(id));if(c&&!seen.has(String(c.id))&&picked.length<12){picked.push(c);seen.add(String(c.id))}});
+ // Configuração ausente/incompleta: completar com cartas F publicadas, de forma determinística.
+ eligible.forEach(c=>{if(picked.length<12&&!seen.has(String(c.id))){picked.push(c);seen.add(String(c.id))}});
+ // Não marca a entrega como concluída se o catálogo ainda não tiver as 12 cartas necessárias.
+ if(picked.length<12){console.warn(`Cartas iniciais: somente ${picked.length}/12 cartas Rank F válidas.`);return false}
+ picked.forEach(c=>{S.inv[c.id]=Math.max(1,+S.inv[c.id]||0)});
+ if(firstStart)S.opened=(S.opened||0)+2;
+ S.ini=1;S.iniV=2;save();
+ setTimeout(()=>toast(firstStart?`🎴 Você ganhou <b>12 cartas iniciais fixas</b> e <b>2 pacotes de boas-vindas</b>!`:`🎴 Suas <b>12 cartas iniciais do ADM</b> foram conferidas e desbloqueadas!`),700);
+ return true;
 }
 window.cpStarterGo=()=>{const granted=starterGo();if(granted){try{render(1)}catch(e){console.warn("render cartas iniciais",e)}}return granted};
 const imgOK=(file,cb)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const lim=CONFIG.imgKB*1024,cv=document.createElement("canvas"),x=cv.getContext("2d");let mm="image/webp";if(cv.toDataURL(mm).slice(5,15)!="image/webp")mm="image/jpeg";for(const w of[600,520,440,360,300]){cv.width=w;cv.height=w*4/3;const k=Math.max(w/im.width,cv.height/im.height);x.fillStyle="#111";x.fillRect(0,0,w,cv.height);x.drawImage(im,(w-im.width*k)/2,(cv.height-im.height*k)/2,im.width*k,im.height*k);for(let q=.9;q>.3;q-=.1){const u=cv.toDataURL(mm,q);if(u.length*.75<=lim)return cb(u)}}cb(cv.toDataURL("image/jpeg",.3))};im.onerror=()=>cb(null);im.src=r.result};r.readAsDataURL(file)};
@@ -4872,14 +4883,26 @@ function cpPowerScore(c,mode){
  if(mode==="all")return status*(1+Math.min(.8,skills*.10));
  return status;
 }
+function cpPowerRanking(c,mode,excludeSpecial){
+ const rows=ALL.filter(x=>x&&!x.dr&&(!excludeSpecial||!cpPowerIsSpecial(x))).map(x=>{const score=Number(cpPowerScore(x,mode));return{id:String(x.id),score:Number.isFinite(score)?score:0}});
+ rows.sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id));
+ let max=0;rows.forEach(x=>{if(x.score>max)max=x.score});
+ const index=rows.findIndex(x=>x.id===String(c&&c.id)),position=index<0?0:rows.findIndex(x=>x.score===rows[index].score)+1,tied=index<0?0:rows.filter(x=>x.score===rows[index].score).length;
+ return{position,total:rows.length,max,tied};
+}
 function stp(c,n){
  const m=mult(c),hp=Math.round(c.hp*m),dn=Math.round(c.atk*m),top=ST[Math.min(window.CPREF==null?ST.length-1:window.CPREF,ST.length-1)]||ST[0],maxLevel=1+gain(c)*mxLv(c),hpMax=Math.max(1,top[0]*maxLevel),dnMax=Math.max(1,top[1]*maxLevel),
  barPct=(value,maximum)=>Math.max(value>0?1.2:0,Math.min(100,value/maximum*100)),
  stat=(icon,label,value,base,maximum)=>`<div class="cp-sheet-stat"><div class="cp-sheet-stat-top"><span>${icon} ${label}</span><b>${value}</b></div><div class="cp-sheet-stat-track" role="img" aria-label="${label}: ${value}; escala comum entre todos os ranks até ${Math.round(maximum)}"><i style="width:${barPct(value,maximum).toFixed(1)}%"></i></div><small>Base ${base}${value>base?` · <strong>+${value-base}</strong> do nível`:""} · escala global até SSS ${Math.round(maximum)}</small></div>`,
  els=elEls(c),elementNames=els.map(k=>(EL[k]||EL.normal)+" "+(ELN[k]||"Normal")).join(" / "),
  elementPanel=`<details class="cp-sheet-elements" open><summary><span>Elementos e relações</span><b>${elementNames}</b></summary><div class="cp-sheet-el-body"><button type="button" class="cp-guide-link small" data-cp-el-guide="1">Abrir guia de elementos</button>${elRelationsHTML(c)}</div></details>`,
- packName=(c.p&&c.p.e?c.p.e+" ":"")+(c.p&&c.p.n||"Carta especial");
- return `${(()=>{try{return window.cpRefSel(R.map((r,k)=>{const t=ST[Math.min(k,ST.length-1)]||ST[0];return[r[0],Math.max(1,t[0]*maxLevel),Math.max(1,t[1]*maxLevel)]}))}catch(e){return""}})()}<div class="cp-sheet-stats">${stat("❤","Vida",hp,c.hp,hpMax)}${stat("⚔","Dano",dn,c.atk,dnMax)}</div><p class="cp-stat-scale-note">Barras comparáveis entre todos os ranks · referência: SSS no nível máximo</p><div class="cp-sheet-origin"><span>Pacote</span><b>${packName}</b></div>${elementPanel}`;
+ packName=(c.p&&c.p.e?c.p.e+" ":"")+(c.p&&c.p.n||"Carta especial"),
+ powerMode=["status","skills","all"].includes(window.CP_POWER_MODE)?window.CP_POWER_MODE:"status",excludeSpecial=!!window.CP_POWER_EXCLUDE_SPECIAL,
+ power=cpPowerScore(c,powerMode),powerRank=cpPowerRanking(c,powerMode,excludeSpecial),powerPct=powerRank.max>0?Math.max(0,Math.min(100,power/powerRank.max*100)):0,
+ powerRankText=powerRank.position?(powerRank.tied>1?`${powerRank.position}ª posição · empate entre ${powerRank.tied} cartas`:`${powerRank.position}ª mais forte · ${powerRank.total} cartas no ranking`):excludeSpecial&&cpPowerIsSpecial(c)?"Carta especial · fora do ranking filtrado":"Sem posição no ranking",
+ powerLabels={status:"Apenas status",skills:"Só habilidades",all:"Status + habilidades"},
+ powerPanel=`<section class="cp-sheet-power"><div class="cp-sheet-power-head"><div><small>⚡ PODER DA CARTA · ${powerLabels[powerMode]}</small><b>${Math.round(power).toLocaleString("pt-BR")}</b></div><strong>${powerRankText}</strong></div><div class="cp-sheet-power-track" role="img" aria-label="Poder ${Math.round(power)} de referência ${Math.round(powerRank.max)}"><i style="width:${powerPct.toFixed(1)}%"></i></div><div class="cp-sheet-power-meta">${excludeSpecial?"Cartas especiais ignoradas no ranking":"Todas as cartas publicadas entram no ranking"}</div><div class="cp-sheet-power-controls"><label>Critério do poder<select id="cpPowerMode" aria-label="Critério do poder da carta"><option value="status"${powerMode==="status"?" selected":""}>Apenas status</option><option value="skills"${powerMode==="skills"?" selected":""}>Só habilidades</option><option value="all"${powerMode==="all"?" selected":""}>Status + habilidades</option></select></label><label class="cp-power-check"><input type="checkbox" id="cpPowerExcludeSpecial"${excludeSpecial?" checked":""}><span>Não contar cartas especiais</span></label></div></section>`;
+ return `${(()=>{try{return window.cpRefSel(R.map((r,k)=>{const t=ST[Math.min(k,ST.length-1)]||ST[0];return[r[0],Math.max(1,t[0]*maxLevel),Math.max(1,t[1]*maxLevel)]}))}catch(e){return""}})()}${powerPanel}<div class="cp-sheet-stats">${stat("❤","Vida",hp,c.hp,hpMax)}${stat("⚔","Dano",dn,c.atk,dnMax)}</div><p class="cp-stat-scale-note">Barras de status comparáveis entre ranks · referência: SSS no nível máximo</p><div class="cp-sheet-origin"><span>Pacote</span><b>${packName}</b></div>${elementPanel}`;
 }
 
 
@@ -5013,12 +5036,12 @@ cfg.addEventListener("input",e=>{const i=e.target.id;if(e.target.closest("#ds_v"
 /* Arquivo-fonte: assets/js/18-ai-card-import.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 18-ai-card-import.js
- * Papel: Importação visual de fichas IA v3, lotes de cartas e formatos legados.
+ * Papel: Importação de fichas textuais padronizadas, com suporte a várias cartas por envio.
  * Origem: bloco inline 12 do HTML de entrada.
  * Ordem de carregamento obrigatória; ver assets/manifest.json.
  */
 
-// ===== v3.0 (27/11/2026): ficha visual IA v3 + importação de JSON em lote; mantém compatibilidade v2 e texto legado =====
+// ===== v4.0 (27/11/2026): formato textual único; remove importação JSON e compatibilidade com fichas antigas =====
 (()=>{try{
 const E=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
 N=s=>String(s==null?"":s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(),
@@ -5037,17 +5060,17 @@ const TY={dano:"d",dano_percentual:"dp",dano_fixo:"dv",dano_vida_atual:"dh",golp
  veneno:"po",sangramento:"bl",marcar:"mk",marca:"mk",marcar_alvo:"mk",vulnerabilizar:"mk",atordoar:"st",silenciar:"cu",desarmar:"dz",atrasar_habilidades:"ci",dissipar:"di",
  recarga:"cd",acao_extra:"ac",comprar:"dr",recuar:"bk",convocar:"pl",devolver_baralho:"rd",descartar_reserva:"dc",queimar_baralho:"mm"};
 const TA={si:"s",si_mesma:"s",propria_carta:"s",a_propria_carta:"s",inimigo:"e",um_inimigo:"e",todos_inimigos:"E",todos_os_inimigos:"E",inimigos:"E",
- aliado:"a",um_aliado:"a",todos_aliados:"A",todos_os_aliados:"A",aliados:"A",inimigo_aleatorio:"r",inimigo_menos_vida:"w",inimigo_mais_fraco:"w",
- inimigo_mais_vida:"x",inimigo_mais_forte:"x",aliado_aleatorio:"q",aliado_menos_vida:"m",aliado_mais_fraco:"m",outros_aliados:"o",todas_cartas:"T",todas_as_cartas:"T"};
+ aliado:"a",um_aliado:"a",todos_aliados:"A",todos_os_aliados:"A",aliados:"A",inimigo_aleatorio:"r",inimigo_menos_vida:"w",inimigo_com_menos_vida:"w",inimigo_mais_fraco:"w",
+ inimigo_mais_vida:"x",inimigo_com_mais_vida:"x",inimigo_mais_forte:"x",aliado_aleatorio:"q",aliado_menos_vida:"m",aliado_com_menos_vida:"m",aliado_mais_fraco:"m",outros_aliados:"o",todas_cartas:"T",todas_as_cartas:"T"};
 const CAN={s:"si",e:"inimigo",E:"todos_inimigos",a:"aliado",A:"todos_aliados",r:"inimigo_aleatorio",w:"inimigo_menos_vida",x:"inimigo_mais_vida",q:"aliado_aleatorio",m:"aliado_menos_vida",o:"outros_aliados",T:"todas_cartas"};
-const CDM={alvo_vida_ate:"tl",alvo_vida_baixa:"tl",alvo_vida_acima:"th",eu_vida_ate:"ul",eu_vida_baixa:"ul",eu_vida_acima:"uh",alvo_envenenado:"pz",alvo_com_debuff:"bd",alvo_com_buff:"bg",vantagem_elemento:"el",menos_vidas:"pe",mais_vidas:"ga"};
+const CDM={alvo_vida_ate:"tl",alvo_vida_baixa:"tl",alvo_vida_acima:"th",eu_vida_ate:"ul",eu_vida_baixa:"ul",eu_vida_acima:"uh",alvo_envenenado:"pz",alvo_com_debuff:"bd",alvo_com_buff:"bg",vantagem_elemento:"el",vantagem_elemental:"el",vantagem_do_elemento:"el",menos_vidas:"pe",mais_vidas:"ga"};
 const PA={m:"m",mult:"m",multiplicador:"m",p:"p",pct:"p",porcentagem:"p",percentual:"p","%":"p",n:"n",turnos:"n",turno:"n",golpes:"n",duracao:"n",v:"v",valor:"v",vidas:"v",cartas:"v",acoes:"v",quantidade:"v",o:"o",poupar:"o",x:"x",elemento:"x",y:"y",elemento_2:"y",segundo_elemento:"y"};
 const LB={nome:"n",rank:"r",raridade:"r",elemento:"el",elemento2:"el2",elemento_2:"el2",segundo_elemento:"el2",selo:"sl",tribo:"tb",familia:"tb",grupo:"tb",vida:"hp",hp:"hp",dano:"atk",ataque:"atk",atk:"atk",historia:"d",frase:"q",quando:"tr",gatilho:"tr",recarga:"rc",chance:"ch",pacote:"pk",tipo:"tp"};
 const HURT=new Set(["d","dp","dv","dh","mh","ex","po","bl","st","cu","dz","ci","di","rd"]),HELP=new Set(["h","hv","rg","sh","ev","cr","im","tn","pu","ls","rf","rv"]),
  ENM=new Set(["e","E","r","w","x"]),ALY=new Set(["s","a","A","q","m","o"]),SIGN=new Set(["at","df","mx"]),BIGP=new Set(["rv","lf","ac","pl","ex","lx","im","dc","mm","rd"]);
 const LIM={m:[.1,6],p:[-100,300],n:[1,10],v:[0,5000]},VL={dr:[1,3],lx:[1,2],lf:[1,2],ac:[1,2],pl:[1,3],dc:[1,3],mm:[1,5],cd:[0,6],ci:[1,5],dv:[1,2000],hv:[1,2000]};
-// Ficha IA v2: faixas oficiais para cartas novas. Saves e fichas antigas mantêm seus valores.
-const CP_CARD_V2_FORMAT="COLECAO_PRIMATA_CARD",CP_CARD_V2_RANGES=[
+// Faixas oficiais de Vida e Dano para cartas novas.
+const CARD_STAT_RANGES=[
  {hp:[100,180],atk:[10,30]},  // F
  {hp:[130,220],atk:[20,40]},  // E
  {hp:[170,270],atk:[30,55]},  // D
@@ -5074,7 +5097,7 @@ function cl(x,k,t,L,wa,nm){
  if(y!==x)wa.push(`${L}${nm}=${x} fora do limite (${lo} a ${hi}): usei ${y}.`);
  return y}
 
-// ---- uma linha de efeito:  nome | alvo=... | mult=... | se=... | limite=... | prob=...
+// ---- tradução interna de efeito para o motor de batalha (não é o formato exibido ao jogador)
 function pEf(s,ln,er,wa){
  const L=`Linha ${ln}: `,parts=String(s).split("|").map(x=>x.trim()).filter(Boolean);
  if(!parts.length){er.push(L+"efeito vazio.");return null}
@@ -5123,7 +5146,7 @@ function pEf(s,ln,er,wa){
  if(t=="ex"&&!e.co)wa.push(`${L}eliminar sem condição elimina SEMPRE: use se=alvo_vida_ate e limite.`);
  return e}
 
-// ---- uma ficha (linhas já separadas) → carta pronta + erros + avisos
+// ---- valida uma carta normalizada e converte seus campos para o motor interno
 function parseSheet(sh,opt={}){
  const er=[],wa=[],card={},abs=[];let ab=null,st=null;
  const E_=(ln,m)=>er.push((ln?`Linha ${ln}: `:"")+m),W_=(ln,m)=>wa.push((ln?`Linha ${ln}: `:"")+m);
@@ -5158,28 +5181,28 @@ function parseSheet(sh,opt={}){
  c.sl="";if(card.sl!==undefined){const n=SL(card.sl);if(n&&!/^(nenhum|nenhuma|sem|nao_tem|vazio|nada|nulo)$/.test(n)){if(has(SLS,n))c.sl=n;else W_(card.$sl,`Selo "${card.sl}" não existe: deixei sem selo.`)}}
  const base=ST[ri],bd=(+CONFIG.faixa>=0?+CONFIG.faixa:15)/100;
  [["hp","Vida",0],["atk","Dano",1]].forEach(([k,nm,i])=>{
-  const band=opt.v2?CP_CARD_V2_RANGES[ri][k]:null;
+  const band=opt.strict?CARD_STAT_RANGES[ri][k]:null;
   const lo=band?band[0]:Math.round(base[i]*(1-bd)),hi=band?band[1]:Math.round(base[i]*(1+bd));
   if(card[k]===undefined||card[k]===""){
    c[k]=base[i];
-   if(opt.v2)E_(0,`ficha v2 sem ${nm}: este campo é obrigatório.`);
+   if(opt.strict)E_(0,`ficha sem ${nm}: este campo é obrigatório.`);
    else W_(0,`sem ${nm}: usei o padrão do rank (${base[i]}).`);
    return
   }
   let x=num(card[k]);
-  if(isNaN(x)){if(opt.v2)E_(card["$"+k],`${nm} "${card[k]}" não é número.`);else W_(card["$"+k],`${nm} "${card[k]}" não é número: usei ${base[i]}.`);c[k]=base[i];return}
+  if(isNaN(x)){if(opt.strict)E_(card["$"+k],`${nm} "${card[k]}" não é número.`);else W_(card["$"+k],`${nm} "${card[k]}" não é número: usei ${base[i]}.`);c[k]=base[i];return}
   x=Math.round(x);
   if(x<lo||x>hi){const y=Math.min(hi,Math.max(lo,x));
    const msg=`${nm} ${x} fora da faixa do rank ${R[ri][0]} (${lo} a ${hi}).`;
-   if(opt.v2)E_(card["$"+k],msg+` Use um valor entre ${lo} e ${hi}.`);else W_(card["$"+k],msg+` Usei ${y}.`);
+   if(opt.strict)E_(card["$"+k],msg+` Use um valor entre ${lo} e ${hi}.`);else W_(card["$"+k],msg+` Usei ${y}.`);
    x=y
   }
   c[k]=x});
  c.d=txt(card.d,700,m=>W_(card.$d,m),"História");
- if(!c.d){if(opt.v2)E_(0,"ficha v2 sem História: este campo é obrigatório.");else W_(0,"sem História.")}
+ if(!c.d){if(opt.strict)E_(0,"ficha sem História: este campo é obrigatório.");else W_(0,"sem História.")}
  // ---- habilidades
- if(!abs.length){if(opt.v2)E_(0,"ficha v2 sem habilidades: inclua pelo menos 1.");else W_(0,"a ficha não tem nenhuma habilidade.")}
- if(abs.length>4){if(opt.v2)E_(0,`a ficha tem ${abs.length} habilidades; o limite é 4.`);else W_(0,`a ficha tem ${abs.length} habilidades: usei só as 4 primeiras.`)}
+ if(!abs.length){if(opt.strict)E_(0,"ficha sem habilidades: inclua pelo menos 1.");else W_(0,"a ficha não tem nenhuma habilidade.")}
+ if(abs.length>4){if(opt.strict)E_(0,`a ficha tem ${abs.length} habilidades; o limite é 4.`);else W_(0,`a ficha tem ${abs.length} habilidades: usei só as 4 primeiras.`)}
  abs.slice(0,4).forEach(a=>{
   const lb=`Habilidade ${a.i}`,o={};
   o.n=txt(a.n,28,m=>W_(a.ln,m),lb+" · nome");
@@ -5194,196 +5217,217 @@ function parseSheet(sh,opt={}){
    o.rc=x}else o.rc=3;
   o.ef=[];
   if(!a.ef.length)E_(a.ln,`${lb}: falta ao menos 1 Efeito.`);
-  if(a.ef.length>6){if(opt.v2)E_(a.ln,`${lb}: tem ${a.ef.length} efeitos; o limite é 6.`);else W_(a.ln,`${lb}: tem ${a.ef.length} efeitos (muitos): usei os 6 primeiros.`)}
-  a.ef.slice(0,6).forEach(([ln,s])=>{const w0=wa.length,e=pEf(s,ln,er,wa);if(opt.v2&&wa.length>w0){const fresh=wa.slice(w0),hard=fresh.filter(x=>/fora do limite|prob .*inválida|sem "limite"/i.test(x));if(hard.length){for(let j=wa.length-1;j>=w0;j--)if(hard.includes(wa[j]))wa.splice(j,1);hard.forEach(x=>er.push(x))}}if(e)o.ef.push(e)});
+  if(a.ef.length>6){if(opt.strict)E_(a.ln,`${lb}: tem ${a.ef.length} efeitos; o limite é 6.`);else W_(a.ln,`${lb}: tem ${a.ef.length} efeitos (muitos): usei os 6 primeiros.`)}
+  a.ef.slice(0,6).forEach(([ln,s])=>{const w0=wa.length,e=pEf(s,ln,er,wa);if(opt.strict&&wa.length>w0){const fresh=wa.slice(w0),hard=fresh.filter(x=>/fora do limite|prob .*inválida|sem "limite"/i.test(x));if(hard.length){for(let j=wa.length-1;j>=w0;j--)if(hard.includes(wa[j]))wa.splice(j,1);hard.forEach(x=>er.push(x))}}if(e)o.ef.push(e)});
   if(a.el!==undefined&&String(a.el).trim()){const rawEl=SL(a.el);if(["carta","da_carta","vazio"].includes(rawEl)){/* herda o elemento da carta */}else{const se=elKey(a.el);if(!se)E_(a.$el,`${lb}: elemento de habilidade "${a.el}" desconhecido. Use Normal, carta ou um dos 20 elementos.`);else if(se!=="carta")o.el=se}}
   if(a.el2!==undefined&&String(a.el2).trim()){const se=elKey(a.el2);if(!o.el||o.el==="normal"||!se||se==="normal"||se===o.el)W_(a.$el2,`${lb}: segundo elemento inválido ou incompatível; ignorei.`);else o.el2=se}
   if(o.tr)o.ef.forEach(e=>{if(BIGP.has(e.t))W_(a.ln,`${lb}: ${FX[e.t].n} em habilidade passiva (sem recarga) costuma desequilibrar o jogo.`)});
   c.abs.push(o)});
  return{card:c,er,wa}}
 
-// ---- Ficha IA v2 (JSON estruturado) + compatibilidade com fichas antigas em texto
-function cpV2Error(message){return{sheets:[{card:{n:"Ficha inválida",r:0,hp:ST[0][0],atk:ST[0][1],abs:[]},er:[message],wa:[]}],ok:false}}
-function cpV2Text(v){return String(v==null?"":v).replace(/[\r\n]+/g," ").replace(/[\u0000-\u001f]/g," ").trim()}
-function cpV2MakeSheet(obj){
- const lines=[],extra=[];let ln=1;const add=(k,v)=>{if(v!==undefined&&v!==null&&String(v)!=="")lines.push([ln++,k+": "+cpV2Text(v)])};
- const rank=cpV2Text(obj.rank||obj.r);if(!rank)extra.push("Rank é obrigatório.");else if(rk(rank)<0)extra.push(`Rank "${rank}" não existe. Use F, E, D, C, B, A, S, SS ou SSS.`);
- const cardName=cpV2Text(obj.name??obj.nome);if(cardName.length>32)extra.push("Nome da carta excede 32 caracteres.");
- const storyText=cpV2Text(obj.story??obj.historia);if(!storyText)extra.push("História é obrigatória.");else if(storyText.length>700)extra.push("História excede 700 caracteres.");
- const synergyObj=obj.synergy&&typeof obj.synergy==="object"?obj.synergy:null;
- const synergyText=typeof obj.synergy==="string"?obj.synergy:synergyObj?(synergyObj.group??synergyObj.tribe??synergyObj.name??""):"";
- const tribeText=cpV2Text(obj.tribe??obj.tribo??synergyText);if(tribeText.length>24)extra.push("Tribo/sinergia excede 24 caracteres.");
- if(synergyObj&&synergyObj.enabled===true&&!tribeText)extra.push("Sinergia ativada sem grupo. Informe synergy.group com o nome da tribo/família.");
- const sealText=cpV2Text(obj.seal??obj.selo);if(sealText&&!has(SLS,SL(sealText)))extra.push(`Selo "${sealText}" não existe. Use amigo, especial, secreta, evento ou vazio.`);
- const stats=obj.stats&&typeof obj.stats==="object"?obj.stats:{};
- const hp=stats.hp??stats.life??obj.hp,atk=stats.attack??stats.atk??stats.damage??obj.atk;
- if(hp===undefined||hp===null||hp==="")extra.push("Vida é obrigatória em stats.hp.");
- if(atk===undefined||atk===null||atk==="")extra.push("Dano é obrigatório em stats.attack.");
- const rawEls=Array.isArray(obj.elements)?obj.elements:(Array.isArray(obj.elementos)?obj.elementos:(obj.element?[obj.element]:[]));
- const els=rawEls.map(x=>elKey(x)).filter(Boolean);
- if(rawEls.length<1)extra.push('Informe elements com "normal" ou um elemento do catálogo.');
- if(rawEls.length>2)extra.push("A carta aceita no máximo dois elementos.");
- if(rawEls.some(x=>!elKey(x)||elKey(x)==="carta"))extra.push("Um dos elementos da carta não existe no catálogo.");
- if(els.length===2&&(els[0]==="normal"||els[1]==="normal"||els[0]===els[1]))extra.push("Normal só pode existir sozinho e os dois elementos não podem ser iguais.");
- lines.push([ln++,"FICHA DE CARTA"]);add("Nome",obj.name??obj.nome);add("Rank",rank);
- if(els[0])add("Elemento",els[0]);if(els[1])add("Elemento 2",els[1]);
- add("Vida",hp);add("Dano",atk);add("Tribo",tribeText);add("Selo",obj.seal??obj.selo);add("História",obj.story??obj.historia);
- const skills=Array.isArray(obj.skills)?obj.skills:(Array.isArray(obj.abilities)?obj.abilities:[]);
- if(skills.length<1)extra.push("Inclua pelo menos uma habilidade em skills.");
- if(skills.length>4)extra.push("O jogo aceita no máximo quatro habilidades por carta.");
- skills.forEach((sk,i)=>{
-  if(!sk||typeof sk!=="object"){extra.push(`Habilidade ${i+1} precisa ser um objeto.`);return}
-  const skillName=cpV2Text(sk.name??sk.nome),skillQuote=cpV2Text(sk.quote??sk.phrase??sk.frase);
-  add(`Habilidade ${i+1}`,skillName);
-  if(!skillName)extra.push(`Habilidade ${i+1} está sem nome.`);else if(skillName.length>28)extra.push(`Habilidade ${i+1}: o nome excede 28 caracteres.`);
-  add("Frase",skillQuote);
-  if(!skillQuote)extra.push(`Habilidade ${i+1}: a frase/descrição é obrigatória.`);else if(skillQuote.length>120)extra.push(`Habilidade ${i+1}: a frase excede 120 caracteres.`);
-  const trigger=sk.trigger??sk.when??sk.quando;
-  if(!cpV2Text(trigger))extra.push(`Habilidade ${i+1} está sem trigger.`);else add("Quando",trigger);
-  const tr=trg(trigger||"");
-  const cooldown=sk.cooldown??sk.recarga;
-  if(tr==="u"&&(cooldown===undefined||cooldown===null||cooldown===""))extra.push(`Habilidade ${i+1}: informe cooldown de 1 a 8 para habilidade ativa.`);
-  if(tr==="u"&&cooldown!==undefined&&cooldown!==null&&cooldown!==""&&(!Number.isInteger(+cooldown)||+cooldown<1||+cooldown>8))extra.push(`Habilidade ${i+1}: cooldown precisa ser inteiro de 1 a 8.`);
-  if(cooldown!==undefined&&cooldown!==null&&cooldown!=="")add("Recarga",cooldown);
-  const se=Array.isArray(sk.elements)?sk.elements:(Array.isArray(sk.elementos)?sk.elementos:(sk.element?[sk.element]:[]));
-  if(se.length>2)extra.push(`Habilidade ${i+1}: no máximo dois elementos próprios.`);
-  const norm=se.map(x=>String(x).toLowerCase()==="card"?"carta":elKey(x)||x);
-  if(norm.length===1&&norm[0]!=="carta"&&!elKey(norm[0]))extra.push(`Habilidade ${i+1}: elemento próprio não existe no catálogo.`);
-  if(norm.length===1&&norm[0]!=="carta")add("Elemento",norm[0]);
-  if(norm.length===2){
-   if(norm.some(x=>!elKey(x)||elKey(x)==="carta")||norm[0]==="normal"||norm[1]==="normal"||norm[0]===norm[1])extra.push(`Habilidade ${i+1}: elementos próprios inválidos.`);
-   else{add("Elemento",norm[0]);add("Elemento 2",norm[1])}
-  }
-  const effects=Array.isArray(sk.effects)?sk.effects:(Array.isArray(sk.efeitos)?sk.efeitos:[]);
-  if(effects.length<1)extra.push(`Habilidade ${i+1}: inclua pelo menos um efeito.`);
-  if(effects.length>6)extra.push(`Habilidade ${i+1}: o limite é seis efeitos.`);
-  effects.forEach((ef,j)=>{
-   if(!ef||typeof ef!=="object"){extra.push(`Habilidade ${i+1}, efeito ${j+1}: formato inválido.`);return}
-   const type=cpV2Text(ef.type??ef.tipo??ef.effect);if(!type){extra.push(`Habilidade ${i+1}, efeito ${j+1}: informe type.`);return}
-   let row=type;
-   const target=cpV2Text(ef.target),typeKey=SL(type),typeCode=has(FX,typeKey)?typeKey:(has(TY,typeKey)?TY[typeKey]:"");
-   const targetless=new Set(["dr","lx","rv","lf","ac","pl","dc","mm","elself"]);
-   if(!target&&typeCode&&!targetless.has(typeCode))extra.push(`Habilidade ${i+1}, efeito ${j+1}: informe target usando um código válido.`);
-   if(target)row+=` | alvo=${target}`;
-   const params=ef.params&&typeof ef.params==="object"?ef.params:(ef.parameters&&typeof ef.parameters==="object"?ef.parameters:{});
-   Object.entries(params).forEach(([k,v])=>{if(v!==undefined&&v!==null&&v!=="")row+=` | ${cpV2Text(k)}=${cpV2Text(v)}`});
-   const cond=ef.condition??ef.condicao;if(cond)row+=` | se=${cpV2Text(cond)}`;
-   const limit=ef.limit??ef.limite;if(limit!==undefined&&limit!==null&&limit!=="")row+=` | limite=${cpV2Text(limit)}`;
-   if(["tl","th","ul","uh"].includes(SL(cond||""))&&(limit===undefined||limit===null||limit===""))extra.push(`Habilidade ${i+1}, efeito ${j+1}: condition ${cond} exige limit de 1 a 99.`);
-   const chance=ef.chance??ef.probability;if(chance!==undefined&&chance!==null&&chance!=="")row+=` | prob=${cpV2Text(chance)}`;
-   lines.push([ln++,"Efeito: "+row]);
-   const t=SL(type),code=has(FX,t)?t:(has(TY,t)?TY[t]:"");
-   if(!code)extra.push(`Habilidade ${i+1}, efeito ${j+1}: type "${type}" não existe no motor atual.`);
-   if(ef.chance!==undefined&&ef.chance!==null&&ef.chance!==""&&(!Number.isFinite(+ef.chance)||+ef.chance<=0||+ef.chance>=100))extra.push(`Habilidade ${i+1}, efeito ${j+1}: chance deve ser de 1 a 99; omita o campo para 100%.`);
-   if(code==="ex"&&!cond)extra.push(`Habilidade ${i+1}, efeito ${j+1}: hitkill exige condition para limitar a execução.`);
-  });
+// ===== NOVO PADRÃO ÚNICO: ficha textual organizada (sem JSON e sem formatos legados) =====
+const cpImportError=message=>({
+ sheets:[{card:{n:"Ficha inválida",r:0,hp:ST[0][0],atk:ST[0][1],abs:[]},er:[message],wa:[]}],
+ ok:false
+});
+const cpLineKey=s=>SL(s).replace(/_/g,"_");
+const cpStartCard=s=>/^={2,}\s*carta(?:\s+\d+)?\s*={2,}$/i.test(s.trim());
+const cpEndCard=s=>/^={2,}\s*fim\s+da\s+carta\s*={2,}$/i.test(s.trim());
+const cpMarker=s=>s.trim().replace(/^\[\s*|\s*\]$/g,"").replace(/:$/," ").trim().replace(/\s+/g," ");
+const cpDecorative=s=>!s.trim()||/^[\s=*_#\-–—━─·•]+$/.test(s.trim());
+const cpPair=s=>{const m=s.match(/^\s*([^:：]{1,42}?)\s*[:：]\s*(.*?)\s*$/);return m?{key:cpLineKey(m[1]),value:m[2].trim()}:null};
+
+function cpEffectExpression(effect,skillNo,effectNo,er){
+ const ln=effect.ln||0, prefix=`Habilidade ${skillNo}, efeito ${effectNo}`;
+ const type=String(effect.type||"").trim();
+ if(!type){er.push(`${prefix}: falta o campo Tipo.`);return null}
+ const key=SL(type),code=has(FX,key)?key:(has(TY,key)?TY[key]:null);
+ if(!code){er.push(`${prefix}: o efeito "${type}" não existe no jogo. Consulte os tipos disponíveis no PDF.`);return null}
+ const def=FX[code],parts=[type];
+ const add=(k,v)=>{if(v!==undefined&&v!==null&&String(v).trim()!=="")parts.push(`${k}=${String(v).trim()}`)};
+ add("alvo",effect.target);
+ const params=Array.isArray(def.f)?def.f.map(x=>x[0]):[];
+ const firstParam=()=>params.includes("m")?"mult":params.includes("p")?"pct":params.includes("v")?"valor":params.includes("n")?"turnos":null;
+ Object.entries(effect).forEach(([k,v])=>{
+  if(v==null||String(v).trim()===""||k==="ln"||k==="type"||k==="target"||k==="condition"||k==="limit"||k==="chance"||k[0]==="$" )return;
+  let dest=null;
+  if(k==="power"||k==="intensity")dest=firstParam();
+  else if(k==="mult")dest="mult";
+  else if(k==="pct")dest="pct";
+  else if(k==="value")dest="valor";
+  else if(k==="turns")dest="turnos";
+  else if(k==="hits")dest="golpes";
+  else if(k==="quantity")dest=params.includes("v")?"valor":params.includes("n")?"turnos":null;
+  else if(k==="lives")dest="vidas";
+  else if(k==="cards")dest="cartas";
+  else if(k==="actions")dest="acoes";
+  else if(k==="element")dest="elemento";
+  else if(k==="element2")dest="elemento_2";
+  else if(k==="preserve")dest="poupar";
+  if(!dest){er.push(`${prefix}: o campo adicional "${k}" não é reconhecido.`);return}
+  add(dest,v)
  });
- const parsed=parseSheet({lines},{v2:true});
- skills.slice(0,4).forEach((sk,i)=>{
-  const charge=sk&&sk.charge&&typeof sk.charge==="object"?sk.charge:null;
-  const mode=sk&&(sk.chargeMode??(charge&&charge.mode));
-  const turns=sk&&(sk.chargeTurns??(charge&&charge.turns));
-  if(mode==null||mode==="")return;
-  const tr=trg(sk.trigger??sk.when??sk.quando??"");
-  if(!["same","turns"].includes(String(mode))){extra.push(`Habilidade ${i+1}: chargeMode deve ser "same" ou "turns".`);return}
-  if(tr!=="u"){extra.push(`Habilidade ${i+1}: carga só pode ser usada em habilidade ativa (trigger "ativa").`);return}
-  if(mode==="turns"&&(!Number.isInteger(+turns)||+turns<1||+turns>6)){extra.push(`Habilidade ${i+1}: chargeTurns precisa ser inteiro de 1 a 6.`);return}
-  const target=parsed.card&&parsed.card.abs&&parsed.card.abs[i];
-  if(target){target.chargeMode=String(mode);target.chargeTurns=mode==="turns"?Math.floor(+turns):1}
- });
- parsed.er.unshift(...extra);
- return parsed;
+ if(effect.condition){
+  let cond=SL(effect.condition);
+  const human={
+   alvo_com_vida_ate_x:"alvo_vida_ate","alvo_com_vida_ate_x%":"alvo_vida_ate",alvo_com_vida_ate_x_porcento:"alvo_vida_ate",alvo_com_vida_abaixo_de_x:"alvo_vida_ate","alvo_com_vida_abaixo_de_x%":"alvo_vida_ate",alvo_com_vida_abaixo_de_x_porcento:"alvo_vida_ate",
+   alvo_com_vida_acima_de_x:"alvo_vida_acima","alvo_com_vida_acima_de_x%":"alvo_vida_acima",alvo_com_vida_acima_de_x_porcento:"alvo_vida_acima",
+   minha_vida_ate_x:"eu_vida_ate","minha_vida_ate_x%":"eu_vida_ate",minha_vida_ate_x_porcento:"eu_vida_ate",minha_vida_abaixo_de_x:"eu_vida_ate",
+   minha_vida_acima_de_x:"eu_vida_acima","minha_vida_acima_de_x%":"eu_vida_acima",minha_vida_acima_de_x_porcento:"eu_vida_acima",
+   alvo_envenenado_ou_sangrando:"alvo_envenenado",alvo_com_veneno_ou_sangramento:"alvo_envenenado",
+   ter_menos_vidas:"menos_vidas",ter_mais_vidas:"mais_vidas",estou_com_menos_vidas:"menos_vidas",estou_com_mais_vidas:"mais_vidas"
+  };
+  cond=human[cond]||cond;
+  add("se",cond);
+ }
+ add("limite",effect.limit);
+ add("prob",effect.chance);
+ return parts.join(" | ");
 }
-// Ficha IA v3: formato mais legível, sem alterar o formato interno do jogo.
-// O tradutor converte o JSON v3 para a mesma validação/motor da ficha v2.
-function cpV3MakeSheet(obj){
- const o=obj&&typeof obj==="object"?obj:{},skillsIn=Array.isArray(o.skills)?o.skills:(Array.isArray(o.abilities)?o.abilities:[]),sy=o.synergy&&typeof o.synergy==="object"?o.synergy:null;
- const tribe=o.tribe??o.tribo??(typeof o.synergy==="string"?o.synergy:sy?(sy.group??sy.tribe??sy.name):undefined);
- const rawElements=Array.isArray(o.elements)?o.elements:(Array.isArray(o.elementos)?o.elementos:(o.element!=null?[o.element]:[]));
- const skillAlias={active:"ativa",manual:"ativa",enter:"entrar_em_campo",enter_field:"entrar_em_campo",on_enter:"entrar_em_campo",death:"morrer",on_death:"morrer",start_turn:"inicio_turno",turn_start:"inicio_turno",end_turn:"fim_turno",turn_end:"fim_turno",take_damage:"receber_dano",receive_damage:"receber_dano",on_hit:"receber_dano",attack:"atacar",on_attack:"atacar",kill:"eliminar",on_kill:"eliminar",after_skill:"usar_habilidade",after_ability:"usar_habilidade",healed:"ser_curado",on_heal:"ser_curado",dodge:"esquivar",on_dodge:"esquivar",ally_enter:"aliado_entrar",ally_death:"aliado_morrer"};
- const targetAlias={self:"si",own:"si",enemy:"inimigo",one_enemy:"inimigo",all_enemies:"todos_inimigos",enemies:"todos_inimigos",ally:"aliado",one_ally:"aliado",allies:"todos_aliados",all_allies:"todos_aliados",random_enemy:"inimigo_aleatorio",weakest_enemy:"inimigo_menos_vida",lowest_hp_enemy:"inimigo_menos_vida",strongest_enemy:"inimigo_mais_vida",highest_hp_enemy:"inimigo_mais_vida",random_ally:"aliado_aleatorio",weakest_ally:"aliado_menos_vida",lowest_hp_ally:"aliado_menos_vida",other_allies:"outros_aliados",all_cards:"todas_cartas"};
- const paramAlias={multiplier:"mult",damage_multiplier:"mult",percent:"pct",percentage:"pct",percent_max_hp:"pct",duration:"turnos",turns:"turnos",hits:"golpes",amount:"valor",value:"valor",cards:"cartas",actions:"acoes",lives:"vidas",preserve_used:"poupar",keep_used:"poupar",element:"elemento",second_element:"elemento_2",element_2:"elemento_2"};
- const condAlias={target_hp_at_most:"alvo_vida_ate",target_hp_at_least:"alvo_vida_acima",self_hp_at_most:"eu_vida_ate",self_hp_at_least:"eu_vida_acima",target_has_poison_or_bleed:"alvo_envenenado",target_has_debuff:"alvo_com_debuff",target_has_buff:"alvo_com_buff",element_advantage:"vantagem_elemento",fewer_lives:"menos_vidas",more_lives:"mais_vidas"};
- const normKey=v=>String(v==null?"":v).normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase().replace(/[\s-]+/g,"_");
- const v2Skills=skillsIn.map(sk=>{
-  if(!sk||typeof sk!=="object")return sk;
-  let elements=Array.isArray(sk.elements)?sk.elements:(Array.isArray(sk.elementos)?sk.elementos:(sk.element!=null?[sk.element]:[]));
-  if(sk.elementSource==="card"||sk.element_source==="card")elements=["card"];
-  let trigger=sk.trigger??sk.when??sk.quando??"";trigger=skillAlias[normKey(trigger)]||trigger;
-  const charges=sk.charge&&typeof sk.charge==="object"?sk.charge:null;
-  const rawEffects=Array.isArray(sk.effects)?sk.effects:(Array.isArray(sk.efeitos)?sk.efeitos:[]);
-  const effects=rawEffects.map(ef=>{
-   if(!ef||typeof ef!=="object")return ef;
-   const rawType=ef.type??ef.tipo??ef.effect??"",type=String(rawType);
-   const params=ef.params&&typeof ef.params==="object"?ef.params:(ef.parameters&&typeof ef.parameters==="object"?ef.parameters:{}),mapped={};
-   Object.entries(params).forEach(([k,v])=>{const key=paramAlias[normKey(k)]||k;mapped[key]=v});
-   const target=ef.target??ef.alvo,condition=ef.condition??ef.condicao;
-   return{type,target:target==null?undefined:(targetAlias[normKey(target)]||target),params:mapped,
-    condition:condition==null?undefined:(condAlias[normKey(condition)]||condition),
-    limit:ef.limit??ef.limite,chance:ef.chance??ef.probability};
-  });
-  return{name:sk.name??sk.nome,quote:sk.quote??sk.phrase??sk.frase??sk.description??sk.descricao,
-   trigger,cooldown:sk.cooldown??sk.recarga,elements,effects,
-   chargeMode:sk.chargeMode??(charges&&charges.mode),chargeTurns:sk.chargeTurns??(charges&&charges.turns)};
+
+function cpParseCardBlock(block,cardNumber){
+ const er=[],wa=[],card={},skills=[];
+ let skill=null,effect=null,lastText=null,section="card";
+ const fail=(ln,msg)=>er.push((ln?`Linha ${ln}: `:"")+msg);
+ const field=(obj,key,value,ln)=>{obj[key]=value;obj["$"+key]=ln};
+ const rootKeys={nome:"name",rank:"rank",vida:"hp",hp:"hp",dano:"atk",ataque:"atk",atk:"atk",elemento:"element",elemento_2:"element2",segundo_elemento:"element2",historia:"story",sinergia:"synergy",tribo:"synergy"};
+ const skillKeys={nome:"name",tipo:"type",tipo_de_habilidade:"type",ativacao:"type",gatilho:"trigger",quando:"trigger",descricao:"description",descricao_da_habilidade:"description",frase:"description",recarga:"cooldown",elemento:"element",elemento_da_habilidade:"element",elemento_2:"element2",segundo_elemento:"element2"};
+ const effectKeys={tipo:"type",acao:"type",alvo:"target",alvos:"target",potencia:"power",intensidade:"intensity",multiplicador:"mult",porcentagem:"pct",percentual:"pct",valor:"value",duracao:"turns",turnos:"turns",golpes:"hits",quantidade:"quantity",vidas:"lives",cartas:"cards",acoes:"actions",elemento:"element",elemento_2:"element2",segundo_elemento:"element2",poupar:"preserve",poupar_habilidade_usada:"preserve",condicao:"condition",limite:"limit",chance:"chance"};
+
+ block.lines.forEach(([ln,raw])=>{
+  let t=String(raw||"").replace(/\*\*/g,"").replace(/^\s*[-•]\s*/,"").trim();
+  if(cpDecorative(t))return;
+  const marker=cpMarker(t),mk=SL(marker);
+  if(/^habilidade(?:_\d+)?$/.test(mk)){
+   if(effect)fail(effect.ln,"encerre o efeito com [FIM DO EFEITO] antes de iniciar outra habilidade.");
+   if(skill)fail(skill.ln,"encerre a habilidade com [FIM DA HABILIDADE] antes de iniciar outra.");
+   skill={ln,name:"",description:"",type:"",trigger:"",cooldown:"",element:"",element2:"",effects:[]};
+   skills.push(skill);effect=null;section="skill";lastText=null;return
+  }
+  if(/^efeito(?:_\d+)?$/.test(mk)){
+   if(!skill){fail(ln,"o bloco [EFEITO] precisa estar dentro de uma [HABILIDADE].");return}
+   if(effect)fail(effect.ln,"encerre o efeito anterior com [FIM DO EFEITO].");
+   effect={ln,type:"",target:"",power:"",intensity:"",mult:"",pct:"",value:"",turns:"",hits:"",quantity:"",lives:"",cards:"",actions:"",element:"",element2:"",preserve:"",condition:"",limit:"",chance:""};
+   skill.effects.push(effect);section="effect";lastText=null;return
+  }
+  if(mk==="fim_do_efeito"){
+   if(!effect)fail(ln,"[FIM DO EFEITO] sem um bloco [EFEITO] aberto.");
+   effect=null;section=skill?"skill":"card";lastText=null;return
+  }
+  if(mk==="fim_da_habilidade"){
+   if(effect){fail(ln,"encerre o efeito com [FIM DO EFEITO] antes de finalizar a habilidade.");effect=null}
+   if(!skill)fail(ln,"[FIM DA HABILIDADE] sem uma habilidade aberta.");
+   skill=null;section="card";lastText=null;return
+  }
+  const pair=cpPair(t);
+  if(!pair){
+   if(lastText&&lastText.section==="card"&&lastText.key==="story")card.story=(card.story||"")+" "+t;
+   else if(lastText&&lastText.section==="skill"&&lastText.key==="description")skill.description=(skill.description||"")+" "+t;
+   else fail(ln,`linha fora do padrão: "${t.slice(0,55)}${t.length>55?"…":""}". Use Campo: valor.`);
+   return
+  }
+  lastText=null;
+  if(section==="effect"&&effect){
+   const key=effectKeys[pair.key];
+   if(!key){fail(ln,`campo de efeito "${pair.key}" não reconhecido.`);return}
+   field(effect,key,pair.value,ln);return
+  }
+  if(section==="skill"&&skill){
+   const key=skillKeys[pair.key];
+   if(!key){fail(ln,`campo de habilidade "${pair.key}" não reconhecido.`);return}
+   field(skill,key,pair.value,ln);
+   if(key==="description")lastText={section:"skill",key};
+   return
+  }
+  const key=rootKeys[pair.key];
+  if(!key){fail(ln,`campo da carta "${pair.key}" não reconhecido. Use Nome, Rank, Vida, Dano, Elemento, História e, somente quando solicitado, Sinergia.`);return}
+  field(card,key,pair.value,ln);
+  if(key==="story")lastText={section:"card",key};
  });
- const v2={name:o.name??o.nome,rank:o.rank??o.r,stats:o.stats&&typeof o.stats==="object"?o.stats:{hp:o.hp,attack:o.attack??o.atk??o.damage},elements:rawElements,tribe,seal:o.seal??o.selo,story:o.story??o.historia,skills:v2Skills};
- const parsed=cpV2MakeSheet(v2),ver=+(o.version??3),rankIndex=rk(v2.rank);
- if(tribe!=null&&sy&&sy.group!=null&&o.tribe!=null&&normKey(tribe)!==normKey(sy.group))parsed.er.unshift("Tribo e synergy.group estão diferentes. Use apenas um nome de família.");
- if(ver>=3&&rankIndex===0&&skillsIn.length!==1)parsed.er.unshift(`Rank F exige exatamente 1 habilidade nesta versão. A ficha contém ${skillsIn.length}.`);
- if(ver>=3&&rawElements.length===0)parsed.er.unshift('Informe ao menos um elemento em "elements". Use ["normal"] para uma carta neutra.');
+ if(effect)fail(effect.ln,"falta [FIM DO EFEITO].");
+ if(skill)fail(skill.ln,"falta [FIM DA HABILIDADE].");
+
+ const rankIndex=card.rank!==undefined?rk(card.rank):-1;
+ if(!card.name)fail(card.$name,"falta Nome.");
+ if(card.name&&card.name.length>32)fail(card.$name,"Nome deve ter no máximo 32 caracteres.");
+ if(rankIndex<0)fail(card.$rank,"Rank é obrigatório e deve ser F, E, D, C, B, A, S, SS ou SSS.");
+ if(card.hp===undefined||card.hp==="")fail(card.$hp,"Vida é obrigatória.");
+ if(card.atk===undefined||card.atk==="")fail(card.$atk,"Dano é obrigatório.");
+ if(!card.element)fail(card.$element,"Elemento é obrigatório.");
+ else if(!elKey(card.element))fail(card.$element,`Elemento "${card.element}" não existe no catálogo.`);
+ if(card.element2){const e1=elKey(card.element),e2=elKey(card.element2);if(!e2||!e1||e1==="normal"||e2==="normal"||e1===e2)fail(card.$element2,"Elemento 2 deve ser diferente do primeiro e não pode ser Normal.")}
+ if(!card.story)fail(card.$story,"História é obrigatória.");
+ if(card.story&&card.story.length>700)fail(card.$story,"História deve ter no máximo 700 caracteres.");
+ if(card.synergy&&card.synergy.length>24)fail(card.$synergy,"Sinergia deve ter no máximo 24 caracteres.");
+ if(skills.length<1)fail(0,"inclua pelo menos uma habilidade.");
+ if(skills.length>4)fail(0,"o jogo aceita no máximo quatro habilidades por carta.");
+ if(rankIndex===0&&skills.length!==1)fail(0,"Rank F exige exatamente uma habilidade.");
+
+ const lines=[[block.startLine||1,"FICHA DE CARTA"]];
+ const add=(ln,label,value)=>{if(value!==undefined&&value!==null&&String(value).trim()!=="")lines.push([ln||1,`${label}: ${String(value).trim()}`])};
+ add(card.$name,"Nome",card.name);add(card.$rank,"Rank",card.rank);add(card.$hp,"Vida",card.hp);add(card.$atk,"Dano",card.atk);
+ add(card.$element,"Elemento",card.element);add(card.$element2,"Elemento 2",card.element2);add(card.$synergy,"Tribo",card.synergy);add(card.$story,"História",card.story);
+ skills.forEach((sk,i)=>{
+  lines.push([sk.ln||1,`Habilidade ${i+1}:`]);
+  add(sk.$name,"Nome",sk.name);add(sk.$description,"Frase",sk.description);
+  if(!sk.name)fail(sk.ln,`Habilidade ${i+1}: Nome é obrigatório.`);
+  if(sk.name&&sk.name.length>28)fail(sk.$name,`Habilidade ${i+1}: Nome deve ter no máximo 28 caracteres.`);
+  if(!sk.description)fail(sk.ln,`Habilidade ${i+1}: Descrição é obrigatória.`);
+  if(sk.description&&sk.description.length>120)fail(sk.$description,`Habilidade ${i+1}: Descrição deve ter no máximo 120 caracteres.`);
+  let when="";
+  const type=SL(sk.type||"");
+  if(type==="ativa"||type==="active")when="Ativa";
+  else if(type==="passiva"||type==="passive"){
+   if(!sk.trigger)fail(sk.$type||sk.ln,`Habilidade ${i+1}: para Tipo Passiva, informe Gatilho.`);
+   else when=sk.trigger;
+  }else if(type)when=sk.type;
+  else if(sk.trigger)when=sk.trigger;
+  else fail(sk.ln,`Habilidade ${i+1}: informe Tipo: Ativa ou Tipo: Passiva com Gatilho.`);
+  add(sk.$type||sk.$trigger||sk.ln,"Quando",when);
+  if(when&&SL(when)==="ativa"){
+   const cd=num(sk.cooldown);
+   if(sk.cooldown===""||sk.cooldown===undefined||isNaN(cd)||!Number.isInteger(cd)||cd<1||cd>8)fail(sk.$cooldown||sk.ln,`Habilidade ${i+1}: Recarga da ativa deve ser um número inteiro de 1 a 8 turnos.`);
+   add(sk.$cooldown,"Recarga",sk.cooldown);
+  }else if(sk.cooldown)wa.push(`Habilidade ${i+1}: Recarga ignorada, pois a habilidade é passiva.`);
+  add(sk.$element,"Elemento",sk.element);add(sk.$element2,"Elemento 2",sk.element2);
+  if(sk.effects.length<1)fail(sk.ln,`Habilidade ${i+1}: inclua pelo menos um efeito.`);
+  if(sk.effects.length>6)fail(sk.ln,`Habilidade ${i+1}: o limite é seis efeitos.`);
+  sk.effects.slice(0,6).forEach((ef,j)=>{
+   const expr=cpEffectExpression(ef,i+1,j+1,er);
+   if(expr)lines.push([ef.ln||sk.ln,`Efeito: ${expr}`]);
+  });
+ });
+ const parsed=parseSheet({lines},{strict:true});
+ parsed.er.unshift(...er);
+ parsed.wa.unshift(...wa);
  return parsed;
 }
 
-// Extrai cada objeto/array JSON completo mesmo quando a mensagem contém vários blocos ```json separados.
-function cpExtractJSON(raw){
- const out=[];let start=-1,stack=[],quoted=false,escape=false;
- for(let i=0;i<raw.length;i++){
-  const ch=raw[i];
-  if(start<0){if(ch==="{"||ch==="["){start=i;stack=[ch]}continue}
-  if(quoted){if(escape)escape=false;else if(ch==="\\")escape=true;else if(ch==='"')quoted=false;continue}
-  if(ch==='"'){quoted=true;continue}
-  if(ch==="{"||ch==="["){stack.push(ch);continue}
-  if(ch==="}"||ch==="]"){
-   const prev=stack.pop();if((prev==="{"&&ch!=="}")||(prev==="["&&ch!=="]")){start=-1;stack=[];continue}
-   if(!stack.length){out.push(raw.slice(start,i+1));start=-1}
-  }
- }
- return out;
-}
-function cpSheetsFromJSON(value){
- const out=[];
- const consume=(obj,versionHint)=>{
-  if(Array.isArray(obj)){obj.forEach(x=>consume(x,versionHint));return}
-  if(!obj||typeof obj!=="object")throw new Error("Cada ficha precisa ser um objeto JSON.");
-  if(obj.format&&obj.format!==CP_CARD_V2_FORMAT)throw new Error(`Formato "${obj.format}" não reconhecido.`);
-  const version=+(obj.version??versionHint??(obj.format?0:3));
-  if(obj.cards&&Array.isArray(obj.cards)){if(!obj.cards.length)throw new Error("O pacote JSON não contém cartas.");obj.cards.forEach(x=>out.push(version===2?cpV2MakeSheet(x):cpV3MakeSheet(x)));return}
-  if(obj.card&&typeof obj.card==="object"){out.push(version===2?cpV2MakeSheet(obj.card):cpV3MakeSheet(obj.card));return}
-  const looksLikeCard=["name","nome","rank","r","stats","elements","elementos","skills","story","historia"].some(k=>Object.prototype.hasOwnProperty.call(obj,k));
-  if(!looksLikeCard)throw new Error("O JSON não parece uma ficha de carta. Use name, rank, stats, elements, story e skills.");
-  if(obj.format&&![2,3].includes(version))throw new Error(`Versão ${obj.version} não reconhecida. Use a ficha v3.`);
-  out.push(version===2?cpV2MakeSheet(obj):cpV3MakeSheet(obj));
- };
- consume(value,undefined);return out;
-}
 function parse(text){
  const raw=String(text||"").replace(/[\u200b-\u200d\u2060\ufeff]/g,"").replace(/[\u00a0\u2007\u202f]/g," ").replace(/\r\n?/g,"\n");
- const candidates=cpExtractJSON(raw);
- if(candidates.length){
-  const sheets=[];let bad=0;
-  candidates.forEach((candidate,i)=>{try{const data=JSON.parse(candidate);const result=cpSheetsFromJSON(data);sheets.push(...result)}catch(e){bad++;sheets.push(cpV2Error(`Bloco JSON ${i+1}: ${String(e&&e.message||"não foi possível ler o JSON")}`))}});
-  if(bad)return{sheets,ok:false};
-  return{sheets,ok:sheets.length>0&&sheets.every(x=>!x.er.length)}
- }
- if(/[\[{]/.test(raw)&&/```\s*json|"format"\s*:|"cards"\s*:/.test(raw))return cpV2Error("Não consegui ler o JSON. Confira as chaves, aspas e vírgulas; envie um único JSON de lote ou vários blocos JSON completos.");
- const L=raw.split("\n"),S=[],pre=[];let cur=null,any=false;
- L.forEach((rawLine,i)=>{const t=rawLine.replace(/\*\*|__|`/g,""),n=N(t);
-  if(/^[\s\-=#*•_>]*ficha\s+de\s+carta\b/.test(n)){cur={lines:[]};S.push(cur);any=true;return}
-  if(/^[\s\-=#*•_>]*fim\s+da\s+ficha\b/.test(n)){cur=null;return}
-  if(cur)cur.lines.push([i+1,t]);else if(!any)pre.push([i+1,t])});
- if(!any&&pre.some(x=>x[1].trim()))S.push({lines:pre});
- const sheets=S.map(x=>parseSheet(x));
- return{sheets,ok:sheets.length>0&&sheets.every(x=>!x.er.length)}}
+ if(/^\s*[\[{]/.test(raw)||/```\s*json|"format"\s*:|"cards"\s*:/i.test(raw))
+  return cpImportError("JSON não é mais aceito como ficha. Use somente o formato textual do PDF, começando por === CARTA 1 === e terminando em === FIM DA CARTA ===.");
+ const blocks=[];let current=null,found=false,problems=[];
+ raw.split("\n").forEach((line,i)=>{
+  const t=line.replace(/\*\*/g,"").trim();
+  if(/^```/.test(t))return;
+  if(cpStartCard(t)){
+   found=true;
+   if(current){problems.push(`A carta iniciada na linha ${current.startLine} não terminou com === FIM DA CARTA ===.`);blocks.push(current)}
+   current={startLine:i+1,lines:[]};return
+  }
+  if(cpEndCard(t)){
+   if(!current){problems.push(`Linha ${i+1}: encontrei FIM DA CARTA sem uma carta aberta.`);return}
+   blocks.push(current);current=null;return
+  }
+  if(current)current.lines.push([i+1,line]);
+ });
+ if(current){problems.push(`A carta iniciada na linha ${current.startLine} não terminou com === FIM DA CARTA ===.`);blocks.push(current)}
+ if(!found)return cpImportError("Não encontrei nenhuma carta. Cada ficha deve começar com === CARTA 1 === e terminar com === FIM DA CARTA ===.");
+ const sheets=blocks.map((b,i)=>cpParseCardBlock(b,i+1));
+ problems.forEach(p=>sheets.push({card:{n:"Ficha inválida",r:0,hp:ST[0][0],atk:ST[0][1],abs:[]},er:[p],wa:[]}));
+ return{sheets,ok:sheets.length>0&&sheets.every(x=>!x.er.length)};
+}
 
 // ---- cria as cartas no ADM (carta + habilidades "só desta carta", igual ao editor de cartas)
 function apply(cards,pk){
@@ -5415,7 +5459,7 @@ function sel(){
 const rkTxt=c=>`Rank ${R[c.r][0]}`+(c.tb?` · 🐾 ${c.tb}`:"")+(elEls(c).length?` · ${elEls(c).map(k=>EL[k]+" "+ELN[k]).join(" / ")}`:"")+(c.sl?` · ${SLS[c.sl]} ${c.sl}`:"")+` · ❤ ${c.hp} · ⚔ ${c.atk}`;
 function html(r){
  const t=$("z_it");if(!t||!t.value.trim())return"";
- if(!r.sheets.length)return'<div class="xw"><p class="er">✖ Não achei nenhuma ficha. Cole um JSON v3, um lote com várias cartas ou uma ficha antiga.</p></div>';
+ if(!r.sheets.length)return'<div class="xw"><p class="er">✖ Nenhuma ficha textual encontrada. Use o padrão do PDF.</p></div>';
  const many=r.sheets.length>1,valid=r.sheets.filter(x=>!x.er.length).length,bad=r.sheets.length-valid;
  let h=`<div class="iv-summary"><div><b>${r.sheets.length} ${r.sheets.length===1?"ficha encontrada":"fichas encontradas"}</b><small>${valid} prontas para criar${bad?` · ${bad} com erro${bad>1?"s":""}`:" · todas validadas"}</small></div><div class="iv-count">${valid}/${r.sheets.length}</div></div>`;
  r.sheets.forEach((s,i)=>{
@@ -5448,9 +5492,9 @@ function build(){
  let last="";try{last=localStorage.getItem("cp_impk")||""}catch(e){}
  const ops=P.concat(ADM.p.filter(d=>!P.some(p=>p.id==d.id))).map(p=>`<option value="${E(p.id)}"${p.id==last?" selected":""}>${E(p.e||"")} ${E(p.n)}${p.cards?"":" · não lançado"}</option>`).join("")+`<option value="ind"${last=="ind"?" selected":""}>🎉 Sem pacote · carta especial</option>`;
  d.insertAdjacentHTML("beforeend",`<div class="fg">
-<div class="exm"><b>✦ FICHA IA v3 · Importação em lote</b><br>Peça a carta do seu jeito e envie o PDF <b>Ficha de Criação de Cartas · v3</b> junto à conversa com a IA. Copie o JSON que ela gerar e cole aqui. Você pode colar um lote com várias cartas ou até vários blocos JSON na mesma mensagem: o importador separa cada ficha, mostra uma prévia individual e cria todas juntas.<br><br><b>O jogo valida automaticamente:</b> rank, faixa de vida/dano, elementos, sinergia de tribo, gatilhos, recargas, tipos de efeitos, parâmetros e limites do motor. Todas precisam estar válidas para liberar a criação em lote. Fichas JSON v2 e fichas antigas em texto continuam aceitas.<br><br><b>Imagem:</b> a ficha guarda a descrição e os dados da carta, mas não incorpora o arquivo de imagem. Depois da importação, anexe a arte no editor de Cartas. A chance de aparecer em pacotes também continua sendo configurada no editor.</div>
+<div class="exm"><b>✦ FICHA TEXTUAL · PADRÃO ÚNICO</b><br>Peça a carta à IA e envie o PDF <b>Manual de Criação de Cartas · PRIMATA</b> junto da foto ou descrição. Cole aqui o texto que ela gerar. Cada carta começa em <b>=== CARTA 1 ===</b> e termina em <b>=== FIM DA CARTA ===</b>. Para criar várias, basta repetir os blocos: o jogo separa, confere e mostra a prévia de cada carta.<br><br><b>O que é conferido:</b> Rank, Vida, Dano, Elemento, História, habilidades, efeitos e limites do jogo. Todas as fichas precisam estar válidas para liberar a criação em lote. <b>JSON e formatos antigos de ficha não são aceitos.</b><br><br><b>Sinergia:</b> só aparece quando você pedir expressamente. <b>Imagem:</b> depois de importar, adicione a foto no editor de Cartas. A chance de aparecer em pacotes também é configurada no editor.</div>
 <div class="afl w"><label for="z_ip">Em qual pacote a carta entra?</label><select id="z_ip">${ops}</select></div>
-<div class="afl w"><label for="z_it">Ficha ou lote de fichas (JSON v3)</label><textarea id="z_it" rows="11" placeholder="{&#10;  &quot;format&quot;: &quot;COLECAO_PRIMATA_CARD&quot;,&#10;  &quot;version&quot;: 3,&#10;  &quot;cards&quot;: [ ... ]&#10;}" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
+<div class="afl w"><label for="z_it">Ficha ou lote de fichas (texto puro)</label><textarea id="z_it" rows="14" placeholder="=== CARTA 1 ===&#10;Nome: Exemplo&#10;Rank: F&#10;Vida: 130&#10;Dano: 20&#10;Elemento: Fogo&#10;História: Uma breve história...&#10;&#10;[HABILIDADE 1]&#10;Nome: Chama Vital&#10;Tipo: Ativa&#10;Descrição: Uma chama que restaura a própria carta.&#10;Recarga: 3&#10;[EFEITO 1]&#10;Tipo: Cura&#10;Alvo: Própria carta&#10;Potência: 20%&#10;[FIM DO EFEITO]&#10;[FIM DA HABILIDADE]&#10;=== FIM DA CARTA ===" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
 <div class="ivb"><button class="bt gh" data-k="@ixp">📋 Colar</button><button class="bt gh" data-k="@ixl">🧹 Limpar</button></div>
 <div id="z_iv"></div>
 <label class="yck"><input type="checkbox" id="z_dr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt off" id="z_ix" data-k="@ix">Criar cartas</button></div>`)}
@@ -5470,7 +5514,7 @@ Object.assign(adxA,{
  ixl:()=>{const t=$("z_it");if(t){t.value="";paint();t.focus()}},
  ixp:async()=>{const t=$("z_it");if(!t)return;try{const s=await navigator.clipboard.readText();if(!s||!s.trim())return toast("A área de transferência está vazia.");t.value=s;paint();toast("Ficha colada. Confira abaixo.")}catch(e){toast("Não consegui colar sozinho: segure no campo e toque em Colar.");t.focus()}},
  ixe:()=>{if(!S)return;const L=[];S.sheets.forEach((s,i)=>s.er.forEach(x=>L.push("- "+(S.sheets.length>1?`Carta ${i+1} · `:"")+x)));
-  cp("A ficha da carta deu erro ao importar no jogo:\n"+L.join("\n")+"\n\nCorrija e me mande a ficha COMPLETA de novo, no mesmo formato do PDF, dentro de um bloco de código.")}});
+  cp("A ficha da carta deu erro ao importar no jogo:\n"+L.join("\n")+"\n\nCorrija e me mande a ficha COMPLETA de novo, no formato textual novo do PDF, incluindo os marcadores de início e fim da carta.")}});
 cfg.addEventListener("input",e=>{if(e.target.id=="z_it"){clearTimeout(tm);tm=setTimeout(paint,250)}});
 cfg.addEventListener("change",e=>{if(e.target.id=="z_it")paint();if(e.target.id=="z_ip")try{localStorage.setItem("cp_impk",e.target.value)}catch(x){}});
 window.cpRegisterAdxOpenHook(function(id){try{if(id=="ds_i"){build();paint()}else if(id=="ds_c")sel()}catch(e){console.warn("imp",e)}});
