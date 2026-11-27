@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.3.9">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.9 -->
+<meta name="application-version" content="1.3.10">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.10 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.3.9";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.10";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -5070,6 +5070,8 @@ cfg.addEventListener("input",e=>{const i=e.target.id;if(e.target.closest("#ds_v"
 
 </script>
 
+
+<style id="cp-import-delete-style">.iv-card-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}.iv-card-actions .iv-valid,.iv-card-actions .iv-invalid{margin:0}.iv-delete{flex:0 0 auto;min-height:36px;padding:7px 11px!important;font-size:.72rem!important;border:1px solid #ff6b6b55!important;color:#ff9a9a!important}@media(max-width:380px){.iv-card-actions{align-items:stretch}.iv-card-actions .iv-valid{flex:1 1 100%}.iv-delete{width:100%}}</style>
 <script id="imp-js">
 /* Arquivo-fonte: assets/js/18-ai-card-import.js */
 /* COLEÇÃO PRIMATA · MÓDULO
@@ -5230,11 +5232,12 @@ function parseSheet(sh,opt={}){
   let x=num(card[k]);
   if(isNaN(x)){if(opt.strict)E_(card["$"+k],`${nm} "${card[k]}" não é número.`);else W_(card["$"+k],`${nm} "${card[k]}" não é número: usei ${base[i]}.`);c[k]=base[i];return}
   x=Math.round(x);
-  if(x<lo||x>hi){const y=Math.min(hi,Math.max(lo,x));
-   const msg=`${nm} ${x} fora da faixa do rank ${R[ri][0]} (${lo} a ${hi}).`;
-   if(opt.strict)E_(card["$"+k],msg+` Use um valor entre ${lo} e ${hi}.`);else W_(card["$"+k],msg+` Usei ${y}.`);
-   x=y
+  if(x<lo||x>hi){
+   const msg=`${nm} ${x} fora da faixa sugerida para o rank ${R[ri][0]} (${lo} a ${hi}).`;
+   W_(card["$"+k],msg+` Mantive o valor informado; confira o balanceamento da carta.`);
   }
+  // Na importação, a faixa por rank é apenas uma referência de balanceamento:
+  // nunca rejeite nem ajuste automaticamente Vida/Dano informados pelo ADM.
   c[k]=x});
  c.d=txt(card.d,700,m=>W_(card.$d,m),"História");
  if(!c.d){if(opt.strict)E_(0,"ficha sem História: este campo é obrigatório.");else W_(0,"sem História.")}
@@ -5532,7 +5535,7 @@ function html(r){
     const trigger=TRG[a.tr||"u"]||"Ativa";
     return `<div class="iva"><div class="iv-skill-head"><span class="iv-skill-name">✦ ${E(a.n||"Habilidade sem nome")}</span><span class="iv-valid">${E(trigger)}</span></div><div class="iv-skill-meta"><span>${E(tag)}</span>${(a.tr||"u")==="u"?`<span>Recarga · ${E(a.rc||3)} turnos</span>`:`<span>Passiva</span>`}${a.chargeMode?`<span>Preparação · ${a.chargeMode==="same"?"2 ações":"aguardar "+(a.chargeTurns||1)+" turno(s)"}</span>`:""}</div>${a.q?`<div class="iv-skill-quote">“${E(a.q)}”</div>`:""}<div class="iv-skill-effect">${E(desc)}</div></div>`
    }).join("")||'<div class="iva">Nenhuma habilidade informada.</div>'}</div></div>
-   <div class="${ok?"iv-valid":"iv-invalid"}">${ok?"✓ Ficha validada":"✕ Precisa de correção"}</div>
+   <div class="iv-card-actions"><div class="${ok?"iv-valid":"iv-invalid"}">${ok?"✓ Ficha validada":"✕ Precisa de correção"}</div><button type="button" class="bt gh iv-delete" data-iv-delete="${i}" aria-label="Excluir somente a ficha ${idx}">🗑️ Excluir esta ficha</button></div>
   </article>`;
   const messages=s.er.map(x=>`<p class="er">✖ ${E(many?`Carta ${i+1} · ${x}`:x)}</p>`).concat(s.wa.map(x=>`<p>⚠ ${E(many?`Carta ${i+1} · ${x}`:x)}</p>`));
   if(messages.length)h+=`<div class="xw">${messages.join("")}</div>`;
@@ -5571,6 +5574,7 @@ Object.assign(adxA,{
  ixp:async()=>{const t=$("z_it");if(!t)return;try{const s=await navigator.clipboard.readText();if(!s||!s.trim())return toast("A área de transferência está vazia.");t.value=s;paint();toast("Ficha colada. Confira abaixo.")}catch(e){toast("Não consegui colar sozinho: segure no campo e toque em Colar.");t.focus()}},
  ixe:()=>{if(!S)return;const L=[];S.sheets.forEach((s,i)=>s.er.forEach(x=>L.push("- "+(S.sheets.length>1?`Carta ${i+1} · `:"")+x)));
   cp("A ficha da carta deu erro ao importar no jogo:\n"+L.join("\n")+"\n\nCorrija e me mande a ficha completa novamente, mantendo os nomes dos campos e dos efeitos.")}});
+cfg.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-iv-delete]");if(!b)return; e.preventDefault();e.stopPropagation();const t=$("z_it");if(!t)return;const index=Number(b.dataset.ivDelete),current=parse(t.value);if(!Number.isInteger(index)||!current.sheets[index])return;const start=current.sheets[index].startLine;if(!Number.isFinite(start))return toast("Não consegui localizar essa ficha no texto.");const next=current.sheets[index+1],lines=t.value.replace(/\r\n?/g,"\n").split("\n"),from=Math.max(0,start-1),to=next?Math.max(from,next.startLine-2):lines.length-1;lines.splice(from,to-from+1);t.value=lines.join("\n").trim();paint();toast("Ficha removida. As outras fichas foram mantidas.")});
 cfg.addEventListener("input",e=>{if(e.target.id=="z_it"){clearTimeout(tm);tm=setTimeout(paint,250)}});
 cfg.addEventListener("change",e=>{if(e.target.id=="z_it")paint();if(e.target.id=="z_ip")try{localStorage.setItem("cp_impk",e.target.value)}catch(x){}});
 window.cpRegisterAdxOpenHook(function(id){try{if(id=="ds_i"){build();paint()}else if(id=="ds_c")sel()}catch(e){console.warn("imp",e)}});
@@ -9848,6 +9852,25 @@ html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSS
  #fc .cp-sheet-stat-top b{font-size:1.48rem}
  #fc .cp-sheet-power-head>strong{font-size:.7rem}
  #fc .pnl .cvb .two{grid-template-columns:minmax(0,1fr)!important}
+}
+/* ===== Ficha 1.3.10 · nome com respiro e hierarquia visual ===== */
+#fc .fch>h2{
+ display:block!important;
+ width:100%;max-width:100%;
+ margin:20px auto 12px!important;
+ padding:0 14px!important;
+ text-align:center!important;
+ font-size:clamp(1.5rem,6vw,1.85rem)!important;
+ line-height:1.14!important;
+ font-weight:900!important;
+ letter-spacing:.045em!important;
+ text-wrap:balance;
+ overflow-wrap:anywhere;
+ text-shadow:0 3px 14px #0009;
+}
+#fc .fch>.rar{margin-top:0!important}
+@media(max-width:380px){
+ #fc .fch>h2{margin-top:17px!important;margin-bottom:11px!important;font-size:clamp(1.38rem,6.2vw,1.62rem)!important;padding:0 10px!important}
 }
 </style>
 </body>
