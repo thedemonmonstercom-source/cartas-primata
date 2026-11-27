@@ -2810,26 +2810,29 @@ html.cp-lite .cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::before,html.cp-lite
 /* SONS · sintetizados no próprio navegador (sem arquivos) */
 const SND=(()=>{
 const RND=Math.random; // sorteio próprio do som: no duelo ao vivo Math.random é trocado pelo sorteio compartilhado, e o som ligado/desligado gastava números diferentes em cada celular
-let A,G,M,on=localStorage.getItem("colprimata_som")!=="0",mv=0,tm,nx=0,st=0,lh=0;
+let A,G,M,on=localStorage.getItem("colprimata_som")!=="0",mv=0,tm,nx=0,st=0,lh=0,lf=0;
 const cf=k=>{try{return CONFIG[k]!==0}catch(e){return true}};
+const inBattle=()=>!!(window.LV||(typeof BT!=="undefined"&&BT&&!BT.over&&!BT.zq));
+const rebuilding=()=>{const L=window.LV;return !!(L&&(L.rebuilding||L.repairing))};
 const ok=()=>{if(!on||!cf("som"))return 0;try{if(!A){A=new(window.AudioContext||window.webkitAudioContext)();G=A.createGain();G.gain.value=.6;G.connect(A.destination);M=A.createGain();M.gain.value=.5;M.connect(G)}if(A.state=="suspended")A.resume();return A}catch(e){return 0}};
 const T=(f,a,d,ty,v,f2)=>{const c=ok();if(!c)return;const o=c.createOscillator(),g=c.createGain(),s=c.currentTime+a;o.type=ty||"sine";o.frequency.setValueAtTime(f,s);if(f2)o.frequency.exponentialRampToValueAtTime(f2,s+d);g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(v||.15,s+.012);g.gain.exponentialRampToValueAtTime(.0001,s+d);o.connect(g);g.connect(G);o.start(s);o.stop(s+d+.03)};
 const N=(a,d,v,fq,q)=>{const c=ok();if(!c)return;const n=c.sampleRate*d|0,b=c.createBuffer(1,n,c.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(RND()*2-1)*(1-i/n);const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type="bandpass";f.frequency.value=fq;f.Q.value=q||.8;g.gain.value=v;s.connect(f);f.connect(g);g.connect(G);s.start(c.currentTime+a)};
 const mf=m=>440*Math.pow(2,(m-69)/12),CH=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],AP=[0,1,2,1,0,2,1,2];
 const sch=()=>{const c=ok();if(!c||!mv)return;while(nx<c.currentTime+1.2){const ch=CH[(st>>3)%4],i=st%8,s=Math.max(nx,c.currentTime),o=c.createOscillator(),g=c.createGain();o.frequency.value=mf(ch[AP[i]]+(i%4==3?12:0));g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(.09,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+.5);o.connect(g);g.connect(M);o.start(s);o.stop(s+.55);if(!i){const p=c.createOscillator(),q=c.createGain();p.type="triangle";p.frequency.value=mf(ch[0]-12);q.gain.setValueAtTime(.0001,s);q.gain.exponentialRampToValueAtTime(.08,s+.3);q.gain.exponentialRampToValueAtTime(.0001,s+3.6);p.connect(q);q.connect(M);p.start(s);p.stop(s+3.7)}nx=s+.46;st++}};
-const mus=()=>{if(mv||!on||!cf("musica")||!ok())return;mv=1;nx=0;sch();tm=setInterval(sch,400)};
-const mstop=()=>{mv=0;clearInterval(tm)};
+const mus=()=>{if(inBattle()){mstop();return}if(mv||!on||!cf("musica")||!ok())return;if(A&&M){M.gain.cancelScheduledValues(A.currentTime);M.gain.setTargetAtTime(.5,A.currentTime,.035)}mv=1;nx=0;sch();tm=setInterval(sch,400)};
+const mstop=()=>{mv=0;clearInterval(tm);tm=0;if(A&&M){try{M.gain.cancelScheduledValues(A.currentTime);M.gain.setTargetAtTime(.0001,A.currentTime,.025)}catch(e){}}};
 const api={
 get on(){return on},
-click(){T(720,0,.05,"triangle",.09,520)},
-flip(){T(380,0,.1,"triangle",.1,760)},
-rip(){N(0,.45,.35,2200,.6);N(.14,.3,.25,3400,.7);T(180,0,.3,"sawtooth",.05,90)},
-rare(r){if(r<3)return;const k=Math.min(7,r),sc=[0,4,7,12,16,19,24];for(let i=0;i<k;i++)T(440*Math.pow(2,sc[i]/12),i*.07,.35,"triangle",.1);if(r>5){N(.1,.9,.12,6000,2);T(90,0,.5,"sine",.25,45)}if(r>7)[0,4,7].forEach(m=>T(880*Math.pow(2,m/12),.5,1,"sine",.07))},
-hit(){const n=performance.now();if(n-lh<90)return;lh=n;N(0,.1,.2,700,1);T(160,0,.12,"square",.08,70)},
-win(){[523,659,784,1047].forEach((f,i)=>T(f,i*.11,.4,"triangle",.14))},
-lose(){[392,330,262].forEach((f,i)=>T(f,i*.16,.5,"sawtooth",.06))},
-start(){ok();mus()},
-toggle(){on=!on;try{localStorage.setItem("colprimata_som",on?"1":"0")}catch(e){}if(on)mus();else mstop();return on}
+click(){if(rebuilding())return;T(720,0,.05,"triangle",.09,520)},
+flip(){if(rebuilding())return;const n=performance.now();if(n-lf<150)return;lf=n;T(380,0,.1,"triangle",.1,760)},
+rip(){if(rebuilding())return;N(0,.45,.35,2200,.6);N(.14,.3,.25,3400,.7);T(180,0,.3,"sawtooth",.05,90)},
+rare(r){if(rebuilding()||r<3)return;const k=Math.min(7,r),sc=[0,4,7,12,16,19,24];for(let i=0;i<k;i++)T(440*Math.pow(2,sc[i]/12),i*.07,.35,"triangle",.1);if(r>5){N(.1,.9,.12,6000,2);T(90,0,.5,"sine",.25,45)}if(r>7)[0,4,7].forEach(m=>T(880*Math.pow(2,m/12),.5,1,"sine",.07))},
+hit(){if(rebuilding())return;const n=performance.now();if(n-lh<480)return;lh=n;T(260,0,.09,"sine",.026,175);T(520,.012,.05,"triangle",.008,390)},
+win(){if(rebuilding())return;[523,659,784,1047].forEach((f,i)=>T(f,i*.11,.4,"triangle",.14))},
+lose(){if(rebuilding())return;[392,330,262].forEach((f,i)=>T(f,i*.16,.5,"sawtooth",.06))},
+battleStart(){mstop()},
+start(){ok();if(inBattle()){mstop();return}mus()},
+toggle(){on=!on;try{localStorage.setItem("colprimata_som",on?"1":"0")}catch(e){}if(on){ok();if(inBattle())mstop();else mus()}else mstop();return on}
 };
 addEventListener("pointerdown",()=>api.start(),{capture:true});
 addEventListener("touchstart",()=>api.start(),{passive:true,capture:true});
@@ -2911,6 +2914,49 @@ html.cp-lite .cd.cp-art-only.k8:not(.lock)>.cp-sss-rgb-film::after{animation:non
 #cpm .cp-raid-pool-item span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #cpm #cpRaidFilterCount{font-size:.66rem;margin:2px 0 8px}
 @media(max-width:460px){#cpm .cp-raid-pool{grid-template-columns:1fr;max-height:180px}}
+</style>
+
+
+<style id="cp-card-touch-holo-css">/* Efeito de película holográfica ativado pelo dedo na ficha: somente ranks S, SS e SSS. */
+#fc .fch>.f3d.cp-holo-gesture{touch-action:none!important}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art{isolation:isolate}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo,
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-specular{
+  position:absolute!important;inset:-1%!important;display:block!important;width:auto!important;height:auto!important;
+  margin:0!important;border:0!important;border-radius:inherit!important;pointer-events:none!important;
+  opacity:0;overflow:hidden!important;transition:opacity .14s ease;will-change:opacity,background-position,filter;
+}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-holo{
+  z-index:7!important;
+  background:
+    linear-gradient(var(--cp-holo-angle,125deg),transparent 41%,var(--cp-holo-a) 46%,var(--cp-holo-b) 50%,var(--cp-holo-c) 54%,var(--cp-holo-d,transparent) 58%,transparent 64%),
+    repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 1px,transparent 1px 9px);
+  background-size:145% 145%,100% 100%;
+  background-position:var(--cp-holo-x,50%) var(--cp-holo-y,50%),center;
+  mix-blend-mode:color;
+  filter:hue-rotate(var(--cp-holo-hue,0deg)) saturate(1.16);
+}
+#fc .fch>.f3d .cd.cp-touch-holo-card>.art>.cp-touch-specular{
+  z-index:8!important;
+  background:
+    radial-gradient(ellipse 30% 19% at var(--cp-holo-x,50%) var(--cp-holo-y,50%),rgba(255,255,255,.52) 0%,rgba(255,255,255,.16) 33%,transparent 73%),
+    linear-gradient(var(--cp-holo-angle,125deg),transparent 43%,rgba(255,255,255,.22) 49%,rgba(255,255,255,.05) 52%,transparent 58%);
+  mix-blend-mode:screen;
+  filter:blur(.3px);
+}
+#fc .fch>.f3d .cd.k6.cp-touch-holo-card{--cp-holo-a:rgba(255,184,35,.52);--cp-holo-b:rgba(255,248,190,.60);--cp-holo-c:rgba(255,132,20,.50);--cp-holo-d:rgba(255,220,120,.12)}
+#fc .fch>.f3d .cd.k7.cp-touch-holo-card{--cp-holo-a:rgba(255,70,85,.52);--cp-holo-b:rgba(255,206,140,.58);--cp-holo-c:rgba(135,80,255,.55);--cp-holo-d:rgba(70,210,255,.13)}
+#fc .fch>.f3d .cd.k8.cp-touch-holo-card{--cp-holo-a:rgba(255,54,190,.58);--cp-holo-b:rgba(65,248,225,.62);--cp-holo-c:rgba(255,220,75,.58);--cp-holo-d:rgba(126,105,255,.36)}
+#fc .fch>.f3d .cd.k6.cp-holo-active>.art>.cp-touch-holo{opacity:.42}
+#fc .fch>.f3d .cd.k7.cp-holo-active>.art>.cp-touch-holo{opacity:.48}
+#fc .fch>.f3d .cd.k8.cp-holo-active>.art>.cp-touch-holo{opacity:.54}
+#fc .fch>.f3d .cd.k6.cp-holo-active>.art>.cp-touch-specular{opacity:.42}
+#fc .fch>.f3d .cd.k7.cp-holo-active>.art>.cp-touch-specular{opacity:.48}
+#fc .fch>.f3d .cd.k8.cp-holo-active>.art>.cp-touch-specular{opacity:.52}
+#fc .fch>.f3h{max-width:300px;margin:7px auto 0;padding:0 10px;text-align:center;font-size:.65rem;line-height:1.5;opacity:.72}
+@media(prefers-reduced-motion:reduce){
+ #fc .fch>.f3d .cd>.art>.cp-touch-holo,#fc .fch>.f3d .cd>.art>.cp-touch-specular{transition:none!important;filter:none!important}
+}
 </style>
 
 </head>
@@ -3338,7 +3384,8 @@ const LK=`<div class="art"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 1
 // Cada fusão reduz os cantos gradualmente; no nível 5 ficam quase retos.
 const cardRadius=L=>({x:Math.max(1.5,14-Math.min(5,Math.max(0,Number(L)||0))*2.5),y:Math.max(1.1,10.5-Math.min(5,Math.max(0,Number(L)||0))*1.88)});
 /* Atributos aleatórios por camada: cada cartão SSS ganha três movimentos dessincronizados. */
-const cpSSSCloudMarkup=()=>["a","b","c"].map(k=>`<i class="cp-sss-rgb-cloud cp-sss-rgb-${k}" aria-hidden="true" style="--cp-move:${(17+Math.random()*12).toFixed(2)}s;--cp-hue:${(23+Math.random()*19).toFixed(2)}s;--cp-fade:${(10+Math.random()*9).toFixed(2)}s;--cp-delay:${(-Math.random()*24).toFixed(2)}s;--cp-start:${Math.round(Math.random()*360)}deg"></i>`).join("");
+/* Uma única película em forma de reflexo alongado; os dois brilhos internos seguem tempos diferentes. */
+const cpSSSCloudMarkup=()=>`<i class="cp-sss-fluid-reflection" aria-hidden="true" style="--cp-flow-a:${(17+Math.random()*8).toFixed(2)}s;--cp-flow-b:${(21+Math.random()*9).toFixed(2)}s;--cp-flow-hue-a:${(25+Math.random()*12).toFixed(2)}s;--cp-flow-hue-b:${(31+Math.random()*13).toFixed(2)}s;--cp-flow-fade-a:${(12+Math.random()*6).toFixed(2)}s;--cp-flow-fade-b:${(15+Math.random()*7).toFixed(2)}s;--cp-flow-delay:${(-Math.random()*18).toFixed(2)}s;--cp-flow-start:${Math.round(Math.random()*180)}deg"></i>`;
 const card=(c,cl="",n=0,lk=0,xt="",lv)=>{
  const r=c.r,L=lk?0:lv==null?lvl(c):Math.min(lv,5),rad=cardRadius(L),im=!lk&&(c.img||IMG[c.id]),
  /* Os efeitos clássicos de raridade também funcionam sobre fotos 3:4. */
@@ -3384,7 +3431,7 @@ document.addEventListener("keydown",e=>{e.target.id=="flq"&&e.key=="Enter"&&e.ta
 const adxQ=()=>["ec","hc","gc"].forEach(id=>{const sl=$(id);if(!sl||sl.dataset.q)return;sl.dataset.q=1;const all=[...sl.options].map(o=>[o.value,o.textContent]),i=document.createElement("input");i.type="search";i.placeholder="🔍 Buscar carta";i.className="sfi";i.oninput=()=>{const q=nrm(i.value),v=sl.value,l=all.filter(o=>nrm(o[1]).includes(q));if(!l.length)return;sl.replaceChildren(...l.map(o=>new Option(o[1],o[0],0,o[0]==v)));if(sl.value!=v)sl.dispatchEvent(new Event("change",{bubbles:true}))};sl.before(i)});
 function render(keep){
  const m=$("m"),p=P[cur],q=P[as];
- if(tab=="h"){const dd=S.dl===day()?"":`<button class="qc" data-d="1">Recompensa diária<span class="pr">${gem}+${fmt(dr())}</span></button>`;m.innerHTML=`<div class="hd top"><div><h1>Coleção Primata</h1><p class="mut">${ALL.filter(c=>S.inv[c.id]).length}/${ALL.length} cartas</p></div>${wlt()}</div><div class="pn"><div class="cs" id="cs">${P.map((x,i)=>`<button class="pk${pkExp(x)||pkFuture(x)?" pkx":""}" data-k="${i}" aria-label="${x.n}">${packEl(x,0,i)}${x.esp>0?`<em class="pke">🎁 Especial</em>`:pkFuture(x)?`<em class="pke">🔒 Começa em ${pkRest(x.ini)}</em>`:x.ate>0?`<em class="pke">⏳ ${pkExp(x)?"Encerrado":"some em "+pkRest(x.ate)}</em>`:""}</button>`).join("")}</div>${P.length>1?`<div class="ar"><button data-p="-1" aria-label="Anterior">‹</button><button data-p="1" aria-label="Próximo">›</button></div>`:""}<small id="cap">${p.n}</small>${P.length>1?`<div class="dots">${P.map(()=>"<i></i>").join("")}</div>`:""}</div><div class="pack-open"><label class="pack-qty" for="packQty"><span>Quantidade</span><select id="packQty" aria-label="Quantidade de pacotes para abrir">${[1,10,25,50,100,250,500,1000].map(n=>`<option value="${n}"${n==PQ?" selected":""}>×${n.toLocaleString("pt-BR")}</option>`).join("")}</select></label><button class="bt pack-open-action" data-open-selected="1"><span data-open-label>Abrir ×${PQ}</span><span class="pr"></span></button></div><div class="qa">${fpb()}<button class="qc" data-gf="1" id="gf" hidden></button>${dd}</div>`}
+ if(tab=="h"){const dd=S.dl===day()?"":`<button class="qc" data-d="1">Recompensa diária<span class="pr">${gem}+${fmt(dr())}</span></button>`;m.innerHTML=`<div class="hd top"><div><h1>Coleção Primata</h1><p class="mut">${ALL.filter(c=>S.inv[c.id]).length}/${ALL.length} cartas</p></div>${wlt()}</div><div class="pn"><div class="cs" id="cs">${P.map((x,i)=>`<button class="pk${pkExp(x)||pkFuture(x)?" pkx":""}" data-k="${i}" aria-label="${x.n}">${packEl(x,0,i)}${x.esp>0?`<em class="pke">🎁 Especial</em>`:pkFuture(x)?`<em class="pke">🔒 Começa em ${pkRest(x.ini)}</em>`:x.ate>0?`<em class="pke">⏳ ${pkExp(x)?"Encerrado":"some em "+pkRest(x.ate)}</em>`:""}</button>`).join("")}</div>${P.length>1?`<div class="ar"><button data-p="-1" aria-label="Anterior">‹</button><button data-p="1" aria-label="Próximo">›</button></div>`:""}<small id="cap">${p.n}</small>${P.length>1?`<div class="dots">${P.map(()=>"<i></i>").join("")}</div>`:""}</div><div class="pack-open"><label class="pack-qty" for="packQty"><span>Quantidade</span><select id="packQty" aria-label="Quantidade de pacotes para abrir">${[1,10,25,50,100,250,500,1000].map(n=>`<option value="${n}"${n==PQ?" selected":""}>×${n.toLocaleString("pt-BR")}</option>`).join("")}</select></label><button class="bt pack-open-action" data-open-selected="1"><span data-open-label>Abrir ×${PQ}</span><span class="pr"></span></button></div><button type="button" class="cp-daily-shop-entry" data-cp-open-daily-shop aria-label="Abrir Loja diária"><span class="cp-daily-shop-icon" aria-hidden="true">🛒</span><span class="cp-daily-shop-copy"><b>Loja diária</b><small>Confira as cartas e ofertas disponíveis</small></span><span class="cp-daily-shop-arrow" aria-hidden="true">ABRIR&nbsp;›</span></button><div class="qa">${fpb()}<button class="qc" data-gf="1" id="gf" hidden></button>${dd}</div>`}
  else if(tab=="a")m.innerHTML=`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><section class="cp-album-guide"><div class="cp-album-title"><small>COLEÇÃO PRIMATA</small><h2>Seu álbum</h2><p>Toque em uma ilustração para abrir a ficha completa.</p></div><button type="button" class="cp-guide-link" data-cp-el-guide="1">Guia de elementos <span>21 elementos</span></button></section><div class="dkb" id="dkp"></div><div id="flt" class="flt">${flBar()}</div><div id="dkal">${flGrid()}</div><div class="dksp"></div><div class="dka" id="dka" hidden></div>`;
  else if(tab=="m")m.innerHTML=msn();else if(tab=="t")m.innerHTML=trk();else if(tab=="b")m.innerHTML=btl();
  m.insertAdjacentHTML("beforeend",nav());
@@ -3574,6 +3621,7 @@ document.addEventListener("change",e=>{if(e.target&&e.target.id=="packQty"){PQ=s
 try{window.CP_POWER_MODE=localStorage.getItem("cp_power_mode")||"status"}catch(e){window.CP_POWER_MODE="status"}
 document.addEventListener("change",e=>{const el=e.target;if(!el||!['cpPowerMode','cpDeckPowerMode'].includes(el.id))return;window.CP_POWER_MODE=["status","skills","all"].includes(el.value)?el.value:"status";try{localStorage.setItem("cp_power_mode",window.CP_POWER_MODE)}catch(x){}if(el.id==="cpPowerMode"&&typeof FC!=="undefined"&&FC&&typeof view==="function")view(FC,1);else if(el.id==="cpDeckPowerMode"&&typeof dkPaint==="function")dkPaint()});
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#m [data-open-selected]");if(!b)return;const n=selectedPackQty();askMany(cur,n)});
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#m [data-cp-open-daily-shop]");if(!b)return;e.preventDefault();e.stopPropagation();if(typeof window.cpOpenShop==="function")window.cpOpenShop();else toast("A Loja diária não está disponível neste momento.")});
 const rs=c=>["mx","my","rx","ry"].forEach(k=>c.style.removeProperty("--"+k));
 let tl=0;document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.closest(".fch .cd");if(!c||tl)return;const X=e.clientX,Y=e.clientY;tl=requestAnimationFrame(()=>{tl=0;const b=c.getBoundingClientRect(),x=(X-b.left)/b.width,y=(Y-b.top)/b.height;c.style.setProperty("--mx",x*100+"%");c.style.setProperty("--my",y*100+"%");c.style.setProperty("--rx",((.5-y)*16).toFixed(1)+"deg");c.style.setProperty("--ry",((x-.5)*16).toFixed(1)+"deg")})});
 ["pointerup","pointercancel"].forEach(t=>document.addEventListener(t,e=>{const c=e.target.closest&&e.target.closest(".fch .cd");if(c)rs(c)}));
@@ -4079,7 +4127,7 @@ function yrv(c){const s=c.sk||[],L=(Array.isArray(s[0])?s:[s]).filter(a=>a&&a[0]
 function YCA(x){window.__yca=0;const ids=[...$("ahb").selectedOptions].map(o=>o.value),q=$("aqs").value;if(q!==""){const h=hxEx[+q],id="h"+rid();ADM.ab.push({id,n:h[0],q:"",rc:h[1],ef:JSON.parse(JSON.stringify(h[2])),tr:h[3],el:h[4],el2:h[5],solo:x.id});ids.push(id)}if(ids.length){ADM.ca[x.id]=ids;window.__yca=1}}
 function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],s=cur_(B);let pn="";
  if(PASS)pn=`<div class="zres"><h2>Vez de ${B.p[B.t].n}</h2><p>Passe o celular.</p><button class="bt" data-z="go">Começar</button></div>`;
- else if(B.p.length>2&&A.life<1)pn=`<p class="zst">Você saiu da luta · acompanhando</p>${ZH}<button class="bk" data-z="leave">Sair da mesa</button>`;else if(B.lv&&B.t!=B.v)pn=`<p class="zst">Vez de ${B.p[B.t].n}…<span id="zlt"></span></p>${ZH}${B.p.length==2?'<button class="bk" data-lvab id="zab" hidden>⏳ Amigo sumiu · vencer por abandono</button>':""}<button class="bk" data-z="sync">↻ Atualizar</button>${B.p.length>2?`<button class="bk" data-z="kick">Remover ${B.p[B.t].n} (ausente)</button>`:""}<button class="bk" data-z="quit">Desistir</button>`;else if(B.ai&&B.t==1)pn=`<p class="zst">Vez do rival…</p>${ZH}`;
+ else if(B.p.length>2&&A.life<1)pn=`<div class="cp-spectator-panel" style="padding:12px 14px;border:1px solid #52617a;border-radius:14px;background:linear-gradient(135deg,rgba(29,42,62,.94),rgba(13,19,31,.96));text-align:center"><b style="display:block;color:#9fd6ff;letter-spacing:.08em;font-size:.78rem">👁 MODO ESPECTADOR</b><span style="display:block;margin:5px 0;color:#e7edf7">Você foi eliminado, mas a Raid continua.</span><small style="display:block;color:#aab7ca">${B.t===0?"O Boss está atacando a equipe…":`Vez de ${esc(B.p[B.t].n)} · acompanhando a jogada`}</small>${ZH}<button class="bk" data-z="leave">Sair da Raid</button></div>`;else if(B.lv&&B.t!=B.v)pn=`<p class="zst">Vez de ${B.p[B.t].n}…<span id="zlt"></span></p>${ZH}${B.p.length==2?'<button class="bk" data-lvab id="zab" hidden>⏳ Amigo sumiu · vencer por abandono</button>':""}<button class="bk" data-z="sync">↻ Atualizar</button>${B.p.length>2?`<button class="bk" data-z="kick">Remover ${B.p[B.t].n} (ausente)</button>`:""}<button class="bk" data-z="quit">Desistir</button>`;else if(B.ai&&B.t==1)pn=`<p class="zst">Vez do rival…</p>${ZH}`;
  else{const u=SEL&&SEL.u,fo=tg_(B).length>0,emp=s.f.includes(null);
   pn=`<p class="zst">${s.n} · ações ${"●".repeat(B.ac)}${"○".repeat(Math.max(0,(CONFIG.acoes||2)-B.ac))}${B.n==1&&B.t==B.st?" · quem começa faz 1 ação":""}<span id="zlt"></span></p>`;
   if(SEL&&SEL.m=="a")pn+=`<p class="zst">Toque no inimigo que vai apanhar</p><button class="bt gh" data-z="cancel">Cancelar</button>`;
@@ -4091,7 +4139,12 @@ function zr(){const B=BT;if(!B)return;const me=B.ai?0:B.v,A=B.p[me],E=B.p[1-me],
   pn+=`<div class="two"><button class="bt gh${s.r.length>=3||!s.dk.length?" off":""}" data-z="draw">${s.r.length>=3?"Banco cheio":!s.dk.length?"Baralho vazio":"Comprar grátis"}</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button>`}
  // Reações por emoji removidas: não devem enviar eventos nem interferir na sincronização.
  fxSnap();ME=me;zb.innerHTML=(B.p.length>2||(B.o&&B.o.soloBoss))?zg(B,me,pn):`<div class="zt"><div><b>${E.n}</b><span class="zl" data-lf="E">${hrt(E.life)}</span></div><div class="zi" data-dkr="E">Turno ${B.n}/${MAXT} · baralho ${E.dk.length}</div></div>${tribeStatus(E)}${zs(E,1)}<p class="zlog">${B.log.slice(-2).join("<br>")||"&nbsp;"}</p>${zs(A,0)}<div class="zt"><div><b>${A.n}</b><span class="zl" data-lf="A">${hrt(A.life)}</span></div><div class="zi" data-dkr="A">baralho ${A.dk.length}</div></div>${tribeStatus(A)}<div class="zc">${pn}</div>`;fxFlush();yref();const actionBar=zb.querySelector(".zc");if(actionBar&&!actionBar.querySelector("[data-cp-el-guide-battle]"))actionBar.insertAdjacentHTML("beforeend",'<button type="button" class="cp-el-guide-float" data-cp-el-guide-battle="1">📖 Elementos</button>')}
-function zpost(){const B=BT;if(!B)return;SEL=null;if(!B.over)chk(B);if(!B.over&&B.ac<1)endT(B);if(B.over)return zend();if(!B.ai&&!B.lv&&B.t!=B.v)PASS=1;zr();aiRun()}
+function zpost(){const B=BT;if(!B)return;SEL=null;if(!B.over)chk(B);
+ // Em Raid, o jogador que perdeu a última vida não pode continuar segurando o turno.
+ // O motor salta imediatamente para o próximo aliado vivo, mesmo que ainda houvesse ações.
+ if(!B.over&&B.o&&B.o.m==="boss"&&B.t>0&&B.p[B.t]&&B.p[B.t].life<1){B.ac=0;endT(B)}
+ else if(!B.over&&B.ac<1)endT(B);
+ if(B.over)return zend();if(!B.ai&&!B.lv&&B.t!=B.v)PASS=1;zr();aiRun()}
 function usk(){const B=BT,u=SEL&&SEL.u,i=SEL&&SEL.i,g=SEL&&SEL.g,before=!!(u&&u.chg&&u.chg[i]),humanSeat=B&&B.lv?B.v:0,ok=aSk(B,u,i,g);if(ok&&B.t===humanSeat){const after=!!(u.chg&&u.chg[i]);if(!before&&after)bump("charge");else if(!after){bump("abil");const ab=u.ab&&u.ab[i];if(ab&&elSkillEls(ab,u).some(k=>k!=="normal"))bump("eluse")}}zpost()}
 function zc(a){const B=BT;if(!B)return;if(String(a).startsWith("rx:"))return;
  if(a=="go"){PASS=0;B.v=B.t;return zr()}
@@ -4137,7 +4190,7 @@ function zg(B,me,pn){const N=B.p.length,T=B.tm,two=N==4&&T[0]==T[2],oth=[...Arra
  const body=two?(()=>{const en=oth.filter(i=>T[i]!=T[me]),al=oth.find(i=>T[i]==T[me]);return`<div class="zqm t2"><div class="zqp">${en.map(seat).join("")}</div>${lgp}<div class="zqp b">${seat(me)}${seat(al)}</div></div>`})()
  :`<div class="zqm n${N}"><div class="zqt">${N==4?seat(oth[1]):""}</div><div class="zql">${seat(oth[0])}</div><div class="zqc">${lgp}</div><div class="zqr">${seat(oth[N-2])}</div><div class="zqb">${seat(me)}</div></div>`;
  return body+`<div class="zc">${pn}</div>`}
-function zgo(a,b,o){BT=nb(a,b,o);BT.p.forEach((s,i)=>s.f[0]&&BT.ev.push({k:"place",s:i,id:s.f[0].id,r:s.f[0].c.r,el:elEls(s.f[0])[0]}));BT.ev.push({k:"turn",s:BT.t,first:1});BT.ai=o.m=="a";BT.v=window.LV?window.LV.me:BT.ai?0:BT.t;BT.lv=window.LV?1:0;SEL=null;PASS=0;zb.hidden=false;zr();aiRun()}
+function zgo(a,b,o){BT=nb(a,b,o);try{SND.battleStart()}catch(e){}BT.p.forEach((s,i)=>s.f[0]&&BT.ev.push({k:"place",s:i,id:s.f[0].id,r:s.f[0].c.r,el:elEls(s.f[0])[0]}));BT.ev.push({k:"turn",s:BT.t,first:1});BT.ai=o.m=="a";BT.v=window.LV?window.LV.me:BT.ai?0:BT.t;BT.lv=window.LV?1:0;SEL=null;PASS=0;zb.hidden=false;zr();aiRun()}
 function mineDeck(){let d=dkv();if(d.length<12)d=dkf();if(d.length<12){toast("Você precisa de <b>12 cartas diferentes</b> para montar o deck. Abra mais pacotes!");return null}return d.map(c=>({c,lv:lvl(c)}))}
 function startArena(bs){
  const k=Math.max(0,Math.min(8,Number.isFinite(+S.ar)?Math.floor(+S.ar):0));
@@ -4190,6 +4243,12 @@ async function cpBuildBackup(download=true,silent=false){
 }
 const saveCode=()=>"CP1:"+b64(JSON.stringify(S)),loadCode=t=>{t=String(t).trim();if(t.slice(0,4)=="CP1:")t=unb(t.slice(4));const j=JSON.parse(t);if(!j||!j.inv)throw 0;return j};
 const ADM=Object.assign({c:[],p:[],d:"",o:{},po:{},ab:[],ca:{},xp:[],shop:[],starterCards:[]},ADM0);ADM.starterCards=Array.isArray(ADM.starterCards)?ADM.starterCards:[];ADM.shop=Array.isArray(ADM.shop)?ADM.shop:[];
+// Recompensas do ranking semanal: editáveis pelo ADM e sincronizadas junto do conteúdo do jogo.
+const WEEKLY_PRIZE_DEFAULTS=[{pk:10,fr:5000},{pk:7,fr:3500},{pk:5,fr:2000}];
+function weeklyPrizeConfig(){
+ const raw=ADM.weeklyRewards&&typeof ADM.weeklyRewards==="object"?ADM.weeklyRewards:{};
+ return WEEKLY_PRIZE_DEFAULTS.map((d,i)=>{const v=raw[String(i+1)]||raw[i+1]||{};const pk=Number(v.pk),fr=Number(v.fr);return{pk:Number.isFinite(pk)?Math.max(0,Math.min(10000,Math.floor(pk))):d.pk,fr:Number.isFinite(fr)?Math.max(0,Math.min(999999999,Math.floor(fr))):d.fr}});
+}
 const sADM=()=>{try{window.cpNormalizeGameElements&&window.cpNormalizeGameElements();localStorage.setItem("colprimata_adm",JSON.stringify(ADM));localStorage.setItem("colprimata_img",JSON.stringify(IMG))}catch(e){toast("Sem espaço no aparelho · exporte o conteúdo")}};
 function addCard(x){let p=x.pk=="ind"?IND:P.find(q=>q.id==x.pk);if(!p){const d=ADM.p.find(q=>q.id==x.pk);if(!d)return;p={id:d.id,n:d.n,e:d.e,h:d.h,cost:d.cost,cards:[]};P.push(p)}const c={...x};prep(p,c,0);p.cards.push(c);ALL.push(c)}
 ADM.c.filter(x=>!x.dr).forEach(addCard);P.forEach(p=>p.dest=p.id==ADM.d); // v1.9: dr=1 = rascunho (guardada, fora do jogo até lançar)
@@ -4336,6 +4395,8 @@ adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("
 +adxT("rdp","Missões diárias · título|tipo|meta · tipos: "+[...new Set(DP.concat(WP).map(m=>m[1]))].join(", "),DP.map(m=>m.slice(0,3).join("|")).join("\n"),18)
 +adxT("rwp","Missões semanais · título|tipo|meta",WP.map(m=>m.slice(0,3).join("|")).join("\n"),14)
 +adxT("rmc","Coleção e secretas · id|meta|pacotes (o texto depois de # é só o nome)",CL.concat(SC).map(m=>`${m[0]}|${m[3]}|${m[4]} # ${m[1]}`).join("\n"),20)
++`<h3 class="ash">🏆 Recompensas do ranking semanal</h3><p class="mut" style="margin:0 0 10px;text-transform:none;letter-spacing:0">Defina os pacotes e Fragmentos entregues aos três primeiros colocados. As alterações aparecem no ranking e são usadas no resgate da temporada encerrada.</p>`
++[1,2,3].map(pos=>{const v=weeklyPrizeConfig()[pos-1];return adxI(`wr${pos}pk`,`${pos}º lugar · Pacotes`,v.pk,"number")+adxI(`wr${pos}fr`,`${pos}º lugar · Fragmentos`,v.fr,"number")}).join("")
 +adxB("sr","Salvar regras")+adxB("rr","Restaurar padrões","gh")),
 adxGv=()=>adxD("g","🧪 Dar itens e testes",adxI("gn","Quantidade",10,"number")+adxS("gp","Pacote de presente",adxPo())+adxS("gc","Carta",adxCo())+adxB("gf","Dar fragmentos","cy")+adxB("gg","Dar pacotes de presente","cy")+adxB("gk","Dar a carta","cy")+adxB("ga","Liberar todas as cartas","gh"));
 function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("eel").value=c.el||"";$("eel2").value=c.el2||"";cpSyncCardElements();$("etb").value=c.tb||"";$("ek2").value=c.p.id;$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||"";$("ebk").value=c.bk||"";$("ega").value=c.ga||""}
@@ -4370,8 +4431,9 @@ ADM.po[id]=Object.assign(ADM.po[id]||{},{n:$("kn").value.trim()||"Pacote",e:$("k
 function adxDk(){const id=$("ek").value,p=P.find(q=>q.id==id);if(!p)return PX.some(q=>q.id==id)?toast("Esse pacote já acabou e saiu da loja."):0;if(P.length<2)return toast("O jogo precisa ter ao menos 1 pacote.");
 ask("Excluir pacote?",`<b>${p.n}</b> e as ${p.cards.length} cartas dele somem do jogo.`,"Excluir",()=>{adxXp(p);save();adxGo()})}
 function adxSr(){const g=i=>$(i).value,n=i=>g(i).split(",").map(x=>+x.trim()),ln=i=>g(i).split("\n").map(x=>x.trim()).filter(Boolean),ok=a=>a.length==9&&a.every(x=>x>=0),
-ms=i=>ln(i).map(l=>{const p=l.split("|");return[p[0].trim(),(p[1]||"").trim(),+p[2]]}),cf={},mc={};
+ms=i=>ln(i).map(l=>{const p=l.split("|");return[p[0].trim(),(p[1]||"").trim(),+p[2]]}),cf={},mc={},weeklyRewards={};
 Object.keys(CONFIG).forEach(k=>{const v=g("cf_"+k);cf[k]=typeof CONFIG[k]=="number"?+v:v});
+for(let pos=1;pos<=3;pos++){const pk=Number(g(`wr${pos}pk`)),fr=Number(g(`wr${pos}fr`));if(!Number.isInteger(pk)||pk<0||pk>10000||!Number.isInteger(fr)||fr<0||fr>999999999)return toast(`Confira as recompensas do ${pos}º lugar. Use pacotes de 0 a 10.000 e Fragmentos de 0 a 999.999.999.`);weeklyRewards[pos]={pk,fr}}
 const fr=n("rfr"),rc=n("rrc"),tr=n("rtr"),st=ln("rst").map(l=>l.split(",").map(Number).slice(0,2)),an=ln("ran").map(l=>l.split("|").map(x=>x.trim())),dp=ms("rdp"),wp=ms("rwp");
 ln("rmc").forEach(l=>{const p=l.split("#")[0].split("|");mc[p[0].trim()]=[+p[1],+p[2]]});
 if(Object.values(cf).some(v=>typeof v=="number"&&!Number.isFinite(v))||isNaN(+g("rcu"))||isNaN(+g("rini")))return toast("Há um número inválido nas regras.");
@@ -4379,8 +4441,8 @@ if(cf.rewardRandomChance<0||cf.rewardRandomChance>100)return toast("A chance de 
 if(!ok(fr)||!ok(rc)||!ok(tr)||st.length!=9||st.some(s=>s.length!=2||s.some(x=>!(x>0)))||an.length!=9||an.some(a=>!a[0]))return toast("Raridades, troféus, força e arenas precisam de 9 itens válidos.");
 if(dp.length<cf.nDia||wp.length<3||[...dp,...wp].some(m=>!m[0]||!m[1]||!(m[2]>0)))return toast("Missões: título|tipo|meta · diárias ≥ nº por dia · semanais ≥ 3.");
 if(Object.values(mc).some(v=>isNaN(v[0])||isNaN(v[1])))return toast("Coleção e secretas: use id|meta|pacotes.");
-Object.assign(ADM,{cfg:cf,fr,cu:+g("rcu"),ini:+g("rini"),rc,st,tr,an,dp,wp,mc});adxGo()}
-function adxRr(){ask("Restaurar padrões?","Regras e recompensas voltam aos valores originais do jogo (cartas e pacotes não mudam).","Restaurar",()=>{["cfg","fr","cu","ini","rc","st","tr","an","dp","wp","mc"].forEach(k=>delete ADM[k]);adxGo()})}
+Object.assign(ADM,{cfg:cf,fr,cu:+g("rcu"),ini:+g("rini"),rc,st,tr,an,dp,wp,mc,weeklyRewards});adxGo()}
+function adxRr(){ask("Restaurar padrões?","Regras e recompensas voltam aos valores originais do jogo (cartas e pacotes não mudam).","Restaurar",()=>{["cfg","fr","cu","ini","rc","st","tr","an","dp","wp","mc","weeklyRewards"].forEach(k=>delete ADM[k]);adxGo()})}
 function adxG(w){const n=Math.floor(+$("gn").value);if(!(n>0))return toast("Informe uma quantidade.");
 if(w=="gf")S.fr+=n;else if(w=="gg"){const v=$("gp").value;if(v=="__r")for(let k=0;k<n;k++)gift(P[Math.floor(Math.random()*P.length)].id,1);else gift(v,n)}else if(w=="gk"){const i=$("gc").value;S.inv[i]=(S.inv[i]||0)+n}else ALL.forEach(c=>S.inv[c.id]=S.inv[c.id]||1);
 save();upd();sync();toast("✓ Pronto")}
@@ -4593,9 +4655,9 @@ if(!document.querySelector('meta[name="theme-color"]')){const t=document.createE
 
 // ===== v1.0 (17/11/2026): MODO ADM organizado · categorias, busca, botão de salvar fixo, campos em grupos e zona de risco =====
 (()=>{try{
-const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, pacotes e fragmentos"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina até dois elementos por carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"],ds_st:["🎴","Cartas iniciais","Escolha as 12 cartas entregues a jogadores novos"]},
+const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, economia e prêmio do ranking semanal"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina até dois elementos por carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"],ds_st:["🎴","Cartas iniciais","Escolha as 12 cartas entregues a jogadores novos"]},
 FT={ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"],ds_st:["@st","Salvar 12 cartas iniciais"]},
-GR={ds_r:[["Login e pacotes",["cf_diaria","cf_pacVit","cf_gratisLivre","cf_gratisJogar"]],["Pacotes aleatórios nas recompensas",["cf_rewardRandomChance"]],["Fragmentos e preços",["rfr","rcu","rini","rrc","cf_fusMult"]],["Liberações por arena",["cf_fusArena","cf_sArena"]],["Faixa de status por rank",["cf_faixa"]],["Bots de batalha",["cf_botErro","cf_botForca","cf_botNivel"]]],
+GR={ds_r:[["Login e pacotes",["cf_diaria","cf_pacVit","cf_gratisLivre","cf_gratisJogar"]],["Pacotes aleatórios nas recompensas",["cf_rewardRandomChance"]],["Fragmentos e preços",["rfr","rcu","rini","rrc","cf_fusMult"]],["Ranking semanal · recompensas",["wr1pk","wr1fr","wr2pk","wr2fr","wr3pk","wr3fr"]],["Liberações por arena",["cf_fusArena","cf_sArena"]],["Faixa de status por rank",["cf_faixa"]],["Bots de batalha",["cf_botErro","cf_botForca","cf_botNivel"]]],
 ds_b:[["Troféus",["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax"]],["Prêmios das lutas",["cf_limiteDia","cf_derrota","cf_arf0","cf_arfK","cf_amigoFrag","cf_amigoDia"]],["Duelo ao vivo",["cf_turnoSeg","cf_sumiuSeg"]],["Chefes e campeão",["cf_chefe","cf_chefeFinal","cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag"]],["Arenas e força das cartas",["rtr","ran","rst"]]],
 ds_m:[["Missões",["cf_nDia","cf_mDia","cf_mSem","cf_mSemPac","cf_mDiaBonus"]],["Listas de missões",["rdp","rwp","rmc"]]],
 ds_s:[["Sistema",["cf_admPin","cf_imgKB","cf_som","cf_musica"]],["Conteúdo do jogo",["cc","fcc"]]],
@@ -5372,26 +5434,32 @@ window.cpPublishProfile=pubPerfil;
 function pushAdm(){const job=()=>pushAdmNow();admChain=admChain.then(job,job);return admChain}
 function pf(){clearTimeout(pt);pt=setTimeout(pubPerfil,6000)}
 function modal(h){let o=g("cpm");if(!o){o=document.createElement("div");o.id="cpm";o.onclick=e=>{e.stopPropagation();if(e.target===o)return o.remove();const wish=e.target.closest("[data-cp-openwish]");if(wish){e.preventDefault();e.stopPropagation();window.cpOpenWishlist&&window.cpOpenWishlist();return}const b=e.target.closest("[data-a]");b&&act(b.dataset.a,b.dataset.v)};o.onchange=e=>{e.target.id=="tm"&&fillQ()};document.body.append(o)}o.innerHTML=`<div class="pbx">${h}</div>`;return o}
-function act(a,v){if(String(a).slice(0,2)=="mz")return mzAct(a,v);if(a=="me")perfil();else if(a=="pj")jogadores();else if(a=="yr")cpOpenYearRetrospective();else if(a=="rnk"||a=="rkr")ranking();else if(a=="rkc")claimSeason();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dstart")enviarDesafio();else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca");else if(a=="px"){const o=g("cpm");o&&o.remove()}}
-function perfil(){const s=stats(),k=TIN.filter(t=>t.s=="p").length;
- modal(`<div class="cxpr"><button class="cxpav" data-a="pf">${av(ME.f,ME.n)}</button><div><b data-a="pn">${esc(ME.n)} ✎</b><small>toque na foto ou no nome para mudar</small></div></div>${window.cpProfileMeta?window.cpProfileMeta(s.title,s.showcase):""}<div class="cxpg"><div><b>🏆 ${s.tp}</b>troféus</div><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}</b>duelos ganhos</div><div><b>${s.ol}</b>duelos perdidos</div></div><button class="bt cy" data-a="pj">👥 Jogadores e trocas${k?" · 🔔 "+k:""}</button><button class="bt cy" data-a="mz">🎴 Batalha em grupo (2x2 ou todos)</button><button class="bt gh" data-a="yr">📊 Retrospectiva Primata</button><button class="bt gh" data-cp-openwish="1">⭐ Editar lista de desejos</button><button class="bt gh" data-a="out">Sair da conta</button>`)}
+function act(a,v){if(String(a).slice(0,2)=="mz")return mzAct(a,v);if(a=="me")perfil();else if(a=="onl")onlineHub();else if(a=="ach"){window.cpOpenAchievements&&window.cpOpenAchievements()}else if(a=="pj")jogadores();else if(a=="yr")cpOpenYearRetrospective();else if(a=="rnk"||a=="rkr")ranking();else if(a=="rkc")claimSeason();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dstart")enviarDesafio();else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca");else if(a=="px"){const o=g("cpm");o&&o.remove()}}
+function onlineHub(){
+ const pending=TIN.filter(t=>t.s=="p").length;
+ modal(`<div class="cp-hub-heading"><div><small>COMUNIDADE</small><h3>Online e partidas</h3><p>Encontre jogadores, faça trocas e organize partidas com amigos.</p></div><button class="cp-hub-close" data-a="px" aria-label="Fechar">✕</button></div><div class="cp-online-grid"><button class="cp-hub-tile" data-a="pj"><span class="cp-hub-icon">👥</span><span><b>Jogadores e trocas</b><small>Veja quem está online, desafie e negocie cartas</small></span>${pending?`<em>${pending} nova${pending>1?"s":""}</em>`:"<i>›</i>"}</button><button class="cp-hub-tile" data-a="mz"><span class="cp-hub-icon">🎴</span><span><b>Batalha em grupo</b><small>Monte partidas 2×2 ou com todos contra todos</small></span><i>›</i></button><button class="cp-hub-tile" data-a="rnk"><span class="cp-hub-icon">🏆</span><span><b>Ranking semanal</b><small>Confira posições, temporada e recompensas</small></span><i>›</i></button></div><div class="cp-hub-footnote">As opções sociais e de partidas ficam reunidas nesta área.</div>`);
+}
+window.cpOpenOnlineHub=onlineHub;
+function perfil(){const s=stats();
+ modal(`<div class="cp-hub-heading"><div><small>MINHA CONTA</small><h3>Meu perfil</h3><p>Identidade, coleção e personalização.</p></div><button class="cp-hub-close" data-a="px" aria-label="Fechar">✕</button></div><section class="cp-profile-identity"><div class="cxpr"><button class="cxpav" data-a="pf">${av(ME.f,ME.n)}</button><div class="cp-profile-name"><b data-a="pn">${esc(ME.n)} ✎</b><small>Toque na foto ou no nome para editar</small></div></div><button class="cp-profile-edit" data-a="ach">🏅 Editar títulos e vitrine</button>${window.cpProfileMeta?window.cpProfileMeta(s.title,s.showcase):""}</section><section class="cp-profile-section"><h4>📊 Suas estatísticas</h4><div class="cxpg"><div><b>🏆 ${s.tp}</b>troféus</div><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}</b>duelos ganhos</div><div><b>${s.ol}</b>duelos perdidos</div></div></section><section class="cp-profile-section"><h4>🗂️ Sua jornada</h4><button class="cp-profile-link" data-a="yr"><span>📊</span><span><b>Retrospectiva Primata</b><small>Veja seu histórico e suas cartas mais usadas</small></span><i>›</i></button><button class="cp-profile-link" data-cp-openwish="1"><span>⭐</span><span><b>Lista de desejos</b><small>Escolha cartas que está procurando para facilitar trocas</small></span><i>›</i></button></section><button class="cp-profile-logout" data-a="out">Sair da conta</button>`)}
 function pickFoto(){const i=document.createElement("input");i.type="file";i.accept="image/*";i.onchange=()=>{const x=i.files[0];if(!x)return;const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=96;const q=Math.min(im.width,im.height);c.getContext("2d").drawImage(im,(im.width-q)/2,(im.height-q)/2,q,q,0,0,96,96);ME.f=c.toDataURL("image/jpeg",.72);pubPerfil().then(()=>{chip();perfil()})};im.src=URL.createObjectURL(x)};i.click()}
 function rename(){const n=prompt("Seu apelido:",ME.n);if(n&&n.trim()){ME.n=n.trim().slice(0,20);pubPerfil().then(()=>{chip();perfil()})}}
 function sair(){confirm("Sair da conta de "+ME.n+"?")&&pushSave().then(()=>A.signOut(au)).then(()=>location.reload())}
 const seasonScore=(p,id)=>p.sId===id?Math.max(0,+p.sPts||0):p.pId===id?Math.max(0,+p.pPts||0):0,
 seasonRank=(arr,p)=>1+arr.filter(x=>x.score>p.score).length,
-seasonPrize=r=>r===1?{pk:3,fr:1500}:r===2?{pk:2,fr:1000}:r===3?{pk:1,fr:500}:null,
+seasonPrize=r=>Number.isInteger(+r)&&+r>=1&&+r<=3?weeklyPrizeConfig()[+r-1]:null,
+weeklyPrizeHtml=()=>`<div class="cprprizes">${weeklyPrizeConfig().map((p,i)=>`<div><span>${["🥇","🥈","🥉"][i]} ${i+1}º lugar</span><b>${fmt(p.pk)} pacotes + ${fmt(p.fr)} 💎</b></div>`).join("")}</div>`,
 seasonDate=id=>{const d=new Date(id+"T00:00:00Z");return d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",timeZone:"UTC"})};
 async function ranking(){if(!U)return toast("Entre na conta para ver o ranking semanal.");modal(`<p>Carregando ranking…</p>`);try{
  await pubPerfil();const snap=await getDocs(collection(db,"perfis")),players=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.n);if(!players.some(p=>p.id===U.uid))players.push({id:U.uid,...stats()});
  const se=seasonData(),prev=previousSeasonId(),current=players.map(p=>({...p,score:seasonScore(p,se.id)})).sort((a,b)=>b.score-a.score||(b.tp||0)-(a.tp||0)||String(a.n).localeCompare(String(b.n))),old=players.map(p=>({...p,score:seasonScore(p,prev)})).filter(p=>p.score>0).sort((a,b)=>b.score-a.score||(b.tp||0)-(a.tp||0)||String(a.n).localeCompare(String(b.n))),mine=current.find(p=>p.id===U.uid)||{id:U.uid,n:ME.n,score:0},myRank=mine.score>0?seasonRank(current,mine):0,oldMe=old.find(p=>p.id===U.uid),oldRank=oldMe?seasonRank(old,oldMe):0,prize=seasonPrize(oldRank),claimed=S.sClaim===prev,remain=Math.max(0,se.end-lnow()),days=Math.floor(remain/864e5),hours=Math.floor(remain%864e5/36e5),mins=Math.floor(remain%36e5/6e4),progress=Math.max(0,Math.min(100,100-remain/(7*864e5)*100)),top=current.filter(p=>p.score>0).slice(0,3),pod=top.length?`<div class="cprpodium">${top.map((p,i)=>`<div class="cprpod"><b class="cprmed">${["🥇","🥈","🥉"][i]}</b><span class="cxpav">${av(p.f,p.n)}</span><strong>${esc(p.n)}</strong><small>${fmt(p.score)} 🏆</small></div>`).join("")}</div>`:`<div class="cprempty">Ainda não há jogadores nesta temporada.</div>`,rows=current.length?current.map((p,i)=>`<div class="cprrow"><b class="cprpos">${p.score>0?seasonRank(current,p)+"º":"—"}</b><span class="cxpav">${av(p.f,p.n)}</span><span class="cprname"><b>${esc(p.n)}${p.id===U.uid?" · você":""}</b><small>${fmt(p.tp||0)} troféus totais</small></span><b class="cprscore">${fmt(p.score)}<small>🏆 na semana</small></b></div>`).join(""):`<div class="cprempty">Nenhum jogador cadastrado.</div>`,oldTop=old.slice(0,3).map((p,i)=>`<div class="cprrow"><b class="cprpos">${seasonRank(old,p)}º</b><span class="cxpav">${av(p.f,p.n)}</span><span class="cprname"><b>${esc(p.n)}</b><small>Temporada ${seasonDate(prev)}</small></span><b class="cprscore">${fmt(p.score)}<small>🏆</small></b></div>`).join("");
- modal(`<button class="bt gh" data-a="px">‹ Fechar ranking</button><div class="cprhero"><small>Competição entre amigos</small><h2>🏆 Ranking Primata</h2><p>Uma nova temporada começa toda segunda-feira</p></div><div class="cprclock"><div><span><small>Temporada atual</small><br><b>${seasonDate(se.id)} — ${seasonDate(new Date(se.start+6*864e5).toISOString().slice(0,10))}</b></span><span style="text-align:right"><small>Termina em</small><br><b>${days}d ${hours}h ${mins}min</b></span></div><div class="cprbar"><i style="width:${progress}%"></i></div><small>Segunda a domingo · horário de Brasília · ${players.length} jogadores</small></div><h4 class="cprsection">🏅 Pódio da semana</h4>${pod}<div class="cprme">Sua posição: <b>${myRank?myRank+"º":"ainda sem posição"}</b> · <b>${fmt(mine.score)} 🏆</b> conquistados nesta temporada</div><h4 class="cprsection">Classificação completa</h4>${rows}<h4 class="cprsection">🎁 Prêmios semanais</h4><div class="cprprizes"><div><span>🥇 1º lugar</span><b>3 pacotes + 1.500 💎</b></div><div><span>🥈 2º lugar</span><b>2 pacotes + 1.000 💎</b></div><div><span>🥉 3º lugar</span><b>1 pacote + 500 💎</b></div></div><p class="cprnote">A pontuação semanal soma os troféus ganhos e desconta os perdidos nas batalhas de arena. Seus troféus permanentes continuam separados.</p><div class="cprprev"><h4>🏆 Resultado da temporada anterior</h4>${oldTop||`<p class="cprnote">Ainda não há resultado registrado para a semana passada.</p>`}${prize?(claimed?`<p class="cprnote">✅ Seu prêmio da temporada anterior já foi resgatado.</p>`:`<button class="bt cy" data-a="rkc">🎁 Resgatar prêmio do ${oldRank}º lugar</button>`):oldMe?`<p class="cprnote">Você ficou em ${oldRank}º lugar. Continue jogando para buscar o pódio!</p>`:`<p class="cprnote">Seu resultado anterior ainda não ficou entre os três primeiros.</p>`}</div><button class="bt gh" data-a="rkr">↻ Atualizar ranking</button>`);
+ modal(`<button class="bt gh" data-a="onl">‹ Voltar para Online</button><div class="cprhero"><small>Competição entre amigos</small><h2>🏆 Ranking Primata</h2><p>Uma nova temporada começa toda segunda-feira</p></div><div class="cprclock"><div><span><small>Temporada atual</small><br><b>${seasonDate(se.id)} — ${seasonDate(new Date(se.start+6*864e5).toISOString().slice(0,10))}</b></span><span style="text-align:right"><small>Termina em</small><br><b>${days}d ${hours}h ${mins}min</b></span></div><div class="cprbar"><i style="width:${progress}%"></i></div><small>Segunda a domingo · horário de Brasília · ${players.length} jogadores</small></div><h4 class="cprsection">🏅 Pódio da semana</h4>${pod}<div class="cprme">Sua posição: <b>${myRank?myRank+"º":"ainda sem posição"}</b> · <b>${fmt(mine.score)} 🏆</b> conquistados nesta temporada</div><h4 class="cprsection">Classificação completa</h4>${rows}<h4 class="cprsection">🎁 Prêmios semanais</h4>${weeklyPrizeHtml()}<p class="cprnote">A pontuação semanal soma os troféus ganhos e desconta os perdidos nas batalhas de arena. Seus troféus permanentes continuam separados.</p><div class="cprprev"><h4>🏆 Resultado da temporada anterior</h4>${oldTop||`<p class="cprnote">Ainda não há resultado registrado para a semana passada.</p>`}${prize?(claimed?`<p class="cprnote">✅ Seu prêmio da temporada anterior já foi resgatado.</p>`:`<button class="bt cy" data-a="rkc">🎁 Resgatar prêmio do ${oldRank}º lugar</button>`):oldMe?`<p class="cprnote">Você ficou em ${oldRank}º lugar. Continue jogando para buscar o pódio!</p>`:`<p class="cprnote">Seu resultado anterior ainda não ficou entre os três primeiros.</p>`}</div><button class="bt gh" data-a="rkr">↻ Atualizar ranking</button>`);
  }catch(e){console.warn("ranking",e);modal(`<button class="bt gh" data-a="px">‹ Fechar</button><p>Não consegui carregar o ranking. Confira sua conexão e tente novamente.</p>`)}}
 async function claimSeason(){if(!U)return;const prev=previousSeasonId();if(S.sClaim===prev)return toast("Esse prêmio já foi resgatado.");try{await pubPerfil();const snap=await getDocs(collection(db,"perfis")),players=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.n),old=players.map(p=>({...p,score:seasonScore(p,prev)})).filter(p=>p.score>0).sort((a,b)=>b.score-a.score||(b.tp||0)-(a.tp||0)||String(a.n).localeCompare(String(b.n))),mine=old.find(p=>p.id===U.uid);if(!mine)return toast("Não há prêmio registrado para sua conta nesta temporada.");const rank=seasonRank(old,mine),pr=seasonPrize(rank);if(!pr)return toast("Você não ficou entre os três primeiros da temporada anterior.");S.fr=(+S.fr||0)+pr.fr;gift(dpk().id,pr.pk,true);S.sClaim=prev;save();toast(`🎉 ${rank}º lugar! Você recebeu ${pr.pk} pacote(s) e ${fmt(pr.fr)} fragmentos.`);ranking()}catch(e){console.warn("prêmio semanal",e);toast("Não foi possível resgatar o prêmio agora.")}}
 async function jogadores(){modal(`<p>Carregando…</p>`);let l=[];
- try{l=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
+ try{l=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
  l.sort((a,b)=>(b.tp||0)-(a.tp||0));PL=l;const ni=TIN.filter(t=>t.s=="p"),no=TOUT.filter(t=>t.s=="p");
- modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button>`+(ni.length?`<h4>Trocas recebidas</h4>`+ni.map(t=>`<div class="cxpt"><span><b>${esc(t.dn)}</b> oferece <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b> (sua)</span><div><button class="bt cy" data-a="ac" data-v="${t.id}">Aceitar</button><button class="bt gh" data-a="no" data-v="${t.id}">Recusar</button></div></div>`).join(""):"")+(no.length?`<h4>Suas ofertas</h4>`+no.map(t=>`<div class="cxpt"><span>Para <b>${esc(t.pn)}</b>: <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b></span><div><button class="bt gh" data-a="ca" data-v="${t.id}">Cancelar</button></div></div>`).join(""):"")+`<h4>Jogadores (${l.length})</h4>`+(l.length?l.map((p,i)=>`<button class="cxpl" data-a="ver" data-v="${i}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>🏆 ${p.tp||0} · ${p.w||0}V ${p.l||0}D</small></span></button>`).join(""):`<p>Nenhum amigo entrou ainda.</p>`))}
+ modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button>`+(ni.length?`<h4>Trocas recebidas</h4>`+ni.map(t=>`<div class="cxpt"><span><b>${esc(t.dn)}</b> oferece <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b> (sua)</span><div><button class="bt cy" data-a="ac" data-v="${t.id}">Aceitar</button><button class="bt gh" data-a="no" data-v="${t.id}">Recusar</button></div></div>`).join(""):"")+(no.length?`<h4>Suas ofertas</h4>`+no.map(t=>`<div class="cxpt"><span>Para <b>${esc(t.pn)}</b>: <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b></span><div><button class="bt gh" data-a="ca" data-v="${t.id}">Cancelar</button></div></div>`).join(""):"")+`<h4>Jogadores (${l.length})</h4>`+(l.length?l.map((p,i)=>`<button class="cxpl" data-a="ver" data-v="${i}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>🏆 ${p.tp||0} · ${p.w||0}V ${p.l||0}D</small></span></button>`).join(""):`<p>Nenhum amigo entrou ainda.</p>`))}
 function ver(i){CP=i;const p=PL[i];if(!p)return;modal(`<button class="bt gh" data-a="pj">‹ Jogadores</button><div class="cxpr"><span class="cxpav">${av(p.f,p.n)}</span><div><b>${esc(p.n)}</b><small>${p.nc||0}/${p.tot||0} cartas</small></div></div>${window.cpProfileMeta?window.cpProfileMeta(p.title,p.showcase):""}${window.cpWishlistMarkup?window.cpWishlistMarkup(p.wish||[],i):""}<div class="cxpg"><div><b>🏆 ${p.tp||0}</b>troféus</div><div><b>${p.w||0}</b>vitórias</div><div><b>${p.l||0}</b>derrotas</div><div><b>${p.ow||0}</b>duelos ganhos</div><div><b>${p.ol||0}</b>duelos perdidos</div></div><button class="bt cy" data-a="duel" data-v="${i}">⚔️ Duelo ao vivo</button><button class="bt gh" data-a="tr" data-v="${i}">🔁 Propor troca</button>`)}
 function fillQ(){const a=byId(g("tm").value),q=g("tq");q.innerHTML=TH.filter(c=>!a||okT(a,c)).map(c=>`<option value="${c.id}">${R[c.r][0]} · ${esc(c.n)} (${PL[CP].ex[c.id]} repetida${PL[CP].ex[c.id]>1?"s":""})</option>`).join("")||`<option value="">Nenhuma compatível</option>`}
 function trocarUI(i){CP=i;const p=PL[i],M=mine().sort((a,b)=>((p.wish||[]).includes(b.id)?1:0)-((p.wish||[]).includes(a.id)?1:0)),TH=Object.keys(p.ex||{}).map(byId).filter(Boolean).sort((a,b)=>b.r-a.r);const bk=`<button class="bt gh" data-a="ver" data-v="${i}">‹ Voltar</button>`;
@@ -5544,10 +5612,10 @@ function cpShowPendingFriendInvites(){
 }
 if(!window.__cpPendingFriendInviteTimer)window.__cpPendingFriendInviteTimer=setInterval(cpShowPendingFriendInvites,1800);
 async function mzMenu(){modal(`<p>Carregando…</p>`);
- try{PL=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
+ try{PL=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
  mzDraw()}
 function mzDraw(){const n=MZM[MZmode][1]-1;
- modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button><h4>🎴 Batalha em grupo</h4><div class="mzm">${Object.keys(MZM).map(k=>`<button class="bt ${k==MZmode?"cy":"gh"}" data-a="mzm" data-v="${k}">${MZM[k][0]}</button>`).join("")}</div><small>${MZmode=="d"?"Escolha 3 amigos: o 1º é seu parceiro de time (fica do seu lado), os outros 2 são os adversários.":"Escolha "+n+" amigos para jogar contra."}</small>`+PL.map(p=>`<button class="cxpl" data-a="mzp" data-v="${p.id}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>${MZsel.includes(p.id)?"✅ nº "+(MZsel.indexOf(p.id)+1):"toque para chamar"}</small></span></button>`).join("")+`<button class="bt cy" data-a="mzc">Chamar ${MZsel.length}/${n}</button>`)}
+ modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button><h4>🎴 Batalha em grupo</h4><div class="mzm">${Object.keys(MZM).map(k=>`<button class="bt ${k==MZmode?"cy":"gh"}" data-a="mzm" data-v="${k}">${MZM[k][0]}</button>`).join("")}</div><small>${MZmode=="d"?"Escolha 3 amigos: o 1º é seu parceiro de time (fica do seu lado), os outros 2 são os adversários.":"Escolha "+n+" amigos para jogar contra."}</small>`+PL.map(p=>`<button class="cxpl" data-a="mzp" data-v="${p.id}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>${MZsel.includes(p.id)?"✅ nº "+(MZsel.indexOf(p.id)+1):"toque para chamar"}</small></span></button>`).join("")+`<button class="bt cy" data-a="mzc">Chamar ${MZsel.length}/${n}</button>`)}
 function mzAct(a,v){
  if(a=="mz")mzMenu();
  else if(a=="mzm"){MZmode=v;MZsel=MZsel.slice(0,MZM[v][1]-1);mzDraw()}
@@ -5761,7 +5829,7 @@ function cpPresenceStop(){clearInterval(CP_PRES_TIMER);clearInterval(CP_PRES_VIE
 function cpRenderPlayers(){
  if(CP_PVIEW!=="list")return;cpPresenceViewStart();
  const ni=TIN.filter(t=>t.s=="p"),no=TOUT.filter(t=>t.s=="p");
- modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button>`+
+ modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button>`+
  (ni.length?`<h4>Trocas recebidas</h4>`+ni.map(t=>`<div class="cxpt"><span><b>${esc(t.dn)}</b> oferece <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b> (sua)</span><div><button class="bt cy" data-a="ac" data-v="${t.id}">Aceitar</button><button class="bt gh" data-a="no" data-v="${t.id}">Recusar</button></div></div>`).join(""):"")+ 
  (no.length?`<h4>Suas ofertas</h4>`+no.map(t=>`<div class="cxpt"><span>Para <b>${esc(t.pn)}</b>: <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b></span><div><button class="bt gh" data-a="ca" data-v="${t.id}">Cancelar</button></div></div>`).join(""):"")+ 
  `<div class="cp-pl-head"><h4>Jogadores (${PL.length})</h4><small>🟢 Online primeiro</small></div>`+
@@ -5776,7 +5844,7 @@ function jogadores(){
   PL.sort((a,b)=>(+cpIsOnline(b))-(+cpIsOnline(a))||(+b.tp||0)-(+a.tp||0)||String(a.n).localeCompare(String(b.n)));
   cpRenderPlayers();
   if(CP_PVIEW==="profile"){const p=PL.find(x=>x.id===CP_PROFILE_ID);const el=g("cp-profile-pres");if(el&&p)el.innerHTML=cpPresenceLabel(p)}
- },e=>{CP_PVIEW="";modal(`<button class="bt gh" data-a="me">‹ Meu perfil</button><p>Não consegui acompanhar o status dos jogadores.</p>`);warn("presença dos jogadores",e)});
+ },e=>{CP_PVIEW="";modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button><p>Não consegui acompanhar o status dos jogadores.</p>`);warn("presença dos jogadores",e)});
 }
 const cpVerBase=ver;
 ver=function(i){
@@ -5939,6 +6007,13 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
       if(!sn.exists())return;
       const d=sn.data();
       if(d.m!=="boss")return;
+      // A inscrição da Raid também é a inscrição em tempo real do histórico da batalha.
+      // Sem isso, quem morreu dependia apenas do polling de recuperação (até 5 s) e podia
+      // deixar de acompanhar as ações dos aliados.
+      const live=window.LV;
+      if(d.s==="p"&&live&&live.id===id&&live.g&&live.raid&&Array.isArray(d.cm)){
+        try{lvCm(d)}catch(error){console.warn("histórico em tempo real da Raid",error)}
+      }
       if(d.s==="x"){
         if(RAID_UNSUB){RAID_UNSUB();RAID_UNSUB=null}
         RAID_ACTIVE_ID="";
@@ -6361,10 +6436,10 @@ function cpxConfetti(){const f=document.createDocumentFragment(),cs=["#ffd24a","
 function on(){try{return typeof SND!=='undefined'?!!SND.on:localStorage.getItem('colprimata_som')!=='0'}catch(e){return true}}
 function cl(){var o=q('yrm');o&&o.remove()}
 function op(){if(q('yrm'))return cl();var o=document.createElement('div');o.id='yrm';
-o.innerHTML='<div class="yb"><h3>Menu</h3><button data-y="s">'+(on()?'🔊 Som: ligado':'🔇 Som: desligado')+'</button><button data-y="p">👤 Perfil, jogadores e batalha em grupo</button><button data-y="r">🏆 Ranking semanal</button><button data-y="c">🏅 Conquistas, títulos e vitrine</button><button data-y="l">🛒 Loja diária</button><button data-y="lite">⚡ Modo leve / reduzir animações: '+(window.cpLite?'ligado':'desligado')+'</button><button data-y="a">🛠 Ajustes e Modo ADM</button><small>Tema</small><div class="yt">'+window.tmHtml()+'</div><button data-y="x" class="g">Fechar</button><small>Criado por Yrogerg</small></div>';
+o.innerHTML='<div class="yb"><h3>Menu</h3><button data-y="s">'+(on()?'🔊 Som: ligado':'🔇 Som: desligado')+'</button><button data-y="p">👤 Meu perfil</button><button data-y="onl">🌐 Online e comunidade</button><button data-y="lite">⚡ Modo leve / reduzir animações: '+(window.cpLite?'ligado':'desligado')+'</button><button data-y="a">🛠 Ajustes e Modo ADM</button><small>Tema</small><div class="yt">'+window.tmHtml()+'</div><button data-y="x" class="g">Fechar</button><small>Criado por Yrogerg</small></div>';
 o.onclick=function(e){var b=e.target.closest('[data-y]');if(!b){if(e.target===o)cl();return}var k=b.dataset.y;
 if(k=='s'){try{if(typeof SND!=='undefined')SND.toggle()}catch(e){}b.textContent=on()?'🔊 Som: ligado':'🔇 Som: desligado'}
-else if(k=='x')cl();else if(k=='r'){cl();window.cpRanking&&window.cpRanking()}else if(k=='c'){cl();window.cpOpenAchievements&&window.cpOpenAchievements()}else if(k=='l'){cl();window.cpOpenShop&&window.cpOpenShop()}else if(k=='lite'){window.cpToggleLite&&window.cpToggleLite();cl();op()}else if(k.charAt(0)=='t'){window.setTema(k.slice(1));o.querySelector('.yt').innerHTML=window.tmHtml()}else{cl();var t=q(k=='p'?'cpchip':'gear');if(t)t.click();else if(k=='p')alert('Entre na conta para abrir o perfil.')}};
+else if(k=='x')cl();else if(k=='onl'){cl();window.cpOpenOnlineHub&&window.cpOpenOnlineHub()}else if(k=='lite'){window.cpToggleLite&&window.cpToggleLite();cl();op()}else if(k.charAt(0)=='t'){window.setTema(k.slice(1));o.querySelector('.yt').innerHTML=window.tmHtml()}else{cl();var t=q(k=='p'?'cpchip':'gear');if(t)t.click();else if(k=='p')alert('Entre na conta para abrir o perfil.')}};
 document.body.appendChild(o)}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-yu]');if(b){e.stopPropagation();e.preventDefault();op()}},true);
 })();
@@ -7648,22 +7723,20 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     const credit=$$('small',panel).find(x=>x.textContent.includes("Criado por"));
     const close=actionMap.get("x");
     const data=[
-      {id:"battles",title:"Batalhas e partidas",keys:["p"],labels:{p:"👥 Jogadores e batalha em grupo"}},
-      {id:"community",title:"Comunidade",keys:["r"],labels:{r:"🏆 Ranking semanal"}},
-      {id:"profile",title:"Perfil e personalização",keys:["c"],labels:{c:"🏅 Títulos e vitrine do perfil"}},
-      {id:"economy",title:"Loja",keys:["l"],labels:{l:"🛒 Loja diária"}},
+      {id:"profile",title:"Minha conta",keys:["p"],labels:{p:"Meu perfil"}},
+      {id:"online",title:"Online e comunidade",keys:["onl"],labels:{onl:"Online e partidas"}},
       {id:"settings",title:"Preferências",keys:["s","lite"],labels:{s:"🔊 Som",lite:"⚡ Modo leve / reduzir animações"}},
       {id:"admin",title:"Administração",keys:["a"],labels:{a:"🛠 Ajustes e painel ADM"}}
     ];
     const frag=document.createDocumentFragment();
     const head=document.createElement("div");head.className="yr-head";
-    const heading=document.createElement("div");heading.innerHTML='<h3>Menu principal</h3><p>Acesse as áreas do jogo sem misturar configurações com partidas.</p>';
+    const heading=document.createElement("div");heading.innerHTML='<h3>Menu do jogo</h3><p>Seu perfil, recursos online e configurações em áreas separadas.</p>';
     head.append(heading);if(close){close.classList.add("yr-close");close.setAttribute("aria-label","Fechar menu");close.textContent="✕";head.append(close)}frag.append(head);
     data.forEach(group=>{
       const section=document.createElement("section");section.className="yr-menu-group";section.dataset.group=group.id;
       const title=document.createElement("h4");title.textContent=group.title;section.append(title);
       const actions=document.createElement("div");actions.className="yr-menu-actions";
-      group.keys.forEach(key=>{const btn=actionMap.get(key);if(!btn)return;{const was=btn.textContent;let tx=group.labels[key]||was;if(key==="lite"){tx+=window.cpLite?" · ligado":" · desligado";btn.setAttribute("aria-pressed",String(!!window.cpLite))}else if(key==="s")tx+=/desligado/i.test(was)?" · desligado":" · ligado";btn.textContent=tx}actions.append(btn)});
+      group.keys.forEach(key=>{const btn=actionMap.get(key);if(!btn)return;const was=btn.textContent;let tx=group.labels[key]||was;if(key==="lite"){tx+=window.cpLite?" · ligado":" · desligado";btn.setAttribute("aria-pressed",String(!!window.cpLite))}else if(key==="s")tx+=/desligado/i.test(was)?" · desligado":" · ligado";if(key==="p"||key==="onl"){btn.classList.add("yr-action-card");const detail=key==="p"?"Foto, título, vitrine e estatísticas":"Jogadores, trocas, partidas em grupo e ranking";const icon=key==="p"?"👤":"🌐";btn.innerHTML='<span class="yr-action-icon">'+icon+'</span><span class="yr-action-copy"><b>'+tx+'</b><small>'+detail+'</small></span><span class="yr-action-arrow">›</span>'}else{btn.textContent=tx}actions.append(btn)});
       section.append(actions);frag.append(section);
     });
     if(theme){const section=document.createElement("section");section.className="yr-theme";themeLabel.remove();section.append(themeLabel,theme);frag.append(section)}
@@ -8070,6 +8143,87 @@ document.addEventListener('pointerout',e=>{if(cur&&!cur.contains(e.relatedTarget
 
 
 
+
+<script id="cp-touch-holo-ficha-2026">
+(()=>{
+ "use strict";
+ const root=document.getElementById("fc");
+ if(!root)return;
+ const $=(sel,base=root)=>base.querySelector(sel);
+ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+ function prepare(){
+   const sheet=$(".fch"),wrap=sheet&&$(":scope > .f3d",sheet),card=wrap&&$(":scope > .in > .cd",wrap);
+   if(!wrap||!card)return;
+   const rank=Number(card.dataset.r);
+   if(rank<6||rank>8||card.classList.contains("lock"))return;
+   const art=$(":scope > .art",card);
+   if(!art)return;
+   if(!$(":scope > .cp-touch-holo",art)){
+     const film=document.createElement("i");
+     film.className="cp-touch-holo";
+     film.setAttribute("aria-hidden","true");
+     art.appendChild(film);
+   }
+   if(!$(":scope > .cp-touch-specular",art)){
+     const glint=document.createElement("i");
+     glint.className="cp-touch-specular";
+     glint.setAttribute("aria-hidden","true");
+     art.appendChild(glint);
+   }
+   card.classList.add("cp-touch-holo-card");
+   wrap.classList.add("cp-holo-gesture");
+   if(wrap.dataset.cpTouchHoloReady==="1")return;
+   wrap.dataset.cpTouchHoloReady="1";
+   let activeId=null,lastX=0,lastY=0,fadeTimer=0,travel=0;
+   const setPoint=(e,dx=0,dy=0)=>{
+     const b=wrap.getBoundingClientRect();
+     if(!b.width||!b.height)return;
+     const x=clamp((e.clientX-b.left)/b.width,0,1),y=clamp((e.clientY-b.top)/b.height,0,1);
+     const angle=(Math.atan2(dy||0.001,dx||1)*180/Math.PI+360)%360;
+     let hue;
+     if(rank===6)hue=(x-.5)*24+(y-.5)*8;
+     else if(rank===7)hue=(x-.5)*82+(y-.5)*34;
+     else hue=(x*210+y*145)%360;
+     card.style.setProperty("--cp-holo-x",(x*100).toFixed(1)+"%");
+     card.style.setProperty("--cp-holo-y",(y*100).toFixed(1)+"%");
+     card.style.setProperty("--cp-holo-angle",(angle+105).toFixed(1)+"deg");
+     card.style.setProperty("--cp-holo-hue",hue.toFixed(1)+"deg");
+   };
+   const activate=e=>{
+     if(e.button!==undefined&&e.button!==0)return;
+     if(fadeTimer){clearTimeout(fadeTimer);fadeTimer=0}
+     activeId=e.pointerId;lastX=e.clientX;lastY=e.clientY;travel=0;
+     card.classList.add("cp-holo-active");
+     setPoint(e,0,0);
+   };
+   const move=e=>{
+     if(activeId===null||e.pointerId!==activeId)return;
+     const dx=e.clientX-lastX,dy=e.clientY-lastY;
+     travel+=Math.abs(dx)+Math.abs(dy);lastX=e.clientX;lastY=e.clientY;
+     setPoint(e,dx,dy);
+   };
+   const release=e=>{
+     if(activeId===null||(e&&e.pointerId!==undefined&&e.pointerId!==activeId))return;
+     activeId=null;
+     if(fadeTimer)clearTimeout(fadeTimer);
+     fadeTimer=setTimeout(()=>{card.classList.remove("cp-holo-active");fadeTimer=0},travel<3?520:380);
+   };
+   wrap.addEventListener("pointerdown",activate,{passive:true});
+   wrap.addEventListener("pointermove",move,{passive:true});
+   wrap.addEventListener("pointerup",release,{passive:true});
+   wrap.addEventListener("pointercancel",release,{passive:true});
+   wrap.addEventListener("lostpointercapture",release,{passive:true});
+   const note=$(":scope > .f3h",sheet);
+   if(note)note.textContent="Passe o dedo para revelar o brilho holográfico · arraste para girar · toque para ver o verso";
+ }
+ const schedule=()=>requestAnimationFrame(prepare);
+ if(typeof window.cpRegisterViewHook==="function")window.cpRegisterViewHook(schedule);
+ const observer=new MutationObserver(schedule);
+ observer.observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:["hidden"]});
+ schedule();
+})();
+</script>
+
 <script id="cp-performance-card-effects-2026">
 (()=>{
  "use strict";
@@ -8474,5 +8628,421 @@ html.cp-lite::after{content:none!important;display:none!important}
 html.cp-lite::before,html.cp-lite::after{content:none!important;display:none!important}
 </style>
 
+
+<style id="cp-sss-fluid-reflection-final-2026">
+/*
+  SSS: reflexo iridescente em fitas orgânicas, não manchas circulares.
+  As duas faixas são estreitas, alongadas e com bordas curvas; cruzam a arte em diagonal,
+  mudam de matiz e respiram na opacidade sem cobrir a ilustração toda.
+*/
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection{
+  position:absolute!important;inset:0!important;display:block!important;z-index:7!important;
+  overflow:hidden!important;pointer-events:none!important;border-radius:inherit!important;
+  background:transparent!important;mix-blend-mode:normal!important;isolation:auto!important;
+}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection::before,
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection::after{
+  content:""!important;position:absolute!important;display:block!important;pointer-events:none!important;
+  mix-blend-mode:color-dodge!important;filter:blur(5px) saturate(1.5)!important;
+  will-change:transform,opacity,filter!important;transform-origin:center!important;
+}
+/* Reflexo principal: rosa → ciano → violeta, como uma película de luz comprida e ondulada. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection::before{
+  width:300%!important;height:19%!important;left:-100%!important;top:39%!important;
+  border-radius:48% 52% 63% 37% / 42% 58% 44% 56%!important;
+  background:linear-gradient(102deg,
+    transparent 7%,rgba(255,72,168,0) 22%,rgba(255,72,168,.58) 36%,
+    rgba(62,220,255,.62) 51%,rgba(168,104,255,.50) 66%,
+    rgba(255,196,114,.12) 77%,transparent 92%)!important;
+  opacity:.30!important;
+  animation:cpSSSFlowTravelA var(--cp-flow-a,21s) ease-in-out infinite,
+            cpSSSFlowHueA var(--cp-flow-hue-a,31s) linear infinite,
+            cpSSSFlowFadeA var(--cp-flow-fade-a,15s) ease-in-out infinite!important;
+  animation-delay:var(--cp-flow-delay,-7s),calc(var(--cp-flow-delay,-7s)*.71),calc(var(--cp-flow-delay,-7s)*1.13)!important;
+}
+/* Reflexo secundário, mais estreito e discreto, corre em sentido contrário. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection::after{
+  width:285%!important;height:10%!important;left:-92%!important;top:57%!important;
+  border-radius:62% 38% 52% 48% / 60% 42% 58% 40%!important;
+  background:linear-gradient(105deg,
+    transparent 10%,rgba(65,218,255,0) 26%,rgba(65,218,255,.34) 41%,
+    rgba(179,105,255,.38) 55%,rgba(255,83,169,.29) 69%,transparent 89%)!important;
+  opacity:.10!important;
+  animation:cpSSSFlowTravelB var(--cp-flow-b,26s) ease-in-out infinite,
+            cpSSSFlowHueB var(--cp-flow-hue-b,37s) linear infinite,
+            cpSSSFlowFadeB var(--cp-flow-fade-b,18s) ease-in-out infinite!important;
+  animation-delay:calc(var(--cp-flow-delay,-7s)*-.63),calc(var(--cp-flow-delay,-7s)*-.47),calc(var(--cp-flow-delay,-7s)*-.91)!important;
+}
+@keyframes cpSSSFlowTravelA{
+  0%{transform:translate3d(-15%,-28%,0) rotate(-24deg) skewX(-8deg) scaleX(1.02)}
+  25%{transform:translate3d(-6%,8%,0) rotate(-18deg) skewX(-4deg) scaleX(1.06)}
+  50%{transform:translate3d(8%,-12%,0) rotate(-27deg) skewX(-10deg) scaleX(.98)}
+  75%{transform:translate3d(15%,14%,0) rotate(-17deg) skewX(-3deg) scaleX(1.08)}
+  100%{transform:translate3d(-15%,-28%,0) rotate(-24deg) skewX(-8deg) scaleX(1.02)}
+}
+@keyframes cpSSSFlowTravelB{
+  0%{transform:translate3d(14%,18%,0) rotate(18deg) skewX(8deg)}
+  30%{transform:translate3d(5%,-18%,0) rotate(11deg) skewX(2deg)}
+  60%{transform:translate3d(-14%,12%,0) rotate(21deg) skewX(10deg)}
+  85%{transform:translate3d(-3%,-15%,0) rotate(13deg) skewX(4deg)}
+  100%{transform:translate3d(14%,18%,0) rotate(18deg) skewX(8deg)}
+}
+@keyframes cpSSSFlowHueA{
+  from{filter:blur(5px) saturate(1.5) hue-rotate(var(--cp-flow-start,0deg))}
+  to{filter:blur(5px) saturate(1.5) hue-rotate(calc(var(--cp-flow-start,0deg) + 360deg))}
+}
+@keyframes cpSSSFlowHueB{
+  from{filter:blur(5px) saturate(1.4) hue-rotate(calc(var(--cp-flow-start,0deg) + 95deg))}
+  to{filter:blur(5px) saturate(1.4) hue-rotate(calc(var(--cp-flow-start,0deg) + 455deg))}
+}
+@keyframes cpSSSFlowFadeA{
+  0%,100%{opacity:.30}24%{opacity:.62}48%{opacity:.40}73%{opacity:.66}
+}
+@keyframes cpSSSFlowFadeB{
+  0%,100%{opacity:.10}28%{opacity:.34}56%{opacity:.14}81%{opacity:.38}
+}
+/* O movimento permanece leve no modo econômico; acessibilidade reduz o deslocamento, não o contraste. */
+html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection::before,
+html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection::after{
+  animation-duration:calc(var(--cp-flow-a,21s)*1.15),calc(var(--cp-flow-hue-a,31s)*1.1),calc(var(--cp-flow-fade-a,15s)*1.12)!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection::before,
+ .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.art>.cp-sss-fluid-reflection::after{
+   animation:none!important;transform:none!important;opacity:.28!important;will-change:auto!important;
+ }
+}
+</style>
+
+
+<style id="cp-battle-bank-life-geometry-fix-2026">
+/* Cabeçalhos: nome em uma linha própria; vidas e baralho em uma faixa abaixo. */
+#zb .zq .zqh{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto auto!important;
+  grid-template-rows:auto auto!important;
+  align-items:center!important;
+  justify-content:stretch!important;
+  gap:2px 6px!important;
+  min-width:0!important;
+  line-height:1.25!important;
+}
+#zb .zq .zqh>b{
+  grid-column:1/-1!important;
+  grid-row:1!important;
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  font-size:.68rem!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+#zb .zq .zqh>.zl{
+  grid-column:1/3!important;
+  grid-row:2!important;
+  justify-self:start!important;
+  display:block!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  letter-spacing:.07em!important;
+  font-size:clamp(.6rem,1.8vw,.72rem)!important;
+  line-height:1.3!important;
+}
+#zb .zq .zqh>small{
+  grid-column:3!important;
+  grid-row:2!important;
+  justify-self:end!important;
+  white-space:nowrap!important;
+  font-size:.56rem!important;
+  line-height:1.3!important;
+}
+/* O banco tem três espaços. A altura não pode esticar as cartas para fora da proporção 3:4. */
+#zb .zrs{
+  min-height:0!important;
+  height:auto!important;
+  align-items:start!important;
+  grid-auto-rows:max-content!important;
+}
+#zb .zrs .zu,
+#zb .zrs .zu.zbk,
+#zb .zrs .zu.ze{
+  min-height:0!important;
+  height:auto!important;
+  align-self:start!important;
+}
+#zb .zrs .zu>.cd{
+  display:block!important;
+  flex:0 0 auto!important;
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:3/4!important;
+}
+#zb .zrs .zu.zbk,
+#zb .zrs .zu.ze{
+  aspect-ratio:3/4!important;
+}
+#zb .zrs .zu.zbk>.cb.back{
+  aspect-ratio:3/4!important;
+  height:100%!important;
+}
+#zb .zrs .zu>.yhp{height:4px!important;min-height:4px!important}
+@media(max-width:600px){
+  #zb .zqm.n3 .zql .zrs,
+  #zb .zqm.n3 .zqr .zrs{
+    --cw:clamp(34px,calc((100vw - 64px)/6),52px)!important;
+    grid-template-columns:repeat(3,minmax(0,var(--cw)))!important;
+    justify-content:center!important;
+  }
+  #zb .zqm.n3 .zqb .zq.me .zrow:not(.zrs){
+    --cw:clamp(68px,calc((100vw - 72px)/4),96px)!important;
+  }
+  #zb .zqm.n3 .zqb .zq.me .zrs{
+    --cw:clamp(40px,calc((100vw - 104px)/6),56px)!important;
+    grid-template-columns:repeat(3,minmax(0,var(--cw)))!important;
+  }
+  #zb .zqm.n4 .zq .zrs,
+  #zb .zqm.t2 .zq .zrs{
+    --cw:clamp(30px,calc((100vw - 92px)/6),48px)!important;
+    grid-template-columns:repeat(3,minmax(0,var(--cw)))!important;
+  }
+}
+</style>
+
+
+<style id="cp-online-life-bank-audio-polish-2026">
+/* Cabeçalho compacto em duas faixas: nome acima; vidas e tamanho do deck abaixo. */
+#zb .zq .zqh{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) max-content!important;
+  grid-template-rows:auto auto!important;
+  align-items:center!important;
+  justify-content:stretch!important;
+  column-gap:8px!important;
+  row-gap:3px!important;
+  width:100%!important;
+  min-width:0!important;
+  overflow:visible!important;
+  line-height:1.25!important;
+}
+#zb .zq .zqh>b{
+  grid-column:1/-1!important;
+  grid-row:1!important;
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+#zb .zq .zqh>.zl{
+  grid-column:1!important;
+  grid-row:2!important;
+  justify-self:start!important;
+  display:block!important;
+  width:max-content!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+  white-space:nowrap!important;
+  text-overflow:clip!important;
+  letter-spacing:.02em!important;
+  font-size:clamp(9px,2.45vw,12px)!important;
+  line-height:1.25!important;
+}
+#zb .zq .zqh>small{
+  grid-column:2!important;
+  grid-row:2!important;
+  justify-self:end!important;
+  display:block!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+  white-space:nowrap!important;
+  font-size:9px!important;
+  line-height:1.25!important;
+}
+/* Banco: cada slot calcula a própria altura a partir da largura da carta. Não usa min-height no trilho. */
+#zb .zrs{
+  display:grid!important;
+  min-height:0!important;
+  height:auto!important;
+  align-items:start!important;
+  align-content:start!important;
+  grid-auto-rows:max-content!important;
+  overflow:visible!important;
+}
+#zb .zrs>.zu:not(.zbk):not(.ze){
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto 4px!important;
+  align-content:start!important;
+  align-items:start!important;
+  justify-items:stretch!important;
+  align-self:start!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:max-content!important;
+  aspect-ratio:auto!important;
+  gap:3px!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+#zb .zrs>.zu:not(.zbk):not(.ze)>.cd{
+  display:block!important;
+  position:relative!important;
+  flex:none!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:auto!important;
+  aspect-ratio:3/4!important;
+  margin:0!important;
+  overflow:hidden!important;
+}
+#zb .zrs>.zu:not(.zbk):not(.ze)>.yhp{
+  display:block!important;
+  position:relative!important;
+  width:100%!important;
+  height:4px!important;
+  min-height:4px!important;
+  grid-row:2!important;
+  margin:0!important;
+}
+#zb .zrs>.zu.zbk,
+#zb .zrs>.zu.ze{
+  display:block!important;
+  align-self:start!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:auto!important;
+  aspect-ratio:3/4!important;
+  overflow:visible!important;
+}
+#zb .zrs>.zu.zbk>.cb.back{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:auto!important;
+  box-sizing:border-box!important;
+}
+#zb .zrs>.zu.ze{height:auto!important}
+/* Três reservas reais = três colunas, sem uma quarta coluna vazia que aperte a carta. */
+@media(max-width:600px){
+  #zb .zqm.n3 .zql .zrs,
+  #zb .zqm.n3 .zqr .zrs{
+    --cw:clamp(34px,calc((50vw - 44px)/3),52px)!important;
+    grid-template-columns:repeat(3,minmax(0,var(--cw)))!important;
+    grid-auto-rows:max-content!important;
+    justify-content:center!important;
+  }
+  #zb .zqm.n3 .zqb .zq.me .zrs{
+    --cw:clamp(40px,calc((100vw - 104px)/6),56px)!important;
+    grid-template-columns:repeat(3,minmax(0,var(--cw)))!important;
+    grid-auto-rows:max-content!important;
+  }
+  #zb .zqm.n4 .zq .zrs,
+  #zb .zqm.t2 .zq .zrs{
+    --cw:clamp(30px,calc((50vw - 48px)/3),48px)!important;
+    grid-template-columns:repeat(3,minmax(0,var(--cw)))!important;
+    grid-auto-rows:max-content!important;
+  }
+}
+</style>
+
+
+<style id="cp-daily-shop-entry-2026">
+/* Atalho da Loja Diária dentro da aba Pacotes: cartão único, responsivo e sem duplicar a navegação. */
+#m .cp-daily-shop-entry{
+  display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:11px;
+  width:100%;min-height:72px;margin:0 0 var(--g2,12px);padding:11px 13px;
+  border:1px solid color-mix(in srgb,var(--ac,#c78bff) 42%,var(--ui-line,#ffffff18));
+  border-radius:16px;background:linear-gradient(118deg,color-mix(in srgb,var(--ac,#c78bff) 18%,#24212d),#18171f 76%);
+  color:var(--fg,#fff);text-align:left;box-shadow:0 8px 22px #0003,inset 0 1px 0 #ffffff12;
+  cursor:pointer;transition:transform .14s ease,border-color .14s ease,filter .14s ease;
+}
+#m .cp-daily-shop-entry:active{transform:scale(.988);filter:brightness(1.12)}
+#m .cp-daily-shop-entry:focus-visible{outline:2px solid var(--ac,#c78bff);outline-offset:3px}
+#m .cp-daily-shop-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;
+  background:color-mix(in srgb,var(--ac,#c78bff) 20%,#17151e);font-size:1.28rem;
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ac,#c78bff) 28%,transparent)}
+#m .cp-daily-shop-copy{display:grid;gap:3px;min-width:0}
+#m .cp-daily-shop-copy b{font-size:.86rem;font-weight:950;letter-spacing:.025em;line-height:1.2}
+#m .cp-daily-shop-copy small{color:var(--ui-muted,#b8b3c2);font-size:.67rem;line-height:1.35;white-space:normal}
+#m .cp-daily-shop-arrow{color:color-mix(in srgb,var(--ac,#c78bff) 78%,#fff);font-size:.59rem;font-weight:950;letter-spacing:.08em;white-space:nowrap}
+@media(max-width:360px){#m .cp-daily-shop-entry{grid-template-columns:38px minmax(0,1fr) auto;gap:8px;padding:10px}#m .cp-daily-shop-icon{width:36px;height:36px}#m .cp-daily-shop-arrow{font-size:.53rem}}
+</style>
+
+<style id="cp-menu-profile-online-reorg">
+/* Menu principal reorganizado: Perfil, Online, Preferências e ADM em grupos independentes. */
+#yrm .yb{width:min(100%,540px);max-height:90dvh;overflow-y:auto;overscroll-behavior:contain;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:11px;padding:17px 16px calc(17px + env(safe-area-inset-bottom,0px));border-radius:22px 22px 0 0}
+#yrm .yr-head,#yrm .yr-theme,#yrm .yr-credit{grid-column:1/-1}
+#yrm .yr-menu-group{min-width:0;padding:12px;display:flex;flex-direction:column;gap:8px}
+#yrm .yr-menu-group h4{font-size:.62rem;line-height:1.25;margin:0;letter-spacing:.11em}
+#yrm .yr-menu-actions{gap:7px;min-width:0}
+#yrm .yr-menu-actions button{min-width:0;width:100%;min-height:48px;padding:10px;border-radius:12px;font-size:.78rem;white-space:normal}
+#yrm .yr-action-card{display:flex;align-items:center;gap:9px;text-align:left!important}
+#yrm .yr-action-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--ac,#c78bff) 16%,transparent);font-size:1.15rem}
+#yrm .yr-action-copy{display:grid;gap:3px;min-width:0;flex:1}
+#yrm .yr-action-copy b{font-size:.78rem;line-height:1.2}
+#yrm .yr-action-copy small{display:block;text-align:left;font-size:.61rem;line-height:1.35;letter-spacing:0;opacity:.65;text-transform:none;white-space:normal}
+#yrm .yr-action-arrow{font-size:1.2rem;opacity:.55}
+#yrm .yr-menu-group[data-group="profile"]{border-color:color-mix(in srgb,#bd8cff 35%,var(--ui-line))}
+#yrm .yr-menu-group[data-group="online"]{border-color:color-mix(in srgb,#59bfe8 35%,var(--ui-line))}
+#yrm .yr-menu-group[data-group="admin"]{border-color:color-mix(in srgb,var(--ac,#c78bff) 35%,var(--ui-line))}
+#yrm .yr-menu-group[data-group="admin"] button{font-size:.75rem}
+#yrm .yr-theme{padding:12px}
+#yrm .yr-theme>small{text-align:left}
+#yrm .yr-credit{margin-top:2px}
+#cpm .pbx{width:min(100%,480px);max-height:92dvh;overflow:auto;overscroll-behavior:contain;padding:18px 16px calc(22px + env(safe-area-inset-bottom,0px));gap:13px;border-radius:22px 22px 0 0}
+.cp-hub-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid #ffffff14}
+.cp-hub-heading>div{min-width:0}
+.cp-hub-heading>div>small{display:block;color:var(--ac);font-size:.61rem;font-weight:900;letter-spacing:.16em}
+.cp-hub-heading h3{margin:3px 0;font-size:1.18rem;font-weight:950}
+.cp-hub-heading p{margin:0;color:var(--mut);font-size:.72rem;line-height:1.4}
+.cp-hub-close{flex:0 0 36px;width:36px;height:36px;border:1px solid #ffffff18;border-radius:12px;background:#ffffff0d;color:inherit;font-size:1.1rem}
+.cp-profile-identity,.cp-profile-section{padding:12px;border:1px solid #ffffff12;border-radius:15px;background:#ffffff06;display:grid;gap:10px}
+.cp-profile-name{display:grid;gap:3px;min-width:0}
+.cp-profile-name b{font-size:1rem}
+.cp-profile-name small{font-size:.68rem;color:var(--mut)}
+.cp-profile-edit{min-height:40px;border:1px solid color-mix(in srgb,var(--ac) 32%,#ffffff18);border-radius:11px;background:color-mix(in srgb,var(--ac) 13%,transparent);color:inherit;font-weight:850}
+.cp-profile-identity .cp-profile-meta{padding:10px;border-radius:12px;background:#ffffff08}
+.cp-profile-identity .cp-showcase{display:flex;gap:8px;overflow-x:auto;padding:3px 0}
+.cp-profile-identity .cp-showcase-card{flex:0 0 82px;min-width:82px}
+.cp-profile-section h4{margin:0;font-size:.78rem;letter-spacing:.02em}
+.cp-profile-section .cxpg{gap:7px}
+.cp-profile-section .cxpg div{padding:9px 4px;background:#ffffff0b}
+.cp-profile-section .cxpg b{font-size:.95rem}
+.cp-profile-link{display:flex;align-items:center;gap:10px;width:100%;min-width:0;padding:10px;border:1px solid #ffffff10;border-radius:12px;background:#ffffff08;color:inherit;text-align:left}
+.cp-profile-link>span:first-child{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:10px;background:#ffffff0c}
+.cp-profile-link>span:nth-child(2){display:grid;gap:3px;min-width:0;flex:1}
+.cp-profile-link b{font-size:.75rem}
+.cp-profile-link small{font-size:.63rem;line-height:1.3;color:var(--mut)}
+.cp-profile-link i,.cp-hub-tile i{font-style:normal;font-size:1.25rem;opacity:.55}
+.cp-profile-logout{min-height:42px;border:1px solid #ff65701e;border-radius:12px;background:#ff657012;color:#ffb0b6;font-weight:850}
+.cp-online-grid{display:grid;gap:9px}
+.cp-hub-tile{display:flex;align-items:center;gap:11px;width:100%;min-width:0;padding:12px;border:1px solid #ffffff13;border-radius:15px;background:#ffffff08;color:inherit;text-align:left}
+.cp-hub-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:12px;background:color-mix(in srgb,var(--ac) 14%,#ffffff08);font-size:1.3rem}
+.cp-hub-tile>span:nth-child(2){display:grid;gap:4px;min-width:0;flex:1}
+.cp-hub-tile b{font-size:.82rem}
+.cp-hub-tile small{font-size:.67rem;line-height:1.35;color:var(--mut)}
+.cp-hub-tile em{padding:4px 7px;border-radius:999px;background:#c78bff2b;color:#e4c9ff;font-size:.6rem;font-style:normal;font-weight:900;white-space:nowrap}
+.cp-hub-footnote{padding:10px 12px;border-radius:12px;background:#ffffff06;color:var(--mut);font-size:.65rem;line-height:1.4}
+@media(max-width:380px){#yrm .yb{gap:8px;padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px))}#yrm .yr-menu-group{padding:10px}#yrm .yr-menu-actions button{padding:8px;font-size:.72rem}#yrm .yr-action-copy b{font-size:.72rem}#yrm .yr-action-copy small{font-size:.57rem}}
+@media(prefers-reduced-motion:reduce){#yrm .yb{animation:none!important}}
+</style>
 </body>
 </html>
+
+
