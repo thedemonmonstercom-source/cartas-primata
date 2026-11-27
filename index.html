@@ -2876,7 +2876,9 @@ toggle(){on=!on;try{localStorage.setItem("colprimata_som",on?"1":"0")}catch(e){}
 addEventListener("pointerdown",()=>api.start(),{capture:true});
 addEventListener("touchstart",()=>api.start(),{passive:true,capture:true});
 addEventListener("keydown",()=>api.start(),{capture:true});
-document.addEventListener("visibilitychange",()=>{if(!document.hidden&&on){try{if(A&&A.state==="suspended")A.resume();else if(!A)api.start()}catch(e){}}});
+// vigia: se a música de fundo parar (contexto suspenso/interrompido/fechado, volta de batalha), religa sozinha
+setInterval(()=>{try{if(!on||!cf("musica"))return;if(A&&A.state==="closed"){A=G=M=null;mv=0;clearInterval(tm);tm=0}if(inBattle()){if(mv)mstop();return}if(document.hidden)return;if(A&&A.state!=="running"&&A.resume)A.resume().catch(()=>{});if(!mv)mus();else if(!tm)tm=setInterval(sch,400)}catch(e){}},2500);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&on){try{if(A&&A.state!=="running")A.resume();if(!A||!mv)api.start()}catch(e){}}});
 document.addEventListener("pointerdown",e=>{if(e.target.closest&&e.target.closest("button,.bt,.tab,[data-t]"))api.click()},true);
 /* O controle flutuante foi removido; o som continua acessível pelo Menu. */
 return api})();
@@ -3053,6 +3055,31 @@ html.cp-lite #fc .fch>.f3d .cd.cp-holo-active>.art>.cp-touch-holo .cp-sym-stream
  animation-delay:var(--cp-flow-delay-b,-3.2s),var(--cp-flow-delay-b,-3.2s),var(--cp-flow-delay-b,-3.2s)!important;
  animation-iteration-count:infinite,infinite,infinite!important;
 }
+</style>
+<style id="cp-sss-interior">
+/* SSS · interior com brilho holográfico suave (a borda RGB e o arrastar continuam iguais) */
+html .cd.cp-art-only.k8>.cp-card-frame::after{
+ content:""!important;display:block!important;position:absolute!important;inset:3px!important;border-radius:inherit!important;pointer-events:none!important;
+ background:
+  radial-gradient(circle at 18% 22%,#fff 0 1px,transparent 2.2px),
+  radial-gradient(circle at 78% 16%,#fff 0 1.2px,transparent 2.6px),
+  radial-gradient(circle at 64% 70%,#fff 0 1px,transparent 2.2px),
+  radial-gradient(circle at 26% 82%,#fff 0 1.3px,transparent 2.8px),
+  radial-gradient(circle at 88% 58%,#fff 0 1px,transparent 2.2px),
+  linear-gradient(115deg,transparent 30%,#ffffff38 46%,#78c8ff2e 52%,#ff78dc29 58%,transparent 70%),
+  radial-gradient(ellipse at 50% 0%,#fff0be38,transparent 55%),
+  radial-gradient(ellipse at 50% 100%,#8c75ff47,transparent 60%)!important;
+ background-size:auto,auto,auto,auto,auto,260% 100%,auto,auto!important;
+ background-repeat:no-repeat!important;
+ box-shadow:inset 0 0 12px #ffffff59,inset 0 0 34px #8c75ff4d,inset 0 0 64px #48dff01f!important;
+ mix-blend-mode:screen;
+ animation:cpSssInner 5.5s ease-in-out infinite!important}
+@keyframes cpSssInner{
+ 0%,100%{background-position:0 0,0 0,0 0,0 0,0 0,130% 0,0 0,0 0;opacity:.8}
+ 50%{background-position:0 0,0 0,0 0,0 0,0 0,-30% 0,0 0,0 0;opacity:1}}
+html .cd.sss:not(.cp-art-only) .art{box-shadow:inset 0 0 20px #a78bfa66,inset 0 0 46px #38bdf833}
+html.cp-lite .cd.cp-art-only.k8>.cp-card-frame::after{animation:none!important}
+@media(prefers-reduced-motion:reduce){html .cd.cp-art-only.k8>.cp-card-frame::after{animation:none!important}}
 </style>
 </head>
 <body>
@@ -3300,7 +3327,8 @@ function claim(id){const it=mit().flatMap(x=>x[1]).find(m=>m.id==id);if(!it||!mo
  else(S.ms=S.ms||{})[id]=1;
  if(it.f)S.fr+=it.f;const actualRewardPack=it.p?gift(rewardPack,it.p,true):null,rp=actualRewardPack||P.find(p=>p.id==rewardPack)||dpk(),rcx=window.rcDar?rcDar("m",it.t):[];save();render(1);upd();it.f&&pop("+"+fmt(it.f),"pos");
  toast(`${it.f?`${gem} <b>+${fmt(it.f)}</b>`:""}${it.p?`${it.f?" · ":""}🎁 <b>${it.p} pacote${it.p>1?"s":""}</b> do ${rp.n}`:""}${b}${rcx.length?" · "+rcx.join(" · "):""} · missão cumprida`)}
-const msn=()=>`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Missões</span></div><p class="mut ctr" style="margin:0 0 6px;letter-spacing:.04em;text-transform:none">Toque numa missão cumprida para pegar o prêmio.</p>`+mit().map(([h,l])=>`<p class="mut" style="margin:18px 0 4px">${h}</p><div class="rl rl-ms">${l.map(m=>{const d=mok(m),g=m.got,hd=m.sec&&!d&&!g,v=Math.min(m.v,m.g);return`<button${d&&!g?` data-g="${m.id}"`:""} style="--rc:${d&&!g?"var(--fr)":"#8f8d96"};opacity:${g?0.45:1}"><b class="sq">${g?"✓":d?"!":"·"}</b><span style="letter-spacing:.05em;font-size:.84rem">${hd?"???":m.t}<small style="display:block;color:var(--mut);letter-spacing:.12em">${hd?"Missão secreta":v+"/"+m.g}</small></span><em class="fv">${m.f?gem+fmt(m.f):""}${m.p?` 🎁×${m.p}`:""}</em></button>`}).join("")}</div>`).join("");
+function claimAll(){const ids=mit().flatMap(x=>x[1]).filter(m=>mok(m)&&!m.got).map(m=>m.id);if(!ids.length)return toast("Nenhuma missão pronta para resgatar.");const f0=S.fr,n0=mcl();ids.forEach(id=>{try{claim(id)}catch(e){console.warn("resgatar",id,e)}});const n=n0-mcl(),gf=S.fr-f0;toast(`🎁 <b>${n}</b> missõe${n==1?"":"s"} resgatada${n==1?"":"s"}${gf>0?` · ${gem} <b>+${fmt(gf)}</b>`:""}`)}
+const msn=()=>`<div class="hd"><button class="bk" data-t="h">‹ Voltar</button>${wlt()}</div><div class="tt"><span class="tab">Missões</span></div><p class="mut ctr" style="margin:0 0 6px;letter-spacing:.04em;text-transform:none">Toque numa missão cumprida para pegar o prêmio.</p>`+(mcl()?`<button class="bt cy" data-g="__all" style="width:100%;margin:2px 0 4px">🎁 Resgatar tudo (${mcl()})</button>`:"")+mit().map(([h,l])=>`<p class="mut" style="margin:18px 0 4px">${h}</p><div class="rl rl-ms">${l.map(m=>{const d=mok(m),g=m.got,hd=m.sec&&!d&&!g,v=Math.min(m.v,m.g);return`<button${d&&!g?` data-g="${m.id}"`:""} style="--rc:${d&&!g?"var(--fr)":"#8f8d96"};opacity:${g?0.45:1}"><b class="sq">${g?"✓":d?"!":"·"}</b><span style="letter-spacing:.05em;font-size:.84rem">${hd?"???":m.t}<small style="display:block;color:var(--mut);letter-spacing:.12em">${hd?"Missão secreta":v+"/"+m.g}</small></span><em class="fv">${m.f?gem+fmt(m.f):""}${m.p?` 🎁×${m.p}`:""}</em></button>`}).join("")}</div>`).join("");
 // diária: CONFIG.diaria fragmentos por dia (valor fixo)
 const day=()=>Math.floor(lnow()/864e5),nsk=()=>S.dl===day()-1?S.sk+1:1,dr=()=>CONFIG.diaria;
 // Temporada semanal do ranking: segunda-feira 00:00 até domingo 23:59 (horário de Brasília).
@@ -3707,7 +3735,7 @@ document.addEventListener("click",e=>{
  else if(D.k!=null){+D.k==cur?openPack(cur):goPk(+D.k)}
  else if(D.o)openPack(cur);
  else if(D.d)daily();
- else if(D.g)claim(D.g);
+ else if(D.g)D.g==="__all"?claimAll():claim(D.g);
  else if(D.x)D.x=="f"?askFuse(FC):D.x=="a"?pickRanks(ALL):D.x=="p"?pickRanks(P[as].cards):askConv(FC,D.x=="1"?1:1e9);
  else if(D.m)askMany(cur,+D.m);
  else if(D.i!=null){cur=+D.i;openPack(cur)}
@@ -4393,15 +4421,15 @@ function weeklyPrizeConfig(){
  return WEEKLY_PRIZE_DEFAULTS.map((d,i)=>{const v=raw[String(i+1)]||raw[i+1]||{};const pk=Number(v.pk),fr=Number(v.fr);return{pk:Number.isFinite(pk)?Math.max(0,Math.min(10000,Math.floor(pk))):d.pk,fr:Number.isFinite(fr)?Math.max(0,Math.min(999999999,Math.floor(fr))):d.fr}});
 }
 const sADM=()=>{try{window.cpNormalizeGameElements&&window.cpNormalizeGameElements();localStorage.setItem("colprimata_adm",JSON.stringify(ADM));localStorage.setItem("colprimata_img",JSON.stringify(IMG))}catch(e){toast("Sem espaço no aparelho · exporte o conteúdo")}};
-function addCard(x){let p=x.pk=="ind"?IND:P.find(q=>q.id==x.pk);if(!p){const d=ADM.p.find(q=>q.id==x.pk);if(!d)return;p={id:d.id,n:d.n,e:d.e,h:d.h,cost:d.cost,cards:[]};P.push(p)}const c={...x};prep(p,c,0);p.cards.push(c);ALL.push(c)}
+function addCard(x){let p=x.pk=="ind"?IND:P.find(q=>q.id==x.pk);if(!p){const d=ADM.p.find(q=>q.id==x.pk);if(d){p={id:d.id,n:d.n,e:d.e,h:d.h,cost:d.cost,cards:[]};P.push(p)}else p=IND}const c={...x};if(p===IND)c.pk="ind";prep(p,c,0);p.cards.push(c);ALL.push(c)}
 ADM.c.filter(x=>!x.dr).forEach(addCard);P.forEach(p=>p.dest=p.id==ADM.d); // v1.9: dr=1 = rascunho (guardada, fora do jogo até lançar)
 const drGo=()=>{sADM();try{sessionStorage.cpad="";sessionStorage.cpad2="ds_l";sessionStorage.cptab=tab}catch(e){}location.reload()};
 const adxRm=(a,x)=>{const k=a.indexOf(x);k>=0&&a.splice(k,1)};
 Object.keys(ADM.po).forEach(i=>{const p=P.find(q=>q.id==i);p&&Object.assign(p,ADM.po[i])});P.forEach(p=>{if(IMG["pk_"+p.id])p.img=IMG["pk_"+p.id]});P.forEach(p=>{if(!p.bk&&IMG["pkb_"+p.id])p.bk=IMG["pkb_"+p.id];p.cards.forEach(c=>{if(!c.bk&&IMG["bk_"+c.id])c.bk=IMG["bk_"+c.id]})}); // foto do pacote fica em IMG["pk_"+id]
-Object.keys(ADM.o).forEach(i=>{const c=byId(i),o=ADM.o[i];if(!c)return;const p=c.p;
+Object.keys(ADM.o).forEach(i=>{try{const c=byId(i),o=ADM.o[i];if(!c)return;const p=c.p;
 if(o.del){adxRm(p.cards,c);adxRm(ALL,c);return}
 const q=o.pk=="ind"?IND:P.find(z=>z.id==o.pk);if(q&&q!=p){adxRm(p.cards,c);q.cards.push(c);c.p=q}
-Object.assign(c,o);if(!(o.ch>0))delete c.ch;if(!o.tipo)delete c.tipo});
+Object.assign(c,o);if(!(o.ch>0))delete c.ch;if(!o.tipo)delete c.tipo}catch(e){console.warn("override da carta falhou",i,e)}});
 // Normaliza cartas base, cartas ADM, ajustes por carta e biblioteca antes da primeira renderização.
 normalizeGameElements();
 (ADM.xp||[]).forEach(id=>{const i=P.findIndex(q=>q.id==id);if(i>=0&&P.length>1){P[i].cards.forEach(c=>adxRm(ALL,c));P.splice(i,1)}});
@@ -4542,10 +4570,10 @@ adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("
 +[1,2,3].map(pos=>{const v=weeklyPrizeConfig()[pos-1];return adxI(`wr${pos}pk`,`${pos}º lugar · Pacotes`,v.pk,"number")+adxI(`wr${pos}fr`,`${pos}º lugar · Fragmentos`,v.fr,"number")}).join("")
 +adxB("sr","Salvar regras")+adxB("rr","Restaurar padrões","gh")),
 adxGv=()=>adxD("g","🧪 Dar itens e testes",adxI("gn","Quantidade",10,"number")+adxS("gp","Pacote de presente",adxPo())+adxS("gc","Carta",adxCo())+adxB("gf","Dar fragmentos","cy")+adxB("gg","Dar pacotes de presente","cy")+adxB("gk","Dar a carta","cy")+adxB("ga","Liberar todas as cartas","gh"));
-function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("eel").value=c.el||"";$("eel2").value=c.el2||"";cpSyncCardElements();$("etb").value=c.tb||"";$("ek2").value=c.p.id;$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||"";$("ebk").value=c.bk||"";$("ega").value=c.ga||"";$("ecv").value=c.colVis==="owned"?"owned":"all"}
+function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("eel").value=c.el||"";$("eel2").value=c.el2||"";cpSyncCardElements();$("etb").value=c.tb||"";{const k2=$("ek2");k2.value=c.p.id;if(k2.value!=String(c.p.id))k2.value=c.p===IND?"ind":(k2.insertAdjacentHTML("beforeend",`<option value="${c.p.id}">${c.p.e||""} ${c.p.n}</option>`),c.p.id)}$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||"";$("ebk").value=c.bk||"";$("ega").value=c.ga||"";$("ecv").value=c.colVis==="owned"?"owned":"all"}
 function adxFk(){const p=P.concat(PX).find(q=>q.id==$("ek").value);if(!p)return;$("kn").value=p.n;$("ke").value=p.e;$("kh").value=p.h;$("kc").value=p.cost||"";$("ko").value=p.odds?p.odds.join(","):"";$("kb").value=p.bk||"";$("kt").value=p.ate?new Date(p.ate-new Date(p.ate).getTimezoneOffset()*6e4).toISOString().slice(0,16):"";$("kx").value=p.esp||"";$("kf").value=p.fim||0}
 function adxGo(){sADM();sessionStorage.cpad=[...cfg.querySelectorAll("details[open]")].map(d=>d.id).join();try{sessionStorage.cptab=tab}catch(e){}location.reload()}
-function adxSc(){if($("ec").value=="__")return YNEW();const c=byId($("ec").value);if(!c)return;const g=i=>$(i).value,r=+g("er"),pk=g("ek2");let f=[+g("ehp"),+g("eatk")];
+function adxSc(){if($("ec").value=="__")return YNEW();const c=byId($("ec").value);if(!c)return;const g=i=>$(i).value,r=+g("er");let pk=g("ek2");if(pk!=="ind"&&!P.concat(PX).some(q=>q.id==pk))pk=c.p.id;let f=[+g("ehp"),+g("eatk")];
 if(pk!=c.p.id&&c.p.cards.length<2&&c.p!==IND&&!c.p.ex)return toast("O pacote precisa ficar com ao menos 1 carta.");
 if(f.some(x=>!(x>0)))return toast("Vida e dano precisam ser maiores que 0.");
 if(r!=c.r&&f[0]==c.hp&&f[1]==c.atk)f=[ST[r][0],ST[r][1]];
@@ -5209,7 +5237,7 @@ function parseSheet(sh,opt={}){
   if(ab||card.n!==undefined)W_(ln,`linha ignorada: "${t.slice(0,40)}${t.length>40?"…":""}"`)});
  // ---- carta
  const c={abs:[]};
- c.n=txt(card.n,32,m=>W_(card.$n,m),"Nome");
+ c.n=txt(card.n,100,m=>W_(card.$n,m),"Nome");
  if(!c.n)E_(card.$n,"falta o Nome da carta.");
  else if(ALL.some(x=>SL(x.n)===SL(c.n)))W_(card.$n,`já existe uma carta chamada "${c.n}": confira se é uma atualização ou uma duplicata antes de importar.`);
  let ri=0;
@@ -5386,7 +5414,7 @@ function cpParseCardBlock(block,cardNumber){
 
  const rankIndex=card.rank!==undefined?rk(card.rank):-1;
  if(!card.name)fail(card.$name,"falta Nome.");
- if(card.name&&card.name.length>32)fail(card.$name,"Nome deve ter no máximo 32 caracteres.");
+ if(card.name&&card.name.length>100)fail(card.$name,"Nome deve ter no máximo 100 caracteres.");
  if(rankIndex<0)fail(card.$rank,"Rank é obrigatório e deve ser F, E, D, C, B, A, S, SS ou SSS.");
  if(card.hp===undefined||card.hp==="")fail(card.$hp,"Vida é obrigatória.");
  if(card.atk===undefined||card.atk==="")fail(card.$atk,"Dano é obrigatório.");
