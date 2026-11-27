@@ -9358,6 +9358,154 @@ html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSS
  .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSSBorderHueLive 18s linear infinite,cpSSSBorderSpinLive 16s linear infinite!important}
 }
 </style>
+
+<style id="cp-sss-deck-rounded-diffuse-rgb-2026">
+/* SSS no álbum/deck: a luz é recortada pela geometria arredondada da própria carta.
+   O halo usa manchas difusas sem uma caixa retangular visível. */
+@property --cp-sss-deck-hue{syntax:"<angle>";inherits:false;initial-value:0deg}
+@property --cp-sss-deck-alpha{syntax:"<number>";inherits:false;initial-value:.62}
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow,
+#dkal .dkc .cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow{
+  position:absolute!important;inset:3px!important;display:block!important;
+  width:auto!important;height:auto!important;box-sizing:border-box!important;
+  z-index:5!important;pointer-events:none!important;isolation:isolate!important;
+  overflow:hidden!important;
+  border-radius:var(--card-rx,14%) / var(--card-ry,10.5%)!important;
+  clip-path:inset(0 round var(--card-rx,14%) / var(--card-ry,10.5%))!important;
+  background:transparent!important;mix-blend-mode:screen!important;
+}
+/* Luz principal: quatro reflexos largos e transparentes, um por lado; sem moldura sólida. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::before,
+#dkal .dkc .cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::before{
+  content:""!important;position:absolute!important;inset:-8px!important;display:block!important;
+  width:auto!important;height:auto!important;border:0!important;pointer-events:none!important;
+  border-radius:calc(var(--card-rx,14%) + 8px) / calc(var(--card-ry,10.5%) + 8px)!important;
+  background:
+    radial-gradient(ellipse 92% 38% at 50% 0%,rgba(255,65,145,.62) 0%,rgba(255,65,145,.24) 42%,transparent 100%),
+    radial-gradient(ellipse 92% 38% at 50% 100%,rgba(54,171,255,.58) 0%,rgba(54,171,255,.22) 42%,transparent 100%),
+    radial-gradient(ellipse 42% 88% at 0% 50%,rgba(169,76,255,.60) 0%,rgba(169,76,255,.22) 44%,transparent 100%),
+    radial-gradient(ellipse 42% 88% at 100% 50%,rgba(255,194,61,.56) 0%,rgba(255,194,61,.20) 44%,transparent 100%)!important;
+  filter:blur(13px) saturate(1.9) brightness(1.22) hue-rotate(var(--cp-sss-deck-hue))!important;
+  opacity:var(--cp-sss-deck-alpha)!important;
+  animation:cpSSSDeckHue 8s linear infinite,cpSSSDeckPulse 4.8s ease-in-out infinite!important;
+  will-change:filter,opacity!important;
+}
+/* Segunda luz: mistura RGB diferente e mais difusa, também contida nos cantos arredondados. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::after,
+#dkal .dkc .cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::after{
+  content:""!important;position:absolute!important;inset:-10px!important;display:block!important;
+  width:auto!important;height:auto!important;border:0!important;pointer-events:none!important;
+  border-radius:calc(var(--card-rx,14%) + 10px) / calc(var(--card-ry,10.5%) + 10px)!important;
+  background:
+    radial-gradient(ellipse 80% 35% at 28% 0%,rgba(255,220,92,.42),transparent 100%),
+    radial-gradient(ellipse 80% 35% at 72% 100%,rgba(95,255,198,.46),transparent 100%),
+    radial-gradient(ellipse 34% 74% at 0% 66%,rgba(83,151,255,.44),transparent 100%),
+    radial-gradient(ellipse 34% 74% at 100% 34%,rgba(211,93,255,.48),transparent 100%)!important;
+  filter:blur(19px) saturate(1.85) brightness(1.18) hue-rotate(calc(var(--cp-sss-deck-hue) + 130deg))!important;
+  opacity:.54!important;mix-blend-mode:screen!important;
+  animation:cpSSSDeckHue 11s linear infinite reverse,cpSSSDeckPulseB 6.2s ease-in-out infinite!important;
+  will-change:filter,opacity!important;
+}
+@keyframes cpSSSDeckHue{from{--cp-sss-deck-hue:0deg}to{--cp-sss-deck-hue:360deg}}
+@keyframes cpSSSDeckPulse{0%,100%{--cp-sss-deck-alpha:.42}48%{--cp-sss-deck-alpha:.78}76%{--cp-sss-deck-alpha:.55}}
+@keyframes cpSSSDeckPulseB{0%,100%{opacity:.28}52%{opacity:.62}78%{opacity:.38}}
+/* A grade do deck desativa efeitos comuns por desempenho; reabilita apenas a raridade SSS. */
+#dkal .dkc .cd.cp-art-only.k8:not(.lock)>.rbw>i{
+  animation:cpSSSBorderHueLive 8s linear infinite,cpSSSBorderSpinLive 7s linear infinite!important;
+  transform-origin:50% 50%!important;will-change:transform,filter!important;
+}
+#dkal .dkc .cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::before{
+  animation:cpSSSDeckHue 8s linear infinite,cpSSSDeckPulse 4.8s ease-in-out infinite!important;
+}
+#dkal .dkc .cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::after{
+  animation:cpSSSDeckHue 11s linear infinite reverse,cpSSSDeckPulseB 6.2s ease-in-out infinite!important;
+}
+@media(prefers-reduced-motion:reduce){
+  #dkal .dkc .cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSSBorderHueLive 18s linear infinite,cpSSSBorderSpinLive 16s linear infinite!important}
+  #dkal .dkc .cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::before{animation:cpSSSDeckHue 20s linear infinite,cpSSSDeckPulse 12s ease-in-out infinite!important}
+  #dkal .dkc .cd.cp-art-only.k8:not(.lock)>.cp-sss-inner-glow::after{animation:cpSSSDeckHue 24s linear infinite reverse,cpSSSDeckPulseB 14s ease-in-out infinite!important}
+}
+</style>
+
+
+<style id="cp-card-corners-cleanup-2026">
+/* O X de remover fica totalmente dentro do canto da carta, sem parecer cortado. */
+.dks>.dkx{
+  top:4px!important;
+  right:4px!important;
+  width:19px!important;
+  height:19px!important;
+  border:1px solid #ffffff85!important;
+  border-radius:50%!important;
+  background:rgba(15,15,19,.82)!important;
+  box-shadow:0 2px 6px #0008!important;
+  font-size:12px!important;
+  line-height:1!important;
+}
+</style>
+
+
+<style id="cp-card-detail-no-inner-square-2026">
+/* A ficha usa o mesmo recorte arredondado da carta; não cria um segundo painel interno. */
+#fc .fch>.f3d>.in>.cd.cp-art-only{
+  border-radius:var(--card-rx,14%) / var(--card-ry,10.5%) !important;
+  overflow:hidden !important;
+}
+#fc .fch>.f3d>.in>.cd.cp-art-only>.art,
+#fc .fch>.f3d>.in>.cd.cp-art-only>.art img,
+#fc .fch>.f3d>.in>.cd.cp-art-only>.rbw{
+  border-radius:inherit !important;
+}
+#fc .fch>.f3d>.in>.cd.cp-art-only>.art{
+  inset:0 !important;
+  overflow:hidden !important;
+}
+#fc .fch>.f3d>.in>.cd.cp-art-only>.art img{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+}
+/* O brilho fica no aro prismático externo; remove a camada interna que formava o quadrado.
+   Regra global: vale também para as miniaturas da aba Coleção, não apenas para a ficha. */
+.cd.cp-art-only.k8>.cp-sss-inner-glow,
+.cd.cp-art-only.k8>.cp-sss-inner-glow::before,
+.cd.cp-art-only.k8>.cp-sss-inner-glow::after{
+  display:none !important;
+  visibility:hidden !important;
+  content:none !important;
+  animation:none !important;
+}
+</style>
+
+
+<style id="cp-sss-vivid-rgb-border-2026">
+/* Borda SSS: mantém o espectro em cores vivas; só o gradiente gira.
+   Sem hue-rotate, que fazia a paleta passar por tons escuros e apagados. */
+.cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{
+  background:conic-gradient(from 0deg,
+    #ff2d95 0deg,
+    #ff7928 48deg,
+    #ffe52e 94deg,
+    #8cff32 142deg,
+    #16e6b8 190deg,
+    #18d5ff 238deg,
+    #536dff 286deg,
+    #bf4cff 334deg,
+    #ff2d95 360deg
+  )!important;
+  filter:saturate(1.18) brightness(1.08) contrast(1.02)!important;
+  animation:cpSSSVividBorderSpin 7s linear infinite!important;
+  transform-origin:50% 50%!important;
+  will-change:transform!important;
+}
+@keyframes cpSSSVividBorderSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+  .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{
+    animation:cpSSSVividBorderSpin 18s linear infinite!important;
+  }
+}
+</style>
 </body>
 </html>
 
