@@ -9933,6 +9933,109 @@ html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSS
 .cp-arena-gate.cp-arena-gate .bt{width:100%;max-width:100%;flex:0 0 auto;margin:0}
 .cp-arena-gate.cp-arena-gate .cp-arena-lock{align-self:flex-start}
 </style>
+<style id="cp-battle-fit-1-3-13">
+/* COLEÇÃO PRIMATA · BATALHA 1v1 ENCAIXADA NA TELA (1.3.13)
+ * Objetivo: cartas bem maiores, tudo visível sem arrastar e sem zoom (celular em pé).
+ * Como funciona: o #zb vira uma coluna de altura fixa (100dvh); cada lado (.zs) ocupa o espaço que sobra
+ * e as cartas calculam o tamanho pela largura E pela altura disponíveis do próprio lado (container query).
+ * Só vale para a mesa 1v1 (filhos diretos do #zb); modos em grupo/raid/chefe solo seguem com o CSS deles. */
+html #zb:not(:has(.zqm)):not(:has(.cp-solo-boss-board)):not(:has(.raid-board)){
+  height:100dvh!important;max-height:100dvh!important;min-height:0!important;overflow:hidden!important;
+  gap:4px!important;padding:calc(env(safe-area-inset-top,0px) + 4px) 6px calc(env(safe-area-inset-bottom,0px) + 4px)!important;
+}
+/* cabeçalhos compactos: nome, corações, turno e baralho */
+html #zb>.zt{flex:0 0 auto;min-height:0!important;padding:2px 8px!important;align-items:center!important}
+html #zb>.zt>div:first-child{display:flex!important;align-items:center;gap:8px;min-width:0}
+html #zb>.zt b{display:inline-block!important;font-size:.8rem!important;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46vw}
+html #zb>.zt .zl{font-size:.8rem;letter-spacing:.06em;line-height:1}
+html #zb>.zt .zi{white-space:nowrap;font-size:.62rem!important;color:#fff!important;text-shadow:0 1px 2px #000c;display:flex;align-items:center}
+html #zb>.zt .zpl{width:23px!important;height:31px!important}
+/* faixa de sinergia (sempre aparece: ativa ou não) */
+html #zb>.ztrib{flex:0 0 auto;margin:0!important;padding:2px 8px!important;min-height:18px;max-height:34px;overflow:hidden;
+  font-size:.6rem!important;line-height:1.25!important;text-align:center;white-space:nowrap;text-overflow:ellipsis;opacity:1!important;color:#fff;letter-spacing:0!important;text-transform:none!important;
+  border-radius:9px;background:#0b1224b8;border:1px solid #ffffff26;text-shadow:0 1px 2px #000a}
+html #zb>.ztrib b{font-weight:900;margin-right:3px}
+html #zb>.ztrib i{font-style:normal;opacity:.92}
+html #zb>.ztrib.on{background:linear-gradient(90deg,#0f4a2dd9,#136b3ed9);border-color:#6dffa0aa;color:#eafff1}
+html #zb>.ztrib.on b{color:#9dffbd}
+html #zb>.ztrib:not(.on){color:#c9d3ea}
+/* log de uma linha, discreto */
+html #zb>.zlog{flex:0 0 auto;margin:0!important;padding:2px 8px!important;font-size:.58rem!important;line-height:1.2!important;min-height:0!important;max-height:2.5em!important;overflow:hidden;border-width:1px!important;border-radius:8px!important}
+/* cada lado ocupa o espaço que sobra */
+html #zb>.zs{flex:1 1 0!important;min-height:0!important;container-type:size;display:grid!important;grid-auto-rows:max-content;
+  align-content:space-evenly;justify-items:stretch;gap:3px!important;padding:4px 3px!important;overflow:visible!important}
+html #zb>.zs .zrow{display:grid!important;justify-content:center!important;gap:4px!important;align-items:start!important;
+  grid-template-columns:repeat(3,var(--cw))!important}
+/* tamanho: cabe pela largura e pela altura do próprio lado; reserva sua ≈60% da ativa, reserva do rival ≈50% (são só versos) */
+html #zb>.ztrib+.zs{flex-grow:.95!important}
+html #zb>.zlog+.zs{flex-grow:1!important}
+html #zb>.zs .zrow:not(.zrs){--cw:clamp(52px,min(calc((100cqw - 20px)/3),calc((100cqh - 36px)/2.03)),160px)!important}
+html #zb>.zs .zrow.zrs{--cw:clamp(34px,calc(min(calc((100cqw - 20px)/3),calc((100cqh - 36px)/2.03))*.52),100px)!important}
+html #zb>.ztrib+.zs .zrow:not(.zrs){--cw:clamp(52px,min(calc((100cqw - 20px)/3),calc((100cqh - 36px)/1.9)),160px)!important}
+html #zb>.ztrib+.zs .zrow.zrs{--cw:clamp(30px,calc(min(calc((100cqw - 20px)/3),calc((100cqh - 36px)/1.9))*.42),90px)!important}
+html #zb>.zs .zu{position:relative}
+html #zb>.zs .zu.ze{aspect-ratio:3/4!important;min-height:0!important;height:auto!important}
+/* barras de vida legíveis */
+html #zb>.zs .zrow:not(.zrs) .zu>.yhp{height:15px!important;min-height:15px!important}
+html #zb>.zs .zrow:not(.zrs) .zu>.yhp span{font-size:10px!important;line-height:11px!important}
+html #zb>.zs .zrs>.zu:not(.zbk):not(.ze){grid-template-rows:auto 11px!important}
+html #zb>.zs .zrs .zu>.yhp,html #zb>.zs .zrs>.zu:not(.zbk):not(.ze)>.yhp{height:11px!important;min-height:11px!important}
+html #zb>.zs .zrs .zu>.yhp span{font-size:8px!important;line-height:7px!important}
+/* selo de sinergia em cada carta */
+.cpsy-badge{position:absolute;z-index:6;bottom:20px;left:3px;padding:1px 5px 1px 4px;border-radius:99px;font:900 9px/1.35 Montserrat,system-ui,sans-serif;
+  letter-spacing:0;pointer-events:none;color:#fff;background:#0a1b10e6;border:1.5px solid #6dffa0;box-shadow:0 1px 4px #000a;font-style:normal;white-space:nowrap}
+.cpsy-badge.off{background:#14161fd0;border-color:#8b93a8;color:#c3c9d8}
+html #zb>.zs .zrs .cpsy-badge{font-size:7.5px;bottom:15px;left:2px;padding:0 3px}
+/* painel de ações compacto, sempre com a mesma altura (as cartas não "pulam" ao selecionar) */
+html #zb>.zc{flex:0 0 auto!important;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px 6px!important;align-content:space-between;
+  height:clamp(112px,17.4dvh,148px)!important;min-height:112px!important;max-height:148px!important;overflow-y:auto!important;overscroll-behavior:contain;
+  padding:6px 8px calc(env(safe-area-inset-bottom,0px) + 4px)!important;margin:0!important;border-radius:14px!important}
+html #zb>.zc>*{grid-column:1/-1;margin:0!important}
+html #zb>.zc>.two:has([data-z="draw"]){display:contents!important}
+html #zb>.zc>.two:has([data-z="draw"])>.bt{grid-column:span 3}
+html #zb>.zc:has(>[data-z="cancel"])>.two:has([data-z="draw"])>.bt{grid-column:span 2}
+html #zb>.zc>[data-z="cancel"]{grid-column:span 2}
+html #zb>.zc>.bk{grid-column:1/4;justify-self:start;padding:4px 4px!important;font-size:.62rem!important}
+html #zb>.zc>.cp-el-guide-float{grid-column:4/7;justify-self:end;position:static!important;min-height:26px!important;padding:4px 11px!important;font-size:.64rem!important;box-shadow:none!important}
+html #zb>.zc .zst{font-size:.58rem!important;line-height:1.2!important;letter-spacing:.05em!important;text-align:center}
+html #zb>.zc .cp-battle-element-legend{font-size:.6rem!important;line-height:1.1!important;gap:10px!important;padding:0!important}
+html #zb>.zc .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+html #zb>.zc .bt{min-height:30px!important;padding:5px 6px!important;font-size:.64rem!important;line-height:1.1!important}
+@media(max-height:720px){
+  html #zb>.zc>p.zst+p.zst,html #zb>.zc>.cp-battle-element-legend{display:none!important}
+  html #zb>.zt{padding-top:0!important;padding-bottom:0!important}
+  html #zb>.ztrib{font-size:.56rem!important;min-height:16px}
+}
+</style>
+<script id="cp-battle-fit-synergy-1-3-13">
+/* COLEÇÃO PRIMATA · SINERGIA VISÍVEL NA BATALHA 1v1 (1.3.13)
+ * Depois de cada desenho do HUD (zr): (1) faixa de sinergia embaixo do cabeçalho de cada jogador (ativa ou "sem sinergia");
+ * (2) selo 🐾 em cada carta com tribo: verde = sinergia ativa (×quantidade no deck), cinza = tribo sozinha;
+ * (3) dica do painel de ações encurtada. Não mexe em regras de combate. Precisa ficar ANTES do bloco cp-battle-hud-safety. */
+(()=>{try{
+const E=s=>String(s??"").replace(/[&<>"']/g,k=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[k]));
+const line=s=>{const a=(s&&s.syn)||[];return a.length
+ ?`🐾 <b>Sinergia ativa:</b> ${a.map(x=>`${E(x.name)} ×${x.count} <i>+${x.atk}% ATQ${x.hp?` · +${x.hp}% VIDA`:""}</i>`).join(" · ")}`
+ :`🐾 <b>Sem sinergia</b> <i>· nenhuma tribo repetida no deck</i>`};
+function fit(){
+ const B=typeof BT!=="undefined"?BT:null,z=document.getElementById("zb");
+ if(!B||!B.p||B.p.length!==2||!z||z.hidden||z.querySelector(".zqm,.cp-solo-boss-board,.raid-board"))return;
+ const zts=[...z.children].filter(n=>n.classList&&n.classList.contains("zt"));if(zts.length<2)return;
+ [...z.children].forEach(n=>{if(n.classList&&n.classList.contains("ztrib"))n.remove()});
+ const me=B.ai?0:B.v,mk=(s,c)=>{const p=document.createElement("p");p.className="ztrib cpsy "+c+((s.syn||[]).length?" on":"");p.innerHTML=line(s);return p};
+ zts[0].after(mk(B.p[1-me],"en"));zts[1].after(mk(B.p[me],"me"));
+ z.querySelectorAll('.zu[data-z^="u:"]').forEach(el=>{
+  if(el.querySelector(":scope>.cpsy-badge"))return;
+  const u=zfnd(B,el.dataset.z.slice(2));if(!u||!u.c||!String(u.c.tb||"").trim())return;
+  const b=document.createElement("em"),sy=u.synergy;b.className="cpsy-badge"+(sy?"":" off");
+  b.textContent=sy?`🐾×${sy.count}`:"🐾✕";
+  b.title=sy?`Tribo ${u.c.tb}: sinergia com ${sy.count} cartas (+${sy.atk}% ATQ${sy.hp?` / +${sy.hp}% VIDA`:""})`:`Tribo ${u.c.tb}: sem sinergia (precisa de outra carta da mesma tribo no deck)`;
+  el.append(b)});
+ z.querySelectorAll(".zc .zst").forEach(p=>{if(/^Toque numa carta para agir/.test(p.textContent))p.textContent="Toque na carta para agir · toque de novo para ver status"});
+}
+const z1=zr;zr=function(){const r=z1.apply(this,arguments);try{fit()}catch(e){console.warn("cp-fit-synergy",e)}return r};
+}catch(x){console.warn("cp-battle-fit-synergy",x)}})();
+</script>
 <script id="cp-battle-hud-safety-1-3-12">
 /* COLEÇÃO PRIMATA · PROTEÇÃO DO HUD DE BATALHA (1.3.12)
  * Problema corrigido: se zr() (desenho do HUD) lançasse erro depois de zb.hidden=false, ficava só o cenário (#zbg)
