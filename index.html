@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.3.4">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.4 -->
+<meta name="application-version" content="1.3.5">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.5 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.3.4";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.5";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -896,16 +896,44 @@ body:has(#cfg:not([hidden])) #cpchip{display:none}#cpchip{position:fixed;right:8
  */
 
 /* v1.8 · ADM · importar ficha de carta */
-#z_iv{display:grid;gap:8px}
-.ivc{padding:12px 14px;border-radius:14px;background:#ffffff0a;border:1px solid #ffffff1f;display:grid;gap:6px}
-.ivc .n{font-size:1rem;line-height:1.2}
-.ivc small{color:var(--mut);font-size:.74rem}
-.ivc p{margin:0;font-size:.76rem;line-height:1.45;color:var(--mut)}
-.iva{padding:9px 11px;border-radius:10px;background:#ffffff0d;font-size:.76rem;line-height:1.45}
+#z_iv{display:grid;gap:12px}
+#z_iv .iv-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid #ffffff20;border-radius:14px;background:linear-gradient(120deg,#ffffff10,#ffffff04)}
+#z_iv .iv-summary b{font-size:.86rem;font-weight:900}
+#z_iv .iv-summary small{display:block;color:var(--mut);font-size:.68rem;margin-top:2px}
+#z_iv .iv-summary .iv-count{flex:none;min-width:48px;padding:7px 10px;border-radius:11px;background:#ffffff12;text-align:center;font-size:1rem;font-weight:900;font-variant-numeric:tabular-nums}
+.ivc{--iv-rank:var(--ac);position:relative;isolation:isolate;overflow:hidden;padding:14px;border-radius:16px;background:linear-gradient(150deg,color-mix(in srgb,var(--iv-rank) 13%,var(--sf)),#111114 74%);border:1px solid color-mix(in srgb,var(--iv-rank) 42%,#ffffff20);border-left:4px solid var(--iv-rank);display:grid;gap:10px;box-shadow:0 7px 22px #0003}
+.ivc::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 100% 0%,color-mix(in srgb,var(--iv-rank) 18%,transparent),transparent 52%)}
+.ivc.invalid{border-color:#f4566a88;border-left-color:#f4566a}
+.ivc .ivc-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ivc .iv-rank{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:7px;background:var(--iv-rank);color:#101014;font-size:.67rem;font-weight:900;letter-spacing:.13em}
+.ivc .iv-index{color:var(--mut);font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.ivc .ivc-title{font-size:1.12rem;line-height:1.18;font-weight:900;letter-spacing:.015em;overflow-wrap:anywhere}
+.ivc .ivc-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ivc .iv-stat{padding:9px 11px;border:1px solid #ffffff17;border-radius:11px;background:#0004}
+.ivc .iv-stat small{display:block;color:var(--mut);font-size:.58rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.ivc .iv-stat b{display:block;margin-top:2px;font-size:1.05rem;font-weight:900;font-variant-numeric:tabular-nums}
+.ivc .ivc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.ivc .iv-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:8px;background:#ffffff10;border:1px solid #ffffff19;font-size:.67rem;font-weight:800;line-height:1.3}
+.ivc .iv-tag.element{border-color:color-mix(in srgb,var(--iv-rank) 35%,#ffffff20)}
+.ivc .iv-tag.tribe{color:#e8d6a8;background:#b58a3518;border-color:#b58a3544}
+.ivc .iv-section-label{margin:1px 0 -5px;color:var(--mut);font-size:.62rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase}
+.ivc .iv-story{padding:10px 11px;border-radius:10px;background:#0003;border:1px solid #ffffff12;font-size:.75rem;line-height:1.52;color:#e3e0e9;overflow-wrap:anywhere}
+.ivc .iv-skill-list{display:grid;gap:8px}
+.iva{padding:10px 11px;border-radius:11px;background:#ffffff0b;border:1px solid #ffffff16;font-size:.75rem;line-height:1.5;overflow-wrap:anywhere}
+.iva .iv-skill-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:5px}
+.iva .iv-skill-name{font-weight:900;font-size:.82rem;line-height:1.25}
+.iva .iv-skill-meta{display:flex;flex-wrap:wrap;gap:4px;margin:5px 0}
+.iva .iv-skill-meta span{padding:3px 6px;border-radius:6px;background:#ffffff0d;color:var(--mut);font-size:.59rem;font-weight:800}
+.iva .iv-skill-quote{margin:4px 0 6px;color:#c9c5d1;font-style:italic}
+.iva .iv-skill-effect{padding-top:6px;border-top:1px solid #ffffff12;color:#e5e1eb;font-size:.7rem}
 .iva i{color:var(--mut)}
+.iv-valid{color:#8be2a2;font-size:.67rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.iv-invalid{color:#ff8a96;font-size:.67rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
 .xw p.er{background:#f4566a1a;border-color:#f4566a55;color:#ff8a96}
 .ivb{display:flex;gap:8px}
 .ivb .bt{flex:1;min-width:0;width:auto}
+#cfg #z_ix.off{opacity:.42;filter:saturate(.45)}
+@media(max-width:380px){.ivc{padding:11px}.ivc .ivc-title{font-size:1rem}.ivc .iv-stat{padding:8px}.ivc .iv-stat b{font-size:.96rem}}
 /* ===== yr-css (origem: linha 4411) ===== */
 /* Arquivo-fonte: assets/css/07-weekly-ranking.css */
 /* COLEÇÃO PRIMATA · CSS 08/17
@@ -4985,12 +5013,12 @@ cfg.addEventListener("input",e=>{const i=e.target.id;if(e.target.closest("#ds_v"
 /* Arquivo-fonte: assets/js/18-ai-card-import.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 18-ai-card-import.js
- * Papel: Importação de fichas de cartas produzidas por IA.
+ * Papel: Importação visual de fichas IA v3, lotes de cartas e formatos legados.
  * Origem: bloco inline 12 do HTML de entrada.
  * Ordem de carregamento obrigatória; ver assets/manifest.json.
  */
 
-// ===== v1.8 (20/11/2026): ADM · IMPORTAR FICHA DE CARTA · cole o texto que a IA criou e o jogo monta a carta (nome, história, status e habilidades) =====
+// ===== v3.0 (27/11/2026): ficha visual IA v3 + importação de JSON em lote; mantém compatibilidade v2 e texto legado =====
 (()=>{try{
 const E=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
 N=s=>String(s==null?"":s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(),
@@ -5266,17 +5294,88 @@ function cpV2MakeSheet(obj){
  parsed.er.unshift(...extra);
  return parsed;
 }
+// Ficha IA v3: formato mais legível, sem alterar o formato interno do jogo.
+// O tradutor converte o JSON v3 para a mesma validação/motor da ficha v2.
+function cpV3MakeSheet(obj){
+ const o=obj&&typeof obj==="object"?obj:{},skillsIn=Array.isArray(o.skills)?o.skills:(Array.isArray(o.abilities)?o.abilities:[]),sy=o.synergy&&typeof o.synergy==="object"?o.synergy:null;
+ const tribe=o.tribe??o.tribo??(typeof o.synergy==="string"?o.synergy:sy?(sy.group??sy.tribe??sy.name):undefined);
+ const rawElements=Array.isArray(o.elements)?o.elements:(Array.isArray(o.elementos)?o.elementos:(o.element!=null?[o.element]:[]));
+ const skillAlias={active:"ativa",manual:"ativa",enter:"entrar_em_campo",enter_field:"entrar_em_campo",on_enter:"entrar_em_campo",death:"morrer",on_death:"morrer",start_turn:"inicio_turno",turn_start:"inicio_turno",end_turn:"fim_turno",turn_end:"fim_turno",take_damage:"receber_dano",receive_damage:"receber_dano",on_hit:"receber_dano",attack:"atacar",on_attack:"atacar",kill:"eliminar",on_kill:"eliminar",after_skill:"usar_habilidade",after_ability:"usar_habilidade",healed:"ser_curado",on_heal:"ser_curado",dodge:"esquivar",on_dodge:"esquivar",ally_enter:"aliado_entrar",ally_death:"aliado_morrer"};
+ const targetAlias={self:"si",own:"si",enemy:"inimigo",one_enemy:"inimigo",all_enemies:"todos_inimigos",enemies:"todos_inimigos",ally:"aliado",one_ally:"aliado",allies:"todos_aliados",all_allies:"todos_aliados",random_enemy:"inimigo_aleatorio",weakest_enemy:"inimigo_menos_vida",lowest_hp_enemy:"inimigo_menos_vida",strongest_enemy:"inimigo_mais_vida",highest_hp_enemy:"inimigo_mais_vida",random_ally:"aliado_aleatorio",weakest_ally:"aliado_menos_vida",lowest_hp_ally:"aliado_menos_vida",other_allies:"outros_aliados",all_cards:"todas_cartas"};
+ const paramAlias={multiplier:"mult",damage_multiplier:"mult",percent:"pct",percentage:"pct",percent_max_hp:"pct",duration:"turnos",turns:"turnos",hits:"golpes",amount:"valor",value:"valor",cards:"cartas",actions:"acoes",lives:"vidas",preserve_used:"poupar",keep_used:"poupar",element:"elemento",second_element:"elemento_2",element_2:"elemento_2"};
+ const condAlias={target_hp_at_most:"alvo_vida_ate",target_hp_at_least:"alvo_vida_acima",self_hp_at_most:"eu_vida_ate",self_hp_at_least:"eu_vida_acima",target_has_poison_or_bleed:"alvo_envenenado",target_has_debuff:"alvo_com_debuff",target_has_buff:"alvo_com_buff",element_advantage:"vantagem_elemento",fewer_lives:"menos_vidas",more_lives:"mais_vidas"};
+ const normKey=v=>String(v==null?"":v).normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase().replace(/[\s-]+/g,"_");
+ const v2Skills=skillsIn.map(sk=>{
+  if(!sk||typeof sk!=="object")return sk;
+  let elements=Array.isArray(sk.elements)?sk.elements:(Array.isArray(sk.elementos)?sk.elementos:(sk.element!=null?[sk.element]:[]));
+  if(sk.elementSource==="card"||sk.element_source==="card")elements=["card"];
+  let trigger=sk.trigger??sk.when??sk.quando??"";trigger=skillAlias[normKey(trigger)]||trigger;
+  const charges=sk.charge&&typeof sk.charge==="object"?sk.charge:null;
+  const rawEffects=Array.isArray(sk.effects)?sk.effects:(Array.isArray(sk.efeitos)?sk.efeitos:[]);
+  const effects=rawEffects.map(ef=>{
+   if(!ef||typeof ef!=="object")return ef;
+   const rawType=ef.type??ef.tipo??ef.effect??"",type=String(rawType);
+   const params=ef.params&&typeof ef.params==="object"?ef.params:(ef.parameters&&typeof ef.parameters==="object"?ef.parameters:{}),mapped={};
+   Object.entries(params).forEach(([k,v])=>{const key=paramAlias[normKey(k)]||k;mapped[key]=v});
+   const target=ef.target??ef.alvo,condition=ef.condition??ef.condicao;
+   return{type,target:target==null?undefined:(targetAlias[normKey(target)]||target),params:mapped,
+    condition:condition==null?undefined:(condAlias[normKey(condition)]||condition),
+    limit:ef.limit??ef.limite,chance:ef.chance??ef.probability};
+  });
+  return{name:sk.name??sk.nome,quote:sk.quote??sk.phrase??sk.frase??sk.description??sk.descricao,
+   trigger,cooldown:sk.cooldown??sk.recarga,elements,effects,
+   chargeMode:sk.chargeMode??(charges&&charges.mode),chargeTurns:sk.chargeTurns??(charges&&charges.turns)};
+ });
+ const v2={name:o.name??o.nome,rank:o.rank??o.r,stats:o.stats&&typeof o.stats==="object"?o.stats:{hp:o.hp,attack:o.attack??o.atk??o.damage},elements:rawElements,tribe,seal:o.seal??o.selo,story:o.story??o.historia,skills:v2Skills};
+ const parsed=cpV2MakeSheet(v2),ver=+(o.version??3),rankIndex=rk(v2.rank);
+ if(tribe!=null&&sy&&sy.group!=null&&o.tribe!=null&&normKey(tribe)!==normKey(sy.group))parsed.er.unshift("Tribo e synergy.group estão diferentes. Use apenas um nome de família.");
+ if(ver>=3&&rankIndex===0&&skillsIn.length!==1)parsed.er.unshift(`Rank F exige exatamente 1 habilidade nesta versão. A ficha contém ${skillsIn.length}.`);
+ if(ver>=3&&rawElements.length===0)parsed.er.unshift('Informe ao menos um elemento em "elements". Use ["normal"] para uma carta neutra.');
+ return parsed;
+}
+
+// Extrai cada objeto/array JSON completo mesmo quando a mensagem contém vários blocos ```json separados.
+function cpExtractJSON(raw){
+ const out=[];let start=-1,stack=[],quoted=false,escape=false;
+ for(let i=0;i<raw.length;i++){
+  const ch=raw[i];
+  if(start<0){if(ch==="{"||ch==="["){start=i;stack=[ch]}continue}
+  if(quoted){if(escape)escape=false;else if(ch==="\\")escape=true;else if(ch==='"')quoted=false;continue}
+  if(ch==='"'){quoted=true;continue}
+  if(ch==="{"||ch==="["){stack.push(ch);continue}
+  if(ch==="}"||ch==="]"){
+   const prev=stack.pop();if((prev==="{"&&ch!=="}")||(prev==="["&&ch!=="]")){start=-1;stack=[];continue}
+   if(!stack.length){out.push(raw.slice(start,i+1));start=-1}
+  }
+ }
+ return out;
+}
+function cpSheetsFromJSON(value){
+ const out=[];
+ const consume=(obj,versionHint)=>{
+  if(Array.isArray(obj)){obj.forEach(x=>consume(x,versionHint));return}
+  if(!obj||typeof obj!=="object")throw new Error("Cada ficha precisa ser um objeto JSON.");
+  if(obj.format&&obj.format!==CP_CARD_V2_FORMAT)throw new Error(`Formato "${obj.format}" não reconhecido.`);
+  const version=+(obj.version??versionHint??(obj.format?0:3));
+  if(obj.cards&&Array.isArray(obj.cards)){if(!obj.cards.length)throw new Error("O pacote JSON não contém cartas.");obj.cards.forEach(x=>out.push(version===2?cpV2MakeSheet(x):cpV3MakeSheet(x)));return}
+  if(obj.card&&typeof obj.card==="object"){out.push(version===2?cpV2MakeSheet(obj.card):cpV3MakeSheet(obj.card));return}
+  const looksLikeCard=["name","nome","rank","r","stats","elements","elementos","skills","story","historia"].some(k=>Object.prototype.hasOwnProperty.call(obj,k));
+  if(!looksLikeCard)throw new Error("O JSON não parece uma ficha de carta. Use name, rank, stats, elements, story e skills.");
+  if(obj.format&&![2,3].includes(version))throw new Error(`Versão ${obj.version} não reconhecida. Use a ficha v3.`);
+  out.push(version===2?cpV2MakeSheet(obj):cpV3MakeSheet(obj));
+ };
+ consume(value,undefined);return out;
+}
 function parse(text){
  const raw=String(text||"").replace(/[\u200b-\u200d\u2060\ufeff]/g,"").replace(/[\u00a0\u2007\u202f]/g," ").replace(/\r\n?/g,"\n");
- const candidate=raw.trim().replace(/^```(?:json)?\s*/i,"").replace(/\s*```$/i,"").trim();
- if(candidate[0]==="{"||candidate[0]==="["){
-  let data;try{data=JSON.parse(candidate)}catch(e){return cpV2Error("JSON inválido. Cole a ficha completa exatamente como a IA gerou, sem editar aspas ou vírgulas.")}
-  if(!data||typeof data!=="object"||Array.isArray(data)||data.format!==CP_CARD_V2_FORMAT||+data.version!==2)return cpV2Error(`JSON reconhecido, mas o formato não é ${CP_CARD_V2_FORMAT} versão 2. Use o PDF atualizado.`);
-  const cards=Array.isArray(data.cards)?data.cards:[(data.card&&typeof data.card==="object")?data.card:data];
-  if(!cards.length)return cpV2Error("O JSON não contém cartas.");
-  const sheets=cards.map(cpV2MakeSheet);
-  return{sheets,ok:sheets.every(x=>!x.er.length)}
+ const candidates=cpExtractJSON(raw);
+ if(candidates.length){
+  const sheets=[];let bad=0;
+  candidates.forEach((candidate,i)=>{try{const data=JSON.parse(candidate);const result=cpSheetsFromJSON(data);sheets.push(...result)}catch(e){bad++;sheets.push(cpV2Error(`Bloco JSON ${i+1}: ${String(e&&e.message||"não foi possível ler o JSON")}`))}});
+  if(bad)return{sheets,ok:false};
+  return{sheets,ok:sheets.length>0&&sheets.every(x=>!x.er.length)}
  }
+ if(/[\[{]/.test(raw)&&/```\s*json|"format"\s*:|"cards"\s*:/.test(raw))return cpV2Error("Não consegui ler o JSON. Confira as chaves, aspas e vírgulas; envie um único JSON de lote ou vários blocos JSON completos.");
  const L=raw.split("\n"),S=[],pre=[];let cur=null,any=false;
  L.forEach((rawLine,i)=>{const t=rawLine.replace(/\*\*|__|`/g,""),n=N(t);
   if(/^[\s\-=#*•_>]*ficha\s+de\s+carta\b/.test(n)){cur={lines:[]};S.push(cur);any=true;return}
@@ -5310,35 +5409,51 @@ function sel(){
  const z=sessionStorage.zimp,e=$("ec");if(!z||!e||![...e.options].some(o=>o.value==z))return;
  const n=sessionStorage.zimn||"";sessionStorage.removeItem("zimp");sessionStorage.removeItem("zimn");
  e.value=z;e.dispatchEvent(new Event("change",{bubbles:true}));
- setTimeout(()=>{toast(`✅ Carta criada${n?": "+E(n):""}. Falta a foto e conferir o rank.`);const f=$("fj");f&&f.scrollIntoView&&f.scrollIntoView({block:"center",behavior:"smooth"})},400)}
+ setTimeout(()=>{toast(`✅ Importação concluída${n?": "+E(n):""}. Adicione a arte no editor e revise os detalhes.`);const f=$("fj");f&&f.scrollIntoView&&f.scrollIntoView({block:"center",behavior:"smooth"})},400)}
 
 // ---- tela "Importar ficha" do ADM
 const rkTxt=c=>`Rank ${R[c.r][0]}`+(c.tb?` · 🐾 ${c.tb}`:"")+(elEls(c).length?` · ${elEls(c).map(k=>EL[k]+" "+ELN[k]).join(" / ")}`:"")+(c.sl?` · ${SLS[c.sl]} ${c.sl}`:"")+` · ❤ ${c.hp} · ⚔ ${c.atk}`;
 function html(r){
  const t=$("z_it");if(!t||!t.value.trim())return"";
- if(!r.sheets.length)return'<div class="xw"><p class="er">✖ Não achei nenhuma ficha no texto. Ela começa com “FICHA DE CARTA”.</p></div>';
- const many=r.sheets.length>1;let h=many?`<div class="exm">${r.sheets.length} fichas encontradas: todas serão criadas de uma vez.</div>`:"";
- r.sheets.forEach((s,i)=>{const c=s.card,pf=many?`Carta ${i+1} · `:"";
-  h+=`<div class="ivc"><b class="n">${E(c.n||"(sem nome)")}</b><small>${E(rkTxt(c))}</small>`+(c.d?`<p>${E(c.d.length>230?c.d.slice(0,230)+"…":c.d)}</p>`:"");
-  c.abs.forEach(a=>{let d="";try{d=dsc({tr:a.tr,ef:a.ef,rc:a.rc,el:a.el,el2:a.el2})}catch(e){d="?"}const tag=a.el?elEls(a).map(k=>EL[k]+" "+ELN[k]).join(" / "):"🃏 Da carta";
-   h+=`<div class="iva"><b>✦ ${E(a.n||"(sem nome)")}</b> <small class="cp-el-origin">${E(tag)}</small>${a.q?` <i>“${E(a.q)}”</i>`:""}<br>${E(d)}</div>`});
-  h+="</div>";
-  const m=s.er.map(x=>`<p class="er">✖ ${E(pf+x)}</p>`).concat(s.wa.map(x=>`<p>⚠ ${E(pf+x)}</p>`));
-  if(m.length)h+=`<div class="xw">${m.join("")}</div>`});
- return h+(r.ok?'<div class="xw"><p class="ok">✔ Ficha OK. Toque em Criar carta.</p></div>':'<button class="bt gh" data-k="@ixe">📋 Copiar os erros para pedir a correção à IA</button>')}
+ if(!r.sheets.length)return'<div class="xw"><p class="er">✖ Não achei nenhuma ficha. Cole um JSON v3, um lote com várias cartas ou uma ficha antiga.</p></div>';
+ const many=r.sheets.length>1,valid=r.sheets.filter(x=>!x.er.length).length,bad=r.sheets.length-valid;
+ let h=`<div class="iv-summary"><div><b>${r.sheets.length} ${r.sheets.length===1?"ficha encontrada":"fichas encontradas"}</b><small>${valid} prontas para criar${bad?` · ${bad} com erro${bad>1?"s":""}`:" · todas validadas"}</small></div><div class="iv-count">${valid}/${r.sheets.length}</div></div>`;
+ r.sheets.forEach((s,i)=>{
+  const c=s.card||{},rank=R[c.r]||R[0],elements=elEls(c),ok=!s.er.length,idx=String(i+1).padStart(2,"0"),name=E(c.n||"Ficha sem nome");
+  h+=`<article class="ivc${ok?"":" invalid"}" style="--iv-rank:${rank[1]}">
+   <div class="ivc-top"><span class="iv-rank">RANK ${E(rank[0])}</span><span class="iv-index">${many?`CARTA ${idx} / ${String(r.sheets.length).padStart(2,"0")}`:"PRÉ-VISUALIZAÇÃO DA FICHA"}</span></div>
+   <div class="ivc-title">${name}</div>
+   <div class="ivc-stats"><div class="iv-stat"><small>♥ Vida</small><b>${Number.isFinite(+c.hp)?E(c.hp):"—"}</b></div><div class="iv-stat"><small>⚔ Dano base</small><b>${Number.isFinite(+c.atk)?E(c.atk):"—"}</b></div></div>
+   <div class="ivc-tags">${elements.map(k=>`<span class="iv-tag element">${E(EL[k]||EL.normal)} ${E(ELN[k]||"Normal")}</span>`).join("")}${c.tb?`<span class="iv-tag tribe">🐾 Sinergia · ${E(c.tb)}</span>`:""}${c.sl?`<span class="iv-tag">${E(SLS[c.sl]||"✨")} ${E(c.sl)}</span>`:""}</div>
+   ${c.d?`<div><div class="iv-section-label">História</div><div class="iv-story">${E(c.d)}</div></div>`:""}
+   <div><div class="iv-section-label">Habilidades · ${(c.abs||[]).length}</div><div class="iv-skill-list">${(c.abs||[]).map(a=>{
+    let desc="";try{desc=dsc({tr:a.tr,ef:a.ef,rc:a.rc,el:a.el,el2:a.el2,chargeMode:a.chargeMode,chargeTurns:a.chargeTurns})}catch(e){desc="Efeitos configurados"}
+    const tag=a.el?elEls(a).map(k=>`${EL[k]||EL.normal} ${ELN[k]||"Normal"}`).join(" / "):"🃏 Elemento da carta";
+    const trigger=TRG[a.tr||"u"]||"Ativa";
+    return `<div class="iva"><div class="iv-skill-head"><span class="iv-skill-name">✦ ${E(a.n||"Habilidade sem nome")}</span><span class="iv-valid">${E(trigger)}</span></div><div class="iv-skill-meta"><span>${E(tag)}</span>${(a.tr||"u")==="u"?`<span>Recarga · ${E(a.rc||3)} turnos</span>`:`<span>Passiva</span>`}${a.chargeMode?`<span>Preparação · ${a.chargeMode==="same"?"2 ações":"aguardar "+(a.chargeTurns||1)+" turno(s)"}</span>`:""}</div>${a.q?`<div class="iv-skill-quote">“${E(a.q)}”</div>`:""}<div class="iv-skill-effect">${E(desc)}</div></div>`
+   }).join("")||'<div class="iva">Nenhuma habilidade informada.</div>'}</div></div>
+   <div class="${ok?"iv-valid":"iv-invalid"}">${ok?"✓ Ficha validada":"✕ Precisa de correção"}</div>
+  </article>`;
+  const messages=s.er.map(x=>`<p class="er">✖ ${E(many?`Carta ${i+1} · ${x}`:x)}</p>`).concat(s.wa.map(x=>`<p>⚠ ${E(many?`Carta ${i+1} · ${x}`:x)}</p>`));
+  if(messages.length)h+=`<div class="xw">${messages.join("")}</div>`;
+ });
+ if(r.ok)h+='<div class="xw"><p class="ok">✔ Todas as fichas estão válidas. A criação em lote está liberada.</p></div>';
+ else h+='<div class="xw"><p class="er">Corrija todas as fichas com erro antes de criar. Nenhuma carta será importada pela metade.</p></div>';
+ return h;
+}
 let S=null,tm=0;
-function paint(){const t=$("z_it"),v=$("z_iv");if(!t||!v)return;S=parse(t.value);v.innerHTML=html(S);const b=$("z_ix");if(b)b.classList.toggle("off",!(S.ok&&S.sheets.length))}
+function paint(){const t=$("z_it"),v=$("z_iv");if(!t||!v)return;S=parse(t.value);v.innerHTML=html(S);const b=$("z_ix");if(b){b.classList.toggle("off",!(S.ok&&S.sheets.length));b.textContent=S.ok&&S.sheets.length?`Criar ${S.sheets.length} ${S.sheets.length===1?"carta":"cartas"}`:"Aguardando fichas válidas"}}
 function build(){
  const d=$("ds_i");if(!d||$("z_it"))return;
  let last="";try{last=localStorage.getItem("cp_impk")||""}catch(e){}
  const ops=P.concat(ADM.p.filter(d=>!P.some(p=>p.id==d.id))).map(p=>`<option value="${E(p.id)}"${p.id==last?" selected":""}>${E(p.e||"")} ${E(p.n)}${p.cards?"":" · não lançado"}</option>`).join("")+`<option value="ind"${last=="ind"?" selected":""}>🎉 Sem pacote · carta especial</option>`;
  d.insertAdjacentHTML("beforeend",`<div class="fg">
-<div class="exm">📥 <b>Como usar:</b> peça uma carta para a IA usando o PDF de criação de fichas v2, copie o JSON completo que ela devolver e cole abaixo. O jogo reconhece automaticamente o formato novo (e continua aceitando fichas antigas em texto). Vida e dano são validados pela faixa do rank. Depois de criar, abra Cartas para colocar a <b>foto</b> original e conferir a ficha. A <b>chance de sair</b> continua sendo configurada em Cartas.<br><br><b>Elementos:</b> cada carta pode ter no máximo dois elementos usando <code>Elemento:</code> e <code>Elemento 2:</code>. Normal só existe sozinho. Em cada habilidade, elemento ausente, vazio, <code>carta</code> ou <code>da_carta</code> significa <b>usar o elemento da carta</b>; <code>normal</code> significa elemento próprio neutro; outro elemento define a origem própria da habilidade e aceita <code>Elemento 2:</code> opcional (máximo de dois, sem repetir e sem combinar Normal com outro). Chaves aceitas: normal, fogo, agua, terra, ar, gelo, raio, natureza, veneno, fera, luta, metal, tech, arte, luz, trevas, espirito, arcano, mente, caos e cosmico. Aliases aceitos: planta→natureza, sombra→trevas, vento→ar, psiquico→mente, tecnologico/tecnologia→tech, espiritual→espirito, comum/nenhum/sem/neutro→normal.</div>
+<div class="exm"><b>✦ FICHA IA v3 · Importação em lote</b><br>Peça a carta do seu jeito e envie o PDF <b>Ficha de Criação de Cartas · v3</b> junto à conversa com a IA. Copie o JSON que ela gerar e cole aqui. Você pode colar um lote com várias cartas ou até vários blocos JSON na mesma mensagem: o importador separa cada ficha, mostra uma prévia individual e cria todas juntas.<br><br><b>O jogo valida automaticamente:</b> rank, faixa de vida/dano, elementos, sinergia de tribo, gatilhos, recargas, tipos de efeitos, parâmetros e limites do motor. Todas precisam estar válidas para liberar a criação em lote. Fichas JSON v2 e fichas antigas em texto continuam aceitas.<br><br><b>Imagem:</b> a ficha guarda a descrição e os dados da carta, mas não incorpora o arquivo de imagem. Depois da importação, anexe a arte no editor de Cartas. A chance de aparecer em pacotes também continua sendo configurada no editor.</div>
 <div class="afl w"><label for="z_ip">Em qual pacote a carta entra?</label><select id="z_ip">${ops}</select></div>
-<div class="afl w"><label for="z_it">Ficha da carta (texto)</label><textarea id="z_it" rows="9" placeholder="{&#10;  &quot;format&quot;: &quot;COLECAO_PRIMATA_CARD&quot;,&#10;  &quot;version&quot;: 2,&#10;  ...&#10;}" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
+<div class="afl w"><label for="z_it">Ficha ou lote de fichas (JSON v3)</label><textarea id="z_it" rows="11" placeholder="{&#10;  &quot;format&quot;: &quot;COLECAO_PRIMATA_CARD&quot;,&#10;  &quot;version&quot;: 3,&#10;  &quot;cards&quot;: [ ... ]&#10;}" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
 <div class="ivb"><button class="bt gh" data-k="@ixp">📋 Colar</button><button class="bt gh" data-k="@ixl">🧹 Limpar</button></div>
 <div id="z_iv"></div>
-<label class="yck"><input type="checkbox" id="z_dr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt off" id="z_ix" data-k="@ix">Criar carta</button></div>`)}
+<label class="yck"><input type="checkbox" id="z_dr" checked> 📦 Guardar sem lançar (rascunho)</label><button class="bt off" id="z_ix" data-k="@ix">Criar cartas</button></div>`)}
 function ix(){
  const t=$("z_it");if(!t||!t.value.trim())return toast("Cole a ficha da carta primeiro.");
  paint();
@@ -5346,7 +5461,7 @@ function ix(){
  const pk=$("z_ip").value;if(!pk)return toast("Escolha o pacote.");
  try{localStorage.setItem("cp_impk",pk)}catch(e){}
  const ids=apply(S.sheets.map(s=>s.card),pk);{const d=$("z_dr");if(d&&d.checked)ids.forEach(i=>{const c=ADM.c.find(x=>x.id==i);if(c)c.dr=1})}
- toast(ids.length>1?`✅ ${ids.length} cartas criadas`:"✅ Carta criada");
+ toast(ids.length>1?`✅ ${ids.length} cartas criadas em lote`:"✅ Carta criada");
  setTimeout(()=>done(ids),350)}
 const cp=s=>{const f=()=>{const a=document.createElement("textarea");a.value=s;a.style.cssText="position:fixed;opacity:0";document.body.append(a);a.select();try{document.execCommand("copy");toast("📋 Copiado! Cole na conversa com a IA.")}catch(e){toast("Não consegui copiar.")}a.remove()};
  try{navigator.clipboard.writeText(s).then(()=>toast("📋 Copiado! Cole na conversa com a IA."),f)}catch(e){f()}};
