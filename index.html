@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#161618">
-<meta name="application-version" content="1.3.12">
-<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.12 -->
+<meta name="application-version" content="1.3.13">
+<!-- COLEÇÃO PRIMATA · VERSÃO 1.3.13 -->
 <!-- Base funcional v3.1.1 consolidada como lançamento 1.0; progressão das batalhas infinitas recalibrada. -->
 <!--
   COLEÇÃO PRIMATA · NOTAS PARA MANUTENÇÃO POR IA
@@ -41,7 +41,7 @@ const loop=t=>{const d=t-prev;prev=t;n++;if(d>w)w=d;
  R.call(window,loop)};
 const init=()=>{box=document.createElement("div");box.id="cp-perf";box.style.cssText="position:fixed;left:3px;top:max(3px,env(safe-area-inset-top));z-index:2147483647;font:9px/1.3 ui-monospace,monospace;color:#7cff8b;background:#000c;padding:3px 5px;border-radius:5px;white-space:pre;max-width:98vw;overflow:hidden;pointer-events:none";document.documentElement.appendChild(box);R.call(window,loop)};
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
-}catch(e){}})();</script><script>window.CP_VERSION="1.3.12";</script><script>
+}catch(e){}})();</script><script>window.CP_VERSION="1.3.13";</script><script>
 /* Arquivo-fonte: assets/js/01-theme-bootstrap.js */
 /* COLEÇÃO PRIMATA · MÓDULO
  * Arquivo: 01-theme-bootstrap.js
@@ -9958,6 +9958,229 @@ html.cp-lite .cd.cd.cd.cd.cd.cd.cp-art-only.k8:not(.lock)>.rbw>i{animation:cpSSS
  #zb .cp-arena-boss-player .zrow{--cw:clamp(58px,min(calc((100vw - 42px)/3),calc(var(--zr)*.15)),98px)}
 }
 </style>
+
+<style id="cp-universal-battle-hud-fix-2026">
+/* HUD universal: o campo fica limitado à viewport e a barra de ações permanece utilizável. */
+#zb{
+  position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;
+  min-height:0!important;max-height:100dvh!important;box-sizing:border-box!important;
+  display:flex!important;flex-direction:column!important;gap:clamp(3px,.7vh,8px)!important;
+  overflow:hidden!important;overscroll-behavior:contain!important;
+  padding:calc(env(safe-area-inset-top,0px) + 6px) clamp(6px,2vw,18px) calc(env(safe-area-inset-bottom,0px) + 5px)!important;
+}
+#zb .cp-duel-board{
+  flex:1 1 0!important;min-height:0!important;min-width:0!important;width:100%!important;max-width:1100px!important;
+  margin:0 auto!important;display:grid!important;
+  grid-template-rows:minmax(0,1fr) auto minmax(0,1fr)!important;
+  align-content:stretch!important;gap:clamp(3px,.8vh,8px)!important;overflow:hidden!important;
+}
+#zb .cp-duel-side{
+  display:grid!important;grid-template-rows:auto auto minmax(0,1fr)!important;align-content:stretch!important;
+  gap:clamp(2px,.45vh,5px)!important;min-width:0!important;min-height:0!important;
+  padding:clamp(4px,.8vw,8px)!important;border:1px solid #ffffff20!important;border-radius:13px!important;
+  background:linear-gradient(145deg,#111722d9,#0b0d15d9)!important;overflow:hidden!important;
+}
+#zb .cp-duel-side>.zt{min-width:0!important;min-height:22px!important;align-items:center!important;padding:2px 6px!important;gap:6px!important}
+#zb .cp-duel-side>.zt>div{min-width:0!important}
+#zb .cp-duel-side>.zt b{max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:clamp(.65rem,2.1vw,.82rem)!important}
+#zb .cp-duel-side>.zt .zi{font-size:clamp(.52rem,1.6vw,.64rem)!important;white-space:nowrap!important}
+#zb .cp-duel-side>.ztrib{margin:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:clamp(.5rem,1.55vw,.64rem)!important;line-height:1.2!important}
+#zb .cp-duel-side>.zs{
+  display:grid!important;grid-template-rows:minmax(0,1fr) auto!important;align-content:center!important;align-items:center!important;
+  justify-items:stretch!important;gap:clamp(3px,.65vh,7px)!important;min-width:0!important;min-height:0!important;
+  padding:clamp(3px,.6vw,7px)!important;margin:0!important;background:#ffffff08!important;border:1px solid #ffffff12!important;border-radius:11px!important;overflow:hidden!important;
+}
+#zb .cp-duel-side .zrow{
+  --cw:clamp(54px,min(23vw,calc((100vw - 42px)/3),calc((100dvh - 500px)*.28)),116px)!important;
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,var(--cw)))!important;
+  justify-content:center!important;align-content:center!important;gap:clamp(3px,.75vw,8px)!important;
+  width:100%!important;min-width:0!important;margin:0!important;
+}
+#zb .cp-duel-side .zrs{
+  --cw:clamp(40px,min(16vw,calc((100vw - 54px)/3),calc((100dvh - 560px)*.18)),76px)!important;
+  grid-template-columns:repeat(3,minmax(0,var(--cw)))!important;justify-content:center!important;align-content:center!important;
+}
+#zb .cp-duel-side .zu{width:100%!important;min-width:0!important;max-width:100%!important;opacity:1!important}
+#zb .cp-duel-side .zu>.cd{width:100%!important;height:auto!important;aspect-ratio:3/4!important}
+#zb .cp-duel-side .zrow.zrs .zu{height:auto!important;aspect-ratio:3/4!important}
+#zb .cp-duel-mid{min-width:0!important;display:flex!important;align-items:center!important;justify-content:center!important;max-height:42px!important;overflow:hidden!important}
+#zb .cp-duel-mid .zlog{width:100%!important;max-width:980px!important;margin:0!important;padding:4px 8px!important;border:1px solid #ffffff18!important;border-radius:9px!important;background:#070b12b8!important;font-size:clamp(.52rem,1.55vw,.66rem)!important;line-height:1.25!important;white-space:normal!important;overflow:hidden!important}
+#zb .zc{
+  position:relative!important;inset:auto!important;bottom:auto!important;z-index:18!important;
+  flex:0 0 auto!important;width:100%!important;max-width:1100px!important;align-self:center!important;
+  max-height:min(34dvh,310px)!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior:contain!important;margin:0 auto!important;
+  padding:clamp(7px,1.2vh,12px) clamp(6px,1.5vw,14px) calc(env(safe-area-inset-bottom,0px) + 6px)!important;
+  border:1px solid #ffffff20!important;border-bottom:0!important;border-radius:15px 15px 0 0!important;
+  background:linear-gradient(180deg,#171521f2,#101018f7 35%)!important;
+  box-shadow:0 -8px 22px #0008!important;backdrop-filter:blur(10px)!important;-webkit-backdrop-filter:blur(10px)!important;
+}
+#zb .zc .zst{font-size:clamp(.57rem,1.8vw,.7rem)!important;line-height:1.3!important;letter-spacing:.025em!important;overflow-wrap:anywhere!important}
+#zb .zc .two{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;margin:5px 0!important}
+#zb .zc .two[style]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#zb .zc .bt,#zb .zc .two .bt{box-sizing:border-box!important;width:100%!important;min-width:0!important;min-height:38px!important;
+  padding:8px 6px!important;font-size:clamp(.58rem,1.8vw,.72rem)!important;line-height:1.2!important;
+  letter-spacing:.035em!important;white-space:normal!important;overflow-wrap:anywhere!important}
+#zb .zc>.bk{display:block!important;width:100%!important;min-height:30px!important;padding:6px!important}
+/* O seletor da arena e o objetivo não podem espremer o texto nem sobrepor o botão. */
+#a3{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+#a3 .a3h{display:grid!important;grid-template-columns:38px minmax(0,1fr) 38px!important;gap:6px!important;align-items:center!important}
+#a3 .a3h button{width:38px!important;min-width:38px!important;height:54px!important}
+#a3 .a3c{width:100%!important;min-width:0!important;overflow:hidden!important}
+#a3 .a3h b{white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.18!important}
+.cp-arena-gate{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-items:stretch!important;justify-items:stretch!important;
+  gap:9px!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important;
+  padding:12px!important;
+}
+.cp-arena-gate-copy,.cp-arena-gate>div{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:5px!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;overflow-wrap:anywhere!important;word-break:normal!important}
+.cp-arena-gate-copy small,.cp-arena-gate>div>small{display:block!important;width:100%!important;white-space:normal!important}
+.cp-arena-gate-copy b,.cp-arena-gate>div>b{display:block!important;width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.cp-arena-gate-copy p,.cp-arena-gate>div>p{display:block!important;width:100%!important;max-width:100%!important;margin:0!important;
+  font-size:clamp(.68rem,2vw,.78rem)!important;line-height:1.45!important;white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important}
+.cp-arena-gate .bt{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;max-width:none!important;
+  min-width:0!important;min-height:44px!important;margin:0!important;white-space:normal!important;overflow-wrap:anywhere!important;text-align:center!important}
+.cp-arena-gate .cp-arena-lock{justify-self:start!important}
+/* Chefe da arena e Boss Raid aproveitam a mesma geometria de tela. */
+#zb .cp-arena-boss-board,#zb .cp-solo-boss-board{
+  flex:1 1 0!important;min-height:0!important;min-width:0!important;width:100%!important;max-width:1100px!important;
+  margin:0 auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:space-evenly!important;
+  gap:clamp(4px,.8vh,9px)!important;overflow:hidden!important;
+}
+#zb .cp-arena-boss-feature,#zb .cp-solo-boss-feature{width:100%!important;max-width:1100px!important;min-width:0!important;padding:clamp(5px,1vh,10px)!important}
+#zb .cp-arena-boss-deck,#zb .cp-solo-boss-player{width:100%!important;max-width:1100px!important;min-width:0!important;overflow:hidden!important}
+#zb .cp-arena-boss-deck .zs,#zb .cp-solo-boss-player .zs{min-width:0!important;overflow:hidden!important}
+#zb .cp-arena-boss-deck .zrow,#zb .cp-solo-boss-player .zrow{--cw:clamp(54px,min(22vw,calc((100vw - 42px)/3),calc((100dvh - 510px)*.27)),112px)!important}
+#zb .cp-arena-boss-deck .zrs,#zb .cp-solo-boss-player .zrs{--cw:clamp(40px,min(15vw,calc((100vw - 54px)/3),calc((100dvh - 560px)*.17)),72px)!important}
+#zb .cp-arena-boss-board>.zlog,#zb .cp-solo-boss-board>.zlog{width:100%!important;max-width:980px!important;margin:0!important;font-size:clamp(.53rem,1.6vw,.66rem)!important}
+/* Em telas mais baixas, as cartas diminuem um pouco; o HUD não some nem fica por baixo do campo. */
+@media(max-height:720px){
+ #zb .cp-duel-side .zrow{--cw:clamp(48px,min(19vw,calc((100vw - 42px)/3),calc((100dvh - 430px)*.28)),96px)!important}
+ #zb .cp-duel-side .zrs{--cw:clamp(36px,min(14vw,calc((100vw - 54px)/3),calc((100dvh - 480px)*.18)),64px)!important}
+ #zb .zc{max-height:36dvh!important;padding-top:5px!important}
+ #zb .zc .bt,#zb .zc .two .bt{min-height:34px!important;padding:6px 5px!important}
+ #zb .cp-arena-boss-board,#zb .cp-solo-boss-board{gap:3px!important}
+}
+@media(max-width:360px){
+ #zb{padding-left:4px!important;padding-right:4px!important}
+ #zb .cp-duel-side{padding:3px!important}
+ #zb .cp-duel-side .zrow{--cw:clamp(48px,min(22vw,calc((100vw - 28px)/3),calc((100dvh - 500px)*.27)),82px)!important}
+ #zb .cp-duel-side .zrs{--cw:clamp(36px,min(15vw,calc((100vw - 36px)/3),calc((100dvh - 560px)*.18)),56px)!important}
+ #zb .zc{max-height:38dvh!important}
+}
+@media(min-width:700px){
+ #zb .cp-duel-side .zrow{--cw:clamp(92px,14vw,150px)!important}
+ #zb .cp-duel-side .zrs{--cw:clamp(58px,8vw,100px)!important}
+}
+/* Layouts multiplayer e Raid também recebem trilhos com altura limitada e rolagem interna. */
+#zb>.zqm,#zb>.raid-board{flex:1 1 0!important;min-width:0!important;min-height:0!important;width:100%!important;max-width:1100px!important;margin:0 auto!important;overflow:hidden!important}
+#zb .zqm.n3{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:minmax(0,1fr) auto minmax(0,1fr)!important;grid-template-areas:"l r" "c c" "b b"!important;align-content:stretch!important;gap:5px!important}
+#zb .zqm.n3 .zqt{display:none!important}
+#zb .zqm.n3 .zql{grid-area:l!important;min-width:0!important;overflow:hidden!important}
+#zb .zqm.n3 .zqr{grid-area:r!important;min-width:0!important;overflow:hidden!important}
+#zb .zqm.n3 .zqc{grid-area:c!important;min-width:0!important;align-content:center!important}
+#zb .zqm.n3 .zqb{grid-area:b!important;min-width:0!important;overflow:hidden!important}
+#zb .zqm.n4{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:auto minmax(0,1fr) auto auto!important;grid-template-areas:"t t" "l r" "c c" "b b"!important;align-content:stretch!important;gap:5px!important}
+#zb .zqm.n4 .zqt{grid-area:t!important;min-width:0!important;overflow:hidden!important}
+#zb .zqm.n4 .zql{grid-area:l!important;min-width:0!important;overflow:hidden!important}
+#zb .zqm.n4 .zqr{grid-area:r!important;min-width:0!important;overflow:hidden!important}
+#zb .zqm.n4 .zqc{grid-area:c!important;min-width:0!important;align-content:center!important}
+#zb .zqm.n4 .zqb{grid-area:b!important;min-width:0!important;overflow:hidden!important}
+#zb .zqm.t2{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto!important;gap:5px!important;overflow:hidden!important}
+#zb .zqm.t2>.zqp:first-child{grid-row:1!important;grid-column:1!important;min-width:0!important}
+#zb .zqm.t2>.zlog{grid-row:2!important;grid-column:1!important}
+#zb .zqm.t2>.zqp.b{grid-row:3!important;grid-column:1!important;min-width:0!important}
+#zb .zqm .zq{min-width:0!important;min-height:0!important;padding:4px!important;overflow:hidden!important}
+#zb .zqm .zq .zrow{--cw:clamp(30px,min(12vw,calc((50vw - 52px)/3)),66px)!important;grid-template-columns:repeat(3,minmax(0,var(--cw)))!important;gap:3px!important;justify-content:center!important}
+#zb .zqm .zq.me .zrow:not(.zrs){--cw:clamp(52px,min(17vw,calc((50vw - 42px)/3)),88px)!important}
+#zb .zqm .zq .zrs{--cw:clamp(26px,min(8vw,calc((50vw - 60px)/4)),46px)!important;grid-template-columns:repeat(3,minmax(0,var(--cw)))!important}
+#zb .zqm .zq .zqh b{max-width:100%!important;font-size:clamp(.56rem,1.8vw,.68rem)!important}
+#zb .zqm .zq .zqh>.zl{font-size:clamp(.52rem,1.6vw,.64rem)!important}
+#zb .raid-board{display:grid!important;grid-template-rows:auto minmax(0,1fr) auto!important;align-content:stretch!important;gap:5px!important}
+#zb .raid-boss{min-width:0!important;overflow:hidden!important;padding:5px!important}
+#zb .raid-boss>.zrow{display:flex!important;justify-content:center!important;align-items:center!important}
+#zb .raid-boss>.zrow>.zu{flex:0 0 auto!important;width:clamp(82px,23vw,130px)!important}
+#zb .raid-players{min-width:0!important;min-height:0!important;overflow:auto!important;align-content:start!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important}
+#zb .cp-duel-fallback-side{min-width:0;min-height:0;height:100%;overflow:hidden}
+#zb .cp-duel-fallback-side>.cp-duel-side{height:100%}
+#zb .cp-hud-fallback-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;min-width:0;min-height:0;overflow:auto}
+#zb .cp-hud-card{display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0;min-height:44px;padding:6px 4px;border:1px solid #ffffff22;border-radius:9px;background:#ffffff0b;color:#fff;text-align:center;overflow-wrap:anywhere}
+#zb .cp-hud-card b{font-size:clamp(.55rem,1.7vw,.72rem);line-height:1.2}
+#zb .cp-hud-card small{font-size:clamp(.47rem,1.35vw,.58rem);opacity:.7;line-height:1.2}
+#zb .cp-hud-empty{grid-column:1/-1;text-align:center;opacity:.6;font-size:.68rem}
+#zb .cp-multi-fallback{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;flex:1 1 0;min-height:0;overflow:auto}
+#zb .cp-multi-fallback>.zlog{grid-column:1/-1}
+#zb .cp-hud-fatal{margin:auto;width:min(100%,420px);padding:20px;border:1px solid #ffffff25;border-radius:16px;background:#101018f2;text-align:center}
+#zb .cp-hud-fatal p{font-size:.78rem;opacity:.75}
+</style>
+
+
+<script id="cp-universal-battle-render-guard-2026">
+(()=>{
+ "use strict";
+ try{
+  if(typeof zr!=="function"||typeof BT==="undefined"||typeof zb==="undefined")return;
+  const base=zr;
+  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const side=(seat,index,enemy)=>{
+   const active=(seat.f||[]).filter(Boolean),reserve=(seat.r||[]).filter(Boolean);
+   const cards=[...active,...reserve].map(u=>`<button type="button" class="cp-hud-card" data-z="u:${esc(u.id)}"><b>${esc(u.c&&u.c.n||"Carta")}</b><small>${enemy?"Rival":"Sua carta"} · ${Math.max(0,Math.round(u.hp||0))}/${Math.max(0,Math.round(u.mx||0))} vida</small></button>`).join("");
+   const hearts=typeof hrt==="function"?hrt(seat.life):String(seat.life??"");
+   return `<section class="cp-duel-side ${enemy?"cp-duel-enemy":"cp-duel-player"}"><div class="zt"><div><b>${esc(seat.n|| (enemy?"Rival":"Você"))}</b><span class="zl" data-lf="${enemy?"E":"A"}">${hearts}</span></div><div class="zi">${enemy?"Rival":"Seu baralho"} · ${(seat.dk||[]).length}</div></div><div class="cp-hud-fallback-cards">${cards||"<span class='cp-hud-empty'>Sem cartas disponíveis</span>"}</div></section>`;
+  };
+  const fallback=(B)=>{
+   if(!B||!Array.isArray(B.p)||!B.p.length)return;
+   const you=B.ai?0:(Number.isInteger(B.v)?B.v:0), opponents=B.p.map((x,i)=>i).filter(i=>i!==you);
+   const yourSeat=B.p[you],other=B.p[opponents[0]];
+   const turn=`Turno ${B.n||1}/${typeof MAXT!=="undefined"?MAXT:20} · ${esc(B.p[B.t]&&B.p[B.t].n||"Jogador")}`;
+   const action=`<div class="zc"><p class="zst">HUD recuperado · selecione uma carta para agir</p><div class="two"><button class="bt" data-z="atk">Atacar</button><button class="bt gh" data-z="place">Colocar em campo</button></div><div class="two"><button class="bt gh" data-z="draw">Comprar grátis</button><button class="bt gh" data-z="end">Passar turno</button></div><button class="bk" data-z="quit">Desistir</button></div>`;
+   if(B.p.length===2){
+    const mk=(x,i,en)=>side(x,i,en);
+    zb.innerHTML=`<div class="cp-duel-board"><div class="cp-duel-fallback-side">${mk(other,opponents[0],true)}</div><div class="cp-duel-mid"><p class="zlog">${turn}<br>${esc((B.log||[]).slice(-1)[0]||"A batalha continua")}</p></div><div class="cp-duel-fallback-side">${mk(yourSeat,you,false)}</div></div>${action}`;
+   }else{
+    const players=B.p.map((x,i)=>side(x,i,i!==you)).join("");
+    zb.innerHTML=`<div class="cp-multi-fallback"><p class="zlog">${turn}</p>${players}</div>${action}`;
+   }
+   zb.hidden=false;
+  };
+  const normalize=()=>{
+   const B=BT;if(!B||!zb||zb.hidden||B.p.length!==2||B.o&&(B.o.soloBoss||(B.o.m==="a"&&B.o.b)))return;
+   if(zb.querySelector(".cp-duel-board"))return;
+   const action=zb.querySelector(":scope > .zc");
+   const nodes=Array.from(zb.children).filter(n=>n!==action);
+   const at=nodes.findIndex(n=>n.classList&&n.classList.contains("zlog"));
+   if(!action||at<1||at===nodes.length-1)return;
+   const enemyNodes=nodes.slice(0,at),log=nodes[at],playerNodes=nodes.slice(at+1);
+   if(!enemyNodes.length||!playerNodes.length)return;
+   const board=document.createElement("div");board.className="cp-duel-board";
+   const enemy=document.createElement("section");enemy.className="cp-duel-side cp-duel-enemy";
+   const middle=document.createElement("div");middle.className="cp-duel-mid";
+   const player=document.createElement("section");player.className="cp-duel-side cp-duel-player";
+   enemyNodes.forEach(n=>enemy.appendChild(n));middle.appendChild(log);
+   // No template original, player-side order was cards -> header -> tribe. Normalize it to header -> tribe -> cards.
+   const playerHeader=playerNodes.find(n=>n.classList&&n.classList.contains("zt"));
+   const playerTribe=playerNodes.find(n=>n.classList&&n.classList.contains("ztrib"));
+   const playerCards=playerNodes.find(n=>n.classList&&n.classList.contains("zs"));
+   [playerHeader,playerTribe,playerCards].filter(Boolean).forEach(n=>player.appendChild(n));
+   playerNodes.filter(n=>n!==playerHeader&&n!==playerTribe&&n!==playerCards).forEach(n=>player.appendChild(n));
+   board.append(enemy,middle,player);zb.insertBefore(board,action);
+  };
+  zr=function(){
+   try{
+    const out=base.apply(this,arguments);
+    try{normalize()}catch(layoutError){console.warn("PRIMATA: ajuste do HUD",layoutError)}
+    return out;
+   }catch(error){
+    console.error("PRIMATA: falha ao montar HUD; ativando layout de recuperação",error);
+    try{fallback(BT)}catch(recoveryError){console.error("PRIMATA: falha também no HUD de recuperação",recoveryError);zb.innerHTML='<div class="cp-hud-fatal"><b>Batalha em andamento</b><p>O campo foi preservado. Toque em atualizar para reconstruir a interface.</p><button type="button" class="bt" onclick="location.reload()">Atualizar batalha</button></div>';zb.hidden=false}
+   }
+  };
+  window.zr=zr;
+ }catch(error){console.warn("PRIMATA: proteção universal do HUD não iniciada",error)}
+})();
+</script>
+
 </body>
 </html>
 
