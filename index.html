@@ -3481,7 +3481,7 @@ const GE=geo();for(const k in GE)document.documentElement.style.setProperty("--"
 // FORMATOS DO PACOTE: [curva da cintura, serrilha]. Clássico é o padrão (sem "sh"). Para criar outro, some uma linha aqui e uma opção em "Visual do pacote".
 const PKS={r:[0,0],l:[1,0],f:[3,.5]},PKG={},pkEsc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
 pkSv=p=>{const k=p.sh,s=PKS[k];if(!s)return"";if(!PKG[k]){const o=[GCV,GTA];[GCV,GTA]=s;try{PKG[k]=geo()}finally{[GCV,GTA]=o}}const g=PKG[k];return`;--cf:${g.cf};--ct:${g.ct};--cb:${g.cb};--et:${g.et};--eb:${g.eb}`},
-pkPe=p=>!p.img?`<div class="em2">${p.e}</div>`:p.pm=="a"?"":`<div class="em2 pi ${p.pm=="l"?"lv":"md"}"><img src="${p.img}" alt="" draggable="false"></div>`;
+pkPe=p=>!p.img?(window.__cpPhotoWait&&window.__cpPhotoWait(p)?"":`<div class="em2">${p.e}</div>`):p.pm=="a"?"":`<div class="em2 pi ${p.pm=="l"?"lv":"md"}"><img src="${p.img}" alt="" draggable="false"></div>`;
 // dobras da folha: pares de linhas (sombra + luz) saindo dos selos e das laterais
 const WK=(()=>{let s="";
  const cr=(x,y,x2,y2)=>{const cx=(x+x2)/2+(rg()-.5)*6,cy=(y+y2)/2+(rg()-.5)*3,d=q=>`M${(x+q).toFixed(1)} ${y.toFixed(1)}Q${(cx+q).toFixed(1)} ${cy.toFixed(1)} ${(x2+q).toFixed(1)} ${y2.toFixed(1)}`;s+=`<path d="${d(0)}" stroke="rgba(0,0,0,${(.12+rg()*.14).toFixed(2)})"/><path d="${d(.8)}" stroke="rgba(255,255,255,${(.14+rg()*.18).toFixed(2)})"/>`};
@@ -3560,7 +3560,7 @@ const flPaint=bar=>{if(!$("dkal"))return;if(bar)$("flt").innerHTML=flBar();$("dk
 document.addEventListener("click",e=>{if(e.target.closest(".flt [data-s]")){FLT.all=0;return}const b=e.target.closest("[data-fl]");if(!b)return;const k=b.dataset.fl,v=b.dataset.fv;if(k=="tg")FLT.open=!FLT.open;else if(k=="all")FLT.all=FLT.all?0:1;else if(k=="clr")Object.assign(FLT,{q:"",r:[],e:[],x:[],st:"",ab:"",o:"r",all:0});else if(k=="r"||k=="e"||k=="x"){const a=FLT[k],x=k=="r"?+v:v,i=a.indexOf(x);i<0?a.push(x):a.splice(i,1)}else FLT[k]=FLT[k]==v?(k=="o"?"r":""):v;flPaint(1)},true);
 document.addEventListener("input",e=>{if(e.target.id!="flq")return;FLT.q=e.target.value;clearTimeout(flT);flT=setTimeout(()=>flPaint(0),140)});
 document.addEventListener("keydown",e=>{e.target.id=="flq"&&e.key=="Enter"&&e.target.blur()});
-const adxQ=()=>["ec","hc","gc"].forEach(id=>{const sl=$(id);if(!sl||sl.dataset.q)return;sl.dataset.q=1;const all=[...sl.options].map(o=>[o.value,o.textContent]),i=document.createElement("input");i.type="search";i.placeholder="🔍 Buscar carta";i.className="sfi";i.oninput=()=>{const q=nrm(i.value),v=sl.value,l=all.filter(o=>nrm(o[1]).includes(q));if(!l.length)return;sl.replaceChildren(...l.map(o=>new Option(o[1],o[0],0,o[0]==v)));if(sl.value!=v)sl.dispatchEvent(new Event("change",{bubbles:true}))};sl.before(i)});
+const adxQ=()=>[].forEach(id=>{const sl=$(id);if(!sl||sl.dataset.q)return;sl.dataset.q=1;const all=[...sl.options].map(o=>[o.value,o.textContent]),i=document.createElement("input");i.type="search";i.placeholder="🔍 Buscar carta";i.className="sfi";i.oninput=()=>{const q=nrm(i.value),v=sl.value,l=all.filter(o=>nrm(o[1]).includes(q));if(!l.length)return;sl.replaceChildren(...l.map(o=>new Option(o[1],o[0],0,o[0]==v)));if(sl.value!=v)sl.dispatchEvent(new Event("change",{bubbles:true}))};sl.before(i)});
 function render(keep){
  const m=$("m"),p=P[cur],q=P[as];
  if(tab=="h"){const dd=S.dl===day()?"":`<button class="qc" data-d="1">Recompensa diária<span class="pr">${gem}+${fmt(dr())}</span></button>`;m.innerHTML=`<div class="hd top"><div><h1>Coleção Primata</h1><p class="mut">${ALL.filter(c=>cpCollectionVisible(c)&&(S.inv[c.id]||0)>0).length}/${ALL.filter(cpCollectionVisible).length} cartas</p></div>${wlt()}</div><div class="pn"><div class="cs" id="cs">${P.map((x,i)=>`<button class="pk${pkExp(x)||pkFuture(x)?" pkx":""}" data-k="${i}" aria-label="${x.n}">${packEl(x,0,i)}${x.esp>0?`<em class="pke">🎁 Especial</em>`:pkFuture(x)?`<em class="pke">🔒 Começa em ${pkRest(x.ini)}</em>`:x.ate>0?`<em class="pke">⏳ ${pkExp(x)?"Encerrado":"some em "+pkRest(x.ate)}</em>`:""}</button>`).join("")}</div>${P.length>1?`<div class="ar"><button data-p="-1" aria-label="Anterior">‹</button><button data-p="1" aria-label="Próximo">›</button></div>`:""}<small id="cap">${p.n}</small>${P.length>1?`<div class="dots">${P.map(()=>"<i></i>").join("")}</div>`:""}</div><div class="pack-open"><label class="pack-qty" for="packQty"><span>Quantidade</span><select id="packQty" aria-label="Quantidade de pacotes para abrir">${[1,10,25,50,100,250,500,1000].map(n=>`<option value="${n}"${n==PQ?" selected":""}>×${n.toLocaleString("pt-BR")}</option>`).join("")}</select></label><button class="bt pack-open-action" data-open-selected="1"><span data-open-label>Abrir ×${PQ}</span><span class="pr"></span></button></div><button type="button" class="cp-daily-shop-entry" data-cp-open-daily-shop aria-label="Abrir Loja diária"><span class="cp-daily-shop-icon" aria-hidden="true">🛒</span><span class="cp-daily-shop-copy"><b>Loja diária</b><small>Confira as cartas e ofertas disponíveis</small></span><span class="cp-daily-shop-arrow" aria-hidden="true">ABRIR&nbsp;›</span></button><div class="qa">${fpb()}<button class="qc" data-gf="1" id="gf" hidden></button>${dd}</div>`}
@@ -4570,10 +4570,10 @@ adxRl=()=>adxD("r","🎁 Recompensas e regras",Object.keys(CONFIG).map(k=>adxI("
 +[1,2,3].map(pos=>{const v=weeklyPrizeConfig()[pos-1];return adxI(`wr${pos}pk`,`${pos}º lugar · Pacotes`,v.pk,"number")+adxI(`wr${pos}fr`,`${pos}º lugar · Fragmentos`,v.fr,"number")}).join("")
 +adxB("sr","Salvar regras")+adxB("rr","Restaurar padrões","gh")),
 adxGv=()=>adxD("g","🧪 Dar itens e testes",adxI("gn","Quantidade",10,"number")+adxS("gp","Pacote de presente",adxPo())+adxS("gc","Carta",adxCo())+adxB("gf","Dar fragmentos","cy")+adxB("gg","Dar pacotes de presente","cy")+adxB("gk","Dar a carta","cy")+adxB("ga","Liberar todas as cartas","gh"));
-function adxFc(){const c=byId($("ec").value);if(!c)return;$("en").value=c.n;$("er").value=c.r;$("eel").value=c.el||"";$("eel2").value=c.el2||"";cpSyncCardElements();$("etb").value=c.tb||"";{const k2=$("ek2");k2.value=c.p.id;if(k2.value!=String(c.p.id))k2.value=c.p===IND?"ind":(k2.insertAdjacentHTML("beforeend",`<option value="${c.p.id}">${c.p.e||""} ${c.p.n}</option>`),c.p.id)}$("ehp").value=c.hp;$("eatk").value=c.atk;$("ech").value=c.ch||"";$("eh").value=c.d||"";$("ebk").value=c.bk||"";$("ega").value=c.ga||"";$("ecv").value=c.colVis==="owned"?"owned":"all"}
+function adxFc(){const c=byId($("ec").value);if(!c)return;const sv=(i,v)=>{const e=$(i);if(e)e.value=v};sv("en",c.n);sv("er",c.r);sv("eel",c.el||"");sv("eel2",c.el2||"");try{cpSyncCardElements()}catch(x){}sv("etb",c.tb||"");{const k2=$("ek2");if(k2){k2.value=c.p.id;if(k2.value!=String(c.p.id))k2.value=c.p===IND?"ind":(k2.insertAdjacentHTML("beforeend",`<option value="${c.p.id}">${c.p.e||""} ${c.p.n}</option>`),c.p.id)}}sv("ehp",c.hp);sv("eatk",c.atk);sv("ech",c.ch||"");sv("eh",c.d||"");sv("ebk",c.bk||"");sv("ega",c.ga||"");sv("ecv",c.colVis==="owned"?"owned":"all");PEND=null;PW="";["fj","fbk"].forEach(i=>{const f=$(i);if(f)f.value=""});window.__cpEc=$("ec").value}
 function adxFk(){const p=P.concat(PX).find(q=>q.id==$("ek").value);if(!p)return;$("kn").value=p.n;$("ke").value=p.e;$("kh").value=p.h;$("kc").value=p.cost||"";$("ko").value=p.odds?p.odds.join(","):"";$("kb").value=p.bk||"";$("kt").value=p.ate?new Date(p.ate-new Date(p.ate).getTimezoneOffset()*6e4).toISOString().slice(0,16):"";$("kx").value=p.esp||"";$("kf").value=p.fim||0}
 function adxGo(){sADM();sessionStorage.cpad=[...cfg.querySelectorAll("details[open]")].map(d=>d.id).join();try{sessionStorage.cptab=tab}catch(e){}location.reload()}
-function adxSc(){if($("ec").value=="__")return YNEW();const c=byId($("ec").value);if(!c)return;const g=i=>$(i).value,r=+g("er");let pk=g("ek2");if(pk!=="ind"&&!P.concat(PX).some(q=>q.id==pk))pk=c.p.id;let f=[+g("ehp"),+g("eatk")];
+function adxSc(){if($("ec").value=="__")return YNEW();const c=byId($("ec").value);if(!c)return;if(window.__cpEc!==$("ec").value){adxFc();return toast("⚠️ A carta selecionada mudou. Recarreguei os campos: confira e salve de novo.")}const g=i=>$(i).value,r=+g("er");let pk=g("ek2");if(pk!=="ind"&&!P.concat(PX).some(q=>q.id==pk))pk=c.p.id;let f=[+g("ehp"),+g("eatk")];
 if(pk!=c.p.id&&c.p.cards.length<2&&c.p!==IND&&!c.p.ex)return toast("O pacote precisa ficar com ao menos 1 carta.");
 if(f.some(x=>!(x>0)))return toast("Vida e dano precisam ser maiores que 0.");
 if(r!=c.r&&f[0]==c.hp&&f[1]==c.atk)f=[ST[r][0],ST[r][1]];
@@ -5768,12 +5768,15 @@ function watchPres(){if(PRW)return;PRW=1;if(!S.pgs){S.pgs=Date.now()-36e5;save()
  onSnapshot(query(collection(db,"presentes"),where("para","==","todos")),h,er)}
 function upd(){if(bt())return setTimeout(upd,3000);toast("🔄 Atualizando o jogo…");setTimeout(reload,900)}
 function put(id,d,t){IMG[id]=d;meta[id]={k:H(d),t};if(id.slice(0,3)==="pk_"){const p=P.find(x=>"pk_"+x.id===id);if(p)p.img=d}else{const c=byId(id);if(c)c.img=d}}
+let LF={};try{LF=JSON.parse(L.getItem("cp_f")||"{}")}catch(e){}
+window.__cpPhotoWait=p=>{try{if(ready||performance.now()>9000)return false;const k="pk_"+p.id;return !!((CF&&CF[k])||LF[k])}catch(e){return false}};
+setTimeout(()=>{try{rf(1)}catch(e){}},9200);
 let rt=0;const rf=now=>{clearTimeout(rt);rt=setTimeout(()=>{try{if(bt()){BT&&!BT.zq&&zr()}else render(1)}catch(e){console.warn(e)}},now?0:700)};
 // ao abrir, mostra logo as fotos já guardadas no aparelho (sem esperar a nuvem)
-(async()=>{try{const f=JSON.parse(L.getItem("cp_f")||"{}");let n=0;await Promise.all(Object.keys(f).map(async id=>{const c=await ig(id);if(!c||!c.d||c.t!==f[id])return;if(id.slice(0,3)==="pk_"){const p=P.find(x=>"pk_"+x.id===id);if(p&&!p.img){p.img=c.d;n++}}else{const x=byId(id);if(x&&!x.img){x.img=c.d;n++}}}));if(n)rf()}catch(e){}})();
-async function fotos(f){try{ls("cp_f",JSON.stringify(f))}catch(e){}await PEND;CF=f;const ids=Object.keys(f).filter(i=>!(meta[i]&&(meta[i].t===f[i]||meta[i].t<0)));let n=0;const tr={};
- const w=async()=>{while(n<ids.length){const id=ids[n++];try{let c=await ig(id);if(!c||c.t!==f[id]){const s=await getDoc(doc(db,"fotos",id));if(!s.exists())continue;c={t:f[id],d:s.data().d};is(id,c)}put(id,c.d,c.t);rf()}catch(e){const q=tr[id]=(tr[id]||0)+1;if(q<4){await new Promise(r=>setTimeout(r,1500*q));ids.push(id)}else warn("fotos",e)}}};
- await Promise.all([w(),w(),w(),w()]);ready=1;if(ids.length)rf(1)}
+(async()=>{try{const f=JSON.parse(L.getItem("cp_f")||"{}");let n=0;await Promise.all(Object.keys(f).map(async id=>{const c=await ig(id);if(!c||!c.d||c.t!==f[id])return;if(id.slice(0,3)==="pk_"){const p=P.find(x=>"pk_"+x.id===id);if(p&&!p.img){p.img=c.d;n++}}else{const x=byId(id);if(x&&!x.img){x.img=c.d;n++}}}));if(n)rf(1)}catch(e){}})();
+async function fotos(f){try{ls("cp_f",JSON.stringify(f))}catch(e){}await PEND;CF=f;const ids=Object.keys(f).filter(i=>!(meta[i]&&(meta[i].t===f[i]||meta[i].t<0)));ids.sort((a,b)=>(b.slice(0,3)==="pk_")-(a.slice(0,3)==="pk_"));let n=0;const tr={};
+ const w=async()=>{while(n<ids.length){const id=ids[n++];try{let c=await ig(id);if(!c||c.t!==f[id]){const s=await getDoc(doc(db,"fotos",id));if(!s.exists())continue;c={t:f[id],d:s.data().d};is(id,c)}put(id,c.d,c.t);rf(id.slice(0,3)==="pk_")}catch(e){const q=tr[id]=(tr[id]||0)+1;if(q<4){await new Promise(r=>setTimeout(r,1500*q));ids.push(id)}else warn("fotos",e)}}};
+ await Promise.all([w(),w(),w(),w()]);ready=1;rf(1)}
 // Backup ADM: lê todas as fotos locais e tenta recuperar do Firestore qualquer foto listada na nuvem.
 window.__cpAdmBackup={
  async collect(){
@@ -6831,7 +6834,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 
 (function(){
 const N=t=>t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
-function ss(id){const s=document.getElementById(id);if(!s||s.dataset.sq||s.multiple||s.options.length<8)return;s.dataset.sq=1;const all=[...s.options].map(o=>[o.value,o.textContent]),q=document.createElement("input");q.type="search";q.placeholder="🔎 Buscar por nome ou rank…";q.className="cdi";q.autocomplete="off";s.before(q);
+function ss(id){return;const s=document.getElementById(id);if(!s||s.dataset.sq||s.multiple||s.options.length<8)return;s.dataset.sq=1;const all=[...s.options].map(o=>[o.value,o.textContent]),q=document.createElement("input");q.type="search";q.placeholder="🔎 Buscar por nome ou rank…";q.className="cdi";q.autocomplete="off";s.before(q);
 q.oninput=()=>{const k=N(q.value.trim()),cur=s.value,l=all.filter(o=>!k||N(o[1]).includes(k));if(!l.length)return;s.replaceChildren(...l.map(o=>new Option(o[1],o[0])));if(l.some(o=>o[0]==cur))s.value=cur;else s.dispatchEvent(new Event("change",{bubbles:true}))}}
 function enh(){["ec","hc","gc","hb","ek"].forEach(ss);const gp=document.getElementById("gp");if(gp&&!gp.querySelector('[value="__r"]'))gp.insertAdjacentHTML("afterbegin",'<option value="__r">🎲 Aleatório</option>')}
 window.cpRegisterCfgViewHook(function(v){if(v=="a")try{enh()}catch(e){console.warn("ADM · opções avançadas",e)}});
@@ -8069,10 +8072,10 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
   }
   function enhanceAdminLists(){
     const cfg=$("#cfg");if(!cfg)return;
-    ["#ec","#hb","#ahb","#hg","#hc"].forEach(selector=>{
-      const sel=$(selector,cfg);if(!sel||sel.dataset.cpListTools==="1"||sel.options.length<12)return;
+    ["#ec","#hb","#ahb","#hg","#hc","#gc","#ek"].forEach(selector=>{
+      const sel=$(selector,cfg);if(!sel||sel.dataset.cpListTools==="1"||sel.options.length<8)return;
       const rows=Array.from(sel.options).map((o,index)=>({value:o.value,text:o.textContent,disabled:o.disabled,index,selected:o.selected}));
-      if(rows.length<12)return;
+      if(rows.length<8)return;
       sel.dataset.cpListTools="1";
       const tools=document.createElement("div");tools.className="cp-adm-list-tools";
       const search=document.createElement("input");search.type="search";search.placeholder="Buscar carta ou habilidade...";search.setAttribute("aria-label","Buscar na lista");
@@ -8082,13 +8085,15 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
       const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
       const getRank=t=>{const m=String(t).trim().match(/^(SSS|SS|S|A|B|C|D|E|F)\s*[·|—-]/i);return m?({F:0,E:1,D:2,C:3,B:4,A:5,S:6,SS:7,SSS:8})[m[1].toUpperCase()]:99};
       const render=()=>{
-        const q=norm(search.value),mode=order.value,selected=new Set(Array.from(sel.selectedOptions).map(o=>o.value));
+        const q=norm(search.value),mode=order.value,prev=sel.value,selected=new Set(Array.from(sel.selectedOptions).map(o=>o.value));
         let list=rows.filter(x=>!q||norm(x.text).includes(q));
         if(mode==="az")list.sort((a,b)=>a.text.localeCompare(b.text,"pt-BR"));
         if(mode==="rank-up")list.sort((a,b)=>getRank(a.text)-getRank(b.text)||a.index-b.index);
         if(mode==="rank-down")list.sort((a,b)=>getRank(b.text)-getRank(a.text)||a.index-b.index);
         if(mode==="created")list.sort((a,b)=>a.index-b.index);
+        if(!list.length)return;
         sel.replaceChildren(...list.map(x=>{const o=document.createElement("option");o.value=x.value;o.textContent=x.text;o.disabled=x.disabled;o.selected=selected.size?selected.has(x.value):x.selected;return o}));
+        if(!sel.multiple&&sel.value!==prev)sel.dispatchEvent(new Event("change",{bubbles:true}));
       };
       search.addEventListener("input",render);order.addEventListener("change",render);
     });
