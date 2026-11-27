@@ -5094,7 +5094,7 @@ const txt=(s,max,W,nm)=>{let t=smart(String(s==null?"":s).replace(/[<>`\u0000-\u
  if(max&&t.length>max){W&&W(`${nm} muito longo: cortei em ${max} letras.`);t=t.slice(0,max).replace(/\s+\S*$/,"")+"…"}return t};
 
 // ---- vocabulário da ficha (nome em português → código interno do jogo). O código curto do jogo também vale.
-const TY={dano:"d",dano_percentual:"dp",dano_fixo:"dv",dano_vida_atual:"dh",dano_da_vida_atual:"dh",golpes_multiplos:"mh",eliminar:"ex",execucao:"ex",tirar_vida_inimigo:"lx",
+const TY={dano:"d",dano_percentual:"dp",dano_fixo:"dv",dano_vida_atual:"dh",dano_da_vida_atual:"dh",golpes_multiplos:"mh",eliminar:"ex",execucao:"ex",tirar_vida_inimigo:"lx",tirar_vida_do_inimigo:"lx",
  cura:"h",cura_fixa:"hv",vida_maxima:"mx",regeneracao:"rg",roubo_de_vida:"ls",reviver:"rv",ganhar_vida:"lf",trocar_vida:"sp",
  ataque:"at",defesa:"df",escudo:"sh",reflexo:"rf",esquiva:"ev",critico:"cr",invulneravel:"im",provocar:"tn",purificar:"pu",copiar_ataque:"ca",mudar_elemento:"el",
  veneno:"po",sangramento:"bl",marcar:"mk",marca:"mk",marcar_alvo:"mk",vulnerabilizar:"mk",atordoar:"st",silenciar:"cu",desarmar:"dz",atrasar_habilidades:"ci",dissipar:"di",
