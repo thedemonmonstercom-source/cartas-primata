@@ -5488,6 +5488,8 @@ function parse(text){
  }
  if(!blocks.length)return cpImportError("Não encontrei nenhuma ficha de carta.");
  const sheets=blocks.map((b,i)=>cpParseCardBlock(b,i+1));
+ // Cada ficha guarda onde começa e onde termina no texto colado (usado pelo botão Excluir).
+ sheets.forEach((sh,i)=>{sh.startLine=blocks[i].startLine||1;sh.endLine=blocks[i+1]?(blocks[i+1].startLine||1)-1:null;sh.canDelete=true});
  return{sheets,ok:sheets.length>0&&sheets.every(x=>!x.er.length)};
 }
 
@@ -5538,7 +5540,7 @@ function html(r){
     const trigger=TRG[a.tr||"u"]||"Ativa";
     return `<div class="iva"><div class="iv-skill-head"><span class="iv-skill-name">✦ ${E(a.n||"Habilidade sem nome")}</span><span class="iv-valid">${E(trigger)}</span></div><div class="iv-skill-meta"><span>${E(tag)}</span>${(a.tr||"u")==="u"?`<span>Recarga · ${E(a.rc||3)} turnos</span>`:`<span>Passiva</span>`}${a.chargeMode?`<span>Preparação · ${a.chargeMode==="same"?"2 ações":"aguardar "+(a.chargeTurns||1)+" turno(s)"}</span>`:""}</div>${a.q?`<div class="iv-skill-quote">“${E(a.q)}”</div>`:""}<div class="iv-skill-effect">${E(desc)}</div></div>`
    }).join("")||'<div class="iva">Nenhuma habilidade informada.</div>'}</div></div>
-   <div class="iv-card-actions"><div class="${ok?"iv-valid":"iv-invalid"}">${ok?"✓ Ficha validada":"✕ Precisa de correção"}</div><button type="button" class="bt gh iv-delete" data-iv-delete="${i}" aria-label="Excluir somente a ficha ${idx}">🗑️ Excluir esta ficha</button></div>
+   <div class="iv-card-actions"><div class="${ok?"iv-valid":"iv-invalid"}">${ok?"✓ Ficha validada":"✕ Precisa de correção"}</div>${s.canDelete?`<button type="button" class="bt gh iv-delete" data-iv-delete="${i}" aria-label="Excluir somente a ficha ${idx}">🗑️ Excluir esta ficha</button>`:""}</div>
   </article>`;
   const messages=s.er.map(x=>`<p class="er">✖ ${E(many?`Carta ${i+1} · ${x}`:x)}</p>`).concat(s.wa.map(x=>`<p>⚠ ${E(many?`Carta ${i+1} · ${x}`:x)}</p>`));
   if(messages.length)h+=`<div class="xw">${messages.join("")}</div>`;
@@ -5582,18 +5584,16 @@ cfg.addEventListener("click",e=>{
  if(!b)return;
  e.preventDefault();e.stopPropagation();
  const t=$("z_it");if(!t)return;
- const index=Number(b.dataset.ivDelete),current=parse(t.value);
- if(!Number.isInteger(index)||!current.sheets[index])return;
- const sheet=current.sheets[index],start=Number(sheet.startLine);
- if(!Number.isInteger(start)||start<1)return toast("Não consegui localizar essa ficha no texto.");
+ const index=Number(b.getAttribute("data-iv-delete")),current=parse(t.value),sheet=current.sheets[index];
+ if(!sheet||!sheet.canDelete)return toast("Não consegui localizar essa ficha no texto.");
  const lines=t.value.replace(/\r\n?/g,"\n").split("\n");
- const next=current.sheets[index+1],from=start-1;
- // A ficha termina na linha anterior ao próximo marcador; a última vai até o fim.
- const endExclusive=next?Math.max(from+1,Number(next.startLine)-1):lines.length;
- lines.splice(from,Math.min(lines.length,endExclusive)-from);
- t.value=lines.join("\n").replace(/^\n+|\n+$/g,"");
- paint();toast("Ficha removida. As outras fichas foram mantidas.");
-});
+ const from=Math.max(0,sheet.startLine-1);
+ // A ficha vai do cabeçalho dela até a linha anterior ao cabeçalho da próxima (ou até o fim).
+ const to=sheet.endLine===null?lines.length:Math.min(lines.length,Math.max(from+1,sheet.endLine));
+ lines.splice(from,to-from);
+ t.value=lines.join("\n").replace(/^\s*\n+/,"").replace(/\s+$/,"");
+ paint();toast("🗑️ Ficha excluída. As outras foram mantidas.");
+},true);
 cfg.addEventListener("input",e=>{if(e.target.id=="z_it"){clearTimeout(tm);tm=setTimeout(paint,250)}});
 cfg.addEventListener("change",e=>{if(e.target.id=="z_it")paint();if(e.target.id=="z_ip")try{localStorage.setItem("cp_impk",e.target.value)}catch(x){}});
 window.cpRegisterAdxOpenHook(function(id){try{if(id=="ds_i"){build();paint()}else if(id=="ds_c")sel()}catch(e){console.warn("imp",e)}});
