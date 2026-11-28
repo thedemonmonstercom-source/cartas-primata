@@ -6476,11 +6476,13 @@ function modal(h){let o=g("cpm");if(!o){o=document.createElement("div");o.id="cp
 function act(a,v){if(String(a).slice(0,2)=="mz")return mzAct(a,v);if(a=="me")perfil();else if(a=="onl")onlineHub();else if(a=="ach"){window.cpOpenAchievements&&window.cpOpenAchievements()}else if(a=="pj")jogadores();else if(a=="yr")cpOpenYearRetrospective();else if(a=="rnk"||a=="rkr")ranking();else if(a=="rkc")claimSeason();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dstart")enviarDesafio();else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca");else if(a=="px"){const o=g("cpm");o&&o.remove()}}
 function onlineHub(){
  const pending=TIN.filter(t=>t.s=="p").length;
- modal(`<div class="cp-hub-heading"><div><small>COMUNIDADE</small><h3>Online e partidas</h3><p>Encontre jogadores, faça trocas e organize partidas com amigos.</p></div><button class="cp-hub-close" data-a="px" aria-label="Fechar">✕</button></div><div class="cp-online-grid"><button class="cp-hub-tile" data-a="pj"><span class="cp-hub-icon">👥</span><span><b>Jogadores e trocas</b><small>Veja quem está online, desafie e negocie cartas</small></span>${pending?`<em>${pending} nova${pending>1?"s":""}</em>`:"<i>›</i>"}</button><button class="cp-hub-tile" data-a="mz"><span class="cp-hub-icon">🎴</span><span><b>Batalha em grupo</b><small>Monte partidas 2×2 ou com todos contra todos</small></span><i>›</i></button><button class="cp-hub-tile" data-a="rnk"><span class="cp-hub-icon">🏆</span><span><b>Ranking semanal</b><small>Confira posições, temporada e recompensas</small></span><i>›</i></button></div><div class="cp-hub-footnote">As opções sociais e de partidas ficam reunidas nesta área.</div>`);
+ const me=stats();
+ modal(`<div class="cp-hub-heading"><div><small>COMUNIDADE</small><h3>Online</h3></div><button class="cp-hub-close" data-a="px" aria-label="Fechar">✕</button></div><button class="cpx-me" data-a="me">${av(ME.f,ME.n)}<span><b>${esc(ME.n)}</b><small>Ver meu perfil</small></span><em>🏆 ${me.tp}</em></button><div class="cp-online-grid"><button class="cpx-big" data-a="pj"><span class="cp-hub-icon">⚔️</span><span><b>Jogadores</b><small>Duelar e trocar cartas</small></span>${pending?`<em class="hot">${pending} nova${pending>1?"s":""}</em>`:"<i>›</i>"}</button><div class="cpx-duo"><button class="cpx-sq t-g" data-a="mz"><span>🎴</span><b>Em grupo</b><small>2×2 ou todos contra todos</small></button><button class="cpx-sq t-r" data-a="rnk"><span>🏆</span><b>Ranking</b><small>Temporada da semana</small></button></div><button class="cpx-wide" data-cp-openwish="1"><span>⭐</span><b>Minha lista de desejos</b><i>›</i></button></div>`);
 }
 window.cpOpenOnlineHub=onlineHub;
 function perfil(){const s=stats();
- modal(`<div class="cp-hub-heading"><div><small>MINHA CONTA</small><h3>Meu perfil</h3><p>Identidade, coleção e personalização.</p></div><button class="cp-hub-close" data-a="px" aria-label="Fechar">✕</button></div><section class="cp-profile-identity"><div class="cxpr"><button class="cxpav" data-a="pf">${av(ME.f,ME.n)}</button><div class="cp-profile-name"><b data-a="pn">${esc(ME.n)} ✎</b><small>Toque na foto ou no nome para editar</small></div></div><button class="cp-profile-edit" data-a="ach">🏅 Editar títulos e vitrine</button>${window.cpProfileMeta?window.cpProfileMeta(s.title,s.showcase):""}</section><section class="cp-profile-section"><h4>📊 Suas estatísticas</h4><div class="cxpg"><div><b>🏆 ${s.tp}</b>troféus</div><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}</b>duelos ganhos</div><div><b>${s.ol}</b>duelos perdidos</div></div></section><section class="cp-profile-section"><h4>🗂️ Sua jornada</h4><button class="cp-profile-link" data-a="yr"><span>📊</span><span><b>Retrospectiva Primata</b><small>Veja seu histórico e suas cartas mais usadas</small></span><i>›</i></button><button class="cp-profile-link" data-cp-openwish="1"><span>⭐</span><span><b>Lista de desejos</b><small>Escolha cartas que está procurando para facilitar trocas</small></span><i>›</i></button></section><button class="cp-profile-logout" data-a="out">Sair da conta</button>`)}
+ const pend=TIN.filter(t=>t.s=="p").length;
+ modal(`<div class="cp-hub-heading"><div><small>MINHA CONTA</small><h3>Meu perfil</h3></div><button class="cp-hub-close" data-a="px" aria-label="Fechar">✕</button></div><section class="cpx-hero"><button class="cxpav cpx-av" data-a="pf" aria-label="Trocar foto">${av(ME.f,ME.n)}<i>📷</i></button><div class="cpx-who"><b data-a="pn">${esc(ME.n)} ✎</b><span class="cpx-tp">🏆 ${s.tp}</span></div></section><section class="cpx-card">${window.cpProfileMeta?window.cpProfileMeta(s.title,s.showcase):""}<button class="cp-profile-edit" data-a="ach">🏅 Títulos e vitrine</button></section><div class="cxpg cpx-stats"><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}–${s.ol}</b>duelos</div></div><div class="cpx-tiles"><button class="cpx-tile t-on" data-a="onl"><span>🌐</span><b>Online</b>${pend?`<em>${pend}</em>`:""}</button><button class="cpx-tile" data-cp-openwish="1"><span>⭐</span><b>Desejos</b></button><button class="cpx-tile" data-a="yr"><span>📊</span><b>Retrospectiva</b></button></div><button class="cp-profile-logout" data-a="out">Sair da conta</button>`)}
 function pickFoto(){const i=document.createElement("input");i.type="file";i.accept="image/*";i.onchange=()=>{const x=i.files[0];if(!x)return;const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=96;const q=Math.min(im.width,im.height);c.getContext("2d").drawImage(im,(im.width-q)/2,(im.height-q)/2,q,q,0,0,96,96);ME.f=c.toDataURL("image/jpeg",.72);pubPerfil().then(()=>{chip();perfil()})};im.src=URL.createObjectURL(x)};i.click()}
 function rename(){const n=prompt("Seu apelido:",ME.n);if(n&&n.trim()){ME.n=n.trim().slice(0,20);pubPerfil().then(()=>{chip();perfil()})}}
 function sair(){confirm("Sair da conta de "+ME.n+"?")&&pushSave().then(()=>A.signOut(au)).then(()=>location.reload())}
@@ -6496,14 +6498,14 @@ async function ranking(){if(!U)return toast("Entre na conta para ver o ranking s
  }catch(e){console.warn("ranking",e);modal(`<button class="bt gh" data-a="px">‹ Fechar</button><p>Não consegui carregar o ranking. Confira sua conexão e tente novamente.</p>`)}}
 async function claimSeason(){if(!U)return;const prev=previousSeasonId();if(S.sClaim===prev)return toast("Esse prêmio já foi resgatado.");try{await pubPerfil();const snap=await getDocs(collection(db,"perfis")),players=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.n),old=players.map(p=>({...p,score:seasonScore(p,prev)})).filter(p=>p.score>0).sort((a,b)=>b.score-a.score||(b.tp||0)-(a.tp||0)||String(a.n).localeCompare(String(b.n))),mine=old.find(p=>p.id===U.uid);if(!mine)return toast("Não há prêmio registrado para sua conta nesta temporada.");const rank=seasonRank(old,mine),pr=seasonPrize(rank);if(!pr)return toast("Você não ficou entre os três primeiros da temporada anterior.");S.fr=(+S.fr||0)+pr.fr;gift(dpk().id,pr.pk,true);S.sClaim=prev;save();toast(`🎉 ${rank}º lugar! Você recebeu ${pr.pk} pacote(s) e ${fmt(pr.fr)} fragmentos.`);ranking()}catch(e){console.warn("prêmio semanal",e);toast("Não foi possível resgatar o prêmio agora.")}}
 async function jogadores(){modal(`<p>Carregando…</p>`);let l=[];
- try{l=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
+ try{l=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="onl">‹ Online</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
  l.sort((a,b)=>(b.tp||0)-(a.tp||0));PL=l;const ni=TIN.filter(t=>t.s=="p"),no=TOUT.filter(t=>t.s=="p");
- modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button>`+(ni.length?`<h4>Trocas recebidas</h4>`+ni.map(t=>`<div class="cxpt"><span><b>${esc(t.dn)}</b> oferece <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b> (sua)</span><div><button class="bt cy" data-a="ac" data-v="${t.id}">Aceitar</button><button class="bt gh" data-a="no" data-v="${t.id}">Recusar</button></div></div>`).join(""):"")+(no.length?`<h4>Suas ofertas</h4>`+no.map(t=>`<div class="cxpt"><span>Para <b>${esc(t.pn)}</b>: <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b></span><div><button class="bt gh" data-a="ca" data-v="${t.id}">Cancelar</button></div></div>`).join(""):"")+`<h4>Jogadores (${l.length})</h4>`+(l.length?l.map((p,i)=>`<button class="cxpl" data-a="ver" data-v="${i}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>🏆 ${p.tp||0} · ${p.w||0}V ${p.l||0}D</small></span></button>`).join(""):`<p>Nenhum amigo entrou ainda.</p>`))}
+ modal(`<button class="bt gh" data-a="onl">‹ Online</button>`+(ni.length?`<h4>Trocas recebidas</h4>`+ni.map(t=>`<div class="cxpt"><span><b>${esc(t.dn)}</b> oferece <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b> (sua)</span><div><button class="bt cy" data-a="ac" data-v="${t.id}">Aceitar</button><button class="bt gh" data-a="no" data-v="${t.id}">Recusar</button></div></div>`).join(""):"")+(no.length?`<h4>Suas ofertas</h4>`+no.map(t=>`<div class="cxpt"><span>Para <b>${esc(t.pn)}</b>: <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b></span><div><button class="bt gh" data-a="ca" data-v="${t.id}">Cancelar</button></div></div>`).join(""):"")+`<h4>Jogadores (${l.length})</h4>`+(l.length?l.map((p,i)=>`<button class="cxpl" data-a="ver" data-v="${i}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>🏆 ${p.tp||0} · ${p.w||0}V ${p.l||0}D</small></span></button>`).join(""):`<p>Nenhum amigo entrou ainda.</p>`))}
 function ver(i){CP=i;const p=PL[i];if(!p)return;modal(`<button class="bt gh" data-a="pj">‹ Jogadores</button><div class="cxpr"><span class="cxpav">${av(p.f,p.n)}</span><div><b>${esc(p.n)}</b><small>${p.nc||0}/${p.tot||0} cartas</small></div></div>${window.cpProfileMeta?window.cpProfileMeta(p.title,p.showcase):""}${window.cpWishlistMarkup?window.cpWishlistMarkup(p.wish||[],i):""}<div class="cxpg"><div><b>🏆 ${p.tp||0}</b>troféus</div><div><b>${p.w||0}</b>vitórias</div><div><b>${p.l||0}</b>derrotas</div><div><b>${p.ow||0}</b>duelos ganhos</div><div><b>${p.ol||0}</b>duelos perdidos</div></div><button class="bt cy" data-a="duel" data-v="${i}">⚔️ Duelo ao vivo</button><button class="bt gh" data-a="tr" data-v="${i}">🔁 Propor troca</button>`)}
 function fillQ(){const a=byId(g("tm").value),q=g("tq");q.innerHTML=TH.filter(c=>!a||okT(a,c)).map(c=>`<option value="${c.id}">${R[c.r][0]} · ${esc(c.n)} (${PL[CP].ex[c.id]} repetida${PL[CP].ex[c.id]>1?"s":""})</option>`).join("")||`<option value="">Nenhuma compatível</option>`}
 function trocarUI(i){CP=i;const p=PL[i],M=mine().sort((a,b)=>((p.wish||[]).includes(b.id)?1:0)-((p.wish||[]).includes(a.id)?1:0)),TH=Object.keys(p.ex||{}).map(byId).filter(Boolean).sort((a,b)=>b.r-a.r);const bk=`<button class="bt gh" data-a="ver" data-v="${i}">‹ Voltar</button>`;
- if(!M.length||!TH.length)return modal(bk+`<p>${!M.length?"Você não tem cartas repetidas para trocar.":esc(p.n)+" não tem repetidas agora."} A troca é 1 por 1, só repetidas do mesmo rank.</p>`);
- modal(bk+`<h4>Trocar com ${esc(p.n)}</h4><small>Só repetidas (sem melhoria) entram na troca · sua carta sai agora e volta se ele recusar.${(p.wish||[]).some(id=>M.some(c=>c.id==id))?" ✨ As cartas que ele procura aparecem primeiro.":""}</small><label>Você dá</label><select id="tm">${M.map(c=>`<option value="${c.id}">${R[c.r][0]} · ${esc(c.n)} (${extra(c)} repetida${extra(c)>1?"s":""})</option>`).join("")}</select><label>Você recebe</label><select id="tq"></select><button class="bt cy" data-a="send">Propor troca</button>`);fillQ()}
+ if(!M.length||!TH.length)return modal(bk+`<div class="cpx-empty"><span>🔁</span><b>${!M.length?"Você não tem repetidas":esc(p.n)+" não tem repetidas"}</b><p>Troca 1 por 1, só repetidas do mesmo rank.</p></div>`);
+ modal(bk+`<h4>Trocar com ${esc(p.n)}</h4><small class="cpx-hint">Só repetidas, 1 por 1. Sua carta volta se ele recusar.${(p.wish||[]).some(id=>M.some(c=>c.id==id))?" ✨ As cartas que ele procura aparecem primeiro.":""}</small><div class="cpx-swap"><div><label>Você dá</label><select id="tm">${M.map(c=>`<option value="${c.id}">${R[c.r][0]} · ${esc(c.n)} (${extra(c)} repetida${extra(c)>1?"s":""})</option>`).join("")}</select></div><i>⇄</i><div><label>Você recebe</label><select id="tq"></select></div></div><button class="bt cy" data-a="send">Propor troca</button>`);fillQ()}
 async function enviar(){const p=PL[CP],a=byId(g("tm")&&g("tm").value),b=byId(g("tq")&&g("tq").value);if(!a||!b||!okT(a,b))return toast("Escolha duas cartas do mesmo rank.");if(extra(a)<1)return toast("Você não tem mais essa repetida.");
  S.inv[a.id]--;save();const id=U.uid.slice(0,6)+Date.now().toString(36);
  try{await setDoc(doc(db,"trocas",id),{de:U.uid,dn:ME.n,para:p.id,pn:p.n,o:a.id,q:b.id,s:"p",t:Date.now()})}catch(e){S.inv[a.id]++;save();return warn("troca",e)}
@@ -6651,10 +6653,10 @@ function cpShowPendingFriendInvites(){
 }
 if(!window.__cpPendingFriendInviteTimer)window.__cpPendingFriendInviteTimer=setInterval(cpShowPendingFriendInvites,1800);
 async function mzMenu(){modal(`<p>Carregando…</p>`);
- try{PL=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
+ try{PL=(await getDocs(collection(db,"perfis"))).docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==U.uid&&p.n)}catch(e){modal(`<button class="bt gh" data-a="onl">‹ Online</button><p>Não consegui carregar os jogadores.</p>`);return warn("jogadores",e)}
  mzDraw()}
 function mzDraw(){const n=MZM[MZmode][1]-1;
- modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button><h4>🎴 Batalha em grupo</h4><div class="mzm">${Object.keys(MZM).map(k=>`<button class="bt ${k==MZmode?"cy":"gh"}" data-a="mzm" data-v="${k}">${MZM[k][0]}</button>`).join("")}</div><small>${MZmode=="d"?"Escolha 3 amigos: o 1º é seu parceiro de time (fica do seu lado), os outros 2 são os adversários.":"Escolha "+n+" amigos para jogar contra."}</small>`+PL.map(p=>`<button class="cxpl" data-a="mzp" data-v="${p.id}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>${MZsel.includes(p.id)?"✅ nº "+(MZsel.indexOf(p.id)+1):"toque para chamar"}</small></span></button>`).join("")+`<button class="bt cy" data-a="mzc">Chamar ${MZsel.length}/${n}</button>`)}
+ modal(`<button class="bt gh" data-a="onl">‹ Online</button><h4>🎴 Batalha em grupo</h4><div class="mzm">${Object.keys(MZM).map(k=>`<button class="bt ${k==MZmode?"cy":"gh"}" data-a="mzm" data-v="${k}">${MZM[k][0]}</button>`).join("")}</div><small>${MZmode=="d"?"Escolha 3 amigos: o 1º é seu parceiro de time (fica do seu lado), os outros 2 são os adversários.":"Escolha "+n+" amigos para jogar contra."}</small>`+PL.map(p=>`<button class="cxpl" data-a="mzp" data-v="${p.id}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>${MZsel.includes(p.id)?"✅ nº "+(MZsel.indexOf(p.id)+1):"toque para chamar"}</small></span></button>`).join("")+`<button class="bt cy" data-a="mzc">Chamar ${MZsel.length}/${n}</button>`)}
 function mzAct(a,v){
  if(a=="mz")mzMenu();
  else if(a=="mzm"){MZmode=v;MZsel=MZsel.slice(0,MZM[v][1]-1);mzDraw()}
@@ -6869,12 +6871,12 @@ function cpPresenceStop(){clearInterval(CP_PRES_TIMER);clearInterval(CP_PRES_VIE
 function cpRenderPlayers(){
  if(CP_PVIEW!=="list")return;cpPresenceViewStart();
  const ni=TIN.filter(t=>t.s=="p"),no=TOUT.filter(t=>t.s=="p");
- modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button>`+
+ modal(`<button class="bt gh" data-a="onl">‹ Online</button>`+
  (ni.length?`<h4>Trocas recebidas</h4>`+ni.map(t=>`<div class="cxpt"><span><b>${esc(t.dn)}</b> oferece <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b> (sua)</span><div><button class="bt cy" data-a="ac" data-v="${t.id}">Aceitar</button><button class="bt gh" data-a="no" data-v="${t.id}">Recusar</button></div></div>`).join(""):"")+ 
  (no.length?`<h4>Suas ofertas</h4>`+no.map(t=>`<div class="cxpt"><span>Para <b>${esc(t.pn)}</b>: <b>${cn(t.o)}</b> por <b>${cn(t.q)}</b></span><div><button class="bt gh" data-a="ca" data-v="${t.id}">Cancelar</button></div></div>`).join(""):"")+ 
- `<div class="cp-pl-head"><h4>Jogadores (${PL.length})</h4><small>🟢 Online primeiro</small></div>`+
- (PL.length?PL.map((p,i)=>`<button class="cxpl" data-a="ver" data-v="${i}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small>🏆 ${p.tp||0} · ${p.w||0}V ${p.l||0}D</small><small data-cp-pres="${p.id}">${cpPresenceLabel(p)}</small></span></button>`).join(""):`<p>Nenhum amigo entrou ainda.</p>`)+
- `<button class="bt gh" data-a="pj" style="margin-top:10px">↻ Atualizar jogadores</button>`);
+ `<div class="cp-pl-head"><h4>Jogadores · ${PL.length}</h4></div>`+
+ (PL.length?PL.map((p,i)=>`<button class="cxpl" data-a="ver" data-v="${i}">${av(p.f,p.n)}<span><b>${esc(p.n)}</b><small data-cp-pres="${p.id}">${cpPresenceLabel(p)}</small></span><em class="cpx-pill">🏆 ${p.tp||0}</em></button>`).join(""):`<p>Nenhum amigo entrou ainda.</p>`)+
+ `<button class="bt gh" data-a="pj" style="margin-top:10px">↻ Atualizar</button>`);
 }
 function jogadores(){
  CP_PVIEW="list";CP_PROFILE_ID="";modal(`<p>Carregando jogadores e status…</p>`);
@@ -6884,7 +6886,7 @@ function jogadores(){
   PL.sort((a,b)=>(+cpIsOnline(b))-(+cpIsOnline(a))||(+b.tp||0)-(+a.tp||0)||String(a.n).localeCompare(String(b.n)));
   cpRenderPlayers();
   if(CP_PVIEW==="profile"){const p=PL.find(x=>x.id===CP_PROFILE_ID);const el=g("cp-profile-pres");if(el&&p)el.innerHTML=cpPresenceLabel(p)}
- },e=>{CP_PVIEW="";modal(`<button class="bt gh" data-a="onl">‹ Meu perfil</button><p>Não consegui acompanhar o status dos jogadores.</p>`);warn("presença dos jogadores",e)});
+ },e=>{CP_PVIEW="";modal(`<button class="bt gh" data-a="onl">‹ Online</button><p>Não consegui acompanhar o status dos jogadores.</p>`);warn("presença dos jogadores",e)});
 }
 const cpVerBase=ver;
 ver=function(i){
@@ -8491,8 +8493,8 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
   function renderShop(){
     shopRenderedCycle=shopCycle();
     const offers=dailyShop();
-    const html=offers.length?`<p>${shopRotationLabel()}. Cada oferta pode ser comprada uma vez por rotação. Os preços usam fragmentos.</p><div class="cp-block">${offers.map(o=>{const k=shopBuyKey(o),bought=!!S.shopBought[k];return `<div class="cp-row"><div style="flex:1"><b>${shopIcon(o)} ${escCP(shopLabel(o)||"Oferta")}</b><small>${o.kind==="card"?`Carta · Rank ${R[(ALL.find(c=>c.id===o.item)||{r:0}).r][0]}`:"Pacote enviado para seus presentes"}</small></div><div style="text-align:right"><b>${fmt(shopPrice(o))} 💎</b><button class="bt ${bought?"gh":"cy"}" style="width:auto;padding:8px 10px;font-size:.65rem;margin-top:5px" data-cp-buy="${escCP(o.id)}" ${bought?"disabled":""}>${bought?"Comprado":"Comprar"}</button></div></div>`}).join("")}</div>`:`<div class="cp-block"><b>🛒 A loja está vazia</b><p>O ADM ainda não adicionou ofertas para a rotação.</p></div>`;
-    openExtra("🛒 Loja diária",html+`<p>Seu saldo atual: <b>${fmt(S.fr||0)} 💎</b>.</p>`);
+    const html=offers.length?`<p class="cpx-rot">⏳ ${shopRotationLabel()}</p><div class="cpx-shop">${offers.map(o=>{const k=shopBuyKey(o),bought=!!S.shopBought[k],c=o.kind==="card"?ALL.find(x=>x.id===o.item):null,img=c&&(c.img||IMG[c.id]),rk=c?R[c.r][0]:"";return `<div class="cpx-offer${bought?" off":""}" data-rk="${rk}"><span class="cpx-thumb">${img?`<img src="${img}" alt="" loading="lazy">`:shopIcon(o)}${rk?`<i>${rk}</i>`:""}</span><b>${escCP(shopLabel(o)||"Oferta")}</b><button class="bt ${bought?"gh":"cy"}" data-cp-buy="${escCP(o.id)}" ${bought?"disabled":""}>${bought?"Comprado ✓":fmt(shopPrice(o))+" 💎"}</button></div>`}).join("")}</div>`:`<div class="cpx-empty"><span>🛒</span><b>Loja vazia</b><p>Volte mais tarde.</p></div>`;
+    openExtra("🛒 Loja diária",html+`<p class="cpx-bal">Seu saldo <b>${fmt(S.fr||0)} 💎</b></p>`);
   }
   window.cpOpenShop=renderShop;
   // Se a loja continuar aberta quando terminar o intervalo, atualiza as ofertas sem exigir reabrir a tela.
@@ -12221,6 +12223,82 @@ setInterval(()=>{try{if(typeof S==="undefined"||!S||typeof S.fr!=="number")retur
  prev=c}catch(e){}},140);
 }catch(x){console.warn("fly",x)}})();
 </script>
+<style id="cp-social-v2">
+/* ===== Perfil + Online + Loja · redesign v2 ===== */
+#cpm .cp-hub-heading small{letter-spacing:.14em}
+#cpm .cp-hub-heading h3{font-size:1.35rem;margin:2px 0 0}
+#cpm .cp-hub-heading p{display:none}
+#cpm .cpx-hero{display:flex;align-items:center;gap:14px;padding:16px;border-radius:20px;border:1px solid #c78bff40;background:radial-gradient(120% 140% at 0% 0%,#c78bff30,transparent 60%),linear-gradient(135deg,#2a2236,#1d1b22)}
+#cpm .cpx-av{position:relative;flex:0 0 auto;padding:0;border:0;background:none;border-radius:50%;box-shadow:0 0 0 3px #c78bff,0 0 22px #c78bff66}
+#cpm .cpx-av img,#cpm .cpx-av .av{width:78px;height:78px;border-radius:50%}
+#cpm .cpx-av i{position:absolute;right:-4px;bottom:-4px;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#c78bff;font-style:normal;font-size:.8rem}
+#cpm .cpx-who{display:grid;gap:8px;min-width:0}
+#cpm .cpx-who>b{font-size:1.25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#cpm .cpx-tp,#cpm .cpx-pill{justify-self:start;padding:5px 12px;border-radius:999px;background:#ffd16622;border:1px solid #ffd16655;color:#ffd166;font-weight:900;font-size:.85rem;white-space:nowrap}
+#cpm .cpx-card{display:grid;gap:10px;padding:12px;border-radius:18px;border:1px solid #ffffff14;background:#ffffff08}
+#cpm .cpx-card .cp-profile-meta{margin:0;padding:0;background:none}
+#cpm .cpx-card .mut{font-size:.62rem;letter-spacing:.12em}
+#cpm .cpx-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+#cpm .cpx-stats div{padding:11px 4px;border-radius:14px;background:#ffffff0c;border:1px solid #ffffff10;text-align:center;font-size:.64rem;color:var(--mut)}
+#cpm .cpx-stats b{display:block;font-size:1.05rem;color:var(--fg);margin-bottom:2px}
+#cpm .cpx-tiles{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px}
+#cpm .cpx-tile{position:relative;display:grid;justify-items:center;gap:5px;padding:14px 6px;border-radius:16px;border:1px solid #ffffff16;background:#ffffff09;color:inherit;font-size:.7rem;transition:transform .12s}
+#cpm .cpx-tile:active,#cpm .cpx-big:active,#cpm .cpx-sq:active,#cpm .cxpl:active{transform:scale(.97)}
+#cpm .cpx-tile span{font-size:1.5rem}
+#cpm .cpx-tile.t-on{background:linear-gradient(135deg,#c78bff,#8f5bff);border-color:transparent;color:#1a1024;font-weight:900}
+#cpm .cpx-tile em,#cpm .cpx-big em.hot{position:absolute;top:-6px;right:-4px;min-width:22px;padding:3px 7px;border-radius:999px;background:#f4566a;color:#fff;font-style:normal;font-size:.65rem;font-weight:900}
+#cpm .cpx-big em.hot{position:static;white-space:nowrap}
+/* Online */
+#cpm .cpx-me{display:flex;align-items:center;gap:11px;width:100%;padding:10px 12px;border-radius:16px;border:1px solid #ffffff14;background:#ffffff08;color:inherit;text-align:left}
+#cpm .cpx-me>span{flex:1;display:grid;min-width:0}#cpm .cpx-me small{color:var(--mut);font-size:.65rem}
+#cpm .cpx-me img,#cpm .cpx-me .av{width:42px;height:42px;border-radius:50%}
+#cpm .cpx-me em{font-style:normal;font-weight:900;color:#ffd166;font-size:.85rem}
+#cpm .cpx-big{display:flex;align-items:center;gap:13px;width:100%;padding:18px 16px;border-radius:20px;border:0;color:#1a1024;text-align:left;background:linear-gradient(135deg,#d6a8ff,#9a63ff);box-shadow:0 10px 26px #9a63ff44}
+#cpm .cpx-big .cp-hub-icon{width:52px;height:52px;flex:0 0 52px;font-size:1.7rem;background:#ffffff40}
+#cpm .cpx-big>span:nth-child(2){flex:1;display:grid;gap:2px}#cpm .cpx-big b{font-size:1.1rem}#cpm .cpx-big small{color:#1a1024b0;font-size:.72rem}#cpm .cpx-big i{font-style:normal;font-size:1.6rem}
+#cpm .cpx-duo{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+#cpm .cpx-sq{display:grid;justify-items:start;gap:4px;padding:15px 13px;border-radius:18px;border:1px solid #ffffff16;color:inherit;text-align:left}
+#cpm .cpx-sq span{font-size:1.7rem}#cpm .cpx-sq b{font-size:.95rem}#cpm .cpx-sq small{font-size:.64rem;color:var(--mut);line-height:1.3}
+#cpm .cpx-sq.t-g{background:linear-gradient(160deg,#2b6a5a55,#ffffff08)}
+#cpm .cpx-sq.t-r{background:linear-gradient(160deg,#ffd16638,#ffffff08)}
+#cpm .cpx-wide{display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:14px;border:1px dashed #ffffff2a;background:none;color:inherit}
+#cpm .cpx-wide b{flex:1;text-align:left;font-size:.8rem}#cpm .cpx-wide i{font-style:normal;opacity:.5}
+/* Lista de jogadores */
+#cpm .cxpl{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:16px;border:1px solid #ffffff12;background:#ffffff09;transition:transform .12s}
+#cpm .cxpl>span{flex:1;display:grid;gap:3px;min-width:0}#cpm .cxpl b{font-size:.95rem}
+#cpm .cxpl img,#cpm .cxpl .av{width:46px;height:46px;border-radius:50%}
+#cpm .cxpl .cpx-pill{padding:4px 10px;font-size:.75rem}
+#cpm .cp-pl-head{margin:14px 0 6px}#cpm .cp-pl-head h4{font-size:.95rem}
+/* Perfil de outro jogador: ações lado a lado */
+#cpm [data-a="duel"],#cpm [data-a="tr"]{min-height:50px;font-size:.8rem}
+#cpm [data-a="duel"]{background:linear-gradient(135deg,#f4566a,#c2304a);color:#fff;border:0}
+/* Troca */
+#cpm .cpx-hint{display:block;margin:4px 0 10px;color:var(--mut);font-size:.68rem}
+#cpm .cpx-swap{display:grid;gap:8px;justify-items:stretch}
+#cpm .cpx-swap>div{padding:12px;border-radius:16px;border:1px solid #ffffff14;background:#ffffff09}
+#cpm .cpx-swap>div:first-child{border-color:#f4566a55}#cpm .cpx-swap>div:nth-child(3){border-color:#6fbf8e66}
+#cpm .cpx-swap label{display:block;margin:0 0 6px;font-size:.7rem;font-weight:900;color:var(--mut)}
+#cpm .cpx-swap>i{justify-self:center;font-style:normal;font-size:1.3rem;color:#c78bff;transform:rotate(90deg)}
+#cpm .cpx-empty,#cpExtra .cpx-empty{display:grid;justify-items:center;gap:6px;padding:28px 16px;text-align:center;border-radius:18px;background:#ffffff08;border:1px dashed #ffffff22}
+.cpx-empty span{font-size:2.2rem}.cpx-empty p{margin:0;color:var(--mut);font-size:.75rem}
+/* Desafio: modificadores como chips */
+#cpm label:has(>input[type=checkbox]){display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:14px;border:1px solid #ffffff14;background:#ffffff09;margin:6px 0}
+#cpm label:has(>input[type=checkbox]:checked){border-color:#c78bff;background:#c78bff26}
+/* Loja */
+.cpx-rot{margin:0 0 10px;color:var(--mut);font-size:.72rem}
+.cpx-shop{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cpx-offer{--rc:#8f8d96;display:grid;gap:8px;padding:10px;border-radius:18px;border:1.5px solid var(--rc);background:linear-gradient(180deg,color-mix(in srgb,var(--rc) 20%,transparent),#ffffff06)}
+.cpx-offer[data-rk=E]{--rc:#6fbf8e}.cpx-offer[data-rk=D]{--rc:#5aa9e6}.cpx-offer[data-rk=C]{--rc:#8b7cf6}.cpx-offer[data-rk=B]{--rc:#d46cf0}.cpx-offer[data-rk=A]{--rc:#f4566a}.cpx-offer[data-rk=S]{--rc:#ff9f43}.cpx-offer[data-rk=SS]{--rc:#ffd166}.cpx-offer[data-rk=SSS]{--rc:#fff1a8}
+.cpx-offer.off{opacity:.5;filter:grayscale(.6)}
+.cpx-thumb{position:relative;display:grid;place-items:center;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#0008;font-size:2rem}
+.cpx-thumb img{width:100%;height:100%;object-fit:cover}
+.cpx-thumb i{position:absolute;top:6px;left:6px;padding:2px 8px;border-radius:8px;background:var(--rc);color:#111;font-style:normal;font-weight:900;font-size:.75rem}
+.cpx-offer>b{font-size:.82rem;text-align:center;line-height:1.2}
+.cpx-offer .bt{width:100%;padding:10px 6px;font-size:.78rem;font-weight:900}
+.cpx-bal{margin:12px 0 0;text-align:center;padding:9px;border-radius:999px;background:#c78bff1f;color:#e4c9ff;font-size:.8rem}
+@media(prefers-reduced-motion:reduce){#cpm *{transition:none!important}}
+
+</style>
 </body>
 </html>
 
