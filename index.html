@@ -2789,7 +2789,13 @@ buy:Q(()=>{T(1318,0,.1,"square",.06);T(1760,.08,.3,"square",.06);NS(.08,.08,.15,
 conv:Q(()=>{for(let i=0;i<5;i++)T(600+i*130,i*.05,.05,"square",.04);T(1500,.28,.25,"triangle",.07)}),
 fuse:Q(()=>{T(150,0,.9,"sawtooth",.06,900);NS(0,.9,.2,300,5000,1);setTimeout(()=>{AR(523,[0,4,7,12,16],"triangle",.1,.05,.6);T(80,0,.5,"sine",.3,40)},800)}),
 open:Q(()=>{NS(0,.18,.14,700,3200,.8);T(500,0,.1,"sine",.05,820)}),close:Q(()=>{NS(0,.15,.12,3000,600,.8);T(700,0,.09,"sine",.045,420)}),
-err:Q(()=>{T(160,0,.18,"square",.06,120);T(150,.2,.2,"square",.06,110)})});
+err:Q(()=>{T(160,0,.18,"square",.06,120);T(150,.2,.2,"square",.06,110)}),
+tear:Q(()=>{N(0,.38,.55,1700,.5);N(.07,.3,.45,3400,.6);T(150,0,.3,"sawtooth",.09,55);T(900,.3,.09,"sine",.14,480);NS(.28,.25,.2,6000,2500,1.2,"highpass")}),
+pop:Q(r=>{T(480+r*85,0,.09,"triangle",.14,720+r*110);NS(0,.06,.14,3200,1600,1)}),
+swipe:Q(()=>{NS(0,.16,.32,1100,4300,.9);T(280,0,.09,"triangle",.09,540)}),
+rumble:Q(s=>{const d=Math.max(.8,Math.min(4,s||1.5));T(55,0,d,"sawtooth",.1,130);NS(0,d,.22,180,1200,.8);for(let i=0;i<6;i++)T(300+i*140,d*(.45+i*.08),.12,"square",.035)}),
+boom:Q(()=>{T(70,0,.9,"sine",.55,28);NS(0,.8,.55,2600,160,.6);AR(523,[0,4,7,12,16,19],"triangle",.1,.06,.55);NS(.1,1.2,.15,7000,3000,1.5,"highpass")}),
+fan:Q(()=>{[523,659,784,1047,1319].forEach((f,i)=>T(f,i*.09,.5,"triangle",.15));AR(1800,[0,2,4,7,9,12],"sine",.06,.05,.25)})});
 const api={
 get on(){return on},...api0,
 click(){if(rebuilding())return;T(720,0,.05,"triangle",.09,520)},
@@ -3946,7 +3952,7 @@ const flip=(t,r)=>{SND.flip();const f=t.querySelector(".cd"),b=t.querySelector("
   hint.textContent=np>1?`Toque para abrir os ${fmt(np)} pacotes`:"Toque no pacote para abrir";hint.className="cx-pt";
   const flashEl=()=>ov.querySelector(".cx-flash");
   const tear=(pk,i)=>{
-   pk.classList.add("cx-tearing");const q=s=>pk.querySelector(s),up=q(".pp.up"),cds=q(".cds"),lip=q(".lip"),ls=q(".ls"),bob=q(".bob"),dl=i*70;
+   pk.classList.add("cx-tearing");const q=s=>pk.querySelector(s),up=q(".pp.up"),cds=q(".cds"),lip=q(".lip"),ls=q(".ls"),bob=q(".bob"),dl=i*70;if(i<4)setTimeout(()=>{try{SND.tear()}catch(e){}},dl);
    // a carta que sai do pacote mostra o verso real da carta (fundo definido no pacote/carta)
    if(cds&&d[0]){try{cds.innerHTML=bkH(d[0].c,p);const bk=cds.firstElementChild;cds.style.cssText+=";background:none;border:0;border-radius:14% / 10.5%;overflow:visible";bk.style.cssText+=";position:absolute;inset:0;width:100%;height:100%;box-sizing:border-box"}catch(e){console.warn("Verso da carta no pacote",e)}}
    cxA(pk,[{transform:"translate(0,0) rotate(0) scale(1)"},{transform:"translate(-1.5%,0) rotate(-2deg) scale(1.02)"},{transform:"translate(1.8%,0) rotate(2.2deg) scale(1.035)"},{transform:"translate(-2%,0) rotate(-2.5deg) scale(1.05)"},{transform:"translate(2%,0) rotate(2.6deg) scale(1.06)"},{transform:"translate(0,0) rotate(0) scale(1.07)"}],{duration:RM?200:460,delay:dl,easing:"ease-in",fill:"forwards"});
@@ -3995,7 +4001,7 @@ const flip=(t,r)=>{SND.flip();const f=t.querySelector(".cd"),b=t.querySelector("
    cxA(vig,[{opacity:0},{opacity:MEGA.dim[T]}],{duration:CH*.6,easing:"ease-out",fill:"forwards"});
    if(MEGA.bars[T]){const bo={duration:620,easing:"cubic-bezier(.2,.8,.2,1)",fill:"forwards"};cxA(bt,[{transform:"translateY(-100%)"},{transform:"none"}],bo);cxA(bb,[{transform:"translateY(100%)"},{transform:"none"}],bo)}
    if(!RM)cxA(fan,cxShakeKF(CH,3+T*1.8),{duration:CH,easing:"linear"});
-   try{SND.charge&&SND.charge(rk)}catch(e){}
+   try{SND.charge&&SND.charge(rk);SND.rumble&&SND.rumble(CH/1000)}catch(e){}
    // pacotinhos: cada faixa entra de um jeito (25 chuva · 50 laterais · 100+ espiral · 500 espiral dupla)
    const piece=()=>{const e=document.createElement("i"),w=cxRnd(18,30),h=cxRnd(30,48);e.className="cxm-p";e.style.cssText=`width:${w}px;height:${h}px;margin:${-h/2}px 0 0 ${-w/2}px`;return e};
    const ins=document.createDocumentFragment(),outs=[];
@@ -4031,7 +4037,7 @@ const flip=(t,r)=>{SND.flip();const f=t.querySelector(".cd"),b=t.querySelector("
    done=1;if(cn)cn.textContent="×"+fmt(np);hint.textContent="";
    const tp=Promise.all(pk.map((e,i)=>tear(e,i)));
    await cxWait(RM?160:420);
-   try{SND.rare(rk)}catch(e){}
+   try{SND.rare(rk);SND.boom&&SND.boom()}catch(e){}
    outs.forEach(a=>{try{a.play()}catch(e){}});
    if(fl)cxA(fl,[{opacity:full?1:.35+T*.1},{opacity:.55*(full?1:.5),offset:.25},{opacity:0}],{duration:900+T*80,easing:"ease-out"});
    cxA(vig,[{opacity:MEGA.dim[T]},{opacity:0}],{duration:1100,easing:"ease-out",fill:"forwards"});
@@ -4080,7 +4086,7 @@ const flip=(t,r)=>{SND.flip();const f=t.querySelector(".cd"),b=t.querySelector("
   };
   // ---- resumo final
   const summary=()=>{
-   ph=4;sk=1;tok++;skb.hidden=true;document.body.classList.remove("nofr");
+   ph=4;sk=1;tok++;skb.hidden=true;try{SND.fan&&SND.fan()}catch(e){}document.body.classList.remove("nofr");
    cxReset();CXFX.clear();ov.querySelectorAll(".cx-prog,.cx-banner,.cx-wave").forEach(e=>e.remove());
    ov.classList.add("cx-sumon");hint.textContent="";hint.className="";
    const grouped=new Map();for(const it of FULL){const id=it.c.id;let q=grouped.get(id);if(!q){q={c:it.c,count:0,fresh:false};grouped.set(id,q)}q.count++;q.fresh=q.fresh||!!it.n}
@@ -4198,7 +4204,7 @@ const flip=(t,r)=>{SND.flip();const f=t.querySelector(".cd"),b=t.querySelector("
    slot.classList.remove("rit");cue.textContent="";
    front.classList.add("vis");cxA(svg,[{opacity:1},{opacity:0}],{duration:200,fill:"forwards"});
    const[x,y]=cc(),fd=Math.round(CXT.flip[r]*(RM?.5:1)*(FM&&r<5?.4:1));
-   try{SND.rare(r);SND.flip()}catch(e){}
+   try{SND.rare(r);SND.flip();r<3&&SND.pop&&SND.pop(r)}catch(e){}
    if(fl&&CXT.flash[r])cxA(fl,[{opacity:CXT.flash[r]},{opacity:0}],{duration:420+r*90,easing:"ease-out"});
    if(sus>0)cxA(vig,[{opacity:CXT.dim[r]},{opacity:0}],{duration:900,easing:"ease-out",fill:"forwards"});
    if(r>=7&&sus>0){const o={duration:900,delay:fd*.6,easing:"cubic-bezier(.5,0,.8,.4)",fill:"forwards"};cxA(bt,[{transform:"none"},{transform:"translateY(-100%)"}],o);cxA(bb,[{transform:"none"},{transform:"translateY(100%)"}],o)}
@@ -4249,7 +4255,7 @@ const flip=(t,r)=>{SND.flip();const f=t.querySelector(".cd"),b=t.querySelector("
    old.style.zIndex=8;old.style.pointerEvents="none";
    const out=cxA(old.querySelector(".cx-card"),[{transform:"none",opacity:1},{transform:`translate(${s*42}%,-12%) rotate(${s*14}deg) scale(.9)`,opacity:0}],{duration:FM&&r<5?130:r>=5?340:230,easing:"cubic-bezier(.5,0,.9,.5)",fill:"forwards"});
    k++;
-   try{SND.draw&&SND.draw()}catch(e){}
+   try{SND.swipe&&SND.swipe()}catch(e){}
    if(pile)pile.style.setProperty("--sh",sh+"s");
    if(k<N){depthSet();if(spr)peek()}
    cxD(out).then(()=>{old.remove();if(!sk&&k>=N)summary()});
@@ -5487,10 +5493,10 @@ if(!document.querySelector('meta[name="theme-color"]')){const t=document.createE
 
 // ===== v1.0 (17/11/2026): MODO ADM organizado · categorias, busca, botão de salvar fixo, campos em grupos e zona de risco =====
 (()=>{try{
-const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["🎁","Recompensas","Login, economia e prêmio do ranking semanal"],ds_b:["⚔️","Batalha e arenas","Troféus, chefes e arenas"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Conteúdo e save","Exportar, importar e PIN"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina até dois elementos por carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"],ds_st:["🎴","Cartas iniciais","Escolha as 12 cartas entregues a jogadores novos"]},
+const T={ds_l:["🚀","Lançamentos","Guarde cartas e lance tudo de uma vez"],ds_p:["📊","Painel","Resumo, verificação e simulador"],ds_x:["🃏","Exemplos por rank","Vida, dano e chance de cada rank"],ds_c:["✏️","Cartas","Editar e criar cartas"],ds_h:["✨","Habilidades","Montar efeitos e dar às cartas"],ds_k:["📦","Pacotes","Preço, chances e destaque"],ds_v:["🎨","Visual do pacote","Foto, formato, cor e textos"],ds_r:["💎","Economia","Valores, prêmios, missões, presentes e loja"],ds_b:["⚔️","Batalhas","Regras, troféus, chefes, arenas e Boss Raid"],ds_m:["📋","Missões","Diárias, semanais e coleção"],ds_g:["🧪","Testes","Troféus, arenas, itens e reiniciar o save"],ds_s:["💾","Sistema","Backup, testes e exclusões"],ds_i:["📥","Importar ficha","Colar a ficha criada pela IA"],ds_z:["🗑️","Excluir","Várias cartas, pacotes ou jogadores de uma vez"],ds_e:["🔥","Elementos","Defina até dois elementos por carta"],ds_t:["🎁","Presentes","Cartas, pacotes ou fragmentos"],ds_q:["🏅","Prêmios de carta","Cartas de prêmio em missões e batalhas"],ds_st:["🎴","Cartas iniciais","Escolha as 12 cartas entregues a jogadores novos"]},
 FT={ds_v:["@sv","Salvar visual"],ds_c:["@sc","Salvar carta"],ds_h:["@hs","Salvar habilidade"],ds_k:["@sk","Salvar pacote"],ds_r:["@sr","Salvar regras"],ds_b:["@sr","Salvar regras"],ds_m:["@sr","Salvar regras"],ds_s:["@sr","Salvar regras"],ds_st:["@st","Salvar 12 cartas iniciais"]},
-GR={ds_r:[["Login e pacotes",["cf_diaria","cf_pacVit","cf_gratisHoras","cf_gratisMax","cf_gratisLivre","cf_gratisJogar","cf_tetoDia","cf_guardMax"]],["Pacotes aleatórios nas recompensas",["cf_rewardRandomChance"]],["Fragmentos e preços",["rfr","rcu","rini","rrc","cf_fusMult","cf_sssLoja"]],["Ranking semanal · recompensas",["wr1pk","wr1fr","wr2pk","wr2fr","wr3pk","wr3fr"]],["Liberações por arena",["cf_fusArena","cf_cArena","cf_sArena"]],["Faixa de status por rank",["cf_faixa"]],["Bots de batalha",["cf_botErro","cf_botForca","cf_botNivel"]]],
-ds_b:[["Troféus",["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax"]],["Prêmios das lutas",["cf_limiteDia","cf_derrota","cf_arf0","cf_arfK","cf_amigoFrag","cf_amigoDia"]],["Duelo ao vivo",["cf_turnoSeg","cf_sumiuSeg"]],["Chefes e campeão",["cf_chefe","cf_chefeFinal","cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag"]],["Arenas e força das cartas",["rtr","ran","rst"]]],
+GR={ds_r:[["Fragmentos e preços",["rfr","rcu","rini","rrc","cf_fusMult","cf_sssLoja"]],["Pacotes grátis e login",["cf_diaria","cf_pacVit","cf_gratisHoras","cf_gratisMax","cf_gratisLivre","cf_gratisJogar","cf_tetoDia","cf_guardMax","cf_rewardRandomChance"]],["Prêmios das lutas",["cf_limiteDia","cf_derrota","cf_arf0","cf_arfK","cf_amigoFrag","cf_amigoDia"]],["Prêmios de arena e campeão",["cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag"]],["Ranking semanal",["wr1pk","wr1fr","wr2pk","wr2fr","wr3pk","wr3fr"]]],
+ds_b:[["Troféus",["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax"]],["Duelo ao vivo",["cf_turnoSeg","cf_sumiuSeg"]],["Chefes",["cf_chefe","cf_chefeFinal"]],["Arenas e força das cartas",["rtr","ran","rst"]],["Liberações por arena",["cf_fusArena","cf_cArena","cf_sArena"]],["Faixa de status por rank",["cf_faixa"]],["Bots de batalha",["cf_botErro","cf_botForca","cf_botNivel"]]],
 ds_m:[["Missões",["cf_nDia","cf_mDia","cf_mSem","cf_mSemPac","cf_mDiaBonus"]],["Listas de missões",["rdp","rwp","rmc"]]],
 ds_s:[["Sistema",["cf_admPin","cf_imgKB","cf_som","cf_musica"]],["Conteúdo do jogo",["cc","fcc"]]],
 ds_k:[["Pacote em destaque",["ad"]]]},
@@ -6472,8 +6478,8 @@ window.cpPublishProfile=pubPerfil;
 // Serializa também as publicações de conteúdo ADM: uma edição antiga nunca pode terminar depois da mais nova.
 function pushAdm(){const job=()=>pushAdmNow();admChain=admChain.then(job,job);return admChain}
 function pf(){clearTimeout(pt);pt=setTimeout(pubPerfil,6000)}
-function modal(h){let o=g("cpm");if(!o){o=document.createElement("div");o.id="cpm";o.onclick=e=>{e.stopPropagation();if(e.target===o)return o.remove();const wish=e.target.closest("[data-cp-openwish]");if(wish){e.preventDefault();e.stopPropagation();window.cpOpenWishlist&&window.cpOpenWishlist();return}const b=e.target.closest("[data-a]");b&&act(b.dataset.a,b.dataset.v)};o.onchange=e=>{e.target.id=="tm"&&fillQ()};document.body.append(o)}o.innerHTML=`<div class="pbx">${h}</div>`;return o}
-function act(a,v){if(String(a).slice(0,2)=="mz")return mzAct(a,v);if(a=="me")perfil();else if(a=="onl")jogadores();else if(a=="ach"){window.cpOpenAchievements&&window.cpOpenAchievements()}else if(a=="pj")jogadores();else if(a=="yr")cpOpenYearRetrospective();else if(a=="rnk"||a=="rkr")ranking();else if(a=="rkc")claimSeason();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dstart")enviarDesafio();else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca");else if(a=="px"){const o=g("cpm");o&&o.remove()}}
+function modal(h){let o=g("cpm");if(!o){try{SND.open()}catch(e){}o=document.createElement("div");o.id="cpm";o.onclick=e=>{e.stopPropagation();if(e.target===o)return o.remove();const wish=e.target.closest("[data-cp-openwish]");if(wish){e.preventDefault();e.stopPropagation();window.cpOpenWishlist&&window.cpOpenWishlist();return}const b=e.target.closest("[data-a]");b&&act(b.dataset.a,b.dataset.v)};o.onchange=e=>{e.target.id=="tm"&&fillQ()};document.body.append(o)}o.innerHTML=`<div class="pbx">${h}</div>`;return o}
+function act(a,v){if(String(a).slice(0,2)=="mz")return mzAct(a,v);if(a=="me")perfil();else if(a=="onl")jogadores();else if(a=="ach"){window.cpOpenAchievements&&window.cpOpenAchievements()}else if(a=="pj")jogadores();else if(a=="yr")cpOpenYearRetrospective();else if(a=="rnk"||a=="rkr")ranking();else if(a=="rkc")claimSeason();else if(a=="pf")pickFoto();else if(a=="pn")rename();else if(a=="out")sair();else if(a=="ver")ver(+v);else if(a=="duel")desafiar(+v);else if(a=="dstart")enviarDesafio();else if(a=="dac")aceitarD(v);else if(a=="dno")recusarD(v);else if(a=="dx")cancelarD();else if(a=="tr")trocarUI(+v);else if(a=="send")enviar();else if(a=="ac")aceitar(v);else if(a=="no")fim(v,"no");else if(a=="ca")fim(v,"ca");else if(a=="px"){const o=g("cpm");if(o){try{SND.close()}catch(e){}o.remove()}}}
 function onlineHub(){
  const pending=TIN.filter(t=>t.s=="p").length;
  const me=stats();
@@ -6484,14 +6490,14 @@ new MutationObserver(()=>{const b=document.querySelector("#cpm .pbx");if(!b||b.q
 window.cpOpenOnlineHub=function(){jogadores()};
 function perfil(){const s=stats();
  const pend=TIN.filter(t=>t.s=="p").length;
- modal(`<div class="cp-hub-heading"><div><small>MINHA CONTA</small><h3>Meu perfil</h3></div><button class="cp-hub-close" data-a="px" aria-label="Fechar">✕</button></div><section class="cpx-hero"><button class="cxpav cpx-av" data-a="pf" aria-label="Trocar foto">${av(ME.f,ME.n)}<i>📷</i></button><div class="cpx-who"><b data-a="pn">${esc(ME.n)} ✎</b><span class="cpx-tp">🏆 ${s.tp}</span></div></section><section class="cpx-card">${window.cpProfileMeta?window.cpProfileMeta(s.title,s.showcase):""}<button class="cp-profile-edit" data-a="ach">🏅 Títulos e vitrine</button></section><div class="cxpg cpx-stats"><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}–${s.ol}</b>duelos</div></div><div class="cpx-tiles"><button class="cpx-tile" data-cp-openwish="1"><span>⭐</span><b>Desejos</b></button><button class="cpx-tile" data-a="yr"><span>📊</span><b>Retrospectiva</b></button></div><button class="cp-profile-logout" data-a="out">Sair da conta</button>`)}
+ modal(`<div class="cp-hub-heading"><div><small>MINHA CONTA</small><h3>Meu perfil</h3></div><button class="cp-hub-close" data-a="px" aria-label="Fechar">✕</button></div><section class="cpx-hero"><button class="cxpav cpx-av" data-a="pf" aria-label="Trocar foto">${av(ME.f,ME.n)}</button><div class="cpx-who"><b data-a="pn">${esc(ME.n)} ✎</b><span class="cpx-tp">🏆 ${s.tp}</span></div></section><section class="cpx-card">${window.cpProfileMeta?window.cpProfileMeta(s.title,s.showcase):""}<button class="cp-profile-edit" data-a="ach">🏅 Títulos e vitrine</button></section><div class="cxpg cpx-stats"><div><b>${s.w}</b>vitórias</div><div><b>${s.l}</b>derrotas</div><div><b>${s.nc}/${s.tot}</b>cartas</div><div><b>${s.ow}–${s.ol}</b>duelos</div></div><div class="cpx-tiles"><button class="cpx-tile" data-cp-openwish="1"><span>⭐</span><b>Desejos</b></button><button class="cpx-tile" data-a="yr"><span>📊</span><b>Retrospectiva</b></button></div><button class="cp-profile-logout" data-a="out">Sair da conta</button>`)}
 function pickFoto(){const i=document.createElement("input");i.type="file";i.accept="image/*";i.onchange=()=>{const x=i.files[0];if(!x)return;const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=c.height=96;const q=Math.min(im.width,im.height);c.getContext("2d").drawImage(im,(im.width-q)/2,(im.height-q)/2,q,q,0,0,96,96);ME.f=c.toDataURL("image/jpeg",.72);pubPerfil().then(()=>{chip();perfil()})};im.src=URL.createObjectURL(x)};i.click()}
 function rename(){const n=prompt("Seu apelido:",ME.n);if(n&&n.trim()){ME.n=n.trim().slice(0,20);pubPerfil().then(()=>{chip();perfil()})}}
 function sair(){confirm("Sair da conta de "+ME.n+"?")&&pushSave().then(()=>A.signOut(au)).then(()=>location.reload())}
 const seasonScore=(p,id)=>p.sId===id?Math.max(0,+p.sPts||0):p.pId===id?Math.max(0,+p.pPts||0):0,
 seasonRank=(arr,p)=>1+arr.filter(x=>x.score>p.score).length,
 seasonPrize=r=>Number.isInteger(+r)&&+r>=1&&+r<=3?weeklyPrizeConfig()[+r-1]:null,
-weeklyPrizeHtml=()=>`<div class="cprprizes">${weeklyPrizeConfig().map((p,i)=>`<div><span>${["🥇","🥈","🥉"][i]} ${i+1}º lugar</span><b>${fmt(p.pk)} pacotes + ${fmt(p.fr)} 💎</b></div>`).join("")}</div>`,
+weeklyPrizeHtml=()=>`<div class="cprprizes">${weeklyPrizeConfig().map((p,i)=>`<div><span>${["🥇","🥈","🥉"][i]}</span><b>${fmt(p.pk)} pacotes</b><small>+ ${fmt(p.fr)} 💎</small></div>`).join("")}</div>`,
 seasonDate=id=>{const d=new Date(id+"T00:00:00Z");return d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",timeZone:"UTC"})};
 async function ranking(){if(!U)return toast("Entre na conta para ver o ranking semanal.");modal(`<p>Carregando ranking…</p>`);try{
  await pubPerfil();const snap=await getDocs(collection(db,"perfis")),players=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.n);if(!players.some(p=>p.id===U.uid))players.push({id:U.uid,...stats()});
@@ -6977,7 +6983,7 @@ sair=function(){if(!confirm("Sair da conta de "+ME.n+"?"))return;cpPresenceStop(
     const typeOpts=[["all","Todas as cartas"],["no-special","Todas, menos especiais"],["special-only","Somente especiais"],["packages-only","Somente de pacotes"],["no-pack","Fora dos pacotes"],["arena-only","Somente de arena"],["no-arena","Todas, menos arena"],["with-image","Somente com imagem"],["without-image","Somente sem imagem"]].map(([v,n])=>`<option value="${v}"${(r.rotationFilter||"no-special")===v?" selected":""}>${n}</option>`).join("");
     const currentRanks=Array.isArray(r.rotationRanks)?r.rotationRanks.filter(v=>R.some(x=>x[0]===v)):raidLegacyRanks(r.rotationRank||"all"),rankChecks=R.map(x=>x[0]).map(x=>`<label class="cp-rank-chip"><input type="checkbox" data-cp-raid-rank="${x}"${currentRanks.includes(x)?" checked":""}><b>${x}</b></label>`).join("");
     const raidScaleEditor=R.map((row,i)=>{const rank=row[0],v=raidAutoValues({r:i});return `<div class="cp-raid-scale-row"><b class="cp-raid-scale-rank">${rank}</b><label><span>Força ×</span><input type="number" min="2" max="200" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="power" value="${v.power}"></label><label><span>Fragmentos</span><input type="number" min="0" max="1000000000" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="fragments" value="${v.fragments}"></label><label><span>Pacotes</span><input type="number" min="0" max="100" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="packs" value="${v.packs}"></label><label><span>Drop %</span><input type="number" min="0" max="100" step="1" data-cp-raid-scale-rank="${rank}" data-cp-raid-scale-field="dropChance" value="${v.dropChance}"></label></div>`}).join("");
-    modal(`<h4>⚔️ Configurar Boss Raid</h4><p>Escolha um Boss fixo, uma lista selecionada por você ou um sorteio automático no catálogo de cartas existentes. No sorteio do catálogo, todos os jogadores recebem o mesmo Boss durante aquele ciclo; dificuldade e recompensas acompanham o rank sorteado.</p><div class="raid-admin-grid">
+    modal(`<h4>⚔️ Configurar Boss Raid</h4><p>Como o Boss muda a cada ciclo.</p><div class="raid-admin-grid">
       <label class="raid-wide">Modo de rotação<select id="cpRaidRotationMode"><option value="manual"${!['auto','random'].includes(r.rotationMode)?" selected":""}>Manual · Boss fixo</option><option value="auto"${r.rotationMode==="auto"?" selected":""}>Lista do ADM · alternar Bosses escolhidos</option><option value="random"${r.rotationMode==="random"?" selected":""}>Aleatório · sortear do catálogo de cartas</option></select></label>
       <label class="raid-wide">Intervalo para trocar o Boss (horas)<input id="cpRaidRotationHours" type="number" min="1" max="720" step="1" value="${Math.max(1,Math.min(720,Math.floor(+r.rotationHours||24)))}"></label>
       <label class="raid-wide">Filtro de cartas para o sorteio<select id="cpRaidCardFilter">${typeOpts}</select></label>
@@ -8134,8 +8140,9 @@ try{const a=cfg.querySelector("details.adp[open]");if(!cfg.hidden&&$("ds_c")&&a&
 
 // ===== v2.3: ADM · criar e editar no MESMO lugar (Cartas+Habilidades+Elementos · Pacote+Visual) e 1 botão só =====
 (()=>{try{
-const G=[["ds_c","🃏 Cartas"],["ds_h","✨ Habilidades"],["ds_e","🔥 Elementos"]],K=[["ds_k","📦 Pacote"],["ds_v","🎨 Visual"]],
-bar=(g,id)=>`<div class="ytb">${g.map(([i,t])=>`<button data-adm="p${i}"${i==id?' class="on"':""}>${t}</button>`).join("")}</div>`,
+const G=[["ds_c","🃏 Cartas"],["ds_h","✨ Habilidades"],["ds_i","📥 Importar"],["ds_l","🚀 Publicar"],["ds_x","⚖️ Equilíbrio"]],K=[["ds_k","📦 Pacote"],["ds_v","🎨 Visual"],["ds_st","🎴 Novatos"]],E=[["ds_r","💎 Valores"],["ds_m","📋 Missões"],["ds_q","🏅 Prêmios"],["ds_t","🎁 Presentes"]],S=[["ds_s","💾 Backup"],["ds_g","🧪 Testes"],["ds_z","🗑️ Excluir"]];
+G.x='<button data-cp-admin="pending">📋 Pendências</button>';E.x='<button data-cp-admin="shop">🛒 Loja diária</button>';
+bar=(g,id)=>`<div class="ytb">${g.map(([i,t])=>`<button data-adm="p${i}"${i==id?' class="on"':""}>${t}</button>`).join("")}${g.x||""}</div>`,
 ck=()=>{["kn","ko","kb","kt","kx","kc"].forEach(i=>$(i).value="");$("ke").value="🎴";$("kh").value=200;$("kf").value=0},
 fk=v=>{const d=ADM.p.find(x=>x.id==v);if(!d||P.concat(PX).some(p=>p.id==v))return;const o=Object.assign({},d,ADM.po[v]||{});
 $("kn").value=o.n;$("ke").value=o.e;$("kh").value=o.h;$("kc").value=o.cost||"";$("ko").value=o.odds?o.odds.join(","):"";$("kb").value=o.bk||"";$("kt").value=o.ate?new Date(o.ate-new Date(o.ate).getTimezoneOffset()*6e4).toISOString().slice(0,16):"";$("kx").value=o.esp||"";$("kf").value=o.fim||0},
@@ -8148,7 +8155,7 @@ const id="p"+rid(),e=g("ke")||"🎴",h=+g("kh")||200,cost=+g("kc")||0;ADM.p.push
 ADM.po[id]={n,e,h,cost,odds:od,bk:g("kb").trim(),ate:g("kt")?new Date(g("kt")).getTime():0,esp:+g("kx")>0?1:0,fim:+g("kf")||0};
 if(PEND&&PW=="fpb"){IMG["pkb_"+id]=PEND;ADM.po[id].bk=""}adxGo()};
 function unify(){if(!$("ds_c")||$("y_on"))return;cfg.insertAdjacentHTML("beforeend",'<i id="y_on" hidden></i>');
-[[G],[K]].forEach(([g])=>g.forEach(([id])=>{const s=$(id)&&$(id).querySelector("summary");s&&s.insertAdjacentHTML("afterend",bar(g,id))}));
+[[G],[K],[E],[S]].forEach(([g])=>g.forEach(([id])=>{const s=$(id)&&$(id).querySelector("summary");s&&s.insertAdjacentHTML("afterend",bar(g,id))}));
 const t=(p,b,s)=>{const x=cfg.querySelector(`.at[data-adm="p${p}"]`);if(x){x.querySelector("b").textContent=b;x.querySelector("small").textContent=s}};
 t("ds_c","Cartas","Criar e editar cartas, habilidades e elementos");t("ds_k","Pacotes","Criar e editar pacotes e o visual deles");
 const nl=ADM.p.filter(d=>!P.some(p=>p.id==d.id)).map(d=>`<option value="${d.id}">${d.e} ${d.n} · sem cartas ainda</option>`).join(""),ek=$("ek"),k2=$("ek2");
@@ -8517,7 +8524,7 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     const noPhoto=ALL.filter(c=>!(c.img||IMG[c.id]));
     const noStory=ALL.filter(c=>!String(c.d||"").trim());
     const section=(title,arr,kind)=>`<div class="cp-block"><b>${title} · ${arr.length}</b>${arr.length?arr.slice(0,120).map(c=>`<div class="cp-row"><div style="flex:1"><b>${escCP(c.n||"Sem nome")}</b><small>${escCP(c.id||"")} · ${escCP(c.pk||"")}</small></div><span class="cp-chip">${kind}</span></div>`).join(""):'<p>Nenhuma pendência nesta categoria.</p>'}</div>`;
-    openExtra("🛠 Pendências do ADM",`<p>Visão rápida de cartas que precisam de revisão antes ou depois de serem lançadas. Cartas sem imagem/história podem continuar jogáveis; a lista é apenas uma fila de trabalho.</p><div class="cp-block"><b>Resumo</b><div>${drafts.length} rascunhos · ${noPhoto.length} sem foto · ${noStory.length} sem história</div></div>${section("📦 Rascunhos",drafts,"Rascunho")}${section("🖼️ Sem foto",noPhoto,"Foto")}${section("📖 Sem história",noStory,"História")}<button class="bt cy" data-cp-admin-go="pds_l">Abrir lançamentos/rascunhos</button><button class="bt gh" data-cp-admin-go="pds_c">Abrir criação e edição de cartas</button>`);
+    openExtra("🛠 Pendências do ADM",`<p>Cartas para revisar. Elas continuam jogáveis.</p><div class="cp-block"><b>Resumo</b><div>${drafts.length} rascunhos · ${noPhoto.length} sem foto · ${noStory.length} sem história</div></div>${section("📦 Rascunhos",drafts,"Rascunho")}${section("🖼️ Sem foto",noPhoto,"Foto")}${section("📖 Sem história",noStory,"História")}<button class="bt cy" data-cp-admin-go="pds_l">Abrir lançamentos/rascunhos</button><button class="bt gh" data-cp-admin-go="pds_c">Abrir criação e edição de cartas</button>`);
   }
 
   // ADM shop editor. Offers are stored inside ADM and follow the existing cloud backup/sync route.
@@ -8526,8 +8533,8 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     const offers=ADM.shop.map(o=>`<div class="cp-row"><div style="flex:1"><b>${o.kind==="card"?"🎴":"📦"} ${escCP(shopLabel(o)||o.item)}</b><small>${o.kind==="card"?"Carta":"Pacote"} · ${fmt(shopPrice(o))} 💎${cfg.autoPricing&&o.kind==="card"?" · vale o preço do rank (o valor digitado no cadastro é ignorado)":" · vale o preço digitado"} · ${o.active===false?"pausada":"ativa"}</small></div><button class="bt gh" style="width:auto;padding:7px 9px" data-cp-del-shop="${escCP(o.id)}">Remover</button></div>`).join("")||"<p>Nenhuma oferta cadastrada.</p>";
     const manualList=ADM.shop.filter(validShopOffer).map(o=>`<label class="cp-row" style="justify-content:flex-start"><input type="checkbox" data-cp-shop-manual="${escCP(o.id)}" ${cfg.manualIds.includes(o.id)?"checked":""} style="width:18px;flex:none"><span style="flex:1"><b>${escCP(shopLabel(o)||o.item)}</b><small>${o.kind==="card"?"Carta":"Pacote"} · ${fmt(shopPrice(o))} 💎</small></span></label>`).join("")||"<p>Cadastre ofertas para escolher a rotação manual.</p>";
     const rankPriceFields=CP_RANK_NAMES.map((rank,ri)=>`<label class="cp-shop-price-row"><b>${rank}</b><input type="number" min="1" max="999999999" step="1" data-cp-shop-price-rank="${rank}" value="${cfg.rankPrices[rank]}"${ri>ECO.loja.rankMax?" disabled":""}><small>${ri>ECO.loja.rankMax?"só na Loja de Essência":"fragmentos"}</small></label>`).join("");
-    const root=openExtra("🛒 Configurar loja diária",`<p>Escolha entre ofertas cadastradas ou sorteio do catálogo global. O modo aleatório permite escolher quantas cartas aparecem juntas, combinar qualquer conjunto dos nove ranks e aplicar filtros adicionais de origem e imagem. Todos os jogadores veem o mesmo resultado durante o ciclo.</p>
-      <div class="cp-block"><b>1. Como a loja funciona</b><label>Modo<select id="cpShopMode"><option value="auto" ${cfg.mode==="auto"?"selected":""}>Automático · girar ofertas cadastradas</option><option value="random" ${cfg.mode==="random"?"selected":""}>Aleatório · sortear cartas existentes</option><option value="manual" ${cfg.mode==="manual"?"selected":""}>Manual · ofertas escolhidas</option></select></label><label>Intervalo da rotação (horas)<input id="cpShopHours" type="number" min="1" max="720" step="1" value="${cfg.intervalHours}"></label><label>Quantidade de cartas aleatórias ao mesmo tempo<input id="cpShopRandomCount" type="number" min="1" max="100" step="1" value="${cfg.randomCount}"></label><div class="cp-block"><b>Filtros do sorteio de cartas</b><label>Quais cartas podem aparecer?<select id="cpShopCardFilter">${cardFilterOpts}</select></label><div class="cp-rank-filter"><b>Quais ranks podem aparecer?</b><div class="cp-rank-actions"><button type="button" class="bt gh" data-cp-shop-ranks-all>Selecionar todos</button><button type="button" class="bt gh" data-cp-shop-ranks-none>Limpar seleção</button></div><div class="cp-rank-grid">${shopRankChecks}</div></div><p class="mut" id="cpShopFilterCount">${shopFilteredCards(cfg.cardFilter,cfg.rankRanks).length} cartas disponíveis com os filtros atuais.</p><label>Preço fixo do sorteio (quando o preço por rank estiver desligado)<input id="cpShopCatalogPrice" type="number" min="1" step="1" value="${cfg.catalogPrice}"></label><small>No modo aleatório, a loja sorteia a quantidade configurada de cartas diferentes por ciclo, sem repetir na mesma rotação. Se o catálogo tiver menos cartas elegíveis que a quantidade definida, não salva a configuração.</small></div><label class="cp-row" style="justify-content:flex-start"><input type="checkbox" id="cpShopAutoPrice" ${cfg.autoPricing?"checked":""} style="width:18px;flex:none"><span><b>Preço automático por rank</b><small>F 80 · E 120 · D 200 · C 300 · B 450 · A 700 · S 1.800 · SS 4.500 · SSS 12.000 fragmentos</small></span></label><div class="cp-block cp-shop-price-editor"><b>Preços automáticos por rank</b><p>Valores iniciais preservados do jogo. Ajuste cada rank; estes preços valem para cartas sorteadas e ofertas de cartas quando o preço automático está ligado.</p><button type="button" class="bt gh" data-cp-shop-reset-prices>Restaurar preços originais</button><div class="cp-shop-price-grid">${rankPriceFields}</div></div><div class="cp-block"><b>Ofertas fixas (máximo 3 · usadas nos modos automático/manual)</b>${manualList}</div><button class="bt cy" data-cp-save-shop-settings>Salvar configuração da loja</button></div>
+    const root=openExtra("🛒 Configurar loja diária",`<p>Como a loja monta as ofertas.</p>
+      <div class="cp-block"><b>1. Como a loja funciona</b><label>Modo<select id="cpShopMode"><option value="auto" ${cfg.mode==="auto"?"selected":""}>Automático · girar ofertas cadastradas</option><option value="random" ${cfg.mode==="random"?"selected":""}>Aleatório · sortear cartas existentes</option><option value="manual" ${cfg.mode==="manual"?"selected":""}>Manual · ofertas escolhidas</option></select></label><label>Intervalo da rotação (horas)<input id="cpShopHours" type="number" min="1" max="720" step="1" value="${cfg.intervalHours}"></label><label>Quantidade de cartas aleatórias ao mesmo tempo<input id="cpShopRandomCount" type="number" min="1" max="100" step="1" value="${cfg.randomCount}"></label><div class="cp-block"><b>Filtros do sorteio de cartas</b><label>Quais cartas podem aparecer?<select id="cpShopCardFilter">${cardFilterOpts}</select></label><div class="cp-rank-filter"><b>Quais ranks podem aparecer?</b><div class="cp-rank-actions"><button type="button" class="bt gh" data-cp-shop-ranks-all>Selecionar todos</button><button type="button" class="bt gh" data-cp-shop-ranks-none>Limpar seleção</button></div><div class="cp-rank-grid">${shopRankChecks}</div></div><p class="mut" id="cpShopFilterCount">${shopFilteredCards(cfg.cardFilter,cfg.rankRanks).length} cartas disponíveis com os filtros atuais.</p><label>Preço fixo do sorteio (quando o preço por rank estiver desligado)<input id="cpShopCatalogPrice" type="number" min="1" step="1" value="${cfg.catalogPrice}"></label><small>No modo aleatório, a loja sorteia a quantidade configurada de cartas diferentes por ciclo, sem repetir na mesma rotação. Se o catálogo tiver menos cartas elegíveis que a quantidade definida, não salva a configuração.</small></div><label class="cp-row" style="justify-content:flex-start"><input type="checkbox" id="cpShopAutoPrice" ${cfg.autoPricing?"checked":""} style="width:18px;flex:none"><span><b>Preço automático por rank</b><small>F 80 · E 120 · D 200 · C 300 · B 450 · A 700 · S 1.800 · SS 4.500 · SSS 12.000 fragmentos</small></span></label><div class="cp-block cp-shop-price-editor"><b>Preços automáticos por rank</b><p>Preço de cada rank em fragmentos.</p><button type="button" class="bt gh" data-cp-shop-reset-prices>Restaurar preços originais</button><div class="cp-shop-price-grid">${rankPriceFields}</div></div><div class="cp-block"><b>Ofertas fixas (máximo 3 · usadas nos modos automático/manual)</b>${manualList}</div><button class="bt cy" data-cp-save-shop-settings>Salvar configuração da loja</button></div>
       <div class="cp-block"><b>2. Adicionar oferta</b><label>Tipo<select id="cpShopKind"><option value="card">Carta</option><option value="pack">Pacote</option></select></label><label>Item<select id="cpShopItem">${cardOpts}</select></label><label>Preço do cadastro em fragmentos ${cfg.autoPricing?"(⚠ ignorado para CARTAS enquanto o preço automático por rank estiver ligado; vale para pacotes)":"(vale para esta oferta)"}<input id="cpShopPrice" type="number" min="1" step="1" value="500"></label><button class="bt cy" data-cp-add-shop>Adicionar oferta</button></div><div class="cp-block"><b>3. Catálogo (${ADM.shop.length})</b>${offers}</div>`);;
     const k=root.querySelector("#cpShopKind"),sel=root.querySelector("#cpShopItem"),filterSel=root.querySelector("#cpShopCardFilter"),count=root.querySelector("#cpShopFilterCount"),getRanks=()=>[...root.querySelectorAll("[data-cp-shop-rank]:checked")].map(x=>x.dataset.cpShopRank);root.querySelector("[data-cp-shop-reset-prices]")?.addEventListener("click",()=>{CP_RANK_NAMES.forEach((rank,i)=>{const input=root.querySelector(`[data-cp-shop-price-rank="${rank}"]`);if(input)input.value=SHOP_RANK_PRICES[i]});toast("Preços originais restaurados. Salve para aplicar.")});const refreshFilterCount=()=>{const n=shopFilteredCards(filterSel?.value||"no-special",getRanks()).length;if(count)count.textContent=`${n} cartas disponíveis com os filtros atuais.`};filterSel?.addEventListener("change",refreshFilterCount);root.querySelectorAll("[data-cp-shop-rank]").forEach(x=>x.addEventListener("change",refreshFilterCount));root.querySelector("[data-cp-shop-ranks-all]")?.addEventListener("click",()=>{root.querySelectorAll("[data-cp-shop-rank]").forEach(x=>x.checked=true);refreshFilterCount()});root.querySelector("[data-cp-shop-ranks-none]")?.addEventListener("click",()=>{root.querySelectorAll("[data-cp-shop-rank]").forEach(x=>x.checked=false);refreshFilterCount()});k.addEventListener("change",()=>{sel.innerHTML=k.value==="card"?cardOpts:packOpts});
   }
@@ -8616,7 +8623,7 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
   const $=(s,r=document)=>r.querySelector(s);
   const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
   const tileInfo={
-    ds_c:["🃏","Editor de cartas","Ficha, atributos, arte e habilidades no mesmo lugar"],
+    ds_c:["🃏","Cartas","Editor, habilidades, importar, publicar e equilíbrio"],
     ds_starter:["🎁","Cartas iniciais (12)","Escolha exatamente as 12 cartas que novos jogadores recebem"],
     ds_k:["📦","Pacotes","Cartas, chances, preço e aparência dos pacotes"],
     ds_l:["🚀","Publicar cartas","Rascunhos e lançamentos para todos os jogadores"],
@@ -8625,23 +8632,22 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     ds_e:["🧬","Elementos","Tipos, combinações e relações elementais"],
     ds_v:["🎨","Visual dos pacotes","Arte, formato, cores e textos dos pacotes"],
     ds_x:["⚖️","Equilíbrio e balanceamento","Ajustar cartas individualmente ou em lote por rank"],
-    ds_b:["⚔️","Batalhas e arenas","Troféus, turnos, regras e chefes de arena"],
+    ds_b:["⚔️","Batalhas","Regras, troféus, arenas e Boss Raid"],
     ds_q:["🏆","Prêmios de batalha","Cartas especiais e recompensas por atividade"],
-    ds_r:["💎","Economia do jogo","Fragmentos, preços, pacotes e recompensas"],
+    ds_r:["💎","Economia","Valores, prêmios, missões, presentes e loja"],
     ds_m:["📋","Missões e progresso","Missões diárias, semanais e coleção"],
     ds_t:["🎁","Presentes","Distribuir cartas, pacotes e fragmentos"],
     ds_p:["📊","Painel geral","Resumo, indicadores e simuladores"],
     ds_g:["🧪","Ferramentas de teste","Diagnóstico e ações de teste do jogo"],
-    ds_s:["💾","Backup e dados","Exportar, importar e restaurar conteúdo"],
+    ds_s:["💾","Sistema","Backup, testes e exclusões"],
     ds_z:["🗑️","Excluir conteúdo","Zona de risco para exclusões permanentes"]
   };
   const groups=[
-    {title:"Cartas e criação",desc:"Editor, fichas de IA, habilidades, elementos e equilíbrio das cartas.",ids:["ds_c","ds_i","ds_h","ds_e","ds_x","ds_l"]},
-    {title:"Pacotes e início do jogo",desc:"Conteúdo, aparência dos pacotes e as 12 cartas de boas-vindas.",ids:["ds_k","ds_v","ds_starter"]},
-    {title:"Batalhas e arenas",desc:"Progressão, regras dos rivais, chefes e recompensas das partidas.",ids:["ds_b","ds_q"]},
-    {title:"Loja e progresso",desc:"Preços, fragmentos, missões, presentes e evolução dos jogadores.",ids:["ds_r","ds_m","ds_t"]},
-    {title:"Sistema e manutenção",desc:"Indicadores, testes, backups e exclusões administrativas.",ids:["ds_p","ds_g","ds_s","ds_z"]}
+    {title:"Conteúdo",ids:["ds_c","ds_k"]},
+    {title:"Regras do jogo",ids:["ds_r","ds_b"]},
+    {title:"Sistema",ids:["ds_p","ds_s"]}
   ];
+  const opsTiles={ops_pending:["📋","Pendências","data-cp-admin=\"pending\""],ops_shop:["🛒","Loja diária","data-cp-admin=\"shop\""],ops_raid:["👹","Boss Raid","data-cp-raid-config"]};
   function setButtonText(btn,info){
     if(!btn||!info)return;
     const icon=$("i",btn),title=$("b",btn),desc=$("small",btn);
@@ -8662,7 +8668,7 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
     const frag=document.createDocumentFragment();
     const intro=document.createElement("div");
     intro.className="adm-home-intro";
-    intro.innerHTML='<h2>O que você deseja gerenciar?</h2><p>Cartas e pacotes em Conteúdo, combate em Batalhas, dados em Sistema.</p>';
+    intro.innerHTML='<h2>Painel do ADM</h2>';
     frag.append(intro);
     groups.forEach((group,index)=>{
       const section=document.createElement("section");
@@ -8670,15 +8676,15 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
       const header=document.createElement("header");
       const label=document.createElement("div");
       const h=document.createElement("h3");h.textContent=group.title;
-      const p=document.createElement("p");p.textContent=group.desc;
-      label.append(h,p);
+      label.append(h);
       const n=document.createElement("span");n.className="adm-group-index";n.textContent=String(group.ids.length);n.title=group.ids.length+" ferramentas";
       header.append(label,n);section.append(header);
       const grid=document.createElement("div");grid.className="adm-home-grid";
       group.ids.forEach(id=>{
+        if(opsTiles[id]){const o=opsTiles[id],t=document.createElement("button");t.type="button";t.className="at cp-admin-custom-tile";t.setAttribute(o[2].split("=")[0],(o[2].split("=")[1]||"").replace(/"/g,""));t.innerHTML=`<i>${o[0]}</i><b>${o[1]}</b><small></small>`;grid.append(t);return}
         if(id==="ds_starter"){
           const btn=document.createElement("button");btn.type="button";btn.className="at cp-admin-custom-tile";btn.dataset.cpAdminShortcut="ds_st";
-          btn.innerHTML='<i>🎁</i><b>Cartas iniciais (12)</b><small>Escolha as 12 cartas que todos os novos jogadores recebem</small>';
+          btn.innerHTML='<i>🎁</i><b>Cartas iniciais</b><small></small>';
           grid.append(btn);return;
         }
         const btn=old.get(id);if(!btn)return;
@@ -8689,7 +8695,7 @@ if(!cfg.hidden&&$("ds_c"))try{unify()}catch(x){console.warn("v2.3",x)}
       section.append(grid);frag.append(section);
     });
     root.replaceChildren(frag);
-    if(operations)root.prepend(operations);
+    if(operations)operations.remove();
     root.dataset.cpUiHome="1";
     const search=$("#asq");if(search)search.placeholder="Buscar qualquer opção ou regra do ADM…";
   }
@@ -12343,7 +12349,363 @@ setInterval(()=>{try{if(typeof S==="undefined"||!S||typeof S.fr!=="number")retur
 #cpWishList :has(>input:checked),#cpWishList label:has(input:checked){border-color:#ffd166;background:#ffd16618}
 #cpWishList input{accent-color:#ffd166;width:20px;height:20px}
 
+
+/* ===== v2.2 ===== */
+#cpm .cpx-nav{top:0;background:#1b1a20;z-index:6}
+#cpm .cpx-nav::before{content:"";position:absolute;left:-18px;right:-18px;top:-30px;height:30px;background:var(--sf,#252528);z-index:-1}
+#cpm .cpx-av i{display:none}
+#cpm .cprprizes{grid-template-columns:repeat(3,1fr);gap:8px;padding:0;background:none}
+#cpm .cprprizes>div{flex-direction:column;align-items:center;gap:3px;padding:14px 6px;border-radius:16px;border:1px solid #ffffff18;text-align:center;background:#ffffff09}
+#cpm .cprprizes>div:nth-child(1){background:linear-gradient(160deg,#ffd16640,#ffffff08);border-color:#ffd16688}
+#cpm .cprprizes>div:nth-child(2){background:linear-gradient(160deg,#c9d3e038,#ffffff08);border-color:#c9d3e077}
+#cpm .cprprizes>div:nth-child(3){background:linear-gradient(160deg,#e08a4a38,#ffffff08);border-color:#e08a4a77}
+#cpm .cprprizes span{font-size:1.9rem}#cpm .cprprizes b{font-size:.78rem;white-space:normal}#cpm .cprprizes small{font-size:.68rem;color:#e4c9ff}
+#cpm .cprprev{padding:16px;border-radius:18px;border:1px dashed #ffd16655;background:#ffd16610;text-align:center}
+#cpm .cprprev h4{margin:0 0 6px;font-size:.9rem}
+#cpm .cprprev .cprnote{margin:3px 0;color:var(--mut)}
+#cpm .cprrow{padding:10px 12px;border-radius:16px;border:1px solid #ffffff10;background:#ffffff09;margin:6px 0}
+#cpm .cprpos{font-weight:900;color:#ffd166}
+#cpm .cprscore b{color:#ffd166;font-size:1.1rem}
+#cpm .cprpodium{gap:8px}
+#cpm .cprpod{border-radius:18px}
+
+/* ===== ADM · v2 ===== */
+#cfg.adm .cp-ops-home-group{display:none!important}
+#cfg .adm-home-intro h2{font-size:1.5rem;margin:6px 0 2px}
+#cfg .adm-home-group{--gc:#c78bff;padding:14px;border-radius:22px;border:1px solid color-mix(in srgb,var(--gc) 30%,#ffffff10);background:linear-gradient(160deg,color-mix(in srgb,var(--gc) 13%,transparent),#ffffff04)}
+#cfg .adm-home-group:nth-of-type(1){--gc:#f4566a}#cfg .adm-home-group:nth-of-type(2){--gc:#ffb347}#cfg .adm-home-group:nth-of-type(3){--gc:#6fbf8e}#cfg .adm-home-group:nth-of-type(4){--gc:#5aa9e6}#cfg .adm-home-group:nth-of-type(5){--gc:#8f8d96}
+#cfg .adm-home-group header h3{color:var(--gc);font-size:.8rem;letter-spacing:.12em}
+#cfg .adm-home-group header p,#cfg .adm-home-grid .at small:empty,#cfg .adm-home-grid .at small{display:none}
+#cfg .adm-home-grid .at{min-height:62px;border-radius:16px;border-color:color-mix(in srgb,var(--gc) 22%,#ffffff12)}
+#cfg .adm-home-grid .at:active{transform:scale(.97)}
+#cfg .adm-home-grid .at i{background:color-mix(in srgb,var(--gc) 20%,transparent)}
+/* Editor: abas sem a de Elementos, fixas no topo e sem sobrepor o conteúdo */
+#cfg .ytb button[data-adm="pds_e"]{display:none!important}
+#cfg .ytb{position:sticky;top:0;z-index:30;display:flex;gap:6px;padding:5px;background:#161618;box-shadow:0 8px 14px -6px #000a}
+#cfg .ytb button{flex:1}
 </style>
+<script id="cp-adm-v2-js">
+(()=>{const cfg=document.getElementById("cfg");if(!cfg)return;const go=()=>{cfg.querySelectorAll("p,small,div").forEach(e=>{if(e.children.length||e.dataset.cpHid)return;if(/^Inclui cartas, pacotes, habilidades/.test((e.textContent||"").trim())&&!e.closest("#ds_s")){e.dataset.cpHid=1;e.style.display="none"}})};new MutationObserver(go).observe(cfg,{childList:true,subtree:true});go()})();
+</script>
+<script id="cp-adm-v3-js">
+(()=>{const cfg=document.getElementById("cfg");if(!cfg||!window.cpRegisterAdxOpenHook)return;
+const KT={open:"Abrir pacotes",win:"Vencer na arena",play:"Jogar batalhas",abil:"Usar habilidades",kill:"Derrotar cartas",conv:"Converter repetidas",fuse:"Fundir cartas",eluse:"Habilidades elementais",charge:"Iniciar cargas",draw:"Comprar cartas",frd:"Duelos com amigos",boss:"Desafios Boss",bosswin:"Derrotar Boss"};
+const acc=id=>{const pg=document.getElementById(id);if(!pg||pg.dataset.acc)return;const hs=[...pg.querySelectorAll(":scope>h3.ash")];if(!hs.length)return;pg.dataset.acc=1;hs.forEach((h,i)=>{const g=h.nextElementSibling;if(!g)return;const d=document.createElement("details");d.className="adm-acc";if(i==0)d.open=true;d.innerHTML="<summary>"+h.textContent+"</summary>";h.before(d);d.append(g)})};
+const ed=(ta,mode)=>{if(!ta||ta.dataset.ed)return;ta.dataset.ed=1;const box=document.createElement("div");ta.style.display="none";ta.after(box);
+const parse=()=>ta.value.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{if(mode=="c"){const[a,n]=l.split("#"),p=a.split("|");return{id:p[0],m:String(p[1]||1).trim(),k:String(p[2]||0).trim(),t:(n||"").trim()}}const p=l.split("|");return{t:p[0]||"",k:p[1]||"open",m:p[2]||1}});
+let rows=parse();const sync=()=>{ta.value=rows.map(r=>mode=="c"?r.id+"|"+r.m+"|"+r.k+" # "+r.t:r.t+"|"+r.k+"|"+r.m).join("\n");ta.dispatchEvent(new Event("input",{bubbles:true}));ta.dispatchEvent(new Event("change",{bubbles:true}))};
+const draw=()=>{box.innerHTML=rows.map((r,i)=>mode=="c"?`<div class="ms-row"><input class="ms-t" data-i="${i}" data-f="t" value="${(r.t||"").replace(/"/g,"&quot;")}" placeholder="Nome"><input type="number" data-i="${i}" data-f="m" value="${r.m}" title="Meta"><input type="number" data-i="${i}" data-f="k" value="${r.k}" title="Pacotes"><button data-del="${i}">✕</button></div>`:`<div class="ms-row"><input class="ms-t" data-i="${i}" data-f="t" value="${(r.t||"").replace(/"/g,"&quot;")}" placeholder="Título"><select data-i="${i}" data-f="k">${Object.entries(KT).map(([k,v])=>`<option value="${k}"${k==r.k?" selected":""}>${v}</option>`).join("")}</select><input type="number" data-i="${i}" data-f="m" value="${r.m}" title="Meta"><button data-del="${i}">✕</button></div>`).join("")+'<button class="bt gh ms-add">＋ Nova missão</button>'};
+box.addEventListener("input",e=>{const t=e.target,i=t.dataset.i;if(i==null)return;rows[i][t.dataset.f]=t.value;sync()});
+box.addEventListener("change",e=>{const t=e.target,i=t.dataset.i;if(i==null)return;rows[i][t.dataset.f]=t.value;sync()});
+box.addEventListener("click",e=>{const d=e.target.closest("[data-del]");if(d){rows.splice(+d.dataset.del,1);sync();draw();return}if(e.target.closest(".ms-add")){rows.push(mode=="c"?{id:"x"+Date.now()%1e6,m:1,k:1,t:""}:{t:"Nova missão",k:"open",m:1});sync();draw()}});draw()};
+window.cpRegisterAdxOpenHook(id=>{setTimeout(()=>{if(id=="ds_m"){ed(document.getElementById("rdp"),"d");ed(document.getElementById("rwp"),"d");ed(document.getElementById("rmc"),"c")}},30)})})();
+</script>
+<!-- ============================================================
+  MODO ADM · PAINEL ÚNICO (v4)
+  Substitui as camadas antigas de navegação do ADM (abas .ytb, home de 6 tiles, botões repetidos).
+  REGRA: aqui só se reorganiza a tela. Os campos (IDs), os botões data-k e as funções de salvar continuam os originais.
+  Estrutura: 5 abas → seções recolhíveis (uma aberta por vez).
+    🃏 Cartas · 📦 Pacotes · 💎 Economia · ⚔️ Batalhas · 🧰 Ferramentas
+  Para mover um campo de lugar, mude só os IDs na lista TABS abaixo.
+============================================================ -->
+<style id="cp-adm-hub-css">
+#cfg .ag,#cfg .asr,#cfg .asl,#cfg .ytb,#cfg .anv,#cfg .adm-inline-actions,#cfg .af,#cfg .cp-ops-home-group,#cfg #ds_n,#cfg .ah .ab[data-adm="home"]{display:none!important}
+#cfg .hub{display:block;padding-bottom:96px}
+#cfg .hub [hidden]{display:none!important}
+#cfg .hub-search{width:100%;margin:2px 0 12px}
+#cfg .hub-results{display:grid;gap:6px;margin:-4px 0 12px}
+#cfg .hub-results button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border-radius:12px;border:1px solid #ffffff14;background:#ffffff08;color:var(--fg)}
+#cfg .hub-results small{color:var(--mut)}
+#cfg .hub-home{display:grid;gap:10px}
+#cfg .hub-tile{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:12px;width:100%;padding:14px;border-radius:18px;border:1px solid color-mix(in srgb,var(--hc) 34%,#ffffff12);background:linear-gradient(150deg,color-mix(in srgb,var(--hc) 14%,transparent),#ffffff05);color:var(--fg);text-align:left}
+#cfg .hub-tile i{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;font-style:normal;font-size:1.5rem;background:color-mix(in srgb,var(--hc) 22%,transparent)}
+#cfg .hub-tile b{display:block;font-size:1rem}
+#cfg .hub-tile small{display:block;margin-top:2px;color:var(--mut);font-size:.72rem;line-height:1.3}
+#cfg .hub-tile em{font-style:normal;color:var(--mut);font-size:1.3rem}
+#cfg .hub-tile:active{transform:scale(.98)}
+#cfg .hub-tab{display:grid;gap:10px}
+#cfg .hub-bar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px;padding:5px;border:1px solid #ffffff14;border-radius:14px;background:#161618;position:sticky;top:0;z-index:30;box-shadow:0 8px 14px -8px #000c}
+#cfg .hub-bar::-webkit-scrollbar{display:none}
+#cfg .hub-bar button{flex:1 1 0;min-width:0;min-height:44px;padding:5px 2px;border-radius:10px;border:0;background:none;color:var(--mut);font-weight:800;font-size:.62rem;line-height:1.15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+#cfg .hub-bar button i{font-style:normal;font-size:1.05rem}
+#cfg .hub-bar button.on{background:color-mix(in srgb,var(--hc) 24%,#252528);color:var(--fg);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--hc) 50%,transparent)}
+#cfg details.hub-sec{margin:0;border:1px solid #ffffff16;border-radius:16px;background:#ffffff05;overflow:clip}
+#cfg details.hub-sec>summary{display:flex!important;align-items:center;gap:8px;padding:15px 16px;font-weight:850;font-size:.9rem;list-style:none;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--fg)}
+#cfg .hub-page{display:block}#cfg .hub-page>.fg,#cfg .hub-page .fg{padding:14px}
+#cfg details.hub-sec>summary::-webkit-details-marker{display:none}
+#cfg details.hub-sec>summary::after{content:"›";margin-left:auto;color:var(--mut);font-size:1.3rem;transition:transform .2s}
+#cfg details.hub-sec[open]>summary{border-bottom:1px solid #ffffff12;background:#ffffff07}
+#cfg details.hub-sec[open]>summary::after{transform:rotate(90deg)}
+#cfg details.hub-sec>.hub-body,#cfg details.hub-sec>.fg{display:grid;gap:12px;padding:14px}
+#cfg details.hub-sec .hub-body>.afl,#cfg details.hub-sec .hub-body>*{min-width:0}
+#cfg .hub-sec .hub-note{margin:0;padding:10px 12px;border-radius:12px;border:1px dashed #ffffff1f;color:var(--mut);font-size:.76rem;line-height:1.4}
+#cfg .hub-sec .hub-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#cfg .hub-sec .hub-actions{display:grid;gap:8px}
+#cfg details.hub-sub{border:1px solid #ffffff12;border-radius:12px;background:#ffffff04;margin:0 0 10px;overflow:clip}
+#cfg details.hub-sub>summary{padding:12px 14px;font-weight:800;font-size:.82rem;list-style:none;cursor:pointer;color:var(--fg)}
+#cfg details.hub-sub>summary::-webkit-details-marker{display:none}
+#cfg details.hub-sub>.afl{padding:10px}
+#cfg .hub-sec .hub-actions.two{grid-template-columns:1fr 1fr}
+#cfg .hub-savebar{position:sticky;bottom:0;z-index:20;margin:14px -4px 0;padding:10px 4px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,#16161800,#161618 30%)}
+#cfg .hub-savebar .bt{width:100%}
+#cfg .hub-danger{border-color:#f4566a55!important;color:#ff8c9a!important}
+#cfg .ms-row{display:grid;grid-template-columns:1fr 84px 40px;gap:6px;align-items:center;margin:0 0 8px;padding:8px;border-radius:12px;background:#ffffff07;border:1px solid #ffffff10}
+#cfg .ms-row .ms-t{grid-column:1/-1}
+#cfg .ms-row input,#cfg .ms-row select{min-width:0;width:100%;margin:0}
+#cfg .ms-row button{width:38px;height:38px;border-radius:10px;border:1px solid #ffffff18;background:#ffffff0a;color:var(--fg)}
+#cfg .ms-add{width:100%;margin-top:4px}
+</style>
+<script id="cp-adm-hub-js">
+(()=>{"use strict";
+const cfg=document.getElementById("cfg");if(!cfg)return;
+const $=id=>document.getElementById(id);
+const ST=sessionStorage;
+/* ---------- MAPA DAS ABAS ----------
+   Cada seção: {t:título, page:"ds_x" (página antiga inteira)}  ou  {t:título, ids:[campos], ...extras}
+   ids = IDs dos campos (a caixa .afl de cada um é movida). btn = botões [data-k] movidos junto. */
+const TABS=[
+ {id:"cards",ico:"🃏",t:"Cartas",d:"Criar, editar, habilidades, importar, publicar e equilibrar",hc:"#f4566a",secs:[
+  {t:"✏️ Criar e editar carta",page:"ds_c"},
+  {t:"✨ Habilidades",page:"ds_h"},
+  {t:"🔥 Elementos",page:"ds_e"},
+  {t:"📥 Importar ficha (IA)",page:"ds_i"},
+  {t:"🚀 Rascunhos e publicação",page:"ds_l",extra:"pend"},
+  {t:"⚖️ Equilíbrio por rank",page:"ds_x"}]},
+ {id:"packs",ico:"📦",t:"Pacotes",d:"Pacote, aparência e cartas iniciais",hc:"#ffb347",secs:[
+  {t:"📦 Dados do pacote",page:"ds_k"},
+  {t:"🎨 Aparência do pacote",page:"ds_v",foot:["@sv","💾 Salvar aparência"]},
+  {t:"🎴 Cartas iniciais (novatos)",page:"ds_st",foot:["@st","💾 Salvar 12 cartas iniciais"]}]},
+ {id:"eco",ico:"💎",t:"Economia",d:"Fragmentos, pacotes grátis, prêmios, missões e loja",hc:"#6fbf8e",save:1,secs:[
+  {t:"💰 Fragmentos e preços",ids:["rfr","rcu","rini","rrc","cf_fusMult","cf_sssLoja","cf_diaria"]},
+  {t:"📦 Pacotes grátis e limites",ids:["cf_pacVit","cf_gratisHoras","cf_gratisMax","cf_gratisLivre","cf_gratisJogar","cf_tetoDia","cf_guardMax","cf_rewardRandomChance"]},
+  {t:"⚔️ Prêmios das lutas",ids:["cf_limiteDia","cf_derrota","cf_amigoFrag","cf_amigoDia","cf_arf0","cf_arfK","cf_arenaPac","cf_arenaPacMais","cf_arenaFrag","cf_campPac","cf_campFrag","cf_runFrag","cf_runPacCada","cf_torSSS","cf_torSSSAndar"]},
+  {t:"📅 Desafio do dia",ids:["cf_diaFrag","cf_diaPac","cf_diaSeqPct","cf_diaSeqMax","cf_diaFolga","cf_diaSemPerda","cf_diaEsSemPerda"]},
+  {t:"💠 Essência e loja de Essência",ids:["cf_esTeto","cf_esDesafio","cf_esTorreMin","cf_esTorreMax","cf_esTorreChefe","cf_esRun","cf_esLend","cf_esMit","cf_esS","cf_esSS","cf_esSSS","cf_esSemana"]},
+  {t:"🏆 Ranking semanal",ids:["wr1pk","wr1fr","wr2pk","wr2fr","wr3pk","wr3fr"],pair:1},
+  {t:"📋 Missões",page:"ds_m"},
+  {t:"🏅 Cartas de prêmio",page:"ds_q"},
+  {t:"🛒 Loja diária",extra:"shop"}]},
+ {id:"battle",ico:"⚔️",t:"Batalhas",d:"Regras da luta, troféus, arenas, bots e Boss Raid",hc:"#5aa9e6",save:1,secs:[
+  {t:"👹 Boss Raid cooperativa",extra:"raid"},
+  {t:"⚔️ Regras da luta",ids:["cf_vidas","cf_acoes","cf_acaoIni","cf_turnos","cf_iaMs","cf_danoMult","cf_vidaMult","cf_turnoSeg","cf_sumiuSeg"]},
+  {t:"🏆 Troféus e chefes",ids:["cf_tw","cf_tl","cf_mk","cf_mkPacote","cf_mkMax","cf_chefe","cf_chefeFinal"]},
+  {t:"🏟️ Arenas e força das cartas",ids:["rtr","ran","rst","cf_fusArena","cf_cArena","cf_sArena","cf_faixa"]},
+  {t:"🤖 Bots",ids:["cf_botErro","cf_botForca","cf_botNivel"]}]},
+ {id:"tools",ico:"🧰",t:"Ferramentas",d:"Presentes, testes, painel, backup, PIN e reinício",hc:"#b58bd4",secs:[
+  {t:"🎁 Presentes para jogadores",page:"ds_t"},
+  {t:"🧪 Dar e testar no meu save",page:"ds_g"},
+  {t:"📊 Painel e simuladores",page:"ds_p"},
+  {t:"💾 Backup",ids:["cc","fcc"],btn:["xc","ic"]},
+  {t:"🔐 PIN, imagens e sons",ids:["cf_admPin","cf_imgKB","cf_som","cf_musica"],pair:1,save:1},
+  {t:"🗑️ Excluir e reiniciar",extra:"reset"}]}
+];
+/* ---------- utilidades ---------- */
+const el=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e};
+/* a página antiga (details sem título) vira uma div com o mesmo id: o conteúdo e os IDs ficam iguais */
+const flat=p=>{if(!p||p.tagName!=="DETAILS")return p;const d=el("div","hub-page");d.id=p.id;[...p.childNodes].forEach(n=>{if(!(n.nodeType===1&&n.tagName==="SUMMARY"))d.append(n)});p.replaceWith(d);return d};
+const wrap=id=>{const f=$(id);return f?(f.closest(".afl")||f):null};
+const norm=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const btnByText=(root,re)=>[...root.querySelectorAll("button")].find(b=>re.test(b.textContent));
+function openHook(id){try{window.adxOpen&&window.adxOpen(id)}catch(e){console.warn("hub adxOpen",id,e)}}
+let state={tab:"",sec:""};
+const saveState=()=>{try{ST.cphub=state.tab+"|"+state.sec}catch(e){}};
+
+/* ---------- construção ---------- */
+function build(){
+ const w=cfg.querySelector(".in2");if(!w||!$("ds_c")||$("hub_root"))return;
+ const ag=w.querySelector(".ag");if(ag)ag.dataset.cpUiHome="1";           // impede a home antiga de se reconstruir
+ const c=$("ds_c");if(c)c.dataset.cpUiEditor=c.dataset.cpUiEditor||"";
+ w.querySelectorAll("details.adp").forEach(d=>d.classList.remove("adp")); // desliga o modelo antigo de "uma página aberta"
+ const root=el("div","hub");root.id="hub_root";
+ root.append(el("input","hub-search"),el("div","hub-results"),el("div","hub-home"));
+ const search=root.querySelector(".hub-search");search.type="search";search.placeholder="Buscar qualquer ajuste (ex.: troféus, preço, missão)";search.autocomplete="off";
+ const home=root.querySelector(".hub-home"),results=root.querySelector(".hub-results");
+ const used=new Set();
+ TABS.forEach(T=>{
+  const tile=el("button","hub-tile",`<i>${T.ico}</i><div><b>${T.t}</b><small>${T.d}</small></div><em>›</em>`);
+  tile.type="button";tile.dataset.hubTab=T.id;tile.style.setProperty("--hc",T.hc);home.append(tile);
+  const tab=el("section","hub-tab");tab.hidden=true;tab.dataset.tab=T.id;tab.style.setProperty("--hc",T.hc);
+  const bar=el("div","hub-bar");bar.style.setProperty("--hc",T.hc);
+  const nav=TABS.map(x=>`<button type="button" data-hub-tab="${x.id}"${x.id==T.id?' class="on"':""}><i>${x.ico}</i>${x.t}</button>`).join("");
+  bar.innerHTML=nav;tab.append(bar);
+  T.secs.forEach(S=>{const d=makeSec(S,T,used);if(d)tab.append(d)});
+  if(T.save){const sb=el("div","hub-savebar",'<button type="button" class="bt" data-k="@sr">💾 Salvar regras</button>');tab.append(sb)}
+  root.append(tab);
+ });
+ // tudo que sobrou nas páginas antigas e não foi movido vai para "Outros" em Ferramentas, para nada se perder
+ const skipK=new Set(["@sr","m","@rr","x"]);
+ const leftovers=[...w.querySelectorAll("details.fd")].filter(d=>!d.closest(".hub-sec")&&!d.closest("#hub_root")&&d.id&&!["ds_n","ds_r","ds_b","ds_s","ds_z"].includes(d.id)&&(d.querySelector("input[id],select[id],textarea[id]")||[...d.querySelectorAll("button")].some(b=>!skipK.has(b.dataset.k)&&!b.hidden)));
+ if(leftovers.length){const tools=root.querySelector('[data-tab="tools"]');leftovers.forEach(d=>{const ttl=(d.querySelector("summary")||{}).textContent||d.id;const s=el("details","hub-sec fd",`<summary>${ttl}</summary>`);s.dataset.hubSec=ttl;s.dataset.tab="tools";s.append(flat(d));tools.insertBefore(s,tools.querySelector(".hub-savebar"))})}
+ w.querySelectorAll("details.fd").forEach(d=>{if(!d.closest("#hub_root")&&!d.contains(root))d.hidden=true});
+ const head=w.querySelector(".ah");(head?head.after.bind(head):w.prepend.bind(w))(root);
+ // limpa botões repetidos e reorganiza páginas com muita coisa
+ try{tidyCards();tidyPacks();tidyTools();tidyMissions()}catch(e){console.warn("hub tidy",e)}
+ root.querySelectorAll(".ytb").forEach(x=>x.remove());
+ // abrir a última posição (após salvar a página recarrega)
+ let r=["",""];try{r=(ST.cphub||"").split("|")}catch(e){}
+ go(TABS.some(t=>t.id==r[0])?r[0]:"",r[1]);
+}
+function makeSec(S,T,used){
+ const d=el("details","hub-sec fd");d.dataset.hubSec=S.t;d.dataset.tab=T.id;
+ const sum=el("summary",null,S.t);d.append(sum);
+ if(S.page){
+  const p0=$(S.page);if(!p0)return null;
+  const p=flat(p0);p.hidden=false;
+  d.dataset.page=S.page;d.append(p);
+  if(S.foot)d.append(el("div","hub-savebar",`<button type="button" class="bt" data-k="${S.foot[0]}">${S.foot[1]}</button>`));
+  if(S.extra==="pend")p.prepend(el("div","hub-actions",'<button type="button" class="bt gh" data-cp-admin="pending">📋 Cartas pendentes de aprovação</button>'));
+  return d;
+ }
+ const body=el("div","hub-body");d.append(body);d.dataset.id="sec_"+(S.t.replace(/\W+/g,"").slice(0,12));
+ if(S.ids){
+  const holder=S.pair?el("div","hub-pair"):body;
+  S.ids.forEach(id=>{const f=wrap(id);if(f){holder.append(f);f.style.gridColumn="auto"}});
+  if(S.pair)body.append(holder);
+  if(S.ids.includes("rtr")){/* campos largos ocupam a linha toda */}
+  (S.btn||[]).forEach(k=>{const b=cfg.querySelector(`[data-k="${k}"]`);b&&body.append(b)});
+  if(S.ids.includes("wr1pk")){const n=el("p","hub-note","Pacotes e Fragmentos entregues aos três primeiros do ranking semanal. As mudanças aparecem no ranking e valem no resgate da temporada encerrada.");body.prepend(n)}
+  if(S.save)body.append(el("div","hub-actions",'<button type="button" class="bt" data-k="@sr">💾 Salvar regras</button>'));
+ }
+ if(S.extra==="pend")body.append(el("div","hub-actions",'<button type="button" class="bt gh" data-cp-admin="pending">📋 Cartas pendentes de aprovação</button>'));
+ if(S.extra==="shop")body.append(el("p","hub-note","Itens e regras da loja diária."),el("div","hub-actions",'<button type="button" class="bt cy" data-cp-admin="shop">🛒 Abrir configuração da loja diária</button>'));
+ if(S.extra==="raid")body.append(el("p","hub-note","Escolha a carta do Boss, a força, as vagas e as recompensas da Raid."),el("div","hub-actions",'<button type="button" class="bt cy" data-cp-raid-config>Configurar Boss Raid</button>'));
+ if(S.extra==="reset"){body.append(...resetBlock());d.dataset.hook="ds_z"}
+ return d;
+}
+/* ---------- bloco único de reinício / exclusão ---------- */
+function resetBlock(){
+ const note=el("p","hub-note","Escolha o que reiniciar. Cada opção pede confirmação antes de apagar.");
+ const sel=el("select");sel.id="hub_reset";
+ sel.innerHTML='<option value="">— escolha —</option><option value="me">Meu save (só este aparelho e minha conta)</option><option value="rules">Regras e recompensas → valores padrão</option><option value="all">TODAS AS CONTAS (reinício global)</option>';
+ const b=el("button","bt gh hub-danger","Reiniciar o que foi escolhido");b.type="button";b.dataset.hubReset="1";
+ const del=el("div","hub-actions");del.dataset.hubDelHost="1";
+ return [note,sel,b,del];
+}
+/* ---------- navegação ---------- */
+function go(tab,sec){
+ state.tab=tab||"";
+ const root=$("hub_root");if(!root)return;
+ root.querySelector(".hub-home").hidden=!!tab;root.querySelector(".hub-search").hidden=!!tab;root.querySelector(".hub-results").hidden=!!tab;
+ root.querySelectorAll(".hub-tab").forEach(t=>t.hidden=t.dataset.tab!==tab);
+ const T=TABS.find(x=>x.id==tab);
+ const b=cfg.querySelector(".ah b"),s=cfg.querySelector(".ah small");
+ if(b)b.textContent=T?T.ico+" "+T.t:"Modo ADM";if(s)s.textContent=T?T.d:"Escolha uma categoria · tudo fica salvo neste aparelho";
+ cfg.querySelector(".ah .ab[data-hub-home]")||0;
+ if(tab){const t=root.querySelector(`.hub-tab[data-tab="${tab}"]`);const target=(sec&&[...t.querySelectorAll("details.hub-sec")].find(x=>x.dataset.hubSec==sec))||t.querySelector("details.hub-sec");if(target)openSec(target,true,!!sec)}
+ else{state.sec=""}
+ saveState();cfg.scrollTo&&cfg.scrollTo(0,0);
+}
+function openSec(d,open,scroll){
+ const t=d.closest(".hub-tab");
+ if(open){t.querySelectorAll("details.hub-sec").forEach(x=>{if(x!==d&&x.open)x.open=false});d.open=true;state.sec=d.dataset.hubSec;
+  if(d.dataset.page)openHook(d.dataset.page);
+  if(d.dataset.hook)openHook(d.dataset.hook);
+  setTimeout(()=>{try{tidyLazy()}catch(e){}},80);setTimeout(()=>{try{tidyLazy()}catch(e){}},450);
+  t.querySelectorAll("details.hub-sec>details").forEach(x=>{if(x.id)openHook(x.id)});
+  if(scroll)setTimeout(()=>d.scrollIntoView({block:"start",behavior:"smooth"}),60)}
+ saveState();
+}
+/* ---------- limpeza de duplicados ---------- */
+function tidyCards(){
+ const c=$("ds_c");
+ // salvar/criar da carta e da habilidade: botões que o layout antigo escondia ficam visíveis, cada um no lugar certo
+ ["@sc","nc"].forEach(k=>{const b=cfg.querySelector(`[data-k="${k}"]`);b&&b.classList.remove("ph")});
+ const sc=cfg.querySelector('[data-k="@sc"]');if(sc)sc.textContent="💾 Salvar carta (e as habilidades escolhidas)";
+ const nc=cfg.querySelector('[data-k="nc"]');if(nc)nc.hidden=true;               // "criar" usa o mesmo formulário de editar (opção ➕ Nova carta)
+ const hs=cfg.querySelector('[data-k="@hs"]');if(hs){hs.classList.remove("ph");hs.textContent="💾 Salvar habilidade"}
+ const hk=cfg.querySelector('[data-k="@hk"]');if(hk)hk.textContent="💾 Aplicar habilidades à carta escolhida";
+ // ds_l: atalhos que já existem como seções
+ const l=$("ds_l");if(l)l.querySelectorAll('[data-adm="fds_n"],[data-adm="pds_i"],.aq').forEach(x=>x.remove());
+ // ds_c: atalhos no topo repetem as seções
+ if(c)c.querySelectorAll(".adm-inline-actions,[data-adm=\"pds_i\"],[data-adm=\"pds_l\"]").forEach(x=>x.remove());
+ // cada página tinha uma frase de rodapé "Inclui cartas, pacotes..." repetida
+ cfg.querySelectorAll("p,small,div").forEach(e=>{if(!e.children.length&&/^Inclui cartas, pacotes, habilidades/.test((e.textContent||"").trim())&&!e.closest("#hub_root"))e.style.display="none"});
+}
+function tidyPacks(){
+ const sk=cfg.querySelector('[data-k="@sk"]');if(sk){sk.classList.remove("ph");sk.textContent="💾 Salvar pacote"}
+ const sv=cfg.querySelector('[data-k="@sv"]');if(sv)sv.textContent="💾 Salvar aparência";
+ // um seletor de pacote só: o de aparência (z_vk) acompanha o de dados (ek)
+ const ek=$("ek"),vk=$("z_vk");
+ if(ek&&vk){const vf=vk.closest(".afl")||vk;vf.hidden=true;
+  const sync=src=>{const v=src.value;if(v==="__")return;const dst=src===ek?vk:ek;if(dst&&[...dst.options].some(o=>o.value===v)&&dst.value!==v){dst.value=v;dst.dispatchEvent(new Event("change",{bubbles:true}))}};
+  document.addEventListener("change",e=>{if(e.target===ek)sync(ek)},true);
+  if(ek.value&&ek.value!=="__")sync(ek)}
+ // "Pacote em destaque" fica ao lado de salvar pacote, com rótulo claro
+ const nd=cfg.querySelector('[data-k="nd"]');if(nd)nd.textContent="⭐ Salvar pacote em destaque";
+}
+function tidyTools(){
+ const g=$("ds_g");if(!g)return;
+ const all=[...g.querySelectorAll("button")];
+ const hide=re=>all.filter(b=>re.test(b.textContent.trim())).forEach(b=>b.hidden=true);
+ hide(/^\+?1\.000 fragmentos/i);hide(/^\+10\.000/);hide(/\+5 pacotes/i);
+ // "Liberar todas as cartas" existia duas vezes: fica a que tem data-k
+ const libs=all.filter(b=>/Liberar todas as cartas/i.test(b.textContent));libs.forEach(b=>{if(b.dataset.k!=="@ga")b.hidden=true});
+ // reinícios e zona de risco → bloco único "Excluir e reiniciar"
+ const rG=btnByText(g,/REINICIAR O JOGO INTEIRO/i),rM=btnByText(g,/Reiniciar apenas meu save/i),rR=cfg.querySelector('[data-k="@rr"]');
+ [rG,rM].forEach(b=>{if(b){b.hidden=true;let p=b.previousElementSibling;while(p&&!/^H[1-6]$/.test(p.tagName)&&p.tagName!=="P"&&p.tagName!=="BUTTON")p=p.previousElementSibling}});
+ [...g.querySelectorAll("h3,h4,p,.ash")].forEach(h=>{if(/Rein[ií]cio global|Zona de risco local|Zerar o progresso de todas/i.test(h.textContent))h.hidden=true});
+ if(rR){rR.hidden=true;const z=rR.closest(".fg");z&&z.previousElementSibling&&/Zona de risco/i.test(z.previousElementSibling.textContent)&&(z.previousElementSibling.hidden=true)}
+ const m=cfg.querySelector('[data-k="m"]');if(m)m.hidden=true;                   // "Ajustes do save" é só um atalho para os Ajustes normais do jogo
+ // "Rodar checagem" vai para o Painel, junto com a verificação
+ const chk=btnByText(g,/Rodar checagem/i),pnl=$("ds_p");
+ if(chk&&pnl){const h=[...g.querySelectorAll("h3,h4,.ash")].find(x=>/Checagem do jogo/i.test(x.textContent));if(h)pnl.prepend(h);pnl.insertBefore(chk,h?h.nextSibling:pnl.firstChild)}
+ // excluir cartas/pacotes/jogadores aparece dentro do bloco de reiniciar
+ const host=cfg.querySelector("[data-hub-del-host]"),z=$("ds_z");
+ if(host&&z){const zz=flat(z);zz.hidden=false;host.append(zz)}
+}
+function tidyMissions(){
+ const L={rdp:["📅 Missões diárias","Missões diárias · título, tipo e meta"],rwp:["🗓️ Missões semanais","Missões semanais · título, tipo e meta"],rmc:["📚 Coleção e secretas","Coleção e secretas · nome, meta e pacotes"]};
+ Object.entries(L).forEach(([id,[title,label]])=>{
+  const f=wrap(id);if(!f||f.closest(".hub-sub"))return;
+  const lab=f.querySelector("label");if(lab)lab.textContent=label;
+  const d=el("details","hub-sub");d.append(el("summary",null,title));f.before(d);d.append(f)});
+ const m=$("ds_m");if(m)m.querySelectorAll("h3,.ash").forEach(h=>{if(/Listas de miss/i.test(h.textContent))h.hidden=true});
+}
+/* o que o jogo monta só quando a página abre (rascunhos) */
+function tidyLazy(){
+ const l=$("ds_l");if(!l)return;
+ l.querySelectorAll("button").forEach(b=>{if(/^\W*(Nova carta|Importar ficha)/i.test(b.textContent.trim())||["fds_n","pds_i"].includes(b.dataset.adm))b.remove()});
+ l.querySelectorAll(".aq").forEach(x=>x.remove());
+}
+/* ---------- cliques ---------- */
+cfg.addEventListener("click",e=>{
+ const t=e.target.closest&&e.target.closest("[data-hub-tab]");
+ if(t){e.preventDefault();e.stopPropagation();go(t.dataset.hubTab);return}
+ const home=e.target.closest&&e.target.closest('.ab[data-adm="home"]');
+ if(home&&$("hub_root")){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();go("");return}
+ const r=e.target.closest&&e.target.closest("[data-hub-reset]");
+ if(r){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+  const v=($("hub_reset")||{}).value;if(!v)return window.toast&&toast("Escolha o que reiniciar.");
+  const g=$("ds_g");
+  const b=v==="me"?btnByText(g,/Reiniciar apenas meu save/i):v==="all"?btnByText(g,/REINICIAR O JOGO INTEIRO/i):cfg.querySelector('[data-k="@rr"]');
+  if(b){b.hidden=false;b.click();b.hidden=true}
+  return}
+ const res=e.target.closest&&e.target.closest("[data-hub-go]");
+ if(res){e.preventDefault();e.stopPropagation();const[tab,sec,fid]=res.dataset.hubGo.split("§");go(tab,sec);
+  setTimeout(()=>{const f=$(fid);if(f){f.scrollIntoView({block:"center",behavior:"smooth"});const b=f.closest(".afl")||f;b.style.transition="box-shadow .3s";b.style.boxShadow="0 0 0 2px #c78bff";setTimeout(()=>b.style.boxShadow="",1800)}},220)}
+},true);
+cfg.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.hub-sec"))return;if(d.open)openSec(d,true,false);else saveState()},true);
+/* busca nos campos já organizados */
+cfg.addEventListener("input",e=>{
+ const s=e.target;if(!s.classList||!s.classList.contains("hub-search"))return;
+ const q=norm(s.value.trim()),box=cfg.querySelector(".hub-results");if(!box)return;
+ if(q.length<2){box.innerHTML="";return}
+ const out=[];
+ cfg.querySelectorAll("#hub_root .hub-sec").forEach(sec=>{
+  const tab=TABS.find(x=>x.id==sec.dataset.tab);
+  sec.querySelectorAll("label").forEach(l=>{const tx=l.textContent.trim();if(tx.length<3||!norm(tx).includes(q))return;
+   const f=l.closest(".afl")?l.closest(".afl").querySelector("[id]"):l.nextElementSibling;if(!f||!f.id)return;
+   out.push(`<button type="button" data-hub-go="${tab.id}§${sec.dataset.hubSec}§${f.id}"><b>${tx.slice(0,80)}</b><small>${tab.ico} ${tab.t} › ${sec.dataset.hubSec}</small></button>`)});
+ });
+ box.innerHTML=out.slice(0,12).join("")||'<p class="mut">Nada encontrado.</p>';
+});
+/* depois de salvar, o jogo recarrega: guardamos onde o ADM estava */
+try{const g0=window.adxGo;if(typeof g0==="function"){window.adxGo=adxGo=function(){saveState();return g0.apply(this,arguments)}}}catch(e){}
+window.cpRegisterCfgViewHook(function(v){if(v!=="a")return;try{build()}catch(x){console.warn("ADM hub",x)}});
+if(!cfg.hidden&&$("ds_c"))try{build()}catch(x){console.warn("ADM hub",x)}
+})();
+</script>
+
 </body>
 </html>
 
